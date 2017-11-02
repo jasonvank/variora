@@ -17,7 +17,7 @@ var glob = require('glob');
  * @returns the entries object as explained above
  */
 function getEntries() {
-    var filePaths = glob.sync("./Orbital_django/*/static/*.js")
+    var filePaths = glob.sync("./variora/*/static/*.js")
     var entries = {};    
     for (filePath of filePaths) {
         var splits = filePath.split('/');
@@ -31,7 +31,7 @@ function getEntries() {
 module.exports = {
     entry: getEntries,
     output: {
-        path: path.resolve('./Orbital_django/bundled_static/prod/bundle'),
+        path: path.resolve('./variora/bundled_static/prod/bundle'),
         filename: "[name].js"
     },
     resolve: {
@@ -40,11 +40,11 @@ module.exports = {
       // https://webpack.js.org/configuration/resolve/#resolve-modules
       modules: [
         "node_modules",
-        path.resolve(__dirname, 'Orbital_django/comm_assets'),
+        path.resolve(__dirname, 'variora/comm_assets'),
       ],
       alias: {
         vue: 'vue/dist/vue.js', 
-        CommAssets: path.resolve(__dirname, 'Orbital_django/comm_assets'),
+        CommAssets: path.resolve(__dirname, 'variora/comm_assets'),
       },
     },
     module: {

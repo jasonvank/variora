@@ -2,7 +2,7 @@ import os
 import re
 from hashlib import md5
 
-import Orbital_django.settings as settings
+import variora.settings as settings
 from coterie.models import Coterie
 from django.contrib.auth import get_user, logout
 from django.contrib.auth.decorators import login_required
