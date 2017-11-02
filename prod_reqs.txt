@@ -1,0 +1,10 @@
+###### production ######
+django  # framework
+django-redis-cache  # default cache
+python-memcached  # session cache
+django-proxy # serve external pdf file, solve CORS issue
+pillow
+django-kronos
+
+###### development ######
+selenium  # write browser-side tests
