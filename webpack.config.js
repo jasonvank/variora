@@ -9,6 +9,7 @@
 
 var path = require('path');
 var glob = require('glob');
+const Uglify = require("uglifyjs-webpack-plugin");
 
 /**
  * search for all .js file under [appname]/static/
@@ -55,8 +56,9 @@ module.exports = {
           loader: 'babel-loader',
           exclude: /node_modules/,
           query: {
-            presets: ['es2015', 'react'],
+            presets: ['babel-preset-env', 'react'],
             plugins: [
+              'transform-regenerator',
               [
                 "import", [
                   {
@@ -84,4 +86,7 @@ module.exports = {
         },
       ],
     },
+    plugins: [
+      new Uglify()
+    ],
 }
