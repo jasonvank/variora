@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 from django.views.generic import View
 from file_viewer.models import Document
-from file_viewer.views import DocumentEncoder
+from file_viewer.api.views import DocumentEncoder
 
 from ..models import User
 
