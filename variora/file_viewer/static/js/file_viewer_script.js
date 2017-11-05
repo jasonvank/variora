@@ -79,7 +79,7 @@ function startListeningSelectionBoxCreation() {
         // can create at most one annotation each time,
         // whenever atempt to create new one, close all existing annotations
         layer.closeAll(); 
-        $(".ui-draggable").remove();  // detach() 会保留所有绑定的事件、附加的数据，而remove()不会
+        $(".ui-draggable.Annotation").remove();  // detach() 会保留所有绑定的事件、附加的数据，而remove()不会
 
         var page = $(this).find(".PageImg, .PageCanvas");
         var mouse_absolute_x = e.pageX;
