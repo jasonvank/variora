@@ -107,6 +107,7 @@ var scaleFactor = 1.08;
 var sampleWidth;
 var sampleHeight;
 var is_authenticated = {{ request.user.is_authenticated|yesno:"true,false" }};
+var clearnessLevel = 2.4;  // too small then not clear, not large then rendering consumes much resource 
 
 function pdfScale(scaleFactor) {
     scale *= scaleFactor;
@@ -156,12 +157,14 @@ function renderTaskList(taskList, finishList, scale) {
         $("#buttonForLarger, #buttonForSmaller").attr("disabled", true);
         var num = taskList[0][0];
         pdfDoc.getPage(num).then(function(page) {
-            var page_canvas_id = "page_canvas_" + num;
-            var canvas = document.getElementById(page_canvas_id);
-            var context = canvas.getContext('2d');
-            var viewport = page.getViewport(scale * sampleWidth / page.getViewport(scale).width);
-            canvas.height = sampleHeight;
-            canvas.width = sampleWidth;
+          var page_canvas_id = "page_canvas_" + num;
+          var canvas = document.getElementById(page_canvas_id);
+          var context = canvas.getContext('2d');
+          var viewport = page.getViewport(clearnessLevel * scale * sampleWidth / page.getViewport(scale).width);
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
+          canvas.style.height = viewport.height / clearnessLevel + "px";
+          canvas.style.width = viewport.width / clearnessLevel + "px";
 
             var renderContext = {
                 canvasContext: context,
@@ -170,7 +173,7 @@ function renderTaskList(taskList, finishList, scale) {
             
             taskList[0][2] = page.render(renderContext);  // taskList[0][2] is a RenderTask object
             taskList[0][1] = "RENDERING";
-         
+
             taskList[0][2].promise.then(function() {
                 taskList.shift();
                 finishList.push(num);

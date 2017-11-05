@@ -209,16 +209,16 @@ $(document).ready(function() {
             layer.msg('you need to log in to like');
     });
     $(".AnnotationBlock").on("mouseover", function() {
-        var annotation_id = $(this).attr("annotation_id");
-        var Annotation = $(".Annotation[annotation_id='" + annotation_id + "']");
-        $(this).css("background-color", Annotation.css("background-color"));
-        Annotation.css("border", "1px solid #0F0F0F");
+      var annotation_id = $(this).attr("annotation_id");
+      var Annotation = $(".Annotation[annotation_id='" + annotation_id + "']");
+      $(this).css("box-shadow", '0 2px 6px rgba(0, 0, 0, .25)');
+      Annotation.css("box-shadow", '0 2px 6px rgba(0, 0, 0, .25)');
     });
     $(".AnnotationBlock").on("mouseout", function() {
         var annotation_id = $(this).attr("annotation_id");
         var Annotation = $(".Annotation[annotation_id='" + annotation_id + "']");
-        $(this).css("background-color", "white");
-        Annotation.css("border", "none");
+        $(this).css("box-shadow", 'none');
+        Annotation.css("box-shadow", 'none');
     });
     $(".AnnotationBlock").on("click", function() {  // scroll to the corresponding Anotation when clicking a certain AnnotationBlock
         var annotation_id = $(this).attr("annotation_id");
