@@ -1,5 +1,7 @@
 'use strict';
 
+import getCookie from 'getcookies'
+
 function addEditDocTitleListener() {
     // change document title
     $(".EditDocTitleButton").on("click", function() {
@@ -26,7 +28,7 @@ function addEditDocTitleListener() {
                     url: action,
                     data: {
                         csrfmiddlewaretoken: getCookie('csrftoken'),
-                        document_id: $td.parents("tr").find("input[name='document_id']").val(),
+                        document_id: $td.parents("tr").find("button[name='document_id']").val(),
                         new_doc_title: new_doc_title,
                     },
                 });
@@ -121,19 +123,3 @@ $(document).ready(function() {
 
     addEditDocTitleListener();
 });
-
-function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie != '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
