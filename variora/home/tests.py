@@ -25,7 +25,7 @@ class TestUser(TestCase):
         portrait_url = new_user.portrait_url
         is_active = new_user.is_active
         nickname = new_user.nickname
-        self.assertEqual(portrait_url, "media/portrait/default_portrait.png")
+        self.assertEqual(portrait_url, "/media/portrait/default_portrait.png")
         self.assertEqual(is_active, True)
         self.assertEqual(nickname, "")
 

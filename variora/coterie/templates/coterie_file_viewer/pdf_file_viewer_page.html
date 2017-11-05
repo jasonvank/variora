@@ -82,15 +82,13 @@
                                     <form id="comment_form">
                                         <textarea name="comment_content" class="form-control" rows="2" style="resize: vertical"></textarea>
                                         <!--i use ajax to submit instead of using submit button-->
-                                        <button id="post_comment_button" type="button" class="btn btn-info" name="document_id" value="{{ document.id }}" style="margin-top: 8px; float: right;" > post comment</button>
+                                        <button id="post_comment_button" type="button" class="btn" name="document_id" value="{{ document.id }}" style="margin: 8px; float: right; border-radius: 0; color: white; background-color: #1BA39C"> post comment</button>
                                     </form>
                                     <div id="comment_update_div">
-                                    {% include "file_viewer/comment_viewer_subpage.html" %}
+                                    {% include "coterie_file_viewer/comment_viewer_subpage.html" %}
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="modal-footer"></div>
                         </div>
                     </div>
                 </div>
@@ -136,8 +134,8 @@ function pdfScale(scaleFactor) {
     sampleHeight *= scaleFactor;
     $(".page_div").each(function() {
         var div = $(this);
-        div.css("width", sampleWidth + 6 + "px");
-        div.css("height", sampleHeight + 6 + "px");              
+        div.css("width", sampleWidth + "px");
+        div.css("height", sampleHeight + "px");              
     });
     resizeAnnotations(scaleFactor);
 
@@ -222,8 +220,8 @@ function prepareAndRenderAll(scale) {
 
             $("#file_viewer").append(appendPages);
 
-            $(".page_div").css("height", (sampleHeight + 6) + "px")
-            $(".page_div").css("width", (sampleWidth + 6) + "px")
+            $(".page_div").css("height", sampleHeight + "px")
+            $(".page_div").css("width", sampleWidth + "px")
 
             startListeningSelectionBoxCreation();
             drawAllExistingAnnotationFrame();

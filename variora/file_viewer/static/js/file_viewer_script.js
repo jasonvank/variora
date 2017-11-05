@@ -30,15 +30,20 @@ function tinymceInit() {
         forced_root_block: false,
         plugins: [
         'advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker',
-        'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+        'searchreplace visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
         'save table contextmenu directionality emoticons template paste textcolor'
         ],
         toolbar: [
-            'undo redo | styleselect | bold italic | link image emoticons',
-            'alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | forecolor backcolor'
+            'styleselect | bold italic | link image | bullist numlist outdent indent | forecolor backcolor'
         ],
         paste_as_text: true,
-        branding: false,        
+        branding: false,
+        width: 'calc(100% - 2px)',
+        setup: function (editor) {
+          editor.on('change', function () {
+              editor.save();
+          });
+        }
     });
     $(document).on('focusin', function(e) {
         // this is to solve the issue of being unable to edit link and image link in bootstrap model
@@ -101,10 +106,10 @@ function startListeningSelectionBoxCreation() {
         });
 
         $(".PageImg, .PageCanvas, .Annotation").on("mousemove", function(e) {
-            mouse_absolute_x = e.pageX;
-            mouse_absolute_y = e.pageY;
-            page_top_left_x = page.offset().left;
-            page_top_left_y = page.offset().top;
+            var mouse_absolute_x = e.pageX;
+            var mouse_absolute_y = e.pageY;
+            var page_top_left_x = page.offset().left;
+            var page_top_left_y = page.offset().top;
             var bottom_right_relative_x = mouse_absolute_x - page_top_left_x;
             var bottom_right_relative_y = mouse_absolute_y - page_top_left_y;
 
@@ -141,19 +146,19 @@ function startListeningSelectionBoxCreation() {
                     content:    '<form id="annotation_form">\
                                     <textarea name="annotation_content" class="form-control" rows="8" style="resize: vertical"></textarea>\
                                     <!--i use ajax to submit instead of using submit button-->\
-                                    <button id="post_annotation_button" type="button" class="btn btn-info" name="document_id" value="{{ document.id }}"\ style="margin-top: 8px; float: right;">post annotation</button>\
+                                    <button id="post_annotation_button" type="button" class="btn" name="document_id" value="{{ document.id }}"\ style="margin: 8px; float: right; border-radius: 0; color: white; background-color: #1BA39C">post annotation</button>\
                                 </form>\
                                 <script>tinymceInit();</script>',
                     cancel: function() {  // 窗口被关闭的回调函数：当窗口被关闭，annotation选定框也一并删除
                         new_annotation.remove();
                     }
-                }); 
-
+                });
+                
                 // annotationWindowJqueryObject will return the jquery object of the annotation window
                 var annotationWindowJqueryObject = $(".layui-layer[times=" + annotationWindow + "]");
                 annotationWindowJqueryObject.find("#post_annotation_button").on("click", function () {
                     if (is_authenticated) {
-                        tinyMCE.triggerSave();  // http://www.sifangke.com/2012/04/ajax-submit-tinymce-content/
+                        console.log(annotationWindowJqueryObject.find("textarea[name='annotation_content']"))
                         $.ajax({
                             type: "POST",
                             url: "",
@@ -232,8 +237,8 @@ function scale(scaleFactor) {
         $(".PageDiv").each(function() {
             var div = $(this);
             var img = div.children(".PageImg");
-            div.css("width", img.width() + 6 + "px");
-            div.css("height", img.height() + 6 + "px");
+            div.css("width", img.width() + "px");
+            div.css("height", img.height() + "px");
         });
         resizeAnnotations(scaleFactor);
 
@@ -330,7 +335,6 @@ function addCommentRelatedListener() {
     });
     $(".post_comment_reply_button").on("click", function() {
         if (is_authenticated) {
-            tinyMCE.triggerSave();  // http://www.sifangke.com/2012/04/ajax-submit-tinymce-content/
             var $thisButton = $(this);
             var index = layer.load(0, {shade: 0.18}); //0代表加载的风格，支持0-2
             $.ajax({
@@ -376,15 +380,9 @@ function setupFileViewerSize() {
         var div = $(this);
         var img = div.children(".PageImg");
         imgLoad(img[0], function() {
-            div.css("width", img.width() + 6 + "px");
-            div.css("height", img.height() + 6 + "px");
+            div.css("width", img.width() + "px");
+            div.css("height", img.height() + "px");
         });
-        /* this is not correct when images are gotten from cache rather than loaded from url
-            "complete" is true when the image is shown
-            "load" is triggered when the image is loaded from url
-        img.load(function() {
-            div.css("height", img.height() + 6 + "px");
-        });*/
     });
 }
 
@@ -433,7 +431,6 @@ function enableRefreshCommentButton() {
 function enablePostCommentButton() {
     $("#post_comment_button").on('click', function () {
         if (is_authenticated) {
-            tinyMCE.triggerSave();  // http://www.sifangke.com/2012/04/ajax-submit-tinymce-content/
             var index = layer.load(0, {shade: 0.18});  //0代表加载的风格，支持0-2
             var activeEditor = tinyMCE.activeEditor
             $.ajax({

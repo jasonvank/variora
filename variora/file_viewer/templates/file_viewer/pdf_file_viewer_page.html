@@ -139,8 +139,8 @@ function pdfScale(scaleFactor) {
     sampleHeight *= scaleFactor;
     $(".page_div").each(function() {
         var div = $(this);
-        div.css("width", sampleWidth + 6 + "px");
-        div.css("height", sampleHeight + 6 + "px");              
+        div.css("width", sampleWidth + "px");
+        div.css("height", sampleHeight + "px");              
     });
     resizeAnnotations(scaleFactor);
 
@@ -226,8 +226,8 @@ function prepareAndRenderAll(scale) {
 
             $("#file_viewer").append(appendPages);
 
-            $(".page_div").css("height", (sampleHeight + 6) + "px");
-            $(".page_div").css("width", (sampleWidth + 6) + "px");
+            $(".page_div").css("height", sampleHeight + "px");
+            $(".page_div").css("width", sampleWidth + "px");
 
             startListeningSelectionBoxCreation();
             drawAllExistingAnnotationFrame();

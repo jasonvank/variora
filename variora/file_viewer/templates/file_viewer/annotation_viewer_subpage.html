@@ -101,7 +101,6 @@ $(document).ready(function() {
     });
     $(".PostAnnotationReplyButton").on("click", function() {
         if (is_authenticated) {
-            tinyMCE.triggerSave();  // http://www.sifangke.com/2012/04/ajax-submit-tinymce-content/
             var thisButton = $(this);
             var index = layer.load(0, {shade: 0.18}); //0 represent the style, can be 0-2
             $.ajax({
@@ -126,7 +125,6 @@ $(document).ready(function() {
     })
     $(".PostReplyReplyButton").on("click", function() {
         if (is_authenticated) {
-            tinyMCE.triggerSave();  // http://www.sifangke.com/2012/04/ajax-submit-tinymce-content/
             var thisButton = $(this);
             var index = layer.load(0, {shade: 0.18}); //0 represent the style, can be 0-2
             $.ajax({
@@ -211,8 +209,8 @@ $(document).ready(function() {
     $(".AnnotationBlock").on("mouseover", function() {
       var annotation_id = $(this).attr("annotation_id");
       var Annotation = $(".Annotation[annotation_id='" + annotation_id + "']");
-      $(this).css("box-shadow", '0 2px 6px rgba(0, 0, 0, .25)');
-      Annotation.css("box-shadow", '0 2px 6px rgba(0, 0, 0, .25)');
+      $(this).css("box-shadow", '2px 2px 8px rgba(0, 0, 0, .25)');
+      Annotation.css("box-shadow", '2px 2px 8px rgba(0, 0, 0, .25)');
     });
     $(".AnnotationBlock").on("mouseout", function() {
         var annotation_id = $(this).attr("annotation_id");
