@@ -18,11 +18,20 @@ def handle_log_out(request):
     return redirect("home")
 
 
+def _handle_dropbox_link(link):
+    if link.endswith('dl=0'):
+        link = link.replace('dl=0', 'raw=1')
+    return link
+
+
 def handle_file_upload(request):
-    user = get_user(request)  # get the current user who is logged in and sends this request
+    user = get_user(request)
 
     if "external_url" in request.POST and request.POST["external_url"] != "":
-        document = models.Document(owner=user, external_url=request.POST["external_url"], title=request.POST["title"])
+        external_url = request.POST['external_url']
+        if external_url.startswith('https://www.dropbox.com'):
+            external_url = _handle_dropbox_link(external_url)
+        document = models.Document(owner=user, external_url=external_url, title=request.POST["title"])
         document.save()
     else:
         file_upload = request.FILES["file_upload"]  # this is an UploadedFile object
