@@ -28,7 +28,6 @@
     "element-ui": "^1.4.7",
     "file-loader": "^1.1.5",
     "glob": "^7.1.2",
-    "jquery": "^3.2.1",
     "less": "^2.7.2",
     "less-loader": "^4.0.5",
     "moment-timezone": "^0.5.13",

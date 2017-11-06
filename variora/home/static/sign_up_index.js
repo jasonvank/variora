@@ -1,11 +1,10 @@
 import getCookie from 'getcookies'
-jQuery = require('jquery')
 
 var email_address;
 var loadingLayer;
 var messageLayer;
 
-jQuery(document).ready(function() {
+$(document).ready(function() {
 
     // Fullscreen background
     $.backstretch("/static/assets/img/backgrounds/1.jpg");
