@@ -1,12 +1,13 @@
+<br>
 {% for comment in comments %}
 <hr>
-<blockquote>
+<blockquote style="padding: 18px">
     {% if comment.reply_to_comment.commenter %}
     <h5 style="float: right;">
         <i class="fa fa-share" aria-hidden="true"></i>&nbsp&nbsp&nbspreply to <b>{{ comment.reply_to_comment.commenter.nickname }}:</b>
     </h5><br>
     {% endif %}
-    <div class="content-markdown" style="font-size: 80%; font-family: Microsoft Yahei; padding-bottom: 8px"> {{ comment.content|safe|linebreaks }} </div>
+    <div class="content-markdown" style="font-size: 80%; font-family: Helvetica; padding-bottom: 8px"> {{ comment.content|safe|linebreaks }} </div>
     <footer>
         <img class="img-rounded" src="{{ comment.commenter.portrait_url }}" height="38" width="38">
         {{ comment.commenter.nickname }} | {{ comment.post_time }}
@@ -23,7 +24,7 @@
         <form class="reply_comment_form" style="display: none">
             <br>
             <textarea name="comment_content" class="form-control" rows="2" style="resize: vertical"></textarea>
-            <button type="button" class="post_comment_reply_button btn btn-sm btn-info" name="comment_id" value="{{ comment.id }}" style="margin-top: 8px; float: right;">reply</button>
+            <button type="button" class="post_comment_reply_button btn btn-sm" name="comment_id" value="{{ comment.id }}" style="margin-top: 8px; float: right; border-radius: 0; color: white; background-color: #1BA39C">reply</button>
         </form>
     </footer>
 </blockquote>

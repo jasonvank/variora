@@ -85,15 +85,13 @@
                                     <form id="comment_form">
                                         <textarea name="comment_content" class="form-control" rows="2" style="resize: vertical"></textarea>
                                         <!--i use ajax to submit instead of using submit button-->
-                                        <button id="post_comment_button" type="button" class="btn btn-info" name="document_id" value="{{ document.id }}" style="margin-top: 8px; float: right;" > post comment</button>
+                                        <button id="post_comment_button" type="button" class="btn" name="document_id" value="{{ document.id }}" style="margin: 8px; float: right; border-radius: 0; color: white; background-color: #1BA39C"> post comment</button>
                                     </form>
                                     <div id="comment_update_div">
                                     {% include "file_viewer/comment_viewer_subpage.html" %}
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="modal-footer"></div>
                         </div>
                     </div>
                 </div>
