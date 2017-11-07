@@ -1,9 +1,9 @@
 {% for annotation in annotations %}
 <div class="AnnotationDiv" annotation_id="{{ annotation.id }}">
 <hr>
-<blockquote class="AnnotationBlock" annotation_id="{{ annotation.id }}">
+<blockquote class="AnnotationBlock" annotation_id="{{ annotation.id }}" style="padding: 18px">
     <!--annotation-->
-    <div class="content-markdown" style="padding-bottom: 8px; font-size: 80%; font-family: Microsoft Yahei;"> {{ annotation.content|safe|linebreaks }} </div>
+    <div class="content-markdown" style="padding-bottom: 8px; font-size: 80%; font-family: Helvetica;"> {{ annotation.content|safe|linebreaks }} </div>
     <footer>
         <img class="img-rounded" src="{{ annotation.annotator.portrait_url }}" height="38" width="38">
         {{ annotation.annotator.nickname }} | {{ annotation.post_time.date|date:"Y. M. d" }}
@@ -20,7 +20,7 @@
         <form style="display: none">
             <br>
             <textarea name="annotation_reply_content" class="form-control" rows="2" style="resize: vertical"></textarea>
-            <button type="button" class="PostAnnotationReplyButton btn btn-sm btn-info" name="annotation_id" value="{{ annotation.id }}" style="margin-top: 8px; float: right;"> reply</button>
+            <button type="button" class="PostAnnotationReplyButton btn btn-sm" name="annotation_id" value="{{ annotation.id }}" style="margin-top: 8px; float: right; border-radius: 0; color: white; background-color: #1BA39C"> reply</button>
         </form>
     </footer>
     <br>
@@ -32,7 +32,7 @@
             <i class="fa fa-share" aria-hidden="true"></i>&nbsp&nbsp&nbspreply to <i><b>{{ annotation_reply.reply_to_annotation_reply.replier.nickname }}</b></i>:
         </span><br>
         {% endif %}
-        <div class="content-markdown" style="padding-bottom: 8px; font-size: 80%; font-family: Microsoft Yahei;"> {{ annotation_reply.content|safe|linebreaks }} </div>
+        <div class="content-markdown" style="padding-bottom: 8px; font-size: 80%; font-family: Helvetica;"> {{ annotation_reply.content|safe|linebreaks }} </div>
         <footer>
             <img class="img-rounded" src="{{ annotation_reply.replier.portrait_url }}" height="28" width="28">
             {{ annotation_reply.replier.nickname }} | {{ annotation_reply.post_time.date|date:"Y. M. d" }}
@@ -49,7 +49,7 @@
             <form style="display: none">
                 <br>
                 <textarea name="reply_reply_content" class="form-control" rows="2" style="resize: vertical"></textarea>
-                <button type="button" class="PostReplyReplyButton btn btn-sm btn-info" name="reply_to_annotation_reply_id" value="{{ annotation_reply.id }}" style="margin-top: 8px; float: right;" >reply</button>
+                <button type="button" class="PostReplyReplyButton btn btn-sm" name="reply_to_annotation_reply_id" value="{{ annotation_reply.id }}" style="margin-top: 8px; float: right; border-radius: 0; color: white; background-color: #1BA39C" >reply</button>
             </form>
         </footer>
     </blockquote>
