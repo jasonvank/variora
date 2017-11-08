@@ -7,7 +7,7 @@
         <i class="fa fa-share" aria-hidden="true"></i>&nbsp&nbsp&nbspreply to <b>{{ comment.reply_to_comment.commenter.nickname }}:</b>
     </h5><br>
     {% endif %}
-    <div class="content-markdown" style="font-size: 88%; font-family: Helvetica; padding-bottom: 8px;"> {{ comment.content|safe|linebreaks }} </div>
+    <div class="comment-content" style="font-size: 88%; font-family: Helvetica; padding-bottom: 8px;"> {{ comment.content|safe|linebreaks }} </div>
     <footer>
         <img class="img-rounded" src="{{ comment.commenter.portrait_url }}" height="38" width="38">
         {{ comment.commenter.nickname }} | {{ comment.post_time }}
