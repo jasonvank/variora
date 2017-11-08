@@ -1,6 +1,6 @@
 'use strict';
 
-import getCookie from 'getcookies'
+import { getCookie } from 'util.js'
 
 function addEditDocTitleListener() {
     // change document title
