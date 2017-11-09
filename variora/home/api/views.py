@@ -45,7 +45,14 @@ def search_api_view(request):
     result_documents = list(Document.objects.filter(title__icontains=key))  # case-insensitive contain
     result_users = list(User.objects.filter(Q(nickname__icontains=key) | Q(email_address__icontains=key)))
     result_coteries = list(Coterie.objects.filter(Q(name__icontains=key) | Q(id__icontains=key)))
-    return JsonResponse([result_documents, result_users], encoder=CombinedEncoder, safe=False)
+    return JsonResponse(
+        {
+            'resultDocuments': result_documents, 
+            'resultUsers': result_users
+        }, 
+        encoder=CombinedEncoder, 
+        safe=False
+    )
 
 
 

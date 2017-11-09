@@ -1,4 +1,4 @@
-import getCookie from 'getcookies'
+import { getCookie } from 'util.js'
 
 var email_address;
 var loadingLayer;

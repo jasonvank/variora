@@ -10,19 +10,21 @@ from django.utils.decorators import method_decorator
 from django.views.generic import View
 
 from ..models import Annotation, AnnotationReply, Comment, Document
+from home.models import User
 
 
 class DocumentEncoder(DjangoJSONEncoder):
     def default(self, obj):
         if isinstance(obj, Document):
             return {
+                'pk': obj.pk,
                 'title': obj.title,
                 'num_visit': str(obj.num_visit),
                 'url': obj.url,
                 'download_method': 'get',
-                'download_url': "/file_viewer/api/documents/" + str(obj.pk) + "/download",
-                'delete_method': 'delete',
-                'delete_url': "/file_viewer/api/documents/" + str(obj.pk),
+                'download_url': '/file_viewer/api/documents/' + str(obj.pk) + '/download',
+                'delete_method': 'post',
+                'delete_url': '/file_viewer/api/documents/' + str(obj.pk) + '/delete',
                 'file_on_server': obj.file_on_server
             }
         return super(DocumentEncoder, self).default(obj)
@@ -44,7 +46,7 @@ def _download_document(document):
     else:
         content = urllib.urlopen(document.external_url)
     response = HttpResponse(content, content_type='application/pdf')
-    response['Content-Disposition'] = "attachment; filename=%s.pdf" % document.title
+    response['Content-Disposition'] = 'attachment; filename=%s.pdf' % document.title
     return response
 
 
@@ -52,9 +54,9 @@ class DocumentView(View):
     def get(self, request, pk, **kwargs):
         try:
             document = Document.objects.get(id=pk)
-            if "operation" in kwargs:
-                operation = kwargs["operation"]
-                if operation == "download":
+            if 'operation' in kwargs:
+                operation = kwargs['operation']
+                if operation == 'download':
                     return _download_document(document)
                 else:
                     return HttpResponse(status=500)  # operation not supported
@@ -68,7 +70,7 @@ class DocumentView(View):
         try:
             document = Document.objects.get(id=pk)
             user = get_user(request)
-            if operation == "delete":
+            if operation == 'delete':
                 return _delete_document(document, user)
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
@@ -81,4 +83,19 @@ class DocumentView(View):
             return _delete_document(document, user)
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
+
+
+class DocumentListView(View):
+    def get(self, request):
+        user = get_user(request)
+        uploaded_documents = list(user.document_set.all())
+        collected_documents = list(user.collected_document_set.all())
+        return JsonResponse(
+            {
+                'uploadedDocuments': uploaded_documents, 
+                'collectedDocuments': collected_documents
+            }, 
+            encoder=DocumentEncoder, 
+            safe=False
+        )
 
