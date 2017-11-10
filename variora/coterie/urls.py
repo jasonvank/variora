@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 
 from . import views
 
@@ -26,4 +26,6 @@ urlpatterns = [
     url(r'^edit_coteriedoc_title', views.edit_coteriedoc_title),
 
     url(r'^handle_download_coteriedocument', views.serve_coteriefile),
+
+    url(r'^api/', include('coterie.api.urls')),
 ]
