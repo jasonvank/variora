@@ -1,4 +1,5 @@
 from coterie.models import Coterie
+from django.contrib.auth import get_user
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Q
@@ -55,6 +56,8 @@ def search_api_view(request):
     )
 
 
+def get_current_user(request):
+    return JsonResponse(get_user(request), encoder=UserEncoder, safe=False)
 
 
 

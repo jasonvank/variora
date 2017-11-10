@@ -33,6 +33,9 @@ class App extends React.Component {
     super();
     this.state = {
       createGroupModelVisible: false,
+      user: {
+        portrait_url: '/media/portrait/default_portrait.png'
+      },
     }
     this.handleSearch = (searchKey) => {
       axios.get(getUrlFormat('/api/search', {
@@ -51,6 +54,12 @@ class App extends React.Component {
     }
   }
 
+  componentDidMount() {
+    axios.get('/api/user').then((response) => {
+      this.setState({ user: response.data })
+    })
+  }
+
   render() {
     return (
       <Layout style={{ height: '100%', width: '100%', position: 'absolute' }}>
@@ -67,10 +76,11 @@ class App extends React.Component {
               />
             </Col>
             <Col span={6} style={{ textAlign: 'right' }}>
+              <span style={{ margin: 18 }}>{ this.state.user.nickname }</span>
               <Avatar
                 style={{ verticalAlign: 'middle' }}
                 size={'large'}
-                src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8Qxzyli58fkf7yHJU-Zx07URTiLAREu1gDAsPx0YCTD9Zkflj' 
+                src={this.state.user.portrait_url}
               />
             </Col>
           </Row>
