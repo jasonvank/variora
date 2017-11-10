@@ -31,7 +31,7 @@ class CoterieListView(View):
         joined_coteries = list(user.joined_coterie_set.all())
         return JsonResponse(
             {
-                'administratedCoterires': administrated_coteries, 
+                'administratedCoteries': administrated_coteries, 
                 'joinedCoteries': joined_coteries,
             }, 
             encoder=CoterieEncoder, 

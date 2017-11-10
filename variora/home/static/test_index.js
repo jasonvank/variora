@@ -33,8 +33,11 @@ class App extends React.Component {
     super();
     this.state = {
       createGroupModelVisible: false,
+      administratedCoteries: [],
+      joinedCoteries: [],
       user: {
-        portrait_url: '/media/portrait/default_portrait.png'
+        nickname: '',
+        portrait_url: '/media/portrait/default_portrait.png',
       },
     }
     this.handleSearch = (searchKey) => {
@@ -57,6 +60,10 @@ class App extends React.Component {
   componentDidMount() {
     axios.get('/api/user').then((response) => {
       this.setState({ user: response.data })
+    })
+    axios.get('/coterie/api/coteries').then((response) => {
+      this.setState({ administratedCoteries: response.data.administratedCoteries })
+      this.setState({ joinedCoteries: response.data.joinedCoteries })
     })
   }
 
@@ -105,11 +112,17 @@ class App extends React.Component {
                 <Menu.Item key="document" disabled={true}>
                   <Link to="documents"><span><Icon type='file' />documents</span></Link>
                 </Menu.Item>
-                <SubMenu key="sub3" title={<span><Icon type="usergroup-add" />group</span>}>
-                  <Menu.Item key="1">option1</Menu.Item>
-                  <Menu.Item key="2">option2</Menu.Item>
-                  <Menu.Item key="3">option3</Menu.Item>
-                  <Menu.Item key="4">option4</Menu.Item>
+                <SubMenu key="sub3" title={<span><Icon type="team" />group</span>}>
+                  {
+                    this.state.administratedCoteries.map((coterie) => {
+                      return <Menu.Item key={coterie.pk}>{ coterie.name }</Menu.Item>
+                    })
+                  }
+                  {
+                    this.state.joinedCoteries.map((coterie) => {
+                      return <Menu.Item key={coterie.pk}>{ coterie.name }</Menu.Item>
+                    })
+                  }
                   <Menu.Item key={CREATE_NEW_GROUP_MENU_ITEM_KEY}><Icon type="plus"/></Menu.Item>
                 </SubMenu>
                 <Modal
@@ -146,9 +159,6 @@ ReactDOM.render(
   </LocaleProvider>, 
   document.getElementById('main')
 );
-
-
-
 
 
 
