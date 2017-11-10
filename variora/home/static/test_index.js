@@ -5,8 +5,10 @@ import 'regenerator-runtime/runtime';
 import { Avatar, Breadcrumb, Button, Col, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, Upload } from 'antd';
 import {
   Link,
+  Redirect,
   Route,
-  BrowserRouter as Router
+  BrowserRouter as Router,
+  Switch
 } from 'react-router-dom'
 import { getCookie, getUrlFormat } from 'util.js'
 
@@ -23,6 +25,8 @@ const MenuItemGroup = Menu.ItemGroup;
 const Search = Input.Search;
 const CREATE_NEW_GROUP_MENU_ITEM_KEY = 'createGroupButton';
 
+
+const URL_BASE = '/test'
 
 class App extends React.Component {
   constructor() {
@@ -72,7 +76,7 @@ class App extends React.Component {
           </Row>
         </Header>
 
-        <Router>
+        <Router basename={URL_BASE}>
           <Layout>
             <Sider width={200} style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }}>
               <Menu
@@ -83,10 +87,10 @@ class App extends React.Component {
                 style={{ height: '100%', borderRight: 0 }}
               >
                 <Menu.Item key="explore">
-                  <Link to="/test/explore"><span><Icon type="compass" />explore</span></Link>
+                  <Link to="/explore"><span><Icon type="compass" />explore</span></Link>
                 </Menu.Item>
                 <Menu.Item key="documents">
-                  <Link to="/test/documents"><span><Icon type='file' />documents</span></Link>
+                  <Link to="/documents"><span><Icon type='file' />documents</span></Link>
                 </Menu.Item>
                 <Menu.Item key="document" disabled={true}>
                   <Link to="documents"><span><Icon type='file' />documents</span></Link>
@@ -113,10 +117,11 @@ class App extends React.Component {
             </Sider>
 
             <Layout style={{ marginLeft: 200, padding: 0 }}>
-              <Route exact path="/test" component={DocumentTab}/>
-              <Route path="/test/explore" component={GroupTab}/>
-              <Route path="/test/documents" component={DocumentTab}/>
-              {/* <DocumentTab /> */}
+              <Switch>
+                <Route exact path='/' render={() => (<Redirect to="/documents" />)} />
+                <Route exact path="/documents" component={DocumentTab} />
+                <Route exact path="/explore" component={GroupTab} />
+              </Switch>
             </Layout>
           </Layout>
         </Router>

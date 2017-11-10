@@ -5,7 +5,8 @@ import { Avatar, Breadcrumb, Button, Col, Icon, Input, Layout, LocaleProvider, M
 import {
   Link,
   Route,
-  BrowserRouter as Router
+  BrowserRouter as Router,
+  Switch
 } from 'react-router-dom'
 import { getCookie, getUrlFormat } from 'util.js'
 
@@ -20,6 +21,8 @@ const { Header, Content, Sider } = Layout;
 const MenuItemGroup = Menu.ItemGroup;
 
 
+const URL_BASE = '/test/documents'
+
 class DocumentTab extends React.Component {
   constructor() {
     super();
@@ -27,7 +30,7 @@ class DocumentTab extends React.Component {
   }
   render() {
     return (
-      <Router>
+      <Router basename={URL_BASE}>
         <Content style={{ paddingLeft: 18, paddingRight: 18, paddingTop: 8, margin: 0, minHeight: 280 }}>
           <Menu
             onClick={this.handleClick}
@@ -36,10 +39,10 @@ class DocumentTab extends React.Component {
             style={{ padding: 0 }}
           >
             <Menu.Item key="uploaded-documents">
-              <Link to="/test/documents/uploaded"><Icon type="mail" />Uploaded Documents</Link>
+              <Link to="/uploaded"><Icon type="mail" />Uploaded Documents</Link>
             </Menu.Item>
             <Menu.Item key="collected-documents">
-              <Link to="/test/documents/collected"><Icon type="heart-o" />Collected Documents</Link>
+              <Link to="/collected"><Icon type="heart-o" />Collected Documents</Link>
             </Menu.Item>
             <SubMenu title={<span><Icon type="setting" />Navigation Three - Submenu</span>}>
               <MenuItemGroup title="Item 1">
@@ -55,9 +58,11 @@ class DocumentTab extends React.Component {
               <a href="https://ant.design" target="_blank" rel="noopener noreferrer">Navigation Four - Link</a>
             </Menu.Item>
           </Menu>
-          <Route exact path="/test/documents" component={UploadedDocuments}/>
-          <Route path="/test/documents/uploaded" component={UploadedDocuments}/>
-          <Route path="/test/documents/collected" component={Test}/>
+          <Switch>
+            <Route exact path="/" component={UploadedDocuments}/>
+            <Route exact path="/uploaded" component={UploadedDocuments}/>
+            <Route exact path="/collected" component={Test}/>
+          </Switch>
         </Content>
       </Router>
     );
