@@ -79,10 +79,10 @@ class GroupTab extends React.Component {
             <Icon type="book" />Group Documents
           </Menu.Item>
           <Menu.Item key="group-members">
-            <Icon type="book" />Group Members
+            <Icon type="usergroup-add" />Group Members
           </Menu.Item>
           <Menu.Item key="group-settings">
-            <Icon type="heart-o" />Group Settings
+            <Icon type="setting" />Group Settings
           </Menu.Item>
         </Menu>
         <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
