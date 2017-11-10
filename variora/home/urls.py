@@ -20,5 +20,5 @@ urlpatterns = [
 
     url(r'^api/', include('home.api.urls')),
 
-    url(r'^test$', views.test),
+    url(r'^test', views.test),
 ]
