@@ -17,7 +17,7 @@ function formatOpenDocumentUrl(documentId) {
   })
 }
 
-class DocumentsList extends React.Component {
+class CollectedDocumentsList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -34,13 +34,6 @@ class DocumentsList extends React.Component {
         key: 'action',
         render: (text, record) => (
           <span>
-            <Popconfirm 
-              title="Are you sure delete this document? It cannot be undone." 
-              onConfirm={() => this.deleteDocument(record)} 
-              okText="Yes" cancelText="No"
-            >
-              <a>Delete</a>
-            </Popconfirm>
             <span className="ant-divider" />
             <a href="#" className="ant-dropdown-link">
               More actions <Icon type="down" />
@@ -49,13 +42,8 @@ class DocumentsList extends React.Component {
         ),
       }]
     }
-    this.deleteDocument = (record) => {
-      var data = new FormData()
-      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-      axios.post(record.delete_url, data).then(this.updateData)
-    }
     this.parseResponse = (response) => {
-      var uploadedDocuments = response['uploadedDocuments']
+      var uploadedDocuments = response['collectedDocuments']
       var key = 1
       for (var document of uploadedDocuments) {
         document.key = document.id = key++
@@ -87,7 +75,7 @@ class DocumentsList extends React.Component {
   } 
 }
 
-export { DocumentsList };
+export { CollectedDocumentsList };
 
 
 

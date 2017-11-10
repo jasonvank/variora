@@ -9,9 +9,9 @@ import {
 } from 'react-router-dom'
 import { getCookie, getUrlFormat } from 'util.js'
 
-import { DocumentsList } from './documents_list.jsx'
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { UploadedDocumentsList } from './uploaded_documents_list.jsx'
 import axios from 'axios'
 import enUS from 'antd/lib/locale-provider/en_US';
 
@@ -86,7 +86,7 @@ class GroupTab extends React.Component {
           </Menu.Item>
         </Menu>
         <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
-          <DocumentsList ref={(ele) => this.uploadedDocumentTable = ele} />
+          <UploadedDocumentsList ref={(ele) => this.uploadedDocumentTable = ele} />
         </div>
         <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, padding: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
           <Row>
