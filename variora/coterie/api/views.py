@@ -11,6 +11,7 @@ from django.views.generic import View
 
 from ..models import Coterie
 from home.models import User
+from django.contrib.auth.models import AnonymousUser 
 
 
 class CoterieEncoder(DjangoJSONEncoder):
@@ -27,8 +28,8 @@ class CoterieEncoder(DjangoJSONEncoder):
 class CoterieListView(View):
     def get(self, request):
         user = get_user(request)
-        administrated_coteries = list(user.administrated_coterie_set.all())
-        joined_coteries = list(user.joined_coterie_set.all())
+        administrated_coteries = [] if isinstance(user, AnonymousUser) else list(user.administrated_coterie_set.all())
+        joined_coteries = [] if isinstance(user, AnonymousUser) else list(user.joined_coterie_set.all())
         return JsonResponse(
             {
                 'administratedCoteries': administrated_coteries, 

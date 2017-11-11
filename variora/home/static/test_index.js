@@ -45,6 +45,7 @@ class App extends React.Component {
       joinedCoteries: [],
       user: {
         nickname: '',
+        is_authenticated: false,
         portrait_url: '/media/portrait/default_portrait.png',
       },
     }
@@ -90,7 +91,9 @@ class App extends React.Component {
 
   componentDidMount() {
     axios.get('/api/user').then((response) => {
-      this.setState({ user: response.data })
+      var user = response.data
+      if (user.is_authenticated)
+        this.setState({ user: response.data })
     })
     axios.get('/coterie/api/coteries').then((response) => {
       this.setState({ administratedCoteries: response.data.administratedCoteries })
@@ -138,13 +141,10 @@ class App extends React.Component {
                 <Menu.Item key="explore">
                   <Link to="/explore"><span><Icon type="compass" />explore</span></Link>
                 </Menu.Item>
-                <Menu.Item key="documents">
+                <Menu.Item key="documents" disabled={!this.state.user.is_authenticated}>
                   <Link to="/documents"><span><Icon type='file' />documents</span></Link>
                 </Menu.Item>
-                <Menu.Item key="document" disabled={true}>
-                  <Link to="documents"><span><Icon type='file' />documents</span></Link>
-                </Menu.Item>
-                <SubMenu key="sub3" title={<span><Icon type="team" />group</span>}>
+                <SubMenu key="sub3" title={<span><Icon type="team" />group</span>} disabled={!this.state.user.is_authenticated}>
                   {
                     this.state.administratedCoteries.map((coterie) => {
                       return (

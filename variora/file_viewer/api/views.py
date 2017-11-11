@@ -11,6 +11,7 @@ from django.views.generic import View
 
 from ..models import Annotation, AnnotationReply, Comment, Document
 from home.models import User
+from django.contrib.auth.models import AnonymousUser 
 
 
 class DocumentEncoder(DjangoJSONEncoder):
@@ -88,8 +89,8 @@ class DocumentView(View):
 class DocumentListView(View):
     def get(self, request):
         user = get_user(request)
-        uploaded_documents = list(user.document_set.all())
-        collected_documents = list(user.collected_document_set.all())
+        uploaded_documents = [] if isinstance(user, AnonymousUser) else list(user.document_set.all())
+        collected_documents = [] if isinstance(user, AnonymousUser) else list(user.collected_document_set.all())
         return JsonResponse(
             {
                 'uploadedDocuments': uploaded_documents, 
