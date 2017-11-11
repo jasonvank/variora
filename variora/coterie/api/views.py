@@ -38,3 +38,18 @@ class CoterieListView(View):
             safe=False
         )
 
+@login_required(login_url='/')
+def create_coterie(request):
+    coterie = Coterie()
+    coterie.name = request.POST['coterie_name']
+    if 'coterie_description' in request.POST:
+        coterie.description = request.POST["coterie_description"]
+    coterie.save()
+    coterie.administrators.add(get_user(request))
+    return JsonResponse(coterie, encoder=CoterieEncoder, safe=False)
+
+
+
+
+
+

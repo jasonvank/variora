@@ -2,7 +2,7 @@ import 'antd/dist/antd.css';
 import './css/test_index.css';
 import 'regenerator-runtime/runtime';
 
-import { Avatar, Breadcrumb, Button, Col, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, Upload } from 'antd';
+import { Avatar, Breadcrumb, Button, Col, Form, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, Upload } from 'antd';
 import {
   Link,
   Redirect,
@@ -19,6 +19,9 @@ import ReactDOM from 'react-dom';
 import axios from 'axios'
 import enUS from 'antd/lib/locale-provider/en_US';
 
+const FormItem = Form.Item;
+
+
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 const MenuItemGroup = Menu.ItemGroup;
@@ -32,6 +35,11 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
+      fields: {
+        coterieName: {
+          value: '',
+        },
+      },
       createGroupModelVisible: false,
       administratedCoteries: [],
       joinedCoteries: [],
@@ -55,6 +63,29 @@ class App extends React.Component {
       if (menuItem.key == CREATE_NEW_GROUP_MENU_ITEM_KEY)
         this.setCraeteGroupModelVisible(true)
     }
+    this.handleCreateCoterieFromChange = (changedFields) => {
+      this.setState({
+        fields: { ...this.state.fields, ...changedFields },
+      });
+    }
+    this.submitCreateCoterieForm = () => {
+      console.log(this.state.fields)
+      var data = new FormData()
+      data.append('coterie_name', this.state.fields.coterieName.value)
+      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+      axios.post('/coterie/api/coteries/create', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then((response) => {
+        var newAdministratedCoteries = this.state.administratedCoteries.slice()
+        newAdministratedCoteries.push(response.data)
+        this.setState({
+          administratedCoteries: newAdministratedCoteries
+        })
+        this.setCraeteGroupModelVisible(false)
+      })
+    }
   }
 
   componentDidMount() {
@@ -68,6 +99,7 @@ class App extends React.Component {
   }
 
   render() {
+    const fields = this.state.fields;
     return (
       <Layout style={{ height: '100%', width: '100%', position: 'absolute' }}>
         <Header className="header" style={{ backgroundColor: '#f6f6f6', diplay: 'inline' }}>
@@ -115,12 +147,20 @@ class App extends React.Component {
                 <SubMenu key="sub3" title={<span><Icon type="team" />group</span>}>
                   {
                     this.state.administratedCoteries.map((coterie) => {
-                      return <Menu.Item key={coterie.pk}>{ coterie.name }</Menu.Item>
+                      return (
+                        <Menu.Item key={coterie.pk}>{ coterie.name }
+                          <Link to={ '/groups/' + coterie.pk }><span><Icon type='file' />documents</span></Link>
+                        </Menu.Item>
+                      )
                     })
                   }
                   {
                     this.state.joinedCoteries.map((coterie) => {
-                      return <Menu.Item key={coterie.pk}>{ coterie.name }</Menu.Item>
+                      return (
+                        <Menu.Item key={coterie.pk}>{ coterie.name }
+                          <Link to={ '/groups/' + coterie.pk }><span><Icon type='file' />documents</span></Link>
+                        </Menu.Item>
+                      )
                     })
                   }
                   <Menu.Item key={CREATE_NEW_GROUP_MENU_ITEM_KEY}><Icon type="plus"/></Menu.Item>
@@ -129,12 +169,10 @@ class App extends React.Component {
                   title="create a new group"
                   wrapClassName="vertical-center-modal"
                   visible={this.state.createGroupModelVisible}
-                  onOk={() => this.setCraeteGroupModelVisible(false)}
+                  onOk={this.submitCreateCoterieForm}
                   onCancel={() => this.setCraeteGroupModelVisible(false)}
                 >
-                  <p>some contents...</p>
-                  <p>some contents...</p>
-                  <p>some contents...</p>
+                  <CustomizedForm {...fields} onChange={this.handleCreateCoterieFromChange} />
                 </Modal>
               </Menu>
             </Sider>
@@ -144,6 +182,7 @@ class App extends React.Component {
                 <Route exact path='/' render={() => (<Redirect to="/documents" />)} />
                 <Route exact path="/documents" component={DocumentTab} />
                 <Route exact path="/explore" component={GroupTab} />
+                <Route exact path="/groups/:pk" component={GroupTab} />
               </Switch>
             </Layout>
           </Layout>
@@ -152,6 +191,31 @@ class App extends React.Component {
     );
   }
 }
+
+const CustomizedForm = Form.create({
+  onFieldsChange(props, changedFields) {
+    props.onChange(changedFields);
+  },
+  mapPropsToFields(props) {
+    return {
+      coterieName: {
+        ...props.coterieName,
+        value: props.coterieName.value,
+      },
+    };
+  },
+})((props) => {
+  const { getFieldDecorator } = props.form;
+  return (
+    <Form layout="inline">
+      <FormItem label="group name">
+        {getFieldDecorator('coterieName', {
+          rules: [{ required: true, message: 'name is required!' }],
+        })(<Input />)}
+      </FormItem>
+    </Form>
+  );
+});
 
 ReactDOM.render(
   <LocaleProvider locale={enUS}>

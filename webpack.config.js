@@ -55,7 +55,7 @@ module.exports = {
         loader: 'babel-loader',
         exclude: /node_modules/,
         query: {
-          presets: ['babel-preset-env', 'react'],
+          presets: ['babel-preset-env', 'react', 'stage-2'],
           plugins: [
             'transform-regenerator', [
               "import", [{

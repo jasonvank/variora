@@ -21,8 +21,8 @@ const MenuItemGroup = Menu.ItemGroup;
 
 
 class GroupTab extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props)
     this.state = {
       uploadedDocumentFileList: [],
       uploadedDocumentName: undefined,
@@ -58,7 +58,11 @@ class GroupTab extends React.Component {
         })
     }
   }
-
+  
+  componentWillReceiveProps(nextProps) {
+    this.setState({ coteriePk: nextProps.match.params.pk })
+  }
+  
   render() {
     self = this;
     var uploadProps = {
@@ -76,7 +80,7 @@ class GroupTab extends React.Component {
           style={{ padding: 0 }}
         >
           <Menu.Item key="group-documents">
-            <Icon type="book" />Group Documents
+            <Icon type="book" />{this.state.coteriePk}Group Documents
           </Menu.Item>
           <Menu.Item key="group-members">
             <Icon type="usergroup-add" />Group Members
@@ -130,5 +134,4 @@ class GroupTab extends React.Component {
 }
 
 export { GroupTab };
-
 
