@@ -8,7 +8,13 @@ python variora/manage.py migrate
 rm -r ./variora/bundled_static/dev/*
 
 webpack --config webpack.config.dev.js &  # run webpack watching mode in background
-python variora/manage.py runserver  # run Django development server
+
+if [ $# -ge 1 ]; then
+    python variora/manage.py runserver $1  # run Django development server on specify port
+else
+    python variora/manage.py runserver  # run Django development server on default port 8080
+fi
+
 pkill -f webpack  # kill wepback watching mode after django dev server is terminated
 
 rm -r ./variora/bundled_static/dev/*
