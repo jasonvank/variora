@@ -1,17 +1,14 @@
 import 'antd/dist/antd.css';
 import 'regenerator-runtime/runtime';
 
-import { Avatar, Breadcrumb, Button, Col, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, Upload } from 'antd';
+import { Avatar, Button, Col, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, Upload } from 'antd';
 import {
   Link,
-  Redirect,
   Route,
-  BrowserRouter as Router,
-  Switch
+  BrowserRouter as Router
 } from 'react-router-dom'
 import { getCookie, getUrlFormat } from 'util.js'
 
-import { CollectedDocumentsList } from './collected_documents_list.jsx'
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { UploadedDocumentsList } from './uploaded_documents_list.jsx'
@@ -23,44 +20,9 @@ const { Header, Content, Sider } = Layout;
 const MenuItemGroup = Menu.ItemGroup;
 
 
-const URL_BASE = '/test'
-
-class DocumentTab extends React.Component {
-  constructor() {
-    super();
-    this.state = {}
-  }
-  
-  render() {
-    return (
-      <Router basename={URL_BASE}>
-        <Content style={{ paddingLeft: 18, paddingRight: 18, paddingTop: 8, margin: 0, minHeight: 280 }}>
-          <Menu
-            onClick={this.handleClick}
-            mode="horizontal"
-            style={{ padding: 0 }}
-            defaultSelectedKeys={['uploaded-documents']}
-          >
-            <Menu.Item key="uploaded-documents">
-              <Link to="/"><Icon type="mail" />Uploaded Documents</Link>
-            </Menu.Item>
-            <Menu.Item key="collected-documents">
-              <Link to="/collected"><Icon type="heart-o" />Collected Documents</Link>
-            </Menu.Item>
-          </Menu>
-          <Switch>
-            <Route exact path="/" component={UploadedDocuments}/>
-            <Route exact path="/collected" component={CollectedDocuments}/>
-          </Switch>
-        </Content>
-      </Router>
-    );
-  }
-}
-
-class UploadedDocuments extends React.Component {
-  constructor() {
-    super();
+class GroupDocumentsSubtab extends React.Component {
+  constructor(props) {
+    super(props);
     this.state = {
       uploadedDocumentFileList: [],
       uploadedDocumentName: undefined,
@@ -106,6 +68,7 @@ class UploadedDocuments extends React.Component {
     }
     return (
       <div> 
+        <h1>{ this.props.coteriePk }</h1>
         <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
           <UploadedDocumentsList ref={(ele) => this.uploadedDocumentTable = ele} />
         </div>
@@ -150,19 +113,14 @@ class UploadedDocuments extends React.Component {
   }
 }
 
-class CollectedDocuments extends React.Component {
-  constructor() {
-    super();
-  }
-  render() {
-    return (
-      <div> 
-        <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
-          <CollectedDocumentsList ref={(ele) => this.uploadedDocumentTable = ele} />
-        </div>
-      </div> 
-    )
-  }
-}
+export { GroupDocumentsSubtab }
 
-export { DocumentTab };
+
+
+
+
+
+
+
+
+

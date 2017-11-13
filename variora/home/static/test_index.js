@@ -138,18 +138,18 @@ class App extends React.Component {
             <Sider width={200} style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }}>
               <Menu
                 mode="inline"
-                defaultSelectedKeys={['1']}
-                defaultOpenKeys={['sub1']}
+                defaultOpenKeys={['teams']}
                 onClick={this.onClickCreateGroupMenuItem}
                 style={{ height: '100%', borderRight: 0 }}
+                defaultSelectedKeys={['documents']}
               >
                 <Menu.Item key="explore">
-                  <Link to="/explore"><span><Icon type="compass" />explore</span></Link>
+                  <Link to="/"><span><Icon type="compass" />explore</span></Link>
                 </Menu.Item>
                 <Menu.Item key="documents" disabled={!this.state.user.is_authenticated}>
-                  <Link to="/documents"><span><Icon type='file' />documents</span></Link>
+                  <Link to="/"><span><Icon type='file' />documents</span></Link>
                 </Menu.Item>
-                <SubMenu key="sub3" title={<span><Icon type="team" />group</span>} disabled={!this.state.user.is_authenticated}>
+                <SubMenu key="teams" title={<span><Icon type="team" />group</span>} disabled={!this.state.user.is_authenticated}>
                   {
                     this.state.administratedCoteries.map((coterie) => {
                       return (
@@ -184,8 +184,7 @@ class App extends React.Component {
 
             <Layout style={{ marginLeft: 200, padding: 0 }}>
               <Switch>
-                <Route exact path='/' render={() => (<Redirect to="/documents" />)} />
-                <Route exact path="/documents" component={DocumentTab} />
+                <Route exact path="/" component={DocumentTab} />
                 <Route exact path="/explore" component={GroupTab} />
                 <Route exact path="/groups/:pk" component={GroupTab} />
               </Switch>
