@@ -21,4 +21,6 @@ urlpatterns = [
     url(r'^api/', include('home.api.urls')),
 
     url(r'^test', views.test),
+
+    url(r'^sign-in', views.display_sign_in_page),
 ]

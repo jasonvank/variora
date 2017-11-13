@@ -7,4 +7,8 @@ urlpatterns = [
     url(r'users/(?P<pk>\d+)', views.UserAPIView.as_view()),
     
     url(r'search', views.search_api_view),
+    
+    url(r'signin', views.sign_in),
+    
+    url(r'signoff', views.sign_off),
 ]

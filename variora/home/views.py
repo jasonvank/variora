@@ -3,8 +3,7 @@ import urllib2
 
 import models
 from coterie.models import Coterie
-from django.contrib.auth import authenticate  # for log in verification
-from django.contrib.auth import get_user, login
+from django.contrib.auth import get_user, login, authenticate
 from django.core.mail import EmailMessage  # for sending verification using e-mail
 from django.db.models import Q
 from django.http import HttpResponse
@@ -36,6 +35,10 @@ def display_home_page(request):
 
 def display_sign_up_page(request):
     return render(request, "home/sign_up_page.html")
+
+
+def display_sign_in_page(request):
+    return render(request, "home/sign_in_page.html")
 
 
 def handle_log_in(request):

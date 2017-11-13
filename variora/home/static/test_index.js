@@ -64,13 +64,17 @@ class App extends React.Component {
       if (menuItem.key == CREATE_NEW_GROUP_MENU_ITEM_KEY)
         this.setCraeteGroupModelVisible(true)
     }
+    this.signOff = () => {
+      axios.get('/api/signoff').then(response => {
+        window.location.reload()
+      })
+    }
     this.handleCreateCoterieFromChange = (changedFields) => {
       this.setState({
         fields: { ...this.state.fields, ...changedFields },
       });
     }
     this.submitCreateCoterieForm = () => {
-      console.log(this.state.fields)
       var data = new FormData()
       data.append('coterie_name', this.state.fields.coterieName.value)
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
@@ -118,6 +122,7 @@ class App extends React.Component {
               />
             </Col>
             <Col span={6} style={{ textAlign: 'right' }}>
+              { this.state.user.is_authenticated ? <a onClick={this.signOff}>sign off</a> : <a href="/sign-in">sign in</a> }
               <span style={{ margin: 18 }}>{ this.state.user.nickname }</span>
               <Avatar
                 style={{ verticalAlign: 'middle' }}

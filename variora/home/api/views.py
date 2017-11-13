@@ -1,5 +1,5 @@
 from coterie.models import Coterie
-from django.contrib.auth import get_user
+from django.contrib.auth import get_user, login, authenticate, logout
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Q
@@ -64,6 +64,29 @@ def search_api_view(request):
 
 def get_current_user(request):
     return JsonResponse(get_user(request), encoder=UserEncoder, safe=False)
+
+
+def sign_in(request):
+    input_email_address = request.POST['email_address']
+    input_password = request.POST['password']
+    user = authenticate(email_address=input_email_address, password=input_password)
+    if user is not None:
+        if user.is_active:
+            login(request, user)
+            return HttpResponse(status=200)
+        else:
+            return HttpResponse("account not active", status=400)
+    else:
+        return HttpResponse("email or password incorrect", status=400)
+
+
+def sign_off(request):
+    logout(request)
+    return HttpResponse()
+
+
+
+
 
 
 
