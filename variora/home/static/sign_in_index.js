@@ -19,8 +19,13 @@ const Search = Input.Search;
 
 
 class NormalLoginForm extends React.Component {
+  redirectToNUSSignIn() {
+    var host = 'http://' + window.location.host
+    window.location.href = 
+      'https://ivle.nus.edu.sg/api/login/?apikey=Z6Q2MnpaPX8sDSOfHTAnN&url=' + host + '/handle_nus_log_in'
+  }
   handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     this.props.form.validateFields((err, values) => {
       if (!err) {
         var data = new FormData()
@@ -73,6 +78,15 @@ class NormalLoginForm extends React.Component {
               <Button type="primary" htmlType="submit" className="login-form-button">
                 Log in
               </Button>
+              <Button 
+                style={{backgroundColor: 'orange', borderColor: 'orange', marginTop: 8, color: 'white'}} 
+                className="login-form-button"
+                htmlType='button'
+                type='primary'
+                onClick={this.redirectToNUSSignIn}
+              >
+                Log in with NUS ID
+              </Button>
               Or <a href="">register now!</a>
             </FormItem>
           </Form>
@@ -89,4 +103,4 @@ ReactDOM.render(
     <SignInForm />
   </LocaleProvider>, 
   document.getElementById('main')
-);
+)
