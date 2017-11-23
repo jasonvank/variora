@@ -19,6 +19,29 @@ const Search = Input.Search;
 
 
 class NormalLoginForm extends React.Component {
+  onSuccess(user) {
+    console.log(user)
+  }
+  onFailure() {}
+  componentDidMount() {
+    var auth2 = undefined
+    function attachSignin(element) {
+      auth2.attachClickHandler(element, {},
+          function(googleUser) {
+            console.log(googleUser)
+          }, function(error) {
+            alert(JSON.stringify(error, undefined, 2));
+          });
+    }
+    gapi.load('auth2', function(){
+      // Retrieve the singleton for the GoogleAuth library and set up the client.
+      auth2 = gapi.auth2.init({
+        client_id: '519848814448-89p2bv1b6bksdnd3in64r25j9vq1hgc5.apps.googleusercontent.com',
+        cookiepolicy: 'single_host_origin',
+      });
+      attachSignin(document.getElementById('google-login'));
+    });
+  }
   redirectToNUSSignIn() {
     var host = 'http://' + window.location.host
     window.location.href = 
@@ -78,16 +101,27 @@ class NormalLoginForm extends React.Component {
               <Button type="primary" htmlType="submit" className="login-form-button">
                 Log in
               </Button>
-              <Button 
-                style={{backgroundColor: 'orange', borderColor: 'orange', marginTop: 8, color: 'white'}} 
-                className="login-form-button"
-                htmlType='button'
-                type='primary'
-                onClick={this.redirectToNUSSignIn}
-              >
-                Log in with NUS ID
-              </Button>
               Or <a href="">register now!</a>
+              <div id='third-party-login' style={{ marginTop: 28 }}>
+                <Button 
+                  style={{backgroundColor: 'orange', borderColor: 'orange', marginTop: 8, color: 'white'}} 
+                  className="login-form-button"
+                  htmlType='button'
+                  type='primary'
+                  onClick={this.redirectToNUSSignIn}
+                >
+                  Log in with NUS ID
+                </Button>
+                <Button 
+                  style={{ backgroundColor:'#DD4B39', marginTop: 8, color: 'white' }} 
+                  className="login-form-button"
+                  htmlType='button'
+                  id='google-login'
+                >
+                  <i className="fa fa-google-plus" aria-hidden="true"></i>
+                  {'  '}Log in with Google
+                </Button>
+              </div>
             </FormItem>
           </Form>
         </Col>
@@ -104,3 +138,17 @@ ReactDOM.render(
   </LocaleProvider>, 
   document.getElementById('main')
 )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
