@@ -85,7 +85,7 @@ $(document).ready(function() {
                         verification_code: $("input[name='verification_code']").val(),
                         email_address: email_address,
                     },
-                    success: function (data) {
+                    success: function(data) {
                         if (data == "wrong") {
                             document.getElementById("message2").innerHTML = "<span color='red'>verification code is incorrect</span>";
                         } else {
@@ -117,7 +117,7 @@ $(document).ready(function() {
     });
 
     // password validate
-    $(".registration-form[target='for_submit_refresh']").find("input[name='password_confirm']").keyup(function () {
+    $(".registration-form[target='for_submit_refresh']").find("input[name='password_confirm']").keyup(function() {
         var pw1 = document.getElementsByName("password")[0].value;
         var pw2 = document.getElementsByName("password_confirm")[0].value;
         if (pw2.length < 6){

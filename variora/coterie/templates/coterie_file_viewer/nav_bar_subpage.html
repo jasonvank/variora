@@ -31,16 +31,3 @@
     </form>
     <b id="num_visit" style="float: right; color: white; padding-top: 4px;">{{ document.num_visit }} visits</b>
 </div>
-
-<script> 
-    $("#show_annotation_frame_button").on('click', function() {
-        $(".Annotation").each(function() {
-            $(this).slideDown(180);
-        });
-    });
-    $("#hide_annotation_frame_button").on('click', function() {
-        $(".Annotation").each(function() {
-            $(this).slideUp(180);
-        });
-    });
-</script>

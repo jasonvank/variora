@@ -1,18 +1,18 @@
+import { getCookie } from 'util.js'
+
 var numPages = 0;
 var new_annotation_id;
 var scaleFactor = 1.08;
 
-
+///////////////////////////////////////////////////////////////////////////////
 
 var pdfDoc;
 var currentScale = 1;
 var finishList = [];
 var taskList = [];
 var rendering = false;
-// var scaleFactor = 1.08;
 var sampleWidth;
 var sampleHeight;
-// var is_authenticated = {{ request.user.is_authenticated|yesno:"true,false" }};  // whether the visitor is a logged-in user
 var clearnessLevel = 2.4;  // too small then not clear, not large then rendering consumes much resource 
 
 function pdfScale(scaleFactor) {
@@ -51,30 +51,8 @@ function pdfScale(scaleFactor) {
   $("#file_viewer").scrollTop(parseFloat($("#file_viewer").scrollTop()) * factor);
 }
 
+///////////////////////////////////////////////////////////////////////////////
 
-
-
-
-
-
-
-
-
-function getCookie(name) {
-  var cookieValue = null;
-  if (document.cookie && document.cookie != '') {
-    var cookies = document.cookie.split(';');
-    for (var i = 0; i < cookies.length; i++) {
-      var cookie = jQuery.trim(cookies[i]);
-      // Does this cookie string begin with the name we want?
-      if (cookie.substring(0, name.length + 1) == (name + '=')) {
-        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-        break;
-      }
-    }
-  }
-  return cookieValue;
-}
 
 function tinymceInit() {
   tinymce.init({
@@ -92,13 +70,13 @@ function tinymceInit() {
     paste_as_text: true,
     branding: false,
     width: 'calc(100% - 2px)',
-    setup: function (editor) {
-      editor.on('change', function () {
+    setup: function(editor) {
+      editor.on('change', function() {
         editor.save();
       });
     }
   });
-  $(document).on('focusin', function (e) {
+  $(document).on('focusin', function(e) {
     // this is to solve the issue of being unable to edit link and image link in bootstrap model
     if ($(e.target).closest(".mce-window").length)
       e.stopImmediatePropagation();
@@ -112,7 +90,7 @@ function tinymceInit() {
  * @return {undefined}
  */
 function imgLoad(img, callback) {
-  var timer = setInterval(function () {
+  var timer = setInterval(function() {
     if (img.complete) {
       callback(img);
       clearInterval(timer);
@@ -123,12 +101,12 @@ function imgLoad(img, callback) {
 function startListeningSelectionBoxCreation() {
   var annotationColor = "rgba(0,0,0,0.18)";
 
-  $("#annotation_color_buttons_div").find(".ColorSelectorButton").on("click", function () {
+  $("#annotation_color_buttons_div").find(".ColorSelectorButton").on("click", function() {
     annotationColor = $(this).css("background-color");
   });
 
   // 可以在已经完成的annotation selection frame上新建一个selection frame
-  $(".PageDiv, .page_div").on("mousedown", function (e) {
+  $(".PageDiv, .page_div").on("mousedown", function(e) {
     // 如果是新建尚未上传的annotation，则不能在其selection frame上新建一个selection frame，
     // 因为点击这个事件要用来给这个尚未上传的annotation的frame做drag或者resize
     if ($(e.target).hasClass('ui-draggable') || $(e.target).hasClass('ui-resizable-handle'))
@@ -158,7 +136,7 @@ function startListeningSelectionBoxCreation() {
       "top": top_left_relative_y,
     });
 
-    $(".PageImg, .PageCanvas, .Annotation").on("mousemove", function (e) {
+    $(".PageImg, .PageCanvas, .Annotation").on("mousemove", function(e) {
       var mouse_absolute_x = e.pageX;
       var mouse_absolute_y = e.pageY;
       var page_top_left_x = page.offset().left;
@@ -175,7 +153,7 @@ function startListeningSelectionBoxCreation() {
       e.stopPropagation();
     });
 
-    $("body").on("mouseup", function (e) {
+    $("body").on("mouseup", function(e) {
       if ($(e.target).hasClass("PageImg") || $(e.target).hasClass("PageCanvas") || $(e.target).hasClass("Annotation")) {
         var page_height = page.height();
         var page_width = page.width();
@@ -206,14 +184,14 @@ function startListeningSelectionBoxCreation() {
                                     <button id="post_annotation_button" type="button" class="btn" name="document_id" value="{{ document.id }}"\ style="margin: 8px; float: right; border-radius: 0; color: white; background-color: #1BA39C">post annotation</button>\
                                 </form>\
                                 <script>tinymceInit();</script>',
-          cancel: function () { // 窗口被关闭的回调函数：当窗口被关闭，annotation选定框也一并删除
+          cancel: function() { // 窗口被关闭的回调函数：当窗口被关闭，annotation选定框也一并删除
             new_annotation.remove();
           }
         });
 
         // annotationWindowJqueryObject will return the jquery object of the annotation window
         var annotationWindowJqueryObject = $(".layui-layer[times=" + annotationWindow + "]");
-        annotationWindowJqueryObject.find("#post_annotation_button").on("click", function () {
+        annotationWindowJqueryObject.find("#post_annotation_button").on("click", function() {
           if (is_authenticated) {
             console.log(annotationWindowJqueryObject.find("textarea[name='annotation_content']"))
             $.ajax({
@@ -231,7 +209,7 @@ function startListeningSelectionBoxCreation() {
                 frame_color: annotationColor,
                 document_id: $("button[name='document_id']").val(),
               },
-              success: function (data) {
+              success: function(data) {
                 // after uploading the annotation, 选择框将不再可以调整大小和拖动
                 new_annotation.draggable("destroy").resizable("destroy");
                 $("#annotation_update_div").html(data);
@@ -274,7 +252,7 @@ function startListeningSelectionBoxCreation() {
  * @param scaleFactor
  */
 function resizeAnnotations(scaleFactor) {
-  $(".Annotation").each(function () {
+  $(".Annotation").each(function() {
     $(this).css("top", parseFloat($(this).css("top")) * scaleFactor + "px");
     $(this).css("left", parseFloat($(this).css("left")) * scaleFactor + "px");
     $(this).css("width", parseFloat($(this).css("width")) * scaleFactor + "px");
@@ -282,27 +260,27 @@ function resizeAnnotations(scaleFactor) {
   });
 }
 
-/**
- * called after clicking scale button (buttonForLarger/buttonForSmaller)
- * @param {number} scaleFactor
- */
-function scale(scaleFactor) {
-  if ($("canvas").length == 0) {
-    var oldScrollHeight = $("#file_viewer")[0].scrollHeight;
+// /**
+//  * called after clicking scale button (buttonForLarger/buttonForSmaller)
+//  * @param {number} scaleFactor
+//  */
+// function scale(scaleFactor) {
+//   if ($("canvas").length == 0) {
+//     var oldScrollHeight = $("#file_viewer")[0].scrollHeight;
 
-    $('.PageImg').css("width", parseFloat($('.PageImg').css("width")) * scaleFactor + "px");
-    $(".PageDiv").each(function () {
-      var div = $(this);
-      var img = div.children(".PageImg");
-      div.css("width", img.width() + "px");
-      div.css("height", img.height() + "px");
-    });
-    resizeAnnotations(scaleFactor);
+//     $('.PageImg').css("width", parseFloat($('.PageImg').css("width")) * scaleFactor + "px");
+//     $(".PageDiv").each(function() {
+//       var div = $(this);
+//       var img = div.children(".PageImg");
+//       div.css("width", img.width() + "px");
+//       div.css("height", img.height() + "px");
+//     });
+//     resizeAnnotations(scaleFactor);
 
-    var factor = $("#file_viewer")[0].scrollHeight / oldScrollHeight;
-    $("#file_viewer").scrollTop(parseFloat($("#file_viewer").scrollTop()) * factor);
-  }
-}
+//     var factor = $("#file_viewer")[0].scrollHeight / oldScrollHeight;
+//     $("#file_viewer").scrollTop(parseFloat($("#file_viewer").scrollTop()) * factor);
+//   }
+// }
 
 /**
  * scroll the specified page into fileViewer's visible window
@@ -324,7 +302,7 @@ function prepareScrollPageIntoView() {
   var button = $("#scroll_page_into_view_div").children("button");
   input.attr("min", "1");
   input.attr("max", numPages.toString());
-  button.on("click", function () {
+  button.on("click", function() {
     var pageIndex = input.val();
     var pageDivId = "page_div_" + pageIndex;
     var pageDiv = $("#" + pageDivId);
@@ -333,19 +311,19 @@ function prepareScrollPageIntoView() {
 }
 
 function addAnnotationRelatedListener() {
-  $(".AnnotationBlock").on("mouseover", function () {
+  $(".AnnotationBlock").on("mouseover", function() {
     var annotation_id = $(this).attr("annotation_id");
     var Annotation = $(".Annotation[annotation_id='" + annotation_id + "']");
     $(this).css("box-shadow", '2px 3px 8px rgba(0, 0, 0, .25)');
     Annotation.css("box-shadow", '2px 3px 8px rgba(0, 0, 0, .25)');
   });
-  $(".AnnotationBlock").on("mouseout", function () {
+  $(".AnnotationBlock").on("mouseout", function() {
     var annotation_id = $(this).attr("annotation_id");
     var Annotation = $(".Annotation[annotation_id='" + annotation_id + "']");
     $(this).css("box-shadow", 'none');
     Annotation.css("box-shadow", 'none');
   });
-  $(".AnnotationBlock").on("click", function () { // scroll to the corresponding Anotation when clicking a certain AnnotationBlock
+  $(".AnnotationBlock").on("click", function() { // scroll to the corresponding Anotation when clicking a certain AnnotationBlock
     var annotation_id = $(this).attr("annotation_id");
     var Annotation = $(".Annotation[annotation_id='" + annotation_id + "']");
     var fileViewer = $("#file_viewer");
@@ -354,7 +332,7 @@ function addAnnotationRelatedListener() {
       scrollTop: parseInt(down)
     }, 240);
   });
-  $(".PostReplyReplyButton").on("click", function () {
+  $(".PostReplyReplyButton").on("click", function() {
     if (is_authenticated) {
       var thisButton = $(this);
       var index = layer.load(0, {
@@ -371,7 +349,7 @@ function addAnnotationRelatedListener() {
           reply_to_annotation_reply_id: thisButton.val(),
           document_id: $("button[name='document_id']").val(),
         },
-        success: function (data) {
+        success: function(data) {
           $("#annotation_update_div").html(data);
           addAnnotationRelatedListener()
           tinymceInit();
@@ -381,7 +359,7 @@ function addAnnotationRelatedListener() {
     } else
       layer.msg('you need to log in to reply');
   })
-  $(".DeleteAnnotationReplyButton").on("click", function () {
+  $(".DeleteAnnotationReplyButton").on("click", function() {
     var index = layer.load(0, {
       shade: 0.18
     }); //0 represent the style, can be 0-2
@@ -394,7 +372,7 @@ function addAnnotationRelatedListener() {
         reply_id: this.value,
         document_id: $("button[name='document_id']").val(),
       },
-      success: function (data) {
+      success: function(data) {
         $("#annotation_update_div").html(data);
         addAnnotationRelatedListener()
         tinymceInit();
@@ -434,7 +412,7 @@ function addAnnotationRelatedListener() {
     $(".Annotation[annotation_id='" + annotationID + "']").remove();
   }
 
-  $(".DeleteAnnotationButton").on("click", function () {
+  $(".DeleteAnnotationButton").on("click", function() {
     var annotationID = this.value;
     $.ajax({
       type: "POST",
@@ -444,20 +422,20 @@ function addAnnotationRelatedListener() {
         operation: "delete_annotation",
         annotation_id: this.value,
       },
-      success: function () {
+      success: function() {
         removeAnnotation(annotationID);
       }
     });
   });
 
-  $(".LikeAnnotationButton").on("click", function () {
+  $(".LikeAnnotationButton").on("click", function() {
     if (is_authenticated) {
       $this = $(this);
       var new_num = parseInt($this.next().text()) + 1;
       $this.next().text(new_num.toString());
       $this.off("click");
       $this.css("color", "#6495ED");
-      $this.on("click", function () {
+      $this.on("click", function() {
         layer.msg('already liked', {
           icon: 6,
           time: 800,
@@ -475,14 +453,14 @@ function addAnnotationRelatedListener() {
     } else
       layer.msg('you need to log in to like');
   });
-  $(".LikeAnnotationReplyButton").on("click", function () {
+  $(".LikeAnnotationReplyButton").on("click", function() {
     if (is_authenticated) {
       $this = $(this);
       var new_num = parseInt($this.next().text()) + 1;
       $this.next().text(new_num.toString());
       $this.off("click");
       $this.css("color", "#6495ED");
-      $this.on("click", function () {
+      $this.on("click", function() {
         layer.msg('already liked', {
           icon: 6,
           time: 800,
@@ -504,14 +482,14 @@ function addAnnotationRelatedListener() {
 
 function addCommentRelatedListener() {
   tinymceInit();
-  $(".likeCommentButton").on("click", function () {
+  $(".likeCommentButton").on("click", function() {
     if (is_authenticated) {
       $this = $(this);
       var new_num = parseInt($this.next().text()) + 1;
       $this.next().text(new_num.toString());
       $this.off("click");
       $this.css("color", "#6495ED");
-      $this.on("click", function () {
+      $this.on("click", function() {
         layer.msg('already liked', {
           icon: 6,
           time: 800,
@@ -529,7 +507,7 @@ function addCommentRelatedListener() {
     } else
       layer.msg('you need to log in to like');
   });
-  $(".delete_comment_button").on("click", function () {
+  $(".delete_comment_button").on("click", function() {
     if (is_authenticated) {
       var index = layer.load(0, {
         shade: 0.18
@@ -543,7 +521,7 @@ function addCommentRelatedListener() {
           comment_id: this.value,
           document_id: $("button[name='document_id']").val(),
         },
-        success: function (data) {
+        success: function(data) {
           $("#comment_update_div").html(data);
           addCommentRelatedListener();
           layer.close(index);
@@ -551,10 +529,10 @@ function addCommentRelatedListener() {
       });
     }
   });
-  $(".reply_comment_button").on("click", function () {
+  $(".reply_comment_button").on("click", function() {
     $(this).parents("blockquote").find(".reply_comment_form").slideToggle({
       duration: 180,
-      start: function () {
+      start: function() {
         if ($(this).is(":hidden")) {
           // tinyMCE.activeEditor.setContent("")
         } else {
@@ -565,7 +543,7 @@ function addCommentRelatedListener() {
       }
     });
   });
-  $(".post_comment_reply_button").on("click", function () {
+  $(".post_comment_reply_button").on("click", function() {
     if (is_authenticated) {
       var $thisButton = $(this);
       var index = layer.load(0, {
@@ -581,7 +559,7 @@ function addCommentRelatedListener() {
           document_id: $("button[name='document_id']").val(),
           reply_to_comment_id: $thisButton.val(),
         },
-        success: function (data) {
+        success: function(data) {
           $("#comment_update_div").html(data);
           // 修改html内容后，有关的事件监听会被自动删除，因此需要重新添加事件监听
           addCommentRelatedListener();
@@ -609,10 +587,10 @@ function setupFileViewerSize() {
 
   // 设置文档的大小
   $(".PageImg").css("width", fileViewer.width() - 24 + "px");
-  $(".PageDiv").each(function () {
+  $(".PageDiv").each(function() {
     var div = $(this);
     var img = div.children(".PageImg");
-    imgLoad(img[0], function () {
+    imgLoad(img[0], function() {
       div.css("width", img.width() + "px");
       div.css("height", img.height() + "px");
     });
@@ -622,9 +600,9 @@ function setupFileViewerSize() {
 function animateOnce() {
   // add animation using animate.css
   $.fn.extend({
-    animateOnce: function (animationName) {
+    animateOnce: function(animationName) {
       var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
-      this.addClass('animated ' + animationName).one(animationEnd, function () {
+      this.addClass('animated ' + animationName).one(animationEnd, function() {
         $(this).removeClass('animated ' + animationName);
       });
     }
@@ -634,17 +612,23 @@ function animateOnce() {
 }
 
 function enableResizeButton() {
-  // img resize
-  $("#buttonForLarger").on('click', function () {
-    scale(scaleFactor);
+  // // img resize
+  // $("#buttonForLarger").on('click', function() {
+  //   scale(scaleFactor);
+  // });
+  // $("#buttonForSmaller").on('click', function() {
+  //   scale(1 / scaleFactor);
+  // });
+  $("#buttonForLarger").on('click', function() {
+    pdfScale(scaleFactor);
   });
-  $("#buttonForSmaller").on('click', function () {
-    scale(1 / scaleFactor);
+  $("#buttonForSmaller").on('click', function() {
+    pdfScale(1/scaleFactor);
   });
 }
 
 function enableRefreshCommentButton() {
-  $("#refresh_comment_button").on('click', function () {
+  $("#refresh_comment_button").on('click', function() {
     $.ajax({
       type: "POST",
       url: "",
@@ -653,7 +637,7 @@ function enableRefreshCommentButton() {
         operation: "refresh",
         document_id: $("button[name='document_id']").val(),
       },
-      success: function (data) {
+      success: function(data) {
         $("#comment_update_div").html(data);
         addCommentRelatedListener();
       },
@@ -662,7 +646,7 @@ function enableRefreshCommentButton() {
 }
 
 function enablePostCommentButton() {
-  $("#post_comment_button").on('click', function () {
+  $("#post_comment_button").on('click', function() {
     if (is_authenticated) {
       var index = layer.load(0, {
         shade: 0.18
@@ -677,7 +661,7 @@ function enablePostCommentButton() {
           comment_content: $("textarea[name='comment_content']").val(),
           document_id: $("button[name='document_id']").val(),
         },
-        success: function (data) {
+        success: function(data) {
           $("#comment_update_div").html(data);
           addCommentRelatedListener(); // 修改html内容后，有关的事件监听会被自动删除，因此需要重新添加事件监听
           activeEditor.setContent("") // $("textarea[name='comment_content']").val("");
@@ -688,7 +672,7 @@ function enablePostCommentButton() {
   });
 }
 
-$(document).ready(function () {
+$(document).ready(function() {
   prepareAndRenderAll($("#file-url").val(), currentScale);
   tinymceInit();
   animateOnce();
@@ -696,8 +680,9 @@ $(document).ready(function () {
   enablePostCommentButton();
   enableRefreshCommentButton();
   enableResizeButton();
+  prepareNavbarFunction();
 
-  $(window).resize(function () {
+  $(window).resize(function() {
     setupFileViewerSize();
 
     var originalWidth = parseFloat($(".PageImg").css("width"));
@@ -717,43 +702,12 @@ $(document).ready(function () {
     containment: "#containment-wrapper",
     revert: true,
     revertDuration: 0,
-    stop: function (event, ui) {
+    stop: function(event, ui) {
       var left = ui.offset["left"];
       fileViewer.css("width", left + "px");
       $("#annotation_update_div").css("width", wrapper.width() - 3 - fileViewer.width() + "px");
     }
   });
-
-
-
-
-
-
-
-
-
-
-  
-  $("#buttonForLarger").on('click', function () {
-    pdfScale(scaleFactor);
-  });
-  $("#buttonForSmaller").on('click', function () {
-    pdfScale(1/scaleFactor);
-  });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 });
 
 function renderTaskList(taskList, finishList, scale) {
@@ -761,7 +715,7 @@ function renderTaskList(taskList, finishList, scale) {
     rendering = true;
     $("#buttonForLarger, #buttonForSmaller").attr("disabled", true);
     var num = taskList[0][0];
-    pdfDoc.getPage(num).then(function (page) {
+    pdfDoc.getPage(num).then(function(page) {
       var page_canvas_id = "page_canvas_" + num;
       var canvas = document.getElementById(page_canvas_id);
       var context = canvas.getContext('2d');
@@ -781,13 +735,13 @@ function renderTaskList(taskList, finishList, scale) {
       taskList[0][2] = page.render(renderContext); // taskList[0][2] is a RenderTask object
       taskList[0][1] = "RENDERING";
 
-      taskList[0][2].promise.then(function () {
+      taskList[0][2].promise.then(function() {
         taskList.shift();
         finishList.push(num);
         rendering = false;
         $("#buttonForLarger, #buttonForSmaller").attr("disabled", false　);
         renderTaskList(taskList, finishList, scale);
-      }, function (reason) {
+      }, function(reason) {
         console.log("rejected because of this reason: " + reason);
       });
     });
@@ -797,7 +751,7 @@ function renderTaskList(taskList, finishList, scale) {
 function startListeningScroll() {
   var previous = 1;
 
-  $("#file_viewer").scroll(function () {
+  $("#file_viewer").scroll(function() {
     var percentage = this.scrollTop / this.scrollHeight;
     var page_index = Math.ceil(percentage * numPages);
     if (page_index != previous) {
@@ -834,7 +788,7 @@ function startListeningScroll() {
       }
 
       if (!rendering)
-        renderTaskList(taskList, finishList, scale);
+        renderTaskList(taskList, finishList, currentScale);
     }
   });
 }
@@ -846,7 +800,7 @@ function prepareAndRenderAll(url, scale) {
     shade: false,
     offset: '48%'
   });
-  PDFJS.getDocument(url).then(function (pdf) {
+  PDFJS.getDocument(url).then(function(pdf) {
     layer.close(documentLoadingIcon);
 
     pdfDoc = pdf;
@@ -857,7 +811,7 @@ function prepareAndRenderAll(url, scale) {
     // create the same number of canvases as pages
     // also 
     // initialize the canvases' height and width according to the last page
-    pdfDoc.getPage(numPages).then(function (sample_page) {
+    pdfDoc.getPage(numPages).then(function(sample_page) {
       var appendPages = "";
       sampleHeight = sample_page.getViewport(scale).height;
       sampleWidth = sample_page.getViewport(scale).width;
@@ -894,7 +848,52 @@ function prepareAndRenderAll(url, scale) {
 }
 
 
+function prepareNavbarFunction() {
+  // coterie file viewer pages do not have collect_button
+  // only normal file viewer pages have
+  $("#collect_button").on("click", function(){
+    var span = $(this).find(".fa");
+    if (span.hasClass("fa-star-o")) {
+      layer.msg('Collected');
+      span.removeClass("fa-star-o"); 
+      span.addClass("fa-star");
+      $.ajax({
+        type: "POST",
+        url: "",
+        data: {
+          csrfmiddlewaretoken: getCookie('csrftoken'),
+          operation: "collect",
+          document_id: $("button[name='document_id']").val(),
+        },
+      });
+    }
+    else if (span.hasClass("fa-star")) {
+      layer.msg('Uncollected');
+      span.removeClass("fa-star");
+      span.addClass("fa-star-o");
+      $.ajax({
+        type: "POST",
+        url: "",
+        data: {
+          csrfmiddlewaretoken: getCookie('csrftoken'),
+          operation: "uncollect",
+          document_id: $("button[name='document_id']").val(),
+        },
+      });
+    }
+  });
 
+  $("#show_annotation_frame_button").on('click', function() {
+      $(".Annotation").each(function() {
+          $(this).slideDown(180);
+      });
+  });
+  $("#hide_annotation_frame_button").on('click', function() {
+      $(".Annotation").each(function() {
+          $(this).slideUp(180);
+      });
+  });
+}
 
 
 

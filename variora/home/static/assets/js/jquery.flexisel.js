@@ -9,9 +9,9 @@
 * http://www.opensource.org/licenses/mit-license.php
 */
 
-(function ($) {
+(function($) {
 
-    $.fn.flexisel = function (options) {
+    $.fn.flexisel = function(options) {
 
         var defaults = $.extend({
     		visibleItems: 4,
@@ -55,7 +55,7 @@
         		
 			init: function() {
 				
-        		return this.each(function () {
+        		return this.each(function() {
         			methods.appendHTML();
         			methods.setEventHandlers();      			
         			methods.initializeItems();
@@ -137,20 +137,20 @@
 					
 				});					
 				
-				$(leftArrow).on("click", function (event) {
+				$(leftArrow).on("click", function(event) {
 					methods.scrollLeft();
 				});
 				
-				$(rightArrow).on("click", function (event) {
+				$(rightArrow).on("click", function(event) {
 					methods.scrollRight();
 				});
 				
 				if(settings.pauseOnHover == true) {
 					$(".nbs-flexisel-item").on({
-						mouseenter: function () {
+						mouseenter: function() {
 							canNavigate = false;
 						}, 
-						mouseleave: function () {
+						mouseleave: function() {
 							canNavigate = true;
 						}
 					 });
@@ -158,7 +158,7 @@
 
 				if(settings.autoPlay == true) {
 					
-					setInterval(function () {
+					setInterval(function() {
 						if(canNavigate == true)
 							methods.scrollRight();
 					}, settings.autoPlaySpeed);

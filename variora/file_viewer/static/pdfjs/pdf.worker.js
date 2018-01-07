@@ -103,7 +103,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.unreachable = exports.warn = exports.utf8StringToString = exports.stringToUTF8String = exports.stringToPDFString = exports.stringToBytes = exports.string32 = exports.shadow = exports.setVerbosityLevel = exports.ReadableStream = exports.removeNullCharacters = exports.readUint32 = exports.readUint16 = exports.readInt8 = exports.log2 = exports.loadJpegStream = exports.isEvalSupported = exports.isLittleEndian = exports.createValidAbsoluteUrl = exports.isSameOrigin = exports.isNodeJS = exports.isSpace = exports.isString = exports.isNum = exports.isInt = exports.isEmptyObj = exports.isBool = exports.isArrayBuffer = exports.isArray = exports.info = exports.globalScope = exports.getVerbosityLevel = exports.getLookupTableFactory = exports.deprecated = exports.createObjectURL = exports.createPromiseCapability = exports.createBlob = exports.bytesToString = exports.assert = exports.arraysToBytes = exports.arrayByteLength = exports.FormatError = exports.XRefParseException = exports.Util = exports.UnknownErrorException = exports.UnexpectedResponseException = exports.TextRenderingMode = exports.StreamType = exports.StatTimer = exports.PasswordResponses = exports.PasswordException = exports.PageViewport = exports.NotImplementedException = exports.NativeImageDecoding = exports.MissingPDFException = exports.MissingDataException = exports.MessageHandler = exports.InvalidPDFException = exports.AbortException = exports.CMapCompressionType = exports.ImageKind = exports.FontType = exports.AnnotationType = exports.AnnotationFlag = exports.AnnotationFieldFlag = exports.AnnotationBorderStyleType = exports.UNSUPPORTED_FEATURES = exports.VERBOSITY_LEVELS = exports.OPS = exports.IDENTITY_MATRIX = exports.FONT_IDENTITY_MATRIX = undefined;
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function(obj) { return typeof obj; } : function(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 __w_pdfjs_require__(36);
 
@@ -415,7 +415,7 @@ function shadow(obj, prop, value) {
 }
 function getLookupTableFactory(initializer) {
   var lookup;
-  return function () {
+  return function() {
     if (initializer) {
       lookup = Object.create(null);
       initializer(lookup);
@@ -766,7 +766,7 @@ var Util = function UtilClosure() {
     var loaded = false;
     script.setAttribute('src', src);
     if (callback) {
-      script.onload = function () {
+      script.onload = function() {
         if (!loaded) {
           callback();
         }
@@ -913,7 +913,7 @@ function isNodeJS() {
 }
 function createPromiseCapability() {
   var capability = {};
-  capability.promise = new Promise(function (resolve, reject) {
+  capability.promise = new Promise(function(resolve, reject) {
     capability.resolve = resolve;
     capability.reject = reject;
   });
@@ -1011,7 +1011,7 @@ function resolveCall(fn, args) {
   if (!fn) {
     return Promise.resolve(undefined);
   }
-  return new Promise(function (resolve, reject) {
+  return new Promise(function(resolve, reject) {
     resolve(fn.apply(thisArg, args));
   });
 }
@@ -1038,7 +1038,7 @@ function resolveOrReject(capability, success, reason) {
   }
 }
 function finalize(promise) {
-  return Promise.resolve(promise).catch(function () {});
+  return Promise.resolve(promise).catch(function() {});
 }
 function MessageHandler(sourceName, targetName, comObj) {
   var _this = this;
@@ -1053,7 +1053,7 @@ function MessageHandler(sourceName, targetName, comObj) {
   this.streamControllers = Object.create(null);
   var callbacksCapabilities = this.callbacksCapabilities = Object.create(null);
   var ah = this.actionHandler = Object.create(null);
-  this._onComObjOnMessage = function (event) {
+  this._onComObjOnMessage = function(event) {
     var data = event.data;
     if (data.targetName !== _this.sourceName) {
       return;
@@ -1078,9 +1078,9 @@ function MessageHandler(sourceName, targetName, comObj) {
       if (data.callbackId) {
         var _sourceName = _this.sourceName;
         var _targetName = data.sourceName;
-        Promise.resolve().then(function () {
+        Promise.resolve().then(function() {
           return action[0].call(action[1], data.data);
-        }).then(function (result) {
+        }).then(function(result) {
           comObj.postMessage({
             sourceName: _sourceName,
             targetName: _targetName,
@@ -1088,7 +1088,7 @@ function MessageHandler(sourceName, targetName, comObj) {
             callbackId: data.callbackId,
             data: result
           });
-        }, function (reason) {
+        }, function(reason) {
           if (reason instanceof Error) {
             reason = reason + '';
           }
@@ -1272,12 +1272,12 @@ MessageHandler.prototype = {
     streamSink.sinkCapability.resolve();
     streamSink.ready = streamSink.sinkCapability.promise;
     this.streamSinks[streamId] = streamSink;
-    resolveCall(action[0], [data.data, streamSink], action[1]).then(function () {
+    resolveCall(action[0], [data.data, streamSink], action[1]).then(function() {
       sendStreamRequest({
         stream: 'start_complete',
         success: true
       });
-    }, function (reason) {
+    }, function(reason) {
       sendStreamRequest({
         stream: 'start_complete',
         success: false,
@@ -1306,9 +1306,9 @@ MessageHandler.prototype = {
       });
     };
     var deleteStreamController = function deleteStreamController() {
-      Promise.all([_this4.streamControllers[data.streamId].startCall, _this4.streamControllers[data.streamId].pullCall, _this4.streamControllers[data.streamId].cancelCall].map(function (capability) {
+      Promise.all([_this4.streamControllers[data.streamId].startCall, _this4.streamControllers[data.streamId].pullCall, _this4.streamControllers[data.streamId].cancelCall].map(function(capability) {
         return capability && finalize(capability.promise);
-      })).then(function () {
+      })).then(function() {
         delete _this4.streamControllers[data.streamId];
       });
     };
@@ -1331,12 +1331,12 @@ MessageHandler.prototype = {
           this.streamSinks[data.streamId].sinkCapability.resolve();
         }
         this.streamSinks[data.streamId].desiredSize = data.desiredSize;
-        resolveCall(this.streamSinks[data.streamId].onPull).then(function () {
+        resolveCall(this.streamSinks[data.streamId].onPull).then(function() {
           sendStreamResponse({
             stream: 'pull_complete',
             success: true
           });
-        }, function (reason) {
+        }, function(reason) {
           sendStreamResponse({
             stream: 'pull_complete',
             success: false,
@@ -1372,12 +1372,12 @@ MessageHandler.prototype = {
         if (!this.streamSinks[data.streamId]) {
           break;
         }
-        resolveCall(this.streamSinks[data.streamId].onCancel, [wrapReason(data.reason)]).then(function () {
+        resolveCall(this.streamSinks[data.streamId].onCancel, [wrapReason(data.reason)]).then(function() {
           sendStreamResponse({
             stream: 'cancel_complete',
             success: true
           });
-        }, function (reason) {
+        }, function(reason) {
           sendStreamResponse({
             stream: 'cancel_complete',
             success: false,
@@ -1498,7 +1498,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.isStream = exports.isRefsEqual = exports.isRef = exports.isName = exports.isDict = exports.isCmd = exports.isEOF = exports.RefSetCache = exports.RefSet = exports.Ref = exports.Name = exports.Dict = exports.Cmd = exports.EOF = undefined;
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function(obj) { return typeof obj; } : function(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _util = __w_pdfjs_require__(0);
 
@@ -1612,7 +1612,7 @@ var Dict = function DictClosure() {
     }
   };
   Dict.empty = new Dict(null);
-  Dict.merge = function (xref, dictArray) {
+  Dict.merge = function(xref, dictArray) {
     var mergedDict = new Dict(xref);
     for (var i = 0, ii = dictArray.length; i < ii; i++) {
       var dict = dictArray[i];
@@ -5352,7 +5352,7 @@ exports.Parser = Parser;
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 var getLookupTableFactory = __w_pdfjs_require__(0).getLookupTableFactory;
-var getGlyphsUnicode = getLookupTableFactory(function (t) {
+var getGlyphsUnicode = getLookupTableFactory(function(t) {
  t['A'] = 0x0041;
  t['AE'] = 0x00C6;
  t['AEacute'] = 0x01FC;
@@ -9675,7 +9675,7 @@ var getGlyphsUnicode = getLookupTableFactory(function (t) {
  t['vextenddouble'] = 0x2225;
  t['vextendsingle'] = 0x2223;
 });
-var getDingbatsGlyphsUnicode = getLookupTableFactory(function (t) {
+var getDingbatsGlyphsUnicode = getLookupTableFactory(function(t) {
  t['space'] = 0x0020;
  t['a1'] = 0x2701;
  t['a2'] = 0x2702;
@@ -9895,7 +9895,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.PostScriptCompiler = exports.PostScriptEvaluator = exports.PDFFunction = exports.isPDFFunction = undefined;
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function(obj) { return typeof obj; } : function(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _util = __w_pdfjs_require__(0);
 
@@ -9973,7 +9973,7 @@ var PDFFunction = function PDFFunctionClosure() {
         var obj = xref.fetchIfRef(fnObj[j]);
         fnArray.push(PDFFunction.parse(xref, obj));
       }
-      return function (src, srcOffset, dest, destOffset) {
+      return function(src, srcOffset, dest, destOffset) {
         for (var i = 0, ii = fnArray.length; i < ii; i++) {
           fnArray[i](src, srcOffset, dest, destOffset + i);
         }
@@ -10535,7 +10535,7 @@ var PostScriptCompiler = function PostScriptCompilerClosure() {
   function AstNode(type) {
     this.type = type;
   }
-  AstNode.prototype.visit = function (visitor) {
+  AstNode.prototype.visit = function(visitor) {
     throw new Error('abstract method');
   };
   function AstArgument(index, min, max) {
@@ -10545,7 +10545,7 @@ var PostScriptCompiler = function PostScriptCompilerClosure() {
     this.max = max;
   }
   AstArgument.prototype = Object.create(AstNode.prototype);
-  AstArgument.prototype.visit = function (visitor) {
+  AstArgument.prototype.visit = function(visitor) {
     visitor.visitArgument(this);
   };
   function AstLiteral(number) {
@@ -10555,7 +10555,7 @@ var PostScriptCompiler = function PostScriptCompilerClosure() {
     this.max = number;
   }
   AstLiteral.prototype = Object.create(AstNode.prototype);
-  AstLiteral.prototype.visit = function (visitor) {
+  AstLiteral.prototype.visit = function(visitor) {
     visitor.visitLiteral(this);
   };
   function AstBinaryOperation(op, arg1, arg2, min, max) {
@@ -10567,7 +10567,7 @@ var PostScriptCompiler = function PostScriptCompilerClosure() {
     this.max = max;
   }
   AstBinaryOperation.prototype = Object.create(AstNode.prototype);
-  AstBinaryOperation.prototype.visit = function (visitor) {
+  AstBinaryOperation.prototype.visit = function(visitor) {
     visitor.visitBinaryOperation(this);
   };
   function AstMin(arg, max) {
@@ -10577,7 +10577,7 @@ var PostScriptCompiler = function PostScriptCompilerClosure() {
     this.max = max;
   }
   AstMin.prototype = Object.create(AstNode.prototype);
-  AstMin.prototype.visit = function (visitor) {
+  AstMin.prototype.visit = function(visitor) {
     visitor.visitMin(this);
   };
   function AstVariable(index, min, max) {
@@ -10587,7 +10587,7 @@ var PostScriptCompiler = function PostScriptCompilerClosure() {
     this.max = max;
   }
   AstVariable.prototype = Object.create(AstNode.prototype);
-  AstVariable.prototype.visit = function (visitor) {
+  AstVariable.prototype.visit = function(visitor) {
     visitor.visitVariable(this);
   };
   function AstVariableDefinition(variable, arg) {
@@ -10596,7 +10596,7 @@ var PostScriptCompiler = function PostScriptCompilerClosure() {
     this.arg = arg;
   }
   AstVariableDefinition.prototype = Object.create(AstNode.prototype);
-  AstVariableDefinition.prototype.visit = function (visitor) {
+  AstVariableDefinition.prototype.visit = function(visitor) {
     visitor.visitVariableDefinition(this);
   };
   function ExpressionBuilderVisitor() {
@@ -10823,12 +10823,12 @@ var PostScriptCompiler = function PostScriptCompilerClosure() {
         return null;
       }
       var result = [];
-      instructions.forEach(function (instruction) {
+      instructions.forEach(function(instruction) {
         var statementBuilder = new ExpressionBuilderVisitor();
         instruction.visit(statementBuilder);
         result.push(statementBuilder.toString());
       });
-      stack.forEach(function (expr, i) {
+      stack.forEach(function(expr, i) {
         var statementBuilder = new ExpressionBuilderVisitor();
         expr.visit(statementBuilder);
         var min = range[i * 2],
@@ -10861,7 +10861,7 @@ exports.PostScriptCompiler = PostScriptCompiler;
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 var getLookupTableFactory = __w_pdfjs_require__(0).getLookupTableFactory;
-var getSpecialPUASymbols = getLookupTableFactory(function (t) {
+var getSpecialPUASymbols = getLookupTableFactory(function(t) {
  t[63721] = 0x00A9;
  t[63193] = 0x00A9;
  t[63720] = 0x00AE;
@@ -11435,7 +11435,7 @@ function isRTLRangeFor(value) {
  }
  return false;
 }
-var getNormalizedUnicodes = getLookupTableFactory(function (t) {
+var getNormalizedUnicodes = getLookupTableFactory(function(t) {
  t['\u00A8'] = '\u0020\u0308';
  t['\u00AF'] = '\u0020\u0304';
  t['\u00B4'] = '\u0020\u0301';
@@ -14794,7 +14794,7 @@ var ChunkedStream = function ChunkedStreamClosure() {
       this.ensureRange(start, start + length);
       function ChunkedStreamSubstream() {}
       ChunkedStreamSubstream.prototype = Object.create(this);
-      ChunkedStreamSubstream.prototype.getMissingChunks = function () {
+      ChunkedStreamSubstream.prototype.getMissingChunks = function() {
         var chunkSize = this.chunkSize;
         var beginChunk = Math.floor(this.start / chunkSize);
         var endChunk = Math.floor((this.end - 1) / chunkSize) + 1;
@@ -14848,7 +14848,7 @@ var ChunkedStreamManager = function ChunkedStreamManagerClosure() {
       var chunks = [],
           loaded = 0;
       var manager = this;
-      var promise = new Promise(function (resolve, reject) {
+      var promise = new Promise(function(resolve, reject) {
         var readChunk = function readChunk(chunk) {
           try {
             if (!chunk.done) {
@@ -14870,7 +14870,7 @@ var ChunkedStreamManager = function ChunkedStreamManagerClosure() {
         };
         rangeReader.read().then(readChunk, reject);
       });
-      promise.then(function (data) {
+      promise.then(function(data) {
         if (_this.aborted) {
           return;
         }
@@ -14946,7 +14946,7 @@ var ChunkedStreamManager = function ChunkedStreamManagerClosure() {
           }
         }
       }
-      chunksToRequest.sort(function (a, b) {
+      chunksToRequest.sort(function(a, b) {
         return a - b;
       });
       return this._requestChunks(chunksToRequest);
@@ -16674,7 +16674,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.PartialEvaluator = exports.OperatorList = undefined;
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function(obj) { return typeof obj; } : function(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _util = __w_pdfjs_require__(0);
 
@@ -16734,7 +16734,7 @@ var PartialEvaluator = function PartialEvaluatorClosure() {
       colorSpace = _colorspace.ColorSpace.parse(colorSpace, this.xref, this.resources);
       var numComps = colorSpace.numComps;
       var decodePromise = this.handler.sendWithPromise('JpegDecode', [image.getIR(this.forceDataSchema), numComps]);
-      return decodePromise.then(function (message) {
+      return decodePromise.then(function(message) {
         var data = message.data;
         return new _stream.Stream(data, 0, data.length, image.dict);
       });
@@ -16777,12 +16777,12 @@ var PartialEvaluator = function PartialEvaluatorClosure() {
     this.fontCache = fontCache;
     this.builtInCMapCache = builtInCMapCache;
     this.options = options || DefaultPartialEvaluatorOptions;
-    this.fetchBuiltInCMap = function (name) {
+    this.fetchBuiltInCMap = function(name) {
       var cachedCMap = _this.builtInCMapCache[name];
       if (cachedCMap) {
         return Promise.resolve(cachedCMap);
       }
-      return _this.handler.sendWithPromise('FetchBuiltInCMap', { name: name }).then(function (data) {
+      return _this.handler.sendWithPromise('FetchBuiltInCMap', { name: name }).then(function(data) {
         if (data.compressionType !== _util.CMapCompressionType.NONE) {
           _this.builtInCMapCache[name] = data;
         }
@@ -16954,7 +16954,7 @@ var PartialEvaluator = function PartialEvaluatorClosure() {
         resources: dict.get('Resources') || resources,
         operatorList: operatorList,
         initialState: initialState
-      }).then(function () {
+      }).then(function() {
         operatorList.addOp(_util.OPS.paintFormXObjectEnd, []);
         if (group) {
           operatorList.addOp(_util.OPS.endGroup, [groupOptions]);
@@ -17025,10 +17025,10 @@ var PartialEvaluator = function PartialEvaluatorClosure() {
       if (nativeImageDecoderSupport === _util.NativeImageDecoding.DECODE && (image instanceof _stream.JpegStream || mask instanceof _stream.JpegStream || softMask instanceof _stream.JpegStream)) {
         nativeImageDecoder = new NativeImageDecoder(this.xref, resources, this.handler, this.options.forceDataSchema);
       }
-      _image.PDFImage.buildImage(this.handler, this.xref, resources, image, inline, nativeImageDecoder).then(function (imageObj) {
+      _image.PDFImage.buildImage(this.handler, this.xref, resources, image, inline, nativeImageDecoder).then(function(imageObj) {
         var imgData = imageObj.createImageData(false);
         _this2.handler.send('obj', [objId, _this2.pageIndex, 'Image', imgData], [imgData.data.buffer]);
-      }).catch(function (reason) {
+      }).catch(function(reason) {
         (0, _util.warn)('Unable to decode image: ' + reason);
         _this2.handler.send('obj', [objId, _this2.pageIndex, 'Image', null]);
       });
@@ -17071,15 +17071,15 @@ var PartialEvaluator = function PartialEvaluatorClosure() {
         task: task,
         resources: patternResources,
         operatorList: tilingOpList
-      }).then(function () {
+      }).then(function() {
         return (0, _pattern.getTilingPatternIR)({
           fnArray: tilingOpList.fnArray,
           argsArray: tilingOpList.argsArray
         }, patternDict, args);
-      }).then(function (tilingPatternIR) {
+      }).then(function(tilingPatternIR) {
         operatorList.addDependencies(tilingOpList.dependencies);
         operatorList.addOp(fn, tilingPatternIR);
-      }, function (reason) {
+      }, function(reason) {
         if (_this3.options.ignoreErrors) {
           _this3.handler.send('UnsupportedFeature', { featureId: _util.UNSUPPORTED_FEATURES.unknown });
           (0, _util.warn)('handleTilingType - ignoring pattern: "' + reason + '".');
@@ -17097,17 +17097,17 @@ var PartialEvaluator = function PartialEvaluatorClosure() {
         fontArgs = fontArgs.slice();
         fontName = fontArgs[0].name;
       }
-      return this.loadFont(fontName, fontRef, resources).then(function (translated) {
+      return this.loadFont(fontName, fontRef, resources).then(function(translated) {
         if (!translated.font.isType3Font) {
           return translated;
         }
-        return translated.loadType3Data(_this4, resources, operatorList, task).then(function () {
+        return translated.loadType3Data(_this4, resources, operatorList, task).then(function() {
           return translated;
-        }).catch(function (reason) {
+        }).catch(function(reason) {
           _this4.handler.send('UnsupportedFeature', { featureId: _util.UNSUPPORTED_FEATURES.font });
           return new TranslatedFont('g_font_error', new _fonts.ErrorFont('Type3 font load error: ' + reason), translated.font);
         });
-      }).then(function (translated) {
+      }).then(function(translated) {
         state.font = translated.font;
         translated.send(_this4.handler);
         return translated.loadedName;
@@ -17162,8 +17162,8 @@ var PartialEvaluator = function PartialEvaluatorClosure() {
             gStateObj.push([key, value]);
             break;
           case 'Font':
-            promise = promise.then(function () {
-              return _this6.handleSetFont(resources, null, value[0], operatorList, task, stateManager.state).then(function (loadedName) {
+            promise = promise.then(function() {
+              return _this6.handleSetFont(resources, null, value[0], operatorList, task, stateManager.state).then(function(loadedName) {
                 operatorList.addDependency(loadedName);
                 gStateObj.push([key, [loadedName, value[1]]]);
               });
@@ -17178,7 +17178,7 @@ var PartialEvaluator = function PartialEvaluatorClosure() {
               break;
             }
             if ((0, _primitives.isDict)(value)) {
-              promise = promise.then(function () {
+              promise = promise.then(function() {
                 return _this6.handleSMask(value, resources, operatorList, task, stateManager);
               });
               gStateObj.push([key, true]);
@@ -17211,7 +17211,7 @@ var PartialEvaluator = function PartialEvaluatorClosure() {
       for (var i = 0, ii = gStateKeys.length; i < ii; i++) {
         _loop();
       }
-      return promise.then(function () {
+      return promise.then(function() {
         if (gStateObj.length > 0) {
           operatorList.addOp(_util.OPS.setGState, [gStateObj]);
         }
@@ -17298,13 +17298,13 @@ var PartialEvaluator = function PartialEvaluatorClosure() {
       } catch (e) {
         translatedPromise = Promise.reject(e);
       }
-      translatedPromise.then(function (translatedFont) {
+      translatedPromise.then(function(translatedFont) {
         if (translatedFont.fontType !== undefined) {
           var xrefFontStats = xref.stats.fontTypes;
           xrefFontStats[translatedFont.fontType] = true;
         }
         fontCapability.resolve(new TranslatedFont(font.loadedName, translatedFont, font));
-      }).catch(function (reason) {
+      }).catch(function(reason) {
         _this7.handler.send('UnsupportedFeature', { featureId: _util.UNSUPPORTED_FEATURES.font });
         try {
           var descriptor = preEvaluatedFont.descriptor;
@@ -17382,7 +17382,7 @@ var PartialEvaluator = function PartialEvaluatorClosure() {
       }
       return new Promise(function promiseBody(resolve, reject) {
         var next = function next(promise) {
-          promise.then(function () {
+          promise.then(function() {
             try {
               promiseBody(resolve, reject);
             } catch (ex) {
@@ -17427,7 +17427,7 @@ var PartialEvaluator = function PartialEvaluatorClosure() {
                 }
                 if (type.name === 'Form') {
                   stateManager.save();
-                  next(self.buildFormXObject(resources, xobj, null, operatorList, task, stateManager.state.clone()).then(function () {
+                  next(self.buildFormXObject(resources, xobj, null, operatorList, task, stateManager.state.clone()).then(function() {
                     stateManager.restore();
                   }));
                   return;
@@ -17445,7 +17445,7 @@ var PartialEvaluator = function PartialEvaluatorClosure() {
               break;
             case _util.OPS.setFont:
               var fontSize = args[1];
-              next(self.handleSetFont(resources, args, null, operatorList, task, stateManager.state).then(function (loadedName) {
+              next(self.handleSetFont(resources, args, null, operatorList, task, stateManager.state).then(function(loadedName) {
                 operatorList.addDependency(loadedName);
                 operatorList.addOp(_util.OPS.setFont, [loadedName, fontSize]);
               }));
@@ -17622,7 +17622,7 @@ var PartialEvaluator = function PartialEvaluatorClosure() {
         }
         closePendingRestoreOPS();
         resolve();
-      }).catch(function (reason) {
+      }).catch(function(reason) {
         if (_this8.options.ignoreErrors) {
           _this8.handler.send('UnsupportedFeature', { featureId: _util.UNSUPPORTED_FEATURES.unknown });
           (0, _util.warn)('getOperatorList - ignoring errors during task: ' + task.name);
@@ -17763,7 +17763,7 @@ var PartialEvaluator = function PartialEvaluatorClosure() {
         };
       }
       function handleSetFont(fontName, fontRef) {
-        return self.loadFont(fontName, fontRef, resources).then(function (translated) {
+        return self.loadFont(fontName, fontRef, resources).then(function(translated) {
           textState.font = translated.font;
           textState.fontMatrix = translated.font.fontMatrix || _util.FONT_IDENTITY_MATRIX;
         });
@@ -17854,7 +17854,7 @@ var PartialEvaluator = function PartialEvaluatorClosure() {
       return new Promise(function promiseBody(resolve, reject) {
         var next = function next(promise) {
           enqueueChunk();
-          Promise.all([promise, sink.ready]).then(function () {
+          Promise.all([promise, sink.ready]).then(function() {
             try {
               promiseBody(resolve, reject);
             } catch (ex) {
@@ -17894,7 +17894,7 @@ var PartialEvaluator = function PartialEvaluatorClosure() {
           var gState;
           var gStateFont;
 
-          var _ret2 = function () {
+          var _ret2 = function() {
             switch (fn | 0) {
               case _util.OPS.setFont:
                 fontNameArg = args[0].name;
@@ -18081,7 +18081,7 @@ var PartialEvaluator = function PartialEvaluatorClosure() {
                   combineTextItems: combineTextItems,
                   sink: sinkWrapper,
                   seenStyles: seenStyles
-                }).then(function () {
+                }).then(function() {
                   if (!sinkWrapper.enqueueInvoked) {
                     skipEmptyXObjs[name] = true;
                   }
@@ -18129,7 +18129,7 @@ var PartialEvaluator = function PartialEvaluatorClosure() {
         flushTextContentItem();
         enqueueChunk();
         resolve();
-      }).catch(function (reason) {
+      }).catch(function(reason) {
         if (reason instanceof _util.AbortException) {
           return;
         }
@@ -18219,10 +18219,10 @@ var PartialEvaluator = function PartialEvaluatorClosure() {
       properties.baseEncodingName = baseEncodingName;
       properties.hasEncoding = !!baseEncodingName || differences.length > 0;
       properties.dict = dict;
-      return toUnicodePromise.then(function (toUnicode) {
+      return toUnicodePromise.then(function(toUnicode) {
         properties.toUnicode = toUnicode;
         return _this10.buildToUnicode(properties);
-      }).then(function (toUnicode) {
+      }).then(function(toUnicode) {
         properties.toUnicode = toUnicode;
         return properties;
       });
@@ -18299,10 +18299,10 @@ var PartialEvaluator = function PartialEvaluatorClosure() {
           encoding: ucs2CMapName,
           fetchBuiltInCMap: this.fetchBuiltInCMap,
           useCMap: null
-        }).then(function (ucs2CMap) {
+        }).then(function(ucs2CMap) {
           var cMap = properties.cMap;
           toUnicode = [];
-          cMap.forEach(function (charcode, cid) {
+          cMap.forEach(function(charcode, cid) {
             if (cid > 0xffff) {
               throw new _util.FormatError('Max size of CID is 65,535');
             }
@@ -18323,7 +18323,7 @@ var PartialEvaluator = function PartialEvaluatorClosure() {
           encoding: cmapObj,
           fetchBuiltInCMap: this.fetchBuiltInCMap,
           useCMap: null
-        }).then(function (cmap) {
+        }).then(function(cmap) {
           if (cmap instanceof _cmap.IdentityCMap) {
             return new _fonts.IdentityToUnicodeMap(0, 0xFFFF);
           }
@@ -18334,12 +18334,12 @@ var PartialEvaluator = function PartialEvaluatorClosure() {
           encoding: cmapObj,
           fetchBuiltInCMap: this.fetchBuiltInCMap,
           useCMap: null
-        }).then(function (cmap) {
+        }).then(function(cmap) {
           if (cmap instanceof _cmap.IdentityCMap) {
             return new _fonts.IdentityToUnicodeMap(0, 0xFFFF);
           }
           var map = new Array(cmap.length);
-          cmap.forEach(function (charCode, token) {
+          cmap.forEach(function(charCode, token) {
             var str = [];
             for (var k = 0; k < token.length; k += 2) {
               var w1 = token.charCodeAt(k) << 8 | token.charCodeAt(k + 1);
@@ -18614,7 +18614,7 @@ var PartialEvaluator = function PartialEvaluatorClosure() {
             firstChar: 0,
             lastChar: maxCharIndex
           };
-          return this.extractDataStructures(dict, dict, properties).then(function (properties) {
+          return this.extractDataStructures(dict, dict, properties).then(function(properties) {
             properties.widths = _this11.buildCharCodeToWidth(metrics.widths, properties);
             return new _fonts.Font(baseFontName, null, properties);
           });
@@ -18690,16 +18690,16 @@ var PartialEvaluator = function PartialEvaluatorClosure() {
           encoding: cidEncoding,
           fetchBuiltInCMap: this.fetchBuiltInCMap,
           useCMap: null
-        }).then(function (cMap) {
+        }).then(function(cMap) {
           properties.cMap = cMap;
           properties.vertical = properties.cMap.vertical;
         });
       } else {
         cMapPromise = Promise.resolve(undefined);
       }
-      return cMapPromise.then(function () {
+      return cMapPromise.then(function() {
         return _this11.extractDataStructures(dict, baseDict, properties);
-      }).then(function (properties) {
+      }).then(function(properties) {
         _this11.extractWidths(dict, descriptor, properties);
         if (type === 'Type3') {
           properties.isType3Font = true;
@@ -18746,7 +18746,7 @@ var TranslatedFont = function TranslatedFontClosure() {
 
       var _loop2 = function _loop2() {
         var key = charProcKeys[i];
-        loadCharProcsPromise = loadCharProcsPromise.then(function () {
+        loadCharProcsPromise = loadCharProcsPromise.then(function() {
           var glyphStream = charProcs.get(key);
           var operatorList = new OperatorList();
           return type3Evaluator.getOperatorList({
@@ -18754,10 +18754,10 @@ var TranslatedFont = function TranslatedFontClosure() {
             task: task,
             resources: fontResources,
             operatorList: operatorList
-          }).then(function () {
+          }).then(function() {
             charProcOperatorList[key] = operatorList.getIR();
             parentOperatorList.addDependencies(operatorList.dependencies);
-          }).catch(function (reason) {
+          }).catch(function(reason) {
             (0, _util.warn)('Type3 font resource "' + key + '" is not available.');
             var operatorList = new OperatorList();
             charProcOperatorList[key] = operatorList.getIR();
@@ -18768,7 +18768,7 @@ var TranslatedFont = function TranslatedFontClosure() {
       for (var i = 0, n = charProcKeys.length; i < n; ++i) {
         _loop2();
       }
-      this.type3Loaded = loadCharProcsPromise.then(function () {
+      this.type3Loaded = loadCharProcsPromise.then(function() {
         translatedFont.charProcOperatorList = charProcOperatorList;
       });
       return this.type3Loaded;
@@ -19004,7 +19004,7 @@ var EvalState = function EvalStateClosure() {
   return EvalState;
 }();
 var EvaluatorPreprocessor = function EvaluatorPreprocessorClosure() {
-  var getOPMap = (0, _util.getLookupTableFactory)(function (t) {
+  var getOPMap = (0, _util.getLookupTableFactory)(function(t) {
     t['w'] = {
       id: _util.OPS.setLineWidth,
       numArgs: 1,
@@ -19647,7 +19647,7 @@ var QueueOptimizer = function QueueOptimizerClosure() {
     }
     return iFirstSave + 1;
   });
-  addState(InitialState, [_util.OPS.save, _util.OPS.transform, _util.OPS.paintImageXObject, _util.OPS.restore], function (context) {
+  addState(InitialState, [_util.OPS.save, _util.OPS.transform, _util.OPS.paintImageXObject, _util.OPS.restore], function(context) {
     var MIN_IMAGES_IN_BLOCK = 3;
     var MAX_IMAGES_IN_BLOCK = 1000;
     var fnArray = context.fnArray,
@@ -19693,7 +19693,7 @@ var QueueOptimizer = function QueueOptimizerClosure() {
     argsArray.splice(iFirstSave, count * 4, args);
     return iFirstSave + 1;
   });
-  addState(InitialState, [_util.OPS.beginText, _util.OPS.setFont, _util.OPS.setTextMatrix, _util.OPS.showText, _util.OPS.endText], function (context) {
+  addState(InitialState, [_util.OPS.beginText, _util.OPS.setFont, _util.OPS.setTextMatrix, _util.OPS.showText, _util.OPS.endText], function(context) {
     var MIN_CHARS_IN_BLOCK = 3;
     var MAX_CHARS_IN_BLOCK = 1000;
     var fnArray = context.fnArray,
@@ -21721,9 +21721,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.FileSpec = exports.XRef = exports.ObjectLoader = exports.Catalog = undefined;
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function(obj) { return typeof obj; } : function(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+var _slicedToArray = function() { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function(arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 var _util = __w_pdfjs_require__(0);
 
@@ -22101,10 +22101,10 @@ var Catalog = function CatalogClosure() {
 
       this.pageKidsCountCache.clear();
       var promises = [];
-      this.fontCache.forEach(function (promise) {
+      this.fontCache.forEach(function(promise) {
         promises.push(promise);
       });
-      return Promise.all(promises).then(function (translatedFonts) {
+      return Promise.all(promises).then(function(translatedFonts) {
         for (var i = 0, ii = translatedFonts.length; i < ii; i++) {
           var font = translatedFonts[i].dict;
           delete font.translated;
@@ -22117,7 +22117,7 @@ var Catalog = function CatalogClosure() {
       var _this2 = this;
 
       if (!(pageIndex in this.pagePromises)) {
-        this.pagePromises[pageIndex] = this.getPageDict(pageIndex).then(function (_ref) {
+        this.pagePromises[pageIndex] = this.getPageDict(pageIndex).then(function(_ref) {
           var _ref2 = _slicedToArray(_ref, 2),
               dict = _ref2[0],
               ref = _ref2[1];
@@ -22143,7 +22143,7 @@ var Catalog = function CatalogClosure() {
               currentPageIndex += count;
               continue;
             }
-            xref.fetchAsync(currentNode).then(function (obj) {
+            xref.fetchAsync(currentNode).then(function(obj) {
               if ((0, _primitives.isDict)(obj, 'Page') || (0, _primitives.isDict)(obj) && !obj.has('Kids')) {
                 if (pageIndex === currentPageIndex) {
                   if (currentNode && !pageKidsCountCache.has(currentNode)) {
@@ -22193,7 +22193,7 @@ var Catalog = function CatalogClosure() {
       function pagesBeforeRef(kidRef) {
         var total = 0;
         var parentRef;
-        return xref.fetchAsync(kidRef).then(function (node) {
+        return xref.fetchAsync(kidRef).then(function(node) {
           if ((0, _primitives.isRefsEqual)(kidRef, pageRef) && !(0, _primitives.isDict)(node, 'Page') && !((0, _primitives.isDict)(node) && !node.has('Type') && node.has('Contents'))) {
             throw new _util.FormatError('The reference does not point to a /Page Dict.');
           }
@@ -22205,7 +22205,7 @@ var Catalog = function CatalogClosure() {
           }
           parentRef = node.getRaw('Parent');
           return node.getAsync('Parent');
-        }).then(function (parent) {
+        }).then(function(parent) {
           if (!parent) {
             return null;
           }
@@ -22213,7 +22213,7 @@ var Catalog = function CatalogClosure() {
             throw new _util.FormatError('parent must be a Dict.');
           }
           return parent.getAsync('Kids');
-        }).then(function (kids) {
+        }).then(function(kids) {
           if (!kids) {
             return null;
           }
@@ -22228,7 +22228,7 @@ var Catalog = function CatalogClosure() {
               found = true;
               break;
             }
-            kidPromises.push(xref.fetchAsync(kid).then(function (kid) {
+            kidPromises.push(xref.fetchAsync(kid).then(function(kid) {
               if (kid.has('Count')) {
                 var count = kid.get('Count');
                 total += count;
@@ -22240,14 +22240,14 @@ var Catalog = function CatalogClosure() {
           if (!found) {
             throw new _util.FormatError('kid ref not found in parents kids');
           }
-          return Promise.all(kidPromises).then(function () {
+          return Promise.all(kidPromises).then(function() {
             return [total, parentRef];
           });
         });
       }
       var total = 0;
       function next(ref) {
-        return pagesBeforeRef(ref).then(function (args) {
+        return pagesBeforeRef(ref).then(function(args) {
           if (!args) {
             return total;
           }
@@ -22885,7 +22885,7 @@ var XRef = function XRefClosure() {
           resolve(xref.fetch(ref, suppressEncryption));
         } catch (e) {
           if (e instanceof _util.MissingDataException) {
-            streamManager.requestRange(e.begin, e.end).then(function () {
+            streamManager.requestRange(e.begin, e.end).then(function() {
               tryFetch(resolve, reject);
             }, reject);
             return;
@@ -23089,7 +23089,7 @@ var FileSpec = function FileSpecClosure() {
   };
   return FileSpec;
 }();
-var ObjectLoader = function () {
+var ObjectLoader = function() {
   function mayHaveChildren(value) {
     return (0, _primitives.isRef)(value) || (0, _primitives.isDict)(value) || (0, _util.isArray)(value) || (0, _primitives.isStream)(value);
   }
@@ -23185,7 +23185,7 @@ var ObjectLoader = function () {
         addChildren(currentNode, nodesToVisit);
       }
       if (pendingRequests.length) {
-        this.xref.stream.manager.requestRanges(pendingRequests).then(function () {
+        this.xref.stream.manager.requestRanges(pendingRequests).then(function() {
           for (var _i2 = 0, _ii2 = nodesToRevisit.length; _i2 < _ii2; _i2++) {
             var node = nodesToRevisit[_i2];
             if ((0, _primitives.isRef)(node)) {
@@ -23221,7 +23221,7 @@ exports.getSupplementalGlyphMapForArialBlack = exports.getGlyphMapForStandardFon
 
 var _util = __w_pdfjs_require__(0);
 
-var getStdFontMap = (0, _util.getLookupTableFactory)(function (t) {
+var getStdFontMap = (0, _util.getLookupTableFactory)(function(t) {
   t['ArialNarrow'] = 'Helvetica';
   t['ArialNarrow-Bold'] = 'Helvetica-Bold';
   t['ArialNarrow-BoldItalic'] = 'Helvetica-BoldOblique';
@@ -23279,7 +23279,7 @@ var getStdFontMap = (0, _util.getLookupTableFactory)(function (t) {
   t['TimesNewRomanPSMT-BoldItalic'] = 'Times-BoldItalic';
   t['TimesNewRomanPSMT-Italic'] = 'Times-Italic';
 });
-var getNonStdFontMap = (0, _util.getLookupTableFactory)(function (t) {
+var getNonStdFontMap = (0, _util.getLookupTableFactory)(function(t) {
   t['CenturyGothic'] = 'Helvetica';
   t['CenturyGothic-Bold'] = 'Helvetica-Bold';
   t['CenturyGothic-BoldItalic'] = 'Helvetica-BoldOblique';
@@ -23311,7 +23311,7 @@ var getNonStdFontMap = (0, _util.getLookupTableFactory)(function (t) {
   t['NuptialScript'] = 'Times-Italic';
   t['Wingdings'] = 'ZapfDingbats';
 });
-var getSerifFonts = (0, _util.getLookupTableFactory)(function (t) {
+var getSerifFonts = (0, _util.getLookupTableFactory)(function(t) {
   t['Adobe Jenson'] = true;
   t['Adobe Text'] = true;
   t['Albertus'] = true;
@@ -23446,12 +23446,12 @@ var getSerifFonts = (0, _util.getLookupTableFactory)(function (t) {
   t['Windsor'] = true;
   t['XITS'] = true;
 });
-var getSymbolsFonts = (0, _util.getLookupTableFactory)(function (t) {
+var getSymbolsFonts = (0, _util.getLookupTableFactory)(function(t) {
   t['Dingbats'] = true;
   t['Symbol'] = true;
   t['ZapfDingbats'] = true;
 });
-var getGlyphMapForStandardFonts = (0, _util.getLookupTableFactory)(function (t) {
+var getGlyphMapForStandardFonts = (0, _util.getLookupTableFactory)(function(t) {
   t[2] = 10;
   t[3] = 32;
   t[4] = 33;
@@ -23846,7 +23846,7 @@ var getGlyphMapForStandardFonts = (0, _util.getLookupTableFactory)(function (t) 
   t[3393] = 1159;
   t[3416] = 8377;
 });
-var getSupplementalGlyphMapForArialBlack = (0, _util.getLookupTableFactory)(function (t) {
+var getSupplementalGlyphMapForArialBlack = (0, _util.getLookupTableFactory)(function(t) {
   t[227] = 322;
   t[264] = 261;
   t[291] = 346;
@@ -23870,7 +23870,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.WorkerMessageHandler = exports.WorkerTask = undefined;
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function(obj) { return typeof obj; } : function(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _util = __w_pdfjs_require__(0);
 
@@ -23926,7 +23926,7 @@ var PDFWorkerStream = function PDFWorkerStreamClosure() {
         this._fullRequestReader.cancel(reason);
       }
       var readers = this._rangeRequestReaders.slice(0);
-      readers.forEach(function (reader) {
+      readers.forEach(function(reader) {
         reader.cancel(reason);
       });
     }
@@ -23940,7 +23940,7 @@ var PDFWorkerStream = function PDFWorkerStreamClosure() {
     this._isStreamingSupported = false;
     var readableStream = this._msgHandler.sendWithStream('GetReader');
     this._reader = readableStream.getReader();
-    this._headersReady = this._msgHandler.sendWithPromise('ReaderHeadersReady').then(function (data) {
+    this._headersReady = this._msgHandler.sendWithPromise('ReaderHeadersReady').then(function(data) {
       _this._isStreamingSupported = data.isStreamingSupported;
       _this._isRangeSupported = data.isRangeSupported;
       _this._contentLength = data.contentLength;
@@ -23960,7 +23960,7 @@ var PDFWorkerStream = function PDFWorkerStreamClosure() {
       return this._isRangeSupported;
     },
     read: function read() {
-      return this._reader.read().then(function (_ref) {
+      return this._reader.read().then(function(_ref) {
         var value = _ref.value,
             done = _ref.done;
 
@@ -23994,7 +23994,7 @@ var PDFWorkerStream = function PDFWorkerStreamClosure() {
       return false;
     },
     read: function read() {
-      return this._reader.read().then(function (_ref2) {
+      return this._reader.read().then(function(_ref2) {
         var value = _ref2.value,
             done = _ref2.done;
 
@@ -24094,8 +24094,8 @@ var WorkerMessageHandler = {
       var parseFailure = function parseFailure(e) {
         loadDocumentCapability.reject(e);
       };
-      pdfManager.ensureDoc('checkHeader', []).then(function () {
-        pdfManager.ensureDoc('parseStartXRef', []).then(function () {
+      pdfManager.ensureDoc('checkHeader', []).then(function() {
+        pdfManager.ensureDoc('parseStartXRef', []).then(function() {
           pdfManager.ensureDoc('parse', [recoveryMode]).then(parseSuccess, parseFailure);
         }, parseFailure);
       }, parseFailure);
@@ -24123,7 +24123,7 @@ var WorkerMessageHandler = {
         return pdfManagerCapability.promise;
       }
       var fullRequest = pdfStream.getFullReader();
-      fullRequest.headersReady.then(function () {
+      fullRequest.headersReady.then(function() {
         if (!fullRequest.isRangeSupported) {
           return;
         }
@@ -24142,7 +24142,7 @@ var WorkerMessageHandler = {
         cachedChunks = [];
         pdfManagerCapability.resolve(pdfManager);
         cancelXHRs = null;
-      }).catch(function (reason) {
+      }).catch(function(reason) {
         pdfManagerCapability.reject(reason);
         cancelXHRs = null;
       });
@@ -24160,7 +24160,7 @@ var WorkerMessageHandler = {
         }
         cachedChunks = [];
       };
-      var readPromise = new Promise(function (resolve, reject) {
+      var readPromise = new Promise(function(resolve, reject) {
         var readChunk = function readChunk(chunk) {
           try {
             ensureNotTerminated();
@@ -24191,7 +24191,7 @@ var WorkerMessageHandler = {
         };
         fullRequest.read().then(readChunk, reject);
       });
-      readPromise.catch(function (e) {
+      readPromise.catch(function(e) {
         pdfManagerCapability.reject(e);
         cancelXHRs = null;
       });
@@ -24210,11 +24210,11 @@ var WorkerMessageHandler = {
         if (e instanceof _util.PasswordException) {
           var task = new WorkerTask('PasswordException: response ' + e.code);
           startWorkerTask(task);
-          handler.sendWithPromise('PasswordRequest', e).then(function (data) {
+          handler.sendWithPromise('PasswordRequest', e).then(function(data) {
             finishWorkerTask(task);
             pdfManager.updatePassword(data.password);
             pdfManagerReady();
-          }).catch(function (ex) {
+          }).catch(function(ex) {
             finishWorkerTask(task);
             handler.send('PasswordException', ex);
           }.bind(null, e));
@@ -24237,7 +24237,7 @@ var WorkerMessageHandler = {
             return;
           }
           pdfManager.requestLoadedStream();
-          pdfManager.onLoadedStream().then(function () {
+          pdfManager.onLoadedStream().then(function() {
             ensureNotTerminated();
             loadDocument(true).then(onSuccess, onFailure);
           });
@@ -24251,25 +24251,25 @@ var WorkerMessageHandler = {
         nativeImageDecoderSupport: data.nativeImageDecoderSupport,
         ignoreErrors: data.ignoreErrors
       };
-      getPdfManager(data, evaluatorOptions).then(function (newPdfManager) {
+      getPdfManager(data, evaluatorOptions).then(function(newPdfManager) {
         if (terminated) {
           newPdfManager.terminate();
           throw new Error('Worker was terminated');
         }
         pdfManager = newPdfManager;
         handler.send('PDFManagerReady', null);
-        pdfManager.onLoadedStream().then(function (stream) {
+        pdfManager.onLoadedStream().then(function(stream) {
           handler.send('DataLoaded', { length: stream.bytes.byteLength });
         });
       }).then(pdfManagerReady, onFailure);
     }
     handler.on('GetPage', function wphSetupGetPage(data) {
-      return pdfManager.getPage(data.pageIndex).then(function (page) {
+      return pdfManager.getPage(data.pageIndex).then(function(page) {
         var rotatePromise = pdfManager.ensure(page, 'rotate');
         var refPromise = pdfManager.ensure(page, 'ref');
         var userUnitPromise = pdfManager.ensure(page, 'userUnit');
         var viewPromise = pdfManager.ensure(page, 'view');
-        return Promise.all([rotatePromise, refPromise, userUnitPromise, viewPromise]).then(function (results) {
+        return Promise.all([rotatePromise, refPromise, userUnitPromise, viewPromise]).then(function(results) {
           return {
             rotate: results[0],
             ref: results[1],
@@ -24310,7 +24310,7 @@ var WorkerMessageHandler = {
     });
     handler.on('GetData', function wphSetupGetData(data) {
       pdfManager.requestLoadedStream();
-      return pdfManager.onLoadedStream().then(function (stream) {
+      return pdfManager.onLoadedStream().then(function(stream) {
         return stream.bytes;
       });
     });
@@ -24318,13 +24318,13 @@ var WorkerMessageHandler = {
       return pdfManager.pdfDocument.xref.stats;
     });
     handler.on('GetAnnotations', function wphSetupGetAnnotations(data) {
-      return pdfManager.getPage(data.pageIndex).then(function (page) {
+      return pdfManager.getPage(data.pageIndex).then(function(page) {
         return pdfManager.ensure(page, 'getAnnotationsData', [data.intent]);
       });
     });
     handler.on('RenderPageRequest', function wphSetupRenderPage(data) {
       var pageIndex = data.pageIndex;
-      pdfManager.getPage(pageIndex).then(function (page) {
+      pdfManager.getPage(pageIndex).then(function(page) {
         var task = new WorkerTask('RenderPageRequest: page ' + pageIndex);
         startWorkerTask(task);
         var pageNum = pageIndex + 1;
@@ -24334,10 +24334,10 @@ var WorkerMessageHandler = {
           task: task,
           intent: data.intent,
           renderInteractiveForms: data.renderInteractiveForms
-        }).then(function (operatorList) {
+        }).then(function(operatorList) {
           finishWorkerTask(task);
           (0, _util.info)('page=' + pageNum + ' - getOperatorList: time=' + (Date.now() - start) + 'ms, len=' + operatorList.totalLength);
-        }, function (e) {
+        }, function(e) {
           finishWorkerTask(task);
           if (task.terminated) {
             return;
@@ -24371,9 +24371,9 @@ var WorkerMessageHandler = {
     }, this);
     handler.on('GetTextContent', function wphExtractText(data, sink) {
       var pageIndex = data.pageIndex;
-      sink.onPull = function (desiredSize) {};
-      sink.onCancel = function (reason) {};
-      pdfManager.getPage(pageIndex).then(function (page) {
+      sink.onPull = function(desiredSize) {};
+      sink.onCancel = function(reason) {};
+      pdfManager.getPage(pageIndex).then(function(page) {
         var task = new WorkerTask('GetTextContent: page ' + pageIndex);
         startWorkerTask(task);
         var pageNum = pageIndex + 1;
@@ -24384,11 +24384,11 @@ var WorkerMessageHandler = {
           sink: sink,
           normalizeWhitespace: data.normalizeWhitespace,
           combineTextItems: data.combineTextItems
-        }).then(function () {
+        }).then(function() {
           finishWorkerTask(task);
           (0, _util.info)('text indexing: page=' + pageNum + ' - time=' + (Date.now() - start) + 'ms');
           sink.close();
-        }, function (reason) {
+        }, function(reason) {
           finishWorkerTask(task);
           if (task.terminated) {
             return;
@@ -24411,11 +24411,11 @@ var WorkerMessageHandler = {
         cancelXHRs();
       }
       var waitOn = [];
-      WorkerTasks.forEach(function (task) {
+      WorkerTasks.forEach(function(task) {
         waitOn.push(task.finished);
         task.terminate();
       });
-      return Promise.all(waitOn).then(function () {
+      return Promise.all(waitOn).then(function() {
         handler.destroy();
         handler = null;
       });
@@ -24448,13 +24448,13 @@ exports.WorkerMessageHandler = WorkerMessageHandler;
 "use strict";
 
 
-var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function(obj) { return typeof obj; } : function(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-(function (e, a) {
+(function(e, a) {
   for (var i in a) {
     e[i] = a[i];
   }
-})(exports, function (modules) {
+})(exports, function(modules) {
   var installedModules = {};
   function __w_pdfjs_require__(moduleId) {
     if (installedModules[moduleId]) return installedModules[moduleId].exports;
@@ -24469,10 +24469,10 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
   }
   __w_pdfjs_require__.m = modules;
   __w_pdfjs_require__.c = installedModules;
-  __w_pdfjs_require__.i = function (value) {
+  __w_pdfjs_require__.i = function(value) {
     return value;
   };
-  __w_pdfjs_require__.d = function (exports, name, getter) {
+  __w_pdfjs_require__.d = function(exports, name, getter) {
     if (!__w_pdfjs_require__.o(exports, name)) {
       Object.defineProperty(exports, name, {
         configurable: false,
@@ -24481,7 +24481,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
       });
     }
   };
-  __w_pdfjs_require__.n = function (module) {
+  __w_pdfjs_require__.n = function(module) {
     var getter = module && module.__esModule ? function getDefault() {
       return module['default'];
     } : function getModuleExports() {
@@ -24490,17 +24490,17 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     __w_pdfjs_require__.d(getter, 'a', getter);
     return getter;
   };
-  __w_pdfjs_require__.o = function (object, property) {
+  __w_pdfjs_require__.o = function(object, property) {
     return Object.prototype.hasOwnProperty.call(object, property);
   };
   __w_pdfjs_require__.p = "";
   return __w_pdfjs_require__(__w_pdfjs_require__.s = 7);
-}([function (module, exports, __w_pdfjs_require__) {
+}([function(module, exports, __w_pdfjs_require__) {
   "use strict";
 
-  var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
+  var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function(obj) {
     return typeof obj === 'undefined' ? 'undefined' : _typeof2(obj);
-  } : function (obj) {
+  } : function(obj) {
     return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === 'undefined' ? 'undefined' : _typeof2(obj);
   };
   var _require = __w_pdfjs_require__(1),
@@ -24508,10 +24508,10 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
   function IsPropertyKey(argument) {
     return typeof argument === 'string' || (typeof argument === 'undefined' ? 'undefined' : _typeof(argument)) === 'symbol';
   }
-  exports.typeIsObject = function (x) {
+  exports.typeIsObject = function(x) {
     return (typeof x === 'undefined' ? 'undefined' : _typeof(x)) === 'object' && x !== null || typeof x === 'function';
   };
-  exports.createDataProperty = function (o, p, v) {
+  exports.createDataProperty = function(o, p, v) {
     assert(exports.typeIsObject(o));
     Object.defineProperty(o, p, {
       value: v,
@@ -24520,13 +24520,13 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
       configurable: true
     });
   };
-  exports.createArrayFromList = function (elements) {
+  exports.createArrayFromList = function(elements) {
     return elements.slice();
   };
-  exports.ArrayBufferCopy = function (dest, destOffset, src, srcOffset, n) {
+  exports.ArrayBufferCopy = function(dest, destOffset, src, srcOffset, n) {
     new Uint8Array(dest).set(new Uint8Array(src, srcOffset, n), destOffset);
   };
-  exports.CreateIterResultObject = function (value, done) {
+  exports.CreateIterResultObject = function(value, done) {
     assert(typeof done === 'boolean');
     var obj = {};
     Object.defineProperty(obj, 'value', {
@@ -24543,7 +24543,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     });
     return obj;
   };
-  exports.IsFiniteNonNegativeNumber = function (v) {
+  exports.IsFiniteNonNegativeNumber = function(v) {
     if (Number.isNaN(v)) {
       return false;
     }
@@ -24561,7 +24561,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     }
     return Function.prototype.apply.call(F, V, args);
   }
-  exports.InvokeOrNoop = function (O, P, args) {
+  exports.InvokeOrNoop = function(O, P, args) {
     assert(O !== undefined);
     assert(IsPropertyKey(P));
     assert(Array.isArray(args));
@@ -24571,7 +24571,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     }
     return Call(method, O, args);
   };
-  exports.PromiseInvokeOrNoop = function (O, P, args) {
+  exports.PromiseInvokeOrNoop = function(O, P, args) {
     assert(O !== undefined);
     assert(IsPropertyKey(P));
     assert(Array.isArray(args));
@@ -24581,7 +24581,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
       return Promise.reject(returnValueE);
     }
   };
-  exports.PromiseInvokeOrPerformFallback = function (O, P, args, F, argsF) {
+  exports.PromiseInvokeOrPerformFallback = function(O, P, args, F, argsF) {
     assert(O !== undefined);
     assert(IsPropertyKey(P));
     assert(Array.isArray(args));
@@ -24601,17 +24601,17 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
       return Promise.reject(e);
     }
   };
-  exports.TransferArrayBuffer = function (O) {
+  exports.TransferArrayBuffer = function(O) {
     return O.slice();
   };
-  exports.ValidateAndNormalizeHighWaterMark = function (highWaterMark) {
+  exports.ValidateAndNormalizeHighWaterMark = function(highWaterMark) {
     highWaterMark = Number(highWaterMark);
     if (Number.isNaN(highWaterMark) || highWaterMark < 0) {
       throw new RangeError('highWaterMark property of a queuing strategy must be non-negative and non-NaN');
     }
     return highWaterMark;
   };
-  exports.ValidateAndNormalizeQueuingStrategy = function (size, highWaterMark) {
+  exports.ValidateAndNormalizeQueuingStrategy = function(size, highWaterMark) {
     if (size !== undefined && typeof size !== 'function') {
       throw new TypeError('size property of a queuing strategy must be a function');
     }
@@ -24621,12 +24621,12 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
       highWaterMark: highWaterMark
     };
   };
-}, function (module, exports, __w_pdfjs_require__) {
+}, function(module, exports, __w_pdfjs_require__) {
   "use strict";
 
   function rethrowAssertionErrorRejection(e) {
     if (e && e.constructor === AssertionError) {
-      setTimeout(function () {
+      setTimeout(function() {
         throw e;
       }, 0);
     }
@@ -24648,10 +24648,10 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     AssertionError: AssertionError,
     assert: assert
   };
-}, function (module, exports, __w_pdfjs_require__) {
+}, function(module, exports, __w_pdfjs_require__) {
   "use strict";
 
-  var _createClass = function () {
+  var _createClass = function() {
     function defineProperties(target, props) {
       for (var i = 0; i < props.length; i++) {
         var descriptor = props[i];
@@ -24661,7 +24661,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
         Object.defineProperty(target, descriptor.key, descriptor);
       }
     }
-    return function (Constructor, protoProps, staticProps) {
+    return function(Constructor, protoProps, staticProps) {
       if (protoProps) defineProperties(Constructor.prototype, protoProps);
       if (staticProps) defineProperties(Constructor, staticProps);
       return Constructor;
@@ -24685,7 +24685,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
       EnqueueValueWithSize = _require3.EnqueueValueWithSize,
       PeekQueueValue = _require3.PeekQueueValue,
       ResetQueue = _require3.ResetQueue;
-  var WritableStream = function () {
+  var WritableStream = function() {
     function WritableStream() {
       var underlyingSink = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
@@ -24789,7 +24789,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
       wasAlreadyErroring = true;
       reason = undefined;
     }
-    var promise = new Promise(function (resolve, reject) {
+    var promise = new Promise(function(resolve, reject) {
       stream._pendingAbortRequest = {
         _resolve: resolve,
         _reject: reject,
@@ -24805,7 +24805,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
   function WritableStreamAddWriteRequest(stream) {
     assert(IsWritableStreamLocked(stream) === true);
     assert(stream._state === 'writable');
-    var promise = new Promise(function (resolve, reject) {
+    var promise = new Promise(function(resolve, reject) {
       var writeRequest = {
         _resolve: resolve,
         _reject: reject
@@ -24861,10 +24861,10 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
       return;
     }
     var promise = stream._writableStreamController.__abortSteps(abortRequest._reason);
-    promise.then(function () {
+    promise.then(function() {
       abortRequest._resolve();
       WritableStreamRejectCloseAndClosedPromiseIfNeeded(stream);
-    }, function (reason) {
+    }, function(reason) {
       abortRequest._reject(reason);
       WritableStreamRejectCloseAndClosedPromiseIfNeeded(stream);
     });
@@ -24946,7 +24946,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     var writer = stream._writer;
     if (writer !== undefined) {
       defaultWriterClosedPromiseReject(writer, stream._storedError);
-      writer._closedPromise.catch(function () {});
+      writer._closedPromise.catch(function() {});
     }
   }
   function WritableStreamUpdateBackpressure(stream, backpressure) {
@@ -24963,7 +24963,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     }
     stream._backpressure = backpressure;
   }
-  var WritableStreamDefaultWriter = function () {
+  var WritableStreamDefaultWriter = function() {
     function WritableStreamDefaultWriter(stream) {
       _classCallCheck(this, WritableStreamDefaultWriter);
       if (IsWritableStream(stream) === false) {
@@ -24984,7 +24984,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
         defaultWriterClosedPromiseInitialize(this);
       } else if (state === 'erroring') {
         defaultWriterReadyPromiseInitializeAsRejected(this, stream._storedError);
-        this._readyPromise.catch(function () {});
+        this._readyPromise.catch(function() {});
         defaultWriterClosedPromiseInitialize(this);
       } else if (state === 'closed') {
         defaultWriterReadyPromiseInitializeAsResolved(this);
@@ -24993,9 +24993,9 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
         assert(state === 'errored', 'state must be errored');
         var storedError = stream._storedError;
         defaultWriterReadyPromiseInitializeAsRejected(this, storedError);
-        this._readyPromise.catch(function () {});
+        this._readyPromise.catch(function() {});
         defaultWriterClosedPromiseInitializeAsRejected(this, storedError);
-        this._closedPromise.catch(function () {});
+        this._closedPromise.catch(function() {});
       }
     }
     _createClass(WritableStreamDefaultWriter, [{
@@ -25101,7 +25101,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     }
     assert(state === 'writable' || state === 'erroring');
     assert(WritableStreamCloseQueuedOrInFlight(stream) === false);
-    var promise = new Promise(function (resolve, reject) {
+    var promise = new Promise(function(resolve, reject) {
       var closeRequest = {
         _resolve: resolve,
         _reject: reject
@@ -25133,7 +25133,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     } else {
       defaultWriterClosedPromiseResetToRejected(writer, error);
     }
-    writer._closedPromise.catch(function () {});
+    writer._closedPromise.catch(function() {});
   }
   function WritableStreamDefaultWriterEnsureReadyPromiseRejected(writer, error) {
     if (writer._readyPromiseState === 'pending') {
@@ -25141,7 +25141,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     } else {
       defaultWriterReadyPromiseResetToRejected(writer, error);
     }
-    writer._readyPromise.catch(function () {});
+    writer._readyPromise.catch(function() {});
   }
   function WritableStreamDefaultWriterGetDesiredSize(writer) {
     var stream = writer._ownerWritableStream;
@@ -25187,7 +25187,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     WritableStreamDefaultControllerWrite(controller, chunk, chunkSize);
     return promise;
   }
-  var WritableStreamDefaultController = function () {
+  var WritableStreamDefaultController = function() {
     function WritableStreamDefaultController(stream, underlyingSink, size, highWaterMark) {
       _classCallCheck(this, WritableStreamDefaultController);
       if (IsWritableStream(stream) === false) {
@@ -25236,11 +25236,11 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
         var _this = this;
         var startResult = InvokeOrNoop(this._underlyingSink, 'start', [this]);
         var stream = this._controlledWritableStream;
-        Promise.resolve(startResult).then(function () {
+        Promise.resolve(startResult).then(function() {
           assert(stream._state === 'writable' || stream._state === 'erroring');
           _this._started = true;
           WritableStreamDefaultControllerAdvanceQueueIfNeeded(_this);
-        }, function (r) {
+        }, function(r) {
           assert(stream._state === 'writable' || stream._state === 'erroring');
           _this._started = true;
           WritableStreamDealWithRejection(stream, r);
@@ -25329,9 +25329,9 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     DequeueValue(controller);
     assert(controller._queue.length === 0, 'queue must be empty once the final write record is dequeued');
     var sinkClosePromise = PromiseInvokeOrNoop(controller._underlyingSink, 'close', []);
-    sinkClosePromise.then(function () {
+    sinkClosePromise.then(function() {
       WritableStreamFinishInFlightClose(stream);
-    }, function (reason) {
+    }, function(reason) {
       WritableStreamFinishInFlightCloseWithError(stream, reason);
     }).catch(rethrowAssertionErrorRejection);
   }
@@ -25339,7 +25339,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     var stream = controller._controlledWritableStream;
     WritableStreamMarkFirstWriteRequestInFlight(stream);
     var sinkWritePromise = PromiseInvokeOrNoop(controller._underlyingSink, 'write', [chunk, controller]);
-    sinkWritePromise.then(function () {
+    sinkWritePromise.then(function() {
       WritableStreamFinishInFlightWrite(stream);
       var state = stream._state;
       assert(state === 'writable' || state === 'erroring');
@@ -25349,7 +25349,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
         WritableStreamUpdateBackpressure(stream, backpressure);
       }
       WritableStreamDefaultControllerAdvanceQueueIfNeeded(controller);
-    }, function (reason) {
+    }, function(reason) {
       WritableStreamFinishInFlightWriteWithError(stream, reason);
     }).catch(rethrowAssertionErrorRejection);
   }
@@ -25372,7 +25372,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     return new TypeError('Cannot ' + name + ' a stream using a released writer');
   }
   function defaultWriterClosedPromiseInitialize(writer) {
-    writer._closedPromise = new Promise(function (resolve, reject) {
+    writer._closedPromise = new Promise(function(resolve, reject) {
       writer._closedPromise_resolve = resolve;
       writer._closedPromise_reject = reject;
       writer._closedPromiseState = 'pending';
@@ -25416,7 +25416,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     writer._closedPromiseState = 'resolved';
   }
   function defaultWriterReadyPromiseInitialize(writer) {
-    writer._readyPromise = new Promise(function (resolve, reject) {
+    writer._readyPromise = new Promise(function(resolve, reject) {
       writer._readyPromise_resolve = resolve;
       writer._readyPromise_reject = reject;
     });
@@ -25445,7 +25445,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
   function defaultWriterReadyPromiseReset(writer) {
     assert(writer._readyPromise_resolve === undefined, 'writer._readyPromise_resolve === undefined');
     assert(writer._readyPromise_reject === undefined, 'writer._readyPromise_reject === undefined');
-    writer._readyPromise = new Promise(function (resolve, reject) {
+    writer._readyPromise = new Promise(function(resolve, reject) {
       writer._readyPromise_resolve = resolve;
       writer._readyPromise_reject = reject;
     });
@@ -25465,14 +25465,14 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     writer._readyPromise_reject = undefined;
     writer._readyPromiseState = 'fulfilled';
   }
-}, function (module, exports, __w_pdfjs_require__) {
+}, function(module, exports, __w_pdfjs_require__) {
   "use strict";
 
   var _require = __w_pdfjs_require__(0),
       IsFiniteNonNegativeNumber = _require.IsFiniteNonNegativeNumber;
   var _require2 = __w_pdfjs_require__(1),
       assert = _require2.assert;
-  exports.DequeueValue = function (container) {
+  exports.DequeueValue = function(container) {
     assert('_queue' in container && '_queueTotalSize' in container, 'Spec-level failure: DequeueValue should only be used on containers with [[queue]] and [[queueTotalSize]].');
     assert(container._queue.length > 0, 'Spec-level failure: should never dequeue from an empty queue.');
     var pair = container._queue.shift();
@@ -25482,7 +25482,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     }
     return pair.value;
   };
-  exports.EnqueueValueWithSize = function (container, value, size) {
+  exports.EnqueueValueWithSize = function(container, value, size) {
     assert('_queue' in container && '_queueTotalSize' in container, 'Spec-level failure: EnqueueValueWithSize should only be used on containers with [[queue]] and ' + '[[queueTotalSize]].');
     size = Number(size);
     if (!IsFiniteNonNegativeNumber(size)) {
@@ -25494,21 +25494,21 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     });
     container._queueTotalSize += size;
   };
-  exports.PeekQueueValue = function (container) {
+  exports.PeekQueueValue = function(container) {
     assert('_queue' in container && '_queueTotalSize' in container, 'Spec-level failure: PeekQueueValue should only be used on containers with [[queue]] and [[queueTotalSize]].');
     assert(container._queue.length > 0, 'Spec-level failure: should never peek at an empty queue.');
     var pair = container._queue[0];
     return pair.value;
   };
-  exports.ResetQueue = function (container) {
+  exports.ResetQueue = function(container) {
     assert('_queue' in container && '_queueTotalSize' in container, 'Spec-level failure: ResetQueue should only be used on containers with [[queue]] and [[queueTotalSize]].');
     container._queue = [];
     container._queueTotalSize = 0;
   };
-}, function (module, exports, __w_pdfjs_require__) {
+}, function(module, exports, __w_pdfjs_require__) {
   "use strict";
 
-  var _createClass = function () {
+  var _createClass = function() {
     function defineProperties(target, props) {
       for (var i = 0; i < props.length; i++) {
         var descriptor = props[i];
@@ -25518,7 +25518,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
         Object.defineProperty(target, descriptor.key, descriptor);
       }
     }
-    return function (Constructor, protoProps, staticProps) {
+    return function(Constructor, protoProps, staticProps) {
       if (protoProps) defineProperties(Constructor.prototype, protoProps);
       if (staticProps) defineProperties(Constructor, staticProps);
       return Constructor;
@@ -25558,7 +25558,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
       WritableStreamDefaultWriterRelease = _require5.WritableStreamDefaultWriterRelease,
       WritableStreamDefaultWriterWrite = _require5.WritableStreamDefaultWriterWrite,
       WritableStreamCloseQueuedOrInFlight = _require5.WritableStreamCloseQueuedOrInFlight;
-  var ReadableStream = function () {
+  var ReadableStream = function() {
     function ReadableStream() {
       var underlyingSource = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
@@ -25650,44 +25650,44 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
         var writer = AcquireWritableStreamDefaultWriter(dest);
         var shuttingDown = false;
         var currentWrite = Promise.resolve();
-        return new Promise(function (resolve, reject) {
+        return new Promise(function(resolve, reject) {
           function pipeLoop() {
             currentWrite = Promise.resolve();
             if (shuttingDown === true) {
               return Promise.resolve();
             }
-            return writer._readyPromise.then(function () {
-              return ReadableStreamDefaultReaderRead(reader).then(function (_ref5) {
+            return writer._readyPromise.then(function() {
+              return ReadableStreamDefaultReaderRead(reader).then(function(_ref5) {
                 var value = _ref5.value,
                     done = _ref5.done;
                 if (done === true) {
                   return;
                 }
-                currentWrite = WritableStreamDefaultWriterWrite(writer, value).catch(function () {});
+                currentWrite = WritableStreamDefaultWriterWrite(writer, value).catch(function() {});
               });
             }).then(pipeLoop);
           }
-          isOrBecomesErrored(_this, reader._closedPromise, function (storedError) {
+          isOrBecomesErrored(_this, reader._closedPromise, function(storedError) {
             if (preventAbort === false) {
-              shutdownWithAction(function () {
+              shutdownWithAction(function() {
                 return WritableStreamAbort(dest, storedError);
               }, true, storedError);
             } else {
               shutdown(true, storedError);
             }
           });
-          isOrBecomesErrored(dest, writer._closedPromise, function (storedError) {
+          isOrBecomesErrored(dest, writer._closedPromise, function(storedError) {
             if (preventCancel === false) {
-              shutdownWithAction(function () {
+              shutdownWithAction(function() {
                 return ReadableStreamCancel(_this, storedError);
               }, true, storedError);
             } else {
               shutdown(true, storedError);
             }
           });
-          isOrBecomesClosed(_this, reader._closedPromise, function () {
+          isOrBecomesClosed(_this, reader._closedPromise, function() {
             if (preventClose === false) {
-              shutdownWithAction(function () {
+              shutdownWithAction(function() {
                 return WritableStreamDefaultWriterCloseWithErrorPropagation(writer);
               });
             } else {
@@ -25697,20 +25697,20 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
           if (WritableStreamCloseQueuedOrInFlight(dest) === true || dest._state === 'closed') {
             var destClosed = new TypeError('the destination writable stream closed before all data could be piped to it');
             if (preventCancel === false) {
-              shutdownWithAction(function () {
+              shutdownWithAction(function() {
                 return ReadableStreamCancel(_this, destClosed);
               }, true, destClosed);
             } else {
               shutdown(true, destClosed);
             }
           }
-          pipeLoop().catch(function (err) {
+          pipeLoop().catch(function(err) {
             currentWrite = Promise.resolve();
             rethrowAssertionErrorRejection(err);
           });
           function waitForWritesToFinish() {
             var oldCurrentWrite = currentWrite;
-            return currentWrite.then(function () {
+            return currentWrite.then(function() {
               return oldCurrentWrite !== currentWrite ? waitForWritesToFinish() : undefined;
             });
           }
@@ -25739,9 +25739,9 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
               doTheRest();
             }
             function doTheRest() {
-              action().then(function () {
+              action().then(function() {
                 return finalize(originalIsError, originalError);
-              }, function (newError) {
+              }, function(newError) {
                 return finalize(true, newError);
               }).catch(rethrowAssertionErrorRejection);
             }
@@ -25752,7 +25752,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
             }
             shuttingDown = true;
             if (dest._state === 'writable' && WritableStreamCloseQueuedOrInFlight(dest) === false) {
-              waitForWritesToFinish().then(function () {
+              waitForWritesToFinish().then(function() {
                 return finalize(isError, error);
               }).catch(rethrowAssertionErrorRejection);
             } else {
@@ -25835,7 +25835,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
       reason1: undefined,
       reason2: undefined
     };
-    teeState.promise = new Promise(function (resolve) {
+    teeState.promise = new Promise(function(resolve) {
       teeState._resolve = resolve;
     });
     var pull = create_ReadableStreamTeePullFunction();
@@ -25858,7 +25858,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     var branch2Stream = new ReadableStream(underlyingSource2);
     pull._branch1 = branch1Stream._readableStreamController;
     pull._branch2 = branch2Stream._readableStreamController;
-    reader._closedPromise.catch(function (r) {
+    reader._closedPromise.catch(function(r) {
       if (teeState.closedOrErrored === true) {
         return;
       }
@@ -25874,7 +25874,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
           branch1 = f._branch1,
           branch2 = f._branch2,
           teeState = f._teeState;
-      return ReadableStreamDefaultReaderRead(reader).then(function (result) {
+      return ReadableStreamDefaultReaderRead(reader).then(function(result) {
         assert(typeIsObject(result));
         var value = result.value;
         var done = result.done;
@@ -25936,7 +25936,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
   function ReadableStreamAddReadIntoRequest(stream) {
     assert(IsReadableStreamBYOBReader(stream._reader) === true);
     assert(stream._state === 'readable' || stream._state === 'closed');
-    var promise = new Promise(function (resolve, reject) {
+    var promise = new Promise(function(resolve, reject) {
       var readIntoRequest = {
         _resolve: resolve,
         _reject: reject
@@ -25948,7 +25948,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
   function ReadableStreamAddReadRequest(stream) {
     assert(IsReadableStreamDefaultReader(stream._reader) === true);
     assert(stream._state === 'readable');
-    var promise = new Promise(function (resolve, reject) {
+    var promise = new Promise(function(resolve, reject) {
       var readRequest = {
         _resolve: resolve,
         _reject: reject
@@ -25967,7 +25967,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     }
     ReadableStreamClose(stream);
     var sourceCancelPromise = stream._readableStreamController.__cancelSteps(reason);
-    return sourceCancelPromise.then(function () {
+    return sourceCancelPromise.then(function() {
       return undefined;
     });
   }
@@ -26012,7 +26012,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
       reader._readIntoRequests = [];
     }
     defaultReaderClosedPromiseReject(reader, e);
-    reader._closedPromise.catch(function () {});
+    reader._closedPromise.catch(function() {});
   }
   function ReadableStreamFulfillReadIntoRequest(stream, chunk, done) {
     var reader = stream._reader;
@@ -26052,7 +26052,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     }
     return true;
   }
-  var ReadableStreamDefaultReader = function () {
+  var ReadableStreamDefaultReader = function() {
     function ReadableStreamDefaultReader(stream) {
       _classCallCheck(this, ReadableStreamDefaultReader);
       if (IsReadableStream(stream) === false) {
@@ -26111,7 +26111,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     }]);
     return ReadableStreamDefaultReader;
   }();
-  var ReadableStreamBYOBReader = function () {
+  var ReadableStreamBYOBReader = function() {
     function ReadableStreamBYOBReader(stream) {
       _classCallCheck(this, ReadableStreamBYOBReader);
       if (!IsReadableStream(stream)) {
@@ -26207,7 +26207,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     } else {
       assert(stream._state === 'errored', 'state must be errored');
       defaultReaderClosedPromiseInitializeAsRejected(reader, stream._storedError);
-      reader._closedPromise.catch(function () {});
+      reader._closedPromise.catch(function() {});
     }
   }
   function ReadableStreamReaderGenericCancel(reader, reason) {
@@ -26223,7 +26223,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     } else {
       defaultReaderClosedPromiseResetToRejected(reader, new TypeError('Reader was released and can no longer be used to monitor the stream\'s closedness'));
     }
-    reader._closedPromise.catch(function () {});
+    reader._closedPromise.catch(function() {});
     reader._ownerReadableStream._reader = undefined;
     reader._ownerReadableStream = undefined;
   }
@@ -26249,7 +26249,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     assert(stream._state === 'readable');
     return stream._readableStreamController.__pullSteps();
   }
-  var ReadableStreamDefaultController = function () {
+  var ReadableStreamDefaultController = function() {
     function ReadableStreamDefaultController(stream, underlyingSource, size, highWaterMark) {
       _classCallCheck(this, ReadableStreamDefaultController);
       if (IsReadableStream(stream) === false) {
@@ -26272,12 +26272,12 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
       this._strategyHWM = normalizedStrategy.highWaterMark;
       var controller = this;
       var startResult = InvokeOrNoop(underlyingSource, 'start', [this]);
-      Promise.resolve(startResult).then(function () {
+      Promise.resolve(startResult).then(function() {
         controller._started = true;
         assert(controller._pulling === false);
         assert(controller._pullAgain === false);
         ReadableStreamDefaultControllerCallPullIfNeeded(controller);
-      }, function (r) {
+      }, function(r) {
         ReadableStreamDefaultControllerErrorIfNeeded(controller, r);
       }).catch(rethrowAssertionErrorRejection);
     }
@@ -26378,14 +26378,14 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     assert(controller._pullAgain === false);
     controller._pulling = true;
     var pullPromise = PromiseInvokeOrNoop(controller._underlyingSource, 'pull', [controller]);
-    pullPromise.then(function () {
+    pullPromise.then(function() {
       controller._pulling = false;
       if (controller._pullAgain === true) {
         controller._pullAgain = false;
         return ReadableStreamDefaultControllerCallPullIfNeeded(controller);
       }
       return undefined;
-    }, function (e) {
+    }, function(e) {
       ReadableStreamDefaultControllerErrorIfNeeded(controller, e);
     }).catch(rethrowAssertionErrorRejection);
     return undefined;
@@ -26468,7 +26468,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     }
     return controller._strategyHWM - controller._queueTotalSize;
   }
-  var ReadableStreamBYOBRequest = function () {
+  var ReadableStreamBYOBRequest = function() {
     function ReadableStreamBYOBRequest(controller, view) {
       _classCallCheck(this, ReadableStreamBYOBRequest);
       this._associatedReadableByteStreamController = controller;
@@ -26507,7 +26507,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     }]);
     return ReadableStreamBYOBRequest;
   }();
-  var ReadableByteStreamController = function () {
+  var ReadableByteStreamController = function() {
     function ReadableByteStreamController(stream, underlyingByteSource, highWaterMark) {
       _classCallCheck(this, ReadableByteStreamController);
       if (IsReadableStream(stream) === false) {
@@ -26536,12 +26536,12 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
       this._pendingPullIntos = [];
       var controller = this;
       var startResult = InvokeOrNoop(underlyingByteSource, 'start', [this]);
-      Promise.resolve(startResult).then(function () {
+      Promise.resolve(startResult).then(function() {
         controller._started = true;
         assert(controller._pulling === false);
         assert(controller._pullAgain === false);
         ReadableByteStreamControllerCallPullIfNeeded(controller);
-      }, function (r) {
+      }, function(r) {
         if (stream._state === 'readable') {
           ReadableByteStreamControllerError(controller, r);
         }
@@ -26697,13 +26697,13 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     assert(controller._pullAgain === false);
     controller._pulling = true;
     var pullPromise = PromiseInvokeOrNoop(controller._underlyingByteSource, 'pull', [controller]);
-    pullPromise.then(function () {
+    pullPromise.then(function() {
       controller._pulling = false;
       if (controller._pullAgain === true) {
         controller._pullAgain = false;
         ReadableByteStreamControllerCallPullIfNeeded(controller);
       }
-    }, function (e) {
+    }, function(e) {
       if (controller._controlledReadableStream._state === 'readable') {
         ReadableByteStreamControllerError(controller, e);
       }
@@ -27017,7 +27017,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     return new TypeError('ReadableStreamDefaultReader.prototype.' + name + ' can only be used on a ReadableStreamDefaultReader');
   }
   function defaultReaderClosedPromiseInitialize(reader) {
-    reader._closedPromise = new Promise(function (resolve, reject) {
+    reader._closedPromise = new Promise(function(resolve, reject) {
       reader._closedPromise_resolve = resolve;
       reader._closedPromise_reject = reject;
     });
@@ -27065,10 +27065,10 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
   }
   function ifIsObjectAndHasAPromiseIsHandledInternalSlotSetPromiseIsHandledToTrue(promise) {
     try {
-      Promise.prototype.then.call(promise, undefined, function () {});
+      Promise.prototype.then.call(promise, undefined, function() {});
     } catch (e) {}
   }
-}, function (module, exports, __w_pdfjs_require__) {
+}, function(module, exports, __w_pdfjs_require__) {
   "use strict";
 
   var transformStream = __w_pdfjs_require__(6);
@@ -27090,10 +27090,10 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
   exports.WritableStreamDefaultWriterCloseWithErrorPropagation = writableStream.WritableStreamDefaultWriterCloseWithErrorPropagation;
   exports.WritableStreamDefaultWriterRelease = writableStream.WritableStreamDefaultWriterRelease;
   exports.WritableStreamDefaultWriterWrite = writableStream.WritableStreamDefaultWriterWrite;
-}, function (module, exports, __w_pdfjs_require__) {
+}, function(module, exports, __w_pdfjs_require__) {
   "use strict";
 
-  var _createClass = function () {
+  var _createClass = function() {
     function defineProperties(target, props) {
       for (var i = 0; i < props.length; i++) {
         var descriptor = props[i];
@@ -27103,7 +27103,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
         Object.defineProperty(target, descriptor.key, descriptor);
       }
     }
-    return function (Constructor, protoProps, staticProps) {
+    return function(Constructor, protoProps, staticProps) {
       if (protoProps) defineProperties(Constructor.prototype, protoProps);
       if (staticProps) defineProperties(Constructor, staticProps);
       return Constructor;
@@ -27205,10 +27205,10 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     if (transformStream._backpressureChangePromise !== undefined) {
       transformStream._backpressureChangePromise_resolve(backpressure);
     }
-    transformStream._backpressureChangePromise = new Promise(function (resolve) {
+    transformStream._backpressureChangePromise = new Promise(function(resolve) {
       transformStream._backpressureChangePromise_resolve = resolve;
     });
-    transformStream._backpressureChangePromise.then(function (resolution) {
+    transformStream._backpressureChangePromise.then(function(resolution) {
       assert(resolution !== backpressure, '_backpressureChangePromise should be fulfilled only when backpressure is changed');
     });
     transformStream._backpressure = backpressure;
@@ -27226,10 +27226,10 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     var transformer = transformStream._transformer;
     var controller = transformStream._transformStreamController;
     var transformPromise = PromiseInvokeOrPerformFallback(transformer, 'transform', [chunk, controller], TransformStreamDefaultTransform, [chunk, controller]);
-    return transformPromise.then(function () {
+    return transformPromise.then(function() {
       transformStream._transforming = false;
       return TransformStreamReadableReadyPromise(transformStream);
-    }, function (e) {
+    }, function(e) {
       TransformStreamErrorIfNeeded(transformStream, e);
       return Promise.reject(e);
     });
@@ -27252,7 +27252,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     }
     return true;
   }
-  var TransformStreamSink = function () {
+  var TransformStreamSink = function() {
     function TransformStreamSink(transformStream, startPromise) {
       _classCallCheck(this, TransformStreamSink);
       this._transformStream = transformStream;
@@ -27263,7 +27263,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
       value: function start(c) {
         var transformStream = this._transformStream;
         transformStream._writableController = c;
-        return this._startPromise.then(function () {
+        return this._startPromise.then(function() {
           return TransformStreamReadableReadyPromise(transformStream);
         });
       }
@@ -27287,7 +27287,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
         assert(transformStream._transforming === false);
         transformStream._writableDone = true;
         var flushPromise = PromiseInvokeOrNoop(transformStream._transformer, 'flush', [transformStream._transformStreamController]);
-        return flushPromise.then(function () {
+        return flushPromise.then(function() {
           if (transformStream._errored === true) {
             return Promise.reject(transformStream._storedError);
           }
@@ -27295,7 +27295,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
             TransformStreamCloseReadableInternal(transformStream);
           }
           return Promise.resolve();
-        }).catch(function (r) {
+        }).catch(function(r) {
           TransformStreamErrorIfNeeded(transformStream, r);
           return Promise.reject(transformStream._storedError);
         });
@@ -27303,7 +27303,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     }]);
     return TransformStreamSink;
   }();
-  var TransformStreamSource = function () {
+  var TransformStreamSource = function() {
     function TransformStreamSource(transformStream, startPromise) {
       _classCallCheck(this, TransformStreamSource);
       this._transformStream = transformStream;
@@ -27314,7 +27314,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
       value: function start(c) {
         var transformStream = this._transformStream;
         transformStream._readableController = c;
-        return this._startPromise.then(function () {
+        return this._startPromise.then(function() {
           assert(transformStream._backpressureChangePromise !== undefined, '_backpressureChangePromise should have been initialized');
           if (transformStream._backpressure === true) {
             return Promise.resolve();
@@ -27342,7 +27342,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     }]);
     return TransformStreamSource;
   }();
-  var TransformStreamDefaultController = function () {
+  var TransformStreamDefaultController = function() {
     function TransformStreamDefaultController(transformStream) {
       _classCallCheck(this, TransformStreamDefaultController);
       if (IsTransformStream(transformStream) === false) {
@@ -27390,7 +27390,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
     }]);
     return TransformStreamDefaultController;
   }();
-  var TransformStream = function () {
+  var TransformStream = function() {
     function TransformStream() {
       var transformer = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       _classCallCheck(this, TransformStream);
@@ -27410,7 +27410,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
       this._backpressureChangePromise_resolve = undefined;
       this._transformStreamController = new TransformStreamDefaultController(this);
       var startPromise_resolve = void 0;
-      var startPromise = new Promise(function (resolve) {
+      var startPromise = new Promise(function(resolve) {
         startPromise_resolve = resolve;
       });
       var source = new TransformStreamSource(this, startPromise);
@@ -27424,7 +27424,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
       var transformStream = this;
       var startResult = InvokeOrNoop(transformer, 'start', [transformStream._transformStreamController]);
       startPromise_resolve(startResult);
-      startPromise.catch(function (e) {
+      startPromise.catch(function(e) {
         if (transformStream._errored === false) {
           transformStream._errored = true;
           transformStream._storedError = e;
@@ -27457,7 +27457,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
   function streamBrandCheckException(name) {
     return new TypeError('TransformStream.prototype.' + name + ' can only be used on a TransformStream');
   }
-}, function (module, exports, __w_pdfjs_require__) {
+}, function(module, exports, __w_pdfjs_require__) {
   module.exports = __w_pdfjs_require__(5);
 }]));
 
@@ -27693,12 +27693,12 @@ var Annotation = function AnnotationClosure() {
       this.data.contents = (0, _util.stringToPDFString)(dict.get('Contents') || '');
     },
     loadResources: function Annotation_loadResources(keys) {
-      return this.appearance.dict.getAsync('Resources').then(function (resources) {
+      return this.appearance.dict.getAsync('Resources').then(function(resources) {
         if (!resources) {
           return;
         }
         var objectLoader = new _obj.ObjectLoader(resources, keys, resources.xref);
-        return objectLoader.load().then(function () {
+        return objectLoader.load().then(function() {
           return resources;
         });
       });
@@ -27715,7 +27715,7 @@ var Annotation = function AnnotationClosure() {
       var bbox = appearanceDict.getArray('BBox') || [0, 0, 1, 1];
       var matrix = appearanceDict.getArray('Matrix') || [1, 0, 0, 1, 0, 0];
       var transform = getTransformMatrix(data.rect, bbox, matrix);
-      return resourcesPromise.then(function (resources) {
+      return resourcesPromise.then(function(resources) {
         var opList = new _evaluator.OperatorList();
         opList.addOp(_util.OPS.beginAnnotation, [data.rect, transform, matrix]);
         return evaluator.getOperatorList({
@@ -27723,7 +27723,7 @@ var Annotation = function AnnotationClosure() {
           task: task,
           resources: resources,
           operatorList: opList
-        }).then(function () {
+        }).then(function() {
           opList.addOp(_util.OPS.endAnnotation, []);
           _this.appearance.reset();
           return opList;
@@ -27895,7 +27895,7 @@ var TextWidgetAnnotation = function TextWidgetAnnotationClosure() {
         task: task,
         resources: this.fieldResources,
         operatorList: operatorList
-      }).then(function () {
+      }).then(function() {
         return operatorList;
       });
     }
@@ -28675,7 +28675,7 @@ var BinaryCMapReader = function BinaryCMapReaderClosure() {
     }
   };
   function processBinaryCMap(data, cMap, extend) {
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
       var stream = new BinaryCMapStream(data);
       var header = stream.readByte();
       cMap.vertical = !!(header & 1);
@@ -29019,7 +29019,7 @@ var CMapFactory = function CMapFactoryClosure() {
     return Promise.resolve(cMap);
   }
   function extendCMap(cMap, fetchBuiltInCMap, useCMap) {
-    return createBuiltInCMap(useCMap, fetchBuiltInCMap).then(function (newCMap) {
+    return createBuiltInCMap(useCMap, fetchBuiltInCMap).then(function(newCMap) {
       cMap.useCMap = newCMap;
       if (cMap.numCodespaceRanges === 0) {
         var useCodespaceRanges = cMap.useCMap.codespaceRanges;
@@ -29028,7 +29028,7 @@ var CMapFactory = function CMapFactoryClosure() {
         }
         cMap.numCodespaceRanges = cMap.useCMap.numCodespaceRanges;
       }
-      cMap.useCMap.forEach(function (key, value) {
+      cMap.useCMap.forEach(function(key, value) {
         if (!cMap.contains(key)) {
           cMap.mapOne(key, cMap.useCMap.lookup(key));
         }
@@ -29048,12 +29048,12 @@ var CMapFactory = function CMapFactoryClosure() {
     if (!fetchBuiltInCMap) {
       return Promise.reject(new Error('Built-in CMap parameters are not provided.'));
     }
-    return fetchBuiltInCMap(name).then(function (data) {
+    return fetchBuiltInCMap(name).then(function(data) {
       var cMapData = data.cMapData,
           compressionType = data.compressionType;
       var cMap = new CMap(true);
       if (compressionType === _util.CMapCompressionType.BINARY) {
-        return new BinaryCMapReader().process(cMapData, cMap, function (useCMap) {
+        return new BinaryCMapReader().process(cMapData, cMap, function(useCMap) {
           return extendCMap(cMap, fetchBuiltInCMap, useCMap);
         });
       }
@@ -29074,7 +29074,7 @@ var CMapFactory = function CMapFactoryClosure() {
       } else if ((0, _primitives.isStream)(encoding)) {
         var cMap = new CMap();
         var lexer = new _parser.Lexer(encoding);
-        return parseCMap(cMap, lexer, fetchBuiltInCMap, useCMap).then(function (parsedCMap) {
+        return parseCMap(cMap, lexer, fetchBuiltInCMap, useCMap).then(function(parsedCMap) {
           if (parsedCMap.isIdentityCMap) {
             return createBuiltInCMap(parsedCMap.name, fetchBuiltInCMap);
           }
@@ -29101,7 +29101,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.PDFDocument = exports.Page = undefined;
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+var _slicedToArray = function() { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function(arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 var _obj = __w_pdfjs_require__(15);
 
@@ -29247,7 +29247,7 @@ var Page = function PageClosure() {
       if (!this.resourcesPromise) {
         this.resourcesPromise = this.pdfManager.ensure(this, 'resources');
       }
-      return this.resourcesPromise.then(function () {
+      return this.resourcesPromise.then(function() {
         var objectLoader = new _obj.ObjectLoader(_this.resources, keys, _this.xref);
         return objectLoader.load();
       });
@@ -29273,7 +29273,7 @@ var Page = function PageClosure() {
         options: this.evaluatorOptions
       });
       var dataPromises = Promise.all([contentStreamPromise, resourcesPromise]);
-      var pageListPromise = dataPromises.then(function (_ref2) {
+      var pageListPromise = dataPromises.then(function(_ref2) {
         var _ref3 = _slicedToArray(_ref2, 1),
             contentStream = _ref3[0];
 
@@ -29288,12 +29288,12 @@ var Page = function PageClosure() {
           task: task,
           resources: _this2.resources,
           operatorList: opList
-        }).then(function () {
+        }).then(function() {
           return opList;
         });
       });
       var annotationsPromise = this.pdfManager.ensure(this, 'annotations');
-      return Promise.all([pageListPromise, annotationsPromise]).then(function (_ref4) {
+      return Promise.all([pageListPromise, annotationsPromise]).then(function(_ref4) {
         var _ref5 = _slicedToArray(_ref4, 2),
             pageOpList = _ref5[0],
             annotations = _ref5[1];
@@ -29310,7 +29310,7 @@ var Page = function PageClosure() {
             opListPromises.push(annotations[i].getOperatorList(partialEvaluator, task, renderInteractiveForms));
           }
         }
-        return Promise.all(opListPromises).then(function (opLists) {
+        return Promise.all(opListPromises).then(function(opLists) {
           pageOpList.addOp(_util.OPS.beginAnnotations, []);
           for (i = 0, ii = opLists.length; i < ii; i++) {
             pageOpList.addOpList(opLists[i]);
@@ -29333,7 +29333,7 @@ var Page = function PageClosure() {
       var contentStreamPromise = this.pdfManager.ensure(this, 'getContentStream');
       var resourcesPromise = this.loadResources(['ExtGState', 'XObject', 'Font']);
       var dataPromises = Promise.all([contentStreamPromise, resourcesPromise]);
-      return dataPromises.then(function (_ref7) {
+      return dataPromises.then(function(_ref7) {
         var _ref8 = _slicedToArray(_ref7, 1),
             contentStream = _ref8[0];
 
@@ -30495,7 +30495,7 @@ var Glyph = function GlyphClosure() {
     this.isSpace = isSpace;
     this.isInFont = isInFont;
   }
-  Glyph.prototype.matchesForCache = function (fontChar, unicode, accent, width, vmetric, operatorListId, isSpace, isInFont) {
+  Glyph.prototype.matchesForCache = function(fontChar, unicode, accent, width, vmetric, operatorListId, isSpace, isInFont) {
     return this.fontChar === fontChar && this.unicode === unicode && this.accent === accent && this.width === width && this.vmetric === vmetric && this.operatorListId === operatorListId && this.isSpace === isSpace && this.isInFont === isInFont;
   };
   return Glyph;
@@ -30797,7 +30797,7 @@ var Font = function FontClosure() {
     this.seacMap = properties.seacMap;
     this.loading = true;
   }
-  Font.getFontID = function () {
+  Font.getFontID = function() {
     var ID = 1;
     return function Font_getFontID() {
       return String(ID++);
@@ -31196,7 +31196,7 @@ var Font = function FontClosure() {
         }
         var isIdentityUnicode = this.toUnicode instanceof IdentityToUnicodeMap;
         if (!isIdentityUnicode) {
-          this.toUnicode.forEach(function (charCode, unicodeCharCode) {
+          this.toUnicode.forEach(function(charCode, unicodeCharCode) {
             map[+charCode] = unicodeCharCode;
           });
         }
@@ -31213,7 +31213,7 @@ var Font = function FontClosure() {
         this.toFontChar = buildToFontChar(this.defaultEncoding, (0, _glyphlist.getGlyphsUnicode)(), this.differences);
       } else {
         var glyphsUnicodeMap = (0, _glyphlist.getGlyphsUnicode)();
-        this.toUnicode.forEach(function (charCode, unicodeCharCode) {
+        this.toUnicode.forEach(function(charCode, unicodeCharCode) {
           if (!_this.composite) {
             var glyphName = _this.differences[charCode] || _this.defaultEncoding[charCode];
             unicode = (0, _unicode.getUnicodeForGlyph)(glyphName, glyphsUnicodeMap);
@@ -31408,7 +31408,7 @@ var Font = function FontClosure() {
             hasShortCmap: false
           };
         }
-        mappings.sort(function (a, b) {
+        mappings.sort(function(a, b) {
           return a.charCode - b.charCode;
         });
         for (i = 1; i < mappings.length; i++) {
@@ -32077,7 +32077,7 @@ var Font = function FontClosure() {
       if (properties.composite) {
         var cidToGidMap = properties.cidToGidMap || [];
         var isCidToGidMapEmpty = cidToGidMap.length === 0;
-        properties.cMap.forEach(function (charCode, cid) {
+        properties.cMap.forEach(function(charCode, cid) {
           if (cid > 0xffff) {
             throw new _util.FormatError('Max size of CID is 65,535');
           }
@@ -32982,7 +32982,7 @@ var PDFImage = function PDFImageClosure() {
         maskPromise = Promise.resolve(null);
       }
     }
-    return Promise.all([imagePromise, smaskPromise, maskPromise]).then(function (results) {
+    return Promise.all([imagePromise, smaskPromise, maskPromise]).then(function(results) {
       var imageData = results[0];
       var smaskData = results[1];
       var maskData = results[2];
@@ -33618,7 +33618,7 @@ var Jbig2Image = function Jbig2ImageClosure() {
     }
     var useskip = !!skip;
     var template = CodingTemplates[templateIndex].concat(at);
-    template.sort(function (a, b) {
+    template.sort(function(a, b) {
       return a.y - b.y || a.x - b.x;
     });
     var templateLength = template.length;
@@ -34378,7 +34378,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.JpegImage = undefined;
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function(obj) { return typeof obj; } : function(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _util = __w_pdfjs_require__(0);
 
@@ -35309,12 +35309,12 @@ exports.getMetrics = undefined;
 
 var _util = __w_pdfjs_require__(0);
 
-var getMetrics = (0, _util.getLookupTableFactory)(function (t) {
+var getMetrics = (0, _util.getLookupTableFactory)(function(t) {
   t['Courier'] = 600;
   t['Courier-Bold'] = 600;
   t['Courier-BoldOblique'] = 600;
   t['Courier-Oblique'] = 600;
-  t['Helvetica'] = (0, _util.getLookupTableFactory)(function (t) {
+  t['Helvetica'] = (0, _util.getLookupTableFactory)(function(t) {
     t['space'] = 278;
     t['exclam'] = 278;
     t['quotedbl'] = 355;
@@ -35631,7 +35631,7 @@ var getMetrics = (0, _util.getLookupTableFactory)(function (t) {
     t['imacron'] = 278;
     t['Euro'] = 556;
   });
-  t['Helvetica-Bold'] = (0, _util.getLookupTableFactory)(function (t) {
+  t['Helvetica-Bold'] = (0, _util.getLookupTableFactory)(function(t) {
     t['space'] = 278;
     t['exclam'] = 333;
     t['quotedbl'] = 474;
@@ -35948,7 +35948,7 @@ var getMetrics = (0, _util.getLookupTableFactory)(function (t) {
     t['imacron'] = 278;
     t['Euro'] = 556;
   });
-  t['Helvetica-BoldOblique'] = (0, _util.getLookupTableFactory)(function (t) {
+  t['Helvetica-BoldOblique'] = (0, _util.getLookupTableFactory)(function(t) {
     t['space'] = 278;
     t['exclam'] = 333;
     t['quotedbl'] = 474;
@@ -36265,7 +36265,7 @@ var getMetrics = (0, _util.getLookupTableFactory)(function (t) {
     t['imacron'] = 278;
     t['Euro'] = 556;
   });
-  t['Helvetica-Oblique'] = (0, _util.getLookupTableFactory)(function (t) {
+  t['Helvetica-Oblique'] = (0, _util.getLookupTableFactory)(function(t) {
     t['space'] = 278;
     t['exclam'] = 278;
     t['quotedbl'] = 355;
@@ -36582,7 +36582,7 @@ var getMetrics = (0, _util.getLookupTableFactory)(function (t) {
     t['imacron'] = 278;
     t['Euro'] = 556;
   });
-  t['Symbol'] = (0, _util.getLookupTableFactory)(function (t) {
+  t['Symbol'] = (0, _util.getLookupTableFactory)(function(t) {
     t['space'] = 250;
     t['exclam'] = 333;
     t['universal'] = 713;
@@ -36774,7 +36774,7 @@ var getMetrics = (0, _util.getLookupTableFactory)(function (t) {
     t['bracerightbt'] = 494;
     t['apple'] = 790;
   });
-  t['Times-Roman'] = (0, _util.getLookupTableFactory)(function (t) {
+  t['Times-Roman'] = (0, _util.getLookupTableFactory)(function(t) {
     t['space'] = 250;
     t['exclam'] = 333;
     t['quotedbl'] = 408;
@@ -37091,7 +37091,7 @@ var getMetrics = (0, _util.getLookupTableFactory)(function (t) {
     t['imacron'] = 278;
     t['Euro'] = 500;
   });
-  t['Times-Bold'] = (0, _util.getLookupTableFactory)(function (t) {
+  t['Times-Bold'] = (0, _util.getLookupTableFactory)(function(t) {
     t['space'] = 250;
     t['exclam'] = 333;
     t['quotedbl'] = 555;
@@ -37408,7 +37408,7 @@ var getMetrics = (0, _util.getLookupTableFactory)(function (t) {
     t['imacron'] = 278;
     t['Euro'] = 500;
   });
-  t['Times-BoldItalic'] = (0, _util.getLookupTableFactory)(function (t) {
+  t['Times-BoldItalic'] = (0, _util.getLookupTableFactory)(function(t) {
     t['space'] = 250;
     t['exclam'] = 389;
     t['quotedbl'] = 555;
@@ -37725,7 +37725,7 @@ var getMetrics = (0, _util.getLookupTableFactory)(function (t) {
     t['imacron'] = 278;
     t['Euro'] = 500;
   });
-  t['Times-Italic'] = (0, _util.getLookupTableFactory)(function (t) {
+  t['Times-Italic'] = (0, _util.getLookupTableFactory)(function(t) {
     t['space'] = 250;
     t['exclam'] = 333;
     t['quotedbl'] = 420;
@@ -38042,7 +38042,7 @@ var getMetrics = (0, _util.getLookupTableFactory)(function (t) {
     t['imacron'] = 278;
     t['Euro'] = 500;
   });
-  t['ZapfDingbats'] = (0, _util.getLookupTableFactory)(function (t) {
+  t['ZapfDingbats'] = (0, _util.getLookupTableFactory)(function(t) {
     t['space'] = 278;
     t['a1'] = 974;
     t['a2'] = 961;
@@ -38260,7 +38260,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function(obj) { return typeof obj; } : function(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var MurmurHash3_64 = function MurmurHash3_64Closure(seed) {
   var MASK_HIGH = 0xffff0000;
@@ -39253,7 +39253,7 @@ var LocalPdfManager = function LocalPdfManagerClosure() {
   }
   _util.Util.inherit(LocalPdfManager, BasePdfManager, {
     ensure: function LocalPdfManager_ensure(obj, prop, args) {
-      return new Promise(function (resolve, reject) {
+      return new Promise(function(resolve, reject) {
         try {
           var value = obj[prop];
           var result;
@@ -39299,7 +39299,7 @@ var NetworkPdfManager = function NetworkPdfManagerClosure() {
   _util.Util.inherit(NetworkPdfManager, BasePdfManager, {
     ensure: function NetworkPdfManager_ensure(obj, prop, args) {
       var pdfManager = this;
-      return new Promise(function (resolve, reject) {
+      return new Promise(function(resolve, reject) {
         function ensureHelper() {
           try {
             var result;
@@ -40118,7 +40118,7 @@ exports.WorkerMessageHandler = pdfjsCoreWorker.WorkerMessageHandler;
 "use strict";
 
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function(obj) { return typeof obj; } : function(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 if (typeof PDFJS === 'undefined' || !PDFJS.compatibilityChecked) {
   var globalScope = typeof window !== 'undefined' && window.Math === Math ? window : typeof global !== 'undefined' && global.Math === Math ? global : typeof self !== 'undefined' && self.Math === Math ? self :  false ? undefined : {};
@@ -40225,7 +40225,7 @@ if (typeof PDFJS === 'undefined' || !PDFJS.compatibilityChecked) {
     globalScope.Uint16Array = TypedArray;
     globalScope.Float32Array = TypedArray;
     globalScope.Float64Array = TypedArray;
-    globalScope.Uint32Array = function () {
+    globalScope.Uint32Array = function() {
       if (arguments.length === 3) {
         if (arguments[1] !== 0) {
           throw new Error('offset !== 0 is not supported');
@@ -40367,7 +40367,7 @@ if (typeof PDFJS === 'undefined' || !PDFJS.compatibilityChecked) {
       return;
     }
     var digits = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
-    globalScope.btoa = function (chars) {
+    globalScope.btoa = function(chars) {
       var buffer = '';
       var i, n;
       for (i = 0, n = chars.length; i < n; i += 3) {
@@ -40388,7 +40388,7 @@ if (typeof PDFJS === 'undefined' || !PDFJS.compatibilityChecked) {
       return;
     }
     var digits = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
-    globalScope.atob = function (input) {
+    globalScope.atob = function(input) {
       input = input.replace(/=+$/, '');
       if (input.length % 4 === 1) {
         throw new Error('bad atob input');
@@ -40432,7 +40432,7 @@ if (typeof PDFJS === 'undefined' || !PDFJS.compatibilityChecked) {
           if (attribute.name.substring(0, 5) !== 'data-') {
             continue;
           }
-          var key = attribute.name.substring(5).replace(/\-([a-z])/g, function (all, ch) {
+          var key = attribute.name.substring(5).replace(/\-([a-z])/g, function(all, ch) {
             return ch.toUpperCase();
           });
           dataset[key] = attribute.value;
@@ -40557,18 +40557,18 @@ if (typeof PDFJS === 'undefined' || !PDFJS.compatibilityChecked) {
       return;
     }
     if (!('bind' in console.log)) {
-      console.log = function (fn) {
-        return function (msg) {
+      console.log = function(fn) {
+        return function(msg) {
           return fn(msg);
         };
       }(console.log);
-      console.error = function (fn) {
-        return function (msg) {
+      console.error = function(fn) {
+        return function(msg) {
           return fn(msg);
         };
       }(console.error);
-      console.warn = function (fn) {
-        return function (msg) {
+      console.warn = function(fn) {
+        return function(msg) {
           return fn(msg);
         };
       }(console.warn);
@@ -40622,7 +40622,7 @@ if (typeof PDFJS === 'undefined' || !PDFJS.compatibilityChecked) {
     }
     if (window.CanvasPixelArray) {
       if (typeof window.CanvasPixelArray.prototype.set !== 'function') {
-        window.CanvasPixelArray.prototype.set = function (arr) {
+        window.CanvasPixelArray.prototype.set = function(arr) {
           for (var i = 0, ii = this.length; i < ii; i++) {
             this[i] = arr[i];
           }
@@ -40643,9 +40643,9 @@ if (typeof PDFJS === 'undefined' || !PDFJS.compatibilityChecked) {
       if (polyfill) {
         var contextPrototype = window.CanvasRenderingContext2D.prototype;
         var createImageData = contextPrototype.createImageData;
-        contextPrototype.createImageData = function (w, h) {
+        contextPrototype.createImageData = function(w, h) {
           var imageData = createImageData.call(this, w, h);
-          imageData.data.set = function (arr) {
+          imageData.data.set = function(arr) {
             for (var i = 0, ii = this.length; i < ii; i++) {
               this[i] = arr[i];
             }
@@ -40658,10 +40658,10 @@ if (typeof PDFJS === 'undefined' || !PDFJS.compatibilityChecked) {
   })();
   (function checkRequestAnimationFrame() {
     function installFakeAnimationFrameFunctions() {
-      window.requestAnimationFrame = function (callback) {
+      window.requestAnimationFrame = function(callback) {
         return window.setTimeout(callback, 20);
       };
-      window.cancelAnimationFrame = function (timeoutID) {
+      window.cancelAnimationFrame = function(timeoutID) {
         window.clearTimeout(timeoutID);
       };
     }
@@ -40763,7 +40763,7 @@ if (typeof PDFJS === 'undefined' || !PDFJS.compatibilityChecked) {
     if (typeof Element.prototype.remove !== 'undefined') {
       return;
     }
-    Element.prototype.remove = function () {
+    Element.prototype.remove = function() {
       if (this.parentNode) {
         this.parentNode.removeChild(this);
       }
@@ -40773,7 +40773,7 @@ if (typeof PDFJS === 'undefined' || !PDFJS.compatibilityChecked) {
     if (Number.isNaN) {
       return;
     }
-    Number.isNaN = function (value) {
+    Number.isNaN = function(value) {
       return typeof value === 'number' && isNaN(value);
     };
   })();
@@ -40781,25 +40781,25 @@ if (typeof PDFJS === 'undefined' || !PDFJS.compatibilityChecked) {
     if (Number.isInteger) {
       return;
     }
-    Number.isInteger = function (value) {
+    Number.isInteger = function(value) {
       return typeof value === 'number' && isFinite(value) && Math.floor(value) === value;
     };
   })();
   (function checkPromise() {
     if (globalScope.Promise) {
       if (typeof globalScope.Promise.all !== 'function') {
-        globalScope.Promise.all = function (iterable) {
+        globalScope.Promise.all = function(iterable) {
           var count = 0,
               results = [],
               resolve,
               reject;
-          var promise = new globalScope.Promise(function (resolve_, reject_) {
+          var promise = new globalScope.Promise(function(resolve_, reject_) {
             resolve = resolve_;
             reject = reject_;
           });
-          iterable.forEach(function (p, i) {
+          iterable.forEach(function(p, i) {
             count++;
-            p.then(function (result) {
+            p.then(function(result) {
               results[i] = result;
               count--;
               if (count === 0) {
@@ -40814,21 +40814,21 @@ if (typeof PDFJS === 'undefined' || !PDFJS.compatibilityChecked) {
         };
       }
       if (typeof globalScope.Promise.resolve !== 'function') {
-        globalScope.Promise.resolve = function (value) {
-          return new globalScope.Promise(function (resolve) {
+        globalScope.Promise.resolve = function(value) {
+          return new globalScope.Promise(function(resolve) {
             resolve(value);
           });
         };
       }
       if (typeof globalScope.Promise.reject !== 'function') {
-        globalScope.Promise.reject = function (reason) {
-          return new globalScope.Promise(function (resolve, reject) {
+        globalScope.Promise.reject = function(reason) {
+          return new globalScope.Promise(function(resolve, reject) {
             reject(reason);
           });
         };
       }
       if (typeof globalScope.Promise.prototype.catch !== 'function') {
-        globalScope.Promise.prototype.catch = function (onReject) {
+        globalScope.Promise.prototype.catch = function(onReject) {
           return globalScope.Promise.prototype.then(undefined, onReject);
         };
       }
@@ -40912,7 +40912,7 @@ if (typeof PDFJS === 'undefined' || !PDFJS.compatibilityChecked) {
           return;
         }
         this.pendingRejectionCheck = true;
-        setTimeout(function () {
+        setTimeout(function() {
           _this.pendingRejectionCheck = false;
           var now = Date.now();
           for (var i = 0; i < _this.unhandledRejections.length; i++) {
@@ -40948,7 +40948,7 @@ if (typeof PDFJS === 'undefined' || !PDFJS.compatibilityChecked) {
     };
     Promise.all = function Promise_all(promises) {
       var resolveAll, rejectAll;
-      var deferred = new Promise(function (resolve, reject) {
+      var deferred = new Promise(function(resolve, reject) {
         resolveAll = resolve;
         rejectAll = reject;
       });
@@ -40967,8 +40967,8 @@ if (typeof PDFJS === 'undefined' || !PDFJS.compatibilityChecked) {
       }
       for (var i = 0, ii = promises.length; i < ii; ++i) {
         var promise = promises[i];
-        var resolve = function (i) {
-          return function (value) {
+        var resolve = function(i) {
+          return function(value) {
             if (deferred._status === STATUS_REJECTED) {
               return;
             }
@@ -40991,12 +40991,12 @@ if (typeof PDFJS === 'undefined' || !PDFJS.compatibilityChecked) {
       return value && typeof value.then === 'function';
     };
     Promise.resolve = function Promise_resolve(value) {
-      return new Promise(function (resolve) {
+      return new Promise(function(resolve) {
         resolve(value);
       });
     };
     Promise.reject = function Promise_reject(reason) {
-      return new Promise(function (resolve, reject) {
+      return new Promise(function(resolve, reject) {
         reject(reason);
       });
     };
@@ -41028,7 +41028,7 @@ if (typeof PDFJS === 'undefined' || !PDFJS.compatibilityChecked) {
         this._updateStatus(STATUS_REJECTED, reason);
       },
       then: function Promise_then(onResolve, onReject) {
-        var nextPromise = new Promise(function (resolve, reject) {
+        var nextPromise = new Promise(function(resolve, reject) {
           this.resolve = resolve;
           this.reject = reject;
         });
@@ -41619,10 +41619,10 @@ if (typeof PDFJS === 'undefined' || !PDFJS.compatibilityChecked) {
     };
     var OriginalURL = globalScope.URL;
     if (OriginalURL) {
-      JURL.createObjectURL = function (blob) {
+      JURL.createObjectURL = function(blob) {
         return OriginalURL.createObjectURL.apply(OriginalURL, arguments);
       };
-      JURL.revokeObjectURL = function (url) {
+      JURL.revokeObjectURL = function(url) {
         OriginalURL.revokeObjectURL(url);
       };
     }

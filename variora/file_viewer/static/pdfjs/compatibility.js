@@ -262,7 +262,7 @@ if (typeof PDFJS === 'undefined') {
   // https://github.com/davidchambers/Base64.js
   var digits =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
-  window.atob = function (input) {
+  window.atob = function(input) {
     input = input.replace(/=+$/, '');
     if (input.length % 4 === 1) {
       throw new Error('bad atob input');
@@ -587,7 +587,7 @@ if (typeof PDFJS === 'undefined') {
     return;
   }
   Object.defineProperty(document, 'currentScript', {
-    get: function () {
+    get: function() {
       var scripts = document.getElementsByTagName('script');
       return scripts[scripts.length - 1];
     },

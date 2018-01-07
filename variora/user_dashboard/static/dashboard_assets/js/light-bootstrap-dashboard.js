@@ -104,7 +104,7 @@ lbd = {
              $navbar.find('button').removeClass('btn-round btn-fill btn-info btn-primary btn-success btn-danger btn-warning btn-neutral');
              $navbar.find('button').addClass('btn-simple btn-block');
             
-             $toggle.click(function (){    
+             $toggle.click(function(){    
                 if(lbd.misc.navbar_menu_visible == 1) {
                     $('html').removeClass('nav-open'); 
                     lbd.misc.navbar_menu_visible = 0;

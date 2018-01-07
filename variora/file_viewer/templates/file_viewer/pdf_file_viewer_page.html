@@ -47,7 +47,7 @@
     <body style="overflow:-Scroll; overflow-y:hidden;">
         {% include "file_viewer/nav_bar_subpage.html" %}
 
-        <input value="{{ file_url }}" id="file-url" style="display: none">
+        <input value="{{ file_url }}" id="file-url" style="display: none">  <!-- TODO: refactoring this -->
 
         <div id="wrapper">
             <div id="file_viewer">
@@ -101,60 +101,7 @@
         </div>
     </body>
 <script>
-// var pdfDoc;
-// var scale = 1;
-// var finishList = [];
-// var taskList = [];
-// var rendering = false;
-// var scaleFactor = 1.08;
-// var sampleWidth;
-// var sampleHeight;
-// var is_authenticated = {{ request.user.is_authenticated|yesno:"true,false" }};  // whether the visitor is a logged-in user
-// var clearnessLevel = 2.4;  // too small then not clear, not large then rendering consumes much resource 
-
-// function pdfScale(scaleFactor) {
-//     scale *= scaleFactor;
-    
-//     if (taskList.length > 0) {
-//         while (taskList.length > 1) 
-//             taskList.pop();
-//         taskList.push([taskList[0][0], "PENDING", null]);
-//     }
-
-//     for(var i = 0; i < finishList.length; i++) {
-//         var id = "page_canvas_" + finishList[i];
-//         var pre = document.getElementById(id);
-//         pre.width = 0; 
-//         pre.height = 0; 
-//         taskList.push([finishList[i], "PENDING", null]);
-//     }
-
-//     finishList = [];
-//     if(!rendering)
-//         renderTaskList(taskList, finishList, scale);
-    
-//     var oldScrollHeight = $("#file_viewer")[0].scrollHeight;
-    
-//     sampleWidth *= scaleFactor;
-//     sampleHeight *= scaleFactor;
-//     $(".page_div").each(function() {
-//         var div = $(this);
-//         div.css("width", sampleWidth + "px");
-//         div.css("height", sampleHeight + "px");              
-//     });
-//     resizeAnnotations(scaleFactor);
-
-//     var factor = $("#file_viewer")[0].scrollHeight / oldScrollHeight;
-//     $("#file_viewer").scrollTop(parseFloat($("#file_viewer").scrollTop()) * factor);
-// }
-// $("#buttonForLarger").on('click', function () {
-//     pdfScale(scaleFactor);
-// });
-// $("#buttonForSmaller").on('click', function () {
-//     pdfScale(1/scaleFactor);
-// });
-
-// prepareAndRenderAll("{{ file_url }}", scale);
+var is_authenticated = {{ request.user.is_authenticated|yesno:"true,false" }};  // whether the visitor is a logged-in user
 
 function drawAllExistingAnnotationFrame() {
     {% for annotation in annotations %}

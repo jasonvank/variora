@@ -69,7 +69,7 @@ $(document).ready(function() {
                     coterie_name: $form.find("input").val(),
                     coterie_description: $form.find("textarea").val(),
                 },
-                success: function () {
+                success: function() {
                     layer.close(create_group_form_layer);
                     window.location.reload();
                 },
@@ -100,7 +100,7 @@ $(document).ready(function() {
                 $.ajax({
                     type: "DELETE", url: thisBtn.attr("action-link"),
                     beforeSend: function(xhr) { xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken")); },
-                    success: function () { window.location.reload(); },
+                    success: function() { window.location.reload(); },
                 });
             }
         );
