@@ -1,6 +1,64 @@
 var numPages = 0;
 var new_annotation_id;
-scaleFactor = 1.08;
+var scaleFactor = 1.08;
+
+
+
+var pdfDoc;
+var currentScale = 1;
+var finishList = [];
+var taskList = [];
+var rendering = false;
+// var scaleFactor = 1.08;
+var sampleWidth;
+var sampleHeight;
+// var is_authenticated = {{ request.user.is_authenticated|yesno:"true,false" }};  // whether the visitor is a logged-in user
+var clearnessLevel = 2.4;  // too small then not clear, not large then rendering consumes much resource 
+
+function pdfScale(scaleFactor) {
+  currentScale *= scaleFactor;
+  
+  if (taskList.length > 0) {
+      while (taskList.length > 1) 
+          taskList.pop();
+      taskList.push([taskList[0][0], "PENDING", null]);
+  }
+
+  for(var i = 0; i < finishList.length; i++) {
+      var id = "page_canvas_" + finishList[i];
+      var pre = document.getElementById(id);
+      pre.width = 0; 
+      pre.height = 0; 
+      taskList.push([finishList[i], "PENDING", null]);
+  }
+
+  finishList = [];
+  if(!rendering)
+      renderTaskList(taskList, finishList, currentScale);
+  
+  var oldScrollHeight = $("#file_viewer")[0].scrollHeight;
+  
+  sampleWidth *= scaleFactor;
+  sampleHeight *= scaleFactor;
+  $(".page_div").each(function() {
+      var div = $(this);
+      div.css("width", sampleWidth + "px");
+      div.css("height", sampleHeight + "px");              
+  });
+  resizeAnnotations(scaleFactor);
+
+  var factor = $("#file_viewer")[0].scrollHeight / oldScrollHeight;
+  $("#file_viewer").scrollTop(parseFloat($("#file_viewer").scrollTop()) * factor);
+}
+
+
+
+
+
+
+
+
+
 
 function getCookie(name) {
   var cookieValue = null;
@@ -631,6 +689,7 @@ function enablePostCommentButton() {
 }
 
 $(document).ready(function () {
+  prepareAndRenderAll($("#file-url").val(), currentScale);
   tinymceInit();
   animateOnce();
 
@@ -664,6 +723,37 @@ $(document).ready(function () {
       $("#annotation_update_div").css("width", wrapper.width() - 3 - fileViewer.width() + "px");
     }
   });
+
+
+
+
+
+
+
+
+
+
+  
+  $("#buttonForLarger").on('click', function () {
+    pdfScale(scaleFactor);
+  });
+  $("#buttonForSmaller").on('click', function () {
+    pdfScale(1/scaleFactor);
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 });
 
 function renderTaskList(taskList, finishList, scale) {
@@ -802,3 +892,12 @@ function prepareAndRenderAll(url, scale) {
     });
   });
 }
+
+
+
+
+
+
+
+
+
