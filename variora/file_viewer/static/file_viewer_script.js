@@ -226,28 +226,6 @@ function resizeAnnotations(scaleFactor) {
   });
 }
 
-// /**
-//  * called after clicking scale button (buttonForLarger/buttonForSmaller)
-//  * @param {number} scaleFactor
-//  */
-// function imgScale(scaleFactor) {
-//   if ($("canvas").length == 0) {
-//     var oldScrollHeight = $("#file_viewer")[0].scrollHeight;
-
-//     $('.PageImg').css("width", parseFloat($('.PageImg').css("width")) * scaleFactor + "px");
-//     $(".PageDiv").each(function() {
-//       var div = $(this);
-//       var img = div.children(".PageImg");
-//       div.css("width", img.width() + "px");
-//       div.css("height", img.height() + "px");
-//     });
-//     resizeAnnotations(scaleFactor);
-
-//     var factor = $("#file_viewer")[0].scrollHeight / oldScrollHeight;
-//     $("#file_viewer").scrollTop(parseFloat($("#file_viewer").scrollTop()) * factor);
-//   }
-// }
-
 /**
  * scroll the specified page into fileViewer's visible window
  * @param {jQuery} pageDiv - the jQuery object representing the page to scroll to
@@ -323,13 +301,6 @@ function animateOnce() {
 
 
 function enableResizeButton() {
-  // // img resize
-  // $("#buttonForLarger").on('click', function() {
-  //   scale(scaleFactor);
-  // });
-  // $("#buttonForSmaller").on('click', function() {
-  //   scale(1 / scaleFactor);
-  // });
   $("#buttonForLarger").on('click', function() {
     pdfScale(scaleFactor);
   });
