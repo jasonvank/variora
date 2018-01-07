@@ -122,7 +122,10 @@ class FileViewerView(View):
                 "annotations": document.annotation_set.order_by("page_index"),
                 "new_annotation_id": annotation.id,
             }
-            return render(request, "file_viewer/annotation_viewer_subpage.html", context)
+            return JsonResponse({
+                'new_annotations_html': render(request, "file_viewer/annotation_viewer_subpage.html", context).content,
+                'new_annotation_id': annotation.id
+            })
 
         elif request.POST["operation"] == "reply_annotation":
             document = Document.objects.get(id=int(request.POST["document_id"]))
