@@ -4,6 +4,8 @@ pip install -r dev_reqs.txt
 # install webpack globally
 npm install webpack -g
 
+npm install jshint -g
+
 # install yarn as the replacement of npm
 npm install yarn -g
 
