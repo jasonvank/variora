@@ -57,12 +57,12 @@ function pdfScale(scaleFactor) {
 
 
 function startListeningSelectionBoxCreation() {
-  var annotationColor = "rgba(0,0,0,0.18)";
+  var annotationColor = "rgba(0,0,0,0.28)";
 
   colorPicker.on('change', function(color) {
     var rgb = hexToRgb(color)
     // console.log(hexToRgb(color))
-    annotationColor = 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',0.18)'
+    annotationColor = 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',0.28)'
   })
 
   $("#annotation_color_buttons_div").find(".ColorSelectorButton").on("click", function() {
