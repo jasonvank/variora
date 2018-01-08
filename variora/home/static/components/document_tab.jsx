@@ -121,6 +121,7 @@ class UploadedDocuments extends React.Component {
                 style={{ width: '60%', margin: 8 }}
                 onChange={async (e) => this.setState({ uploadedDocumentName: e.target.value })}
                 value={this.state.uploadedDocumentName}
+                placeholder={ 'name of the document' }
               ></Input>
               <div>
                 <Button type="primary" icon="upload" style={{ margin: 8 }} onClick={this.uploadLocalDocument}>upload</Button>
@@ -131,12 +132,14 @@ class UploadedDocuments extends React.Component {
                 style={{ width: '60%', margin: 8 }}
                 onChange={async (e) => this.setState({ onlineDocumentUrl: e.target.value })}
                 value={this.state.onlineDocumentUrl}
+                placeholder={ 'URL to the online document' }
               >
               </Input>
               <Input
                 style={{ width: '60%', margin: 8 }}
                 onChange={async (e) => this.setState({ onlineDocumentName: e.target.value })}
                 value={this.state.onlineDocumentName}
+                placeholder={ 'name of the document' }
               >
               </Input>
               <div>
