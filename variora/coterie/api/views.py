@@ -115,7 +115,7 @@ class CoterieDocumentView(View):
             coteriedocument = CoterieDocument.objects.get(id=pk)
             user = get_user(request)
             if operation == 'delete':
-                return _delete_coteriedocument(coteriedocument)
+                return _delete_coteriedocument(coteriedocument, user)
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
 

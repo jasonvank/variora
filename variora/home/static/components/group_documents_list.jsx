@@ -10,17 +10,20 @@ import enUS from 'antd/lib/locale-provider/en_US';
 
 const { Column } = Table;
 
-function formatOpenDocumentUrl(documentId) {
-  return getUrlFormat('/file_viewer/', {
+function formatOpenDocumentUrl(documentId, coterieId) {
+  return getUrlFormat('/coterie/display_coteriefile_viewer_page', {
+    'coterie_id': coterieId,
     'document_id': documentId,
-    'csrfmiddlewaretoken': getCookie('csrftokean'),
+    'csrfmiddlewaretoken': getCookie('csrftoken'),
+    'current_url': window.location.href,
   })
 }
 
-class UploadedDocumentsList extends React.Component {
+class GroupDocumentsList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      coteriePk: this.props.coteriePk,
       data: [],
       columns: [{
         title: 'Id',
@@ -28,7 +31,7 @@ class UploadedDocumentsList extends React.Component {
       }, {
         title: 'Title',
         dataIndex: 'title',
-        render: (text, record) => <a href={formatOpenDocumentUrl(record.pk)}>{text}</a>,
+        render: (text, record) => <a href={formatOpenDocumentUrl(record.pk, this.state.coteriePk)}>{text}</a>,
       }, {
         title: 'Action',
         key: 'action',
@@ -54,28 +57,37 @@ class UploadedDocumentsList extends React.Component {
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
       axios.post(record.delete_url, data).then(this.updateData)
     }
-    this.parseResponse = (response) => {
-      var uploadedDocuments = response['uploadedDocuments']
+    this.parseResponseData = (responseData) => {
+      var groupDocuments = responseData.coteriedocument_set
       var key = 1
-      for (var document of uploadedDocuments) {
+      for (var document of groupDocuments) {
         document.key = document.id = key++
       }
-      return uploadedDocuments
+      return groupDocuments
     }
     this.updateData = (response) => {
-      axios.get(getUrlFormat('/file_viewer/api/documents', {
+      axios.get(getUrlFormat('/coterie/api/coteries/' + this.state.coteriePk, {
       }))
       .then(response => {
         this.setState({
-          data: this.parseResponse(response.data)
+          data: this.parseResponseData(response.data)
         })
       })
       .catch(e => { message.warning(e.message) })
     }
   }
+
+  async componentWillReceiveProps(nextProps) {
+    await this.setState({
+      coteriePk: nextProps.coteriePk
+    })
+    this.updateData()
+  }
+
   componentDidMount() {
     this.updateData()
   }
+
   render() { 
     return (
       <Table 
@@ -87,7 +99,7 @@ class UploadedDocumentsList extends React.Component {
   } 
 }
 
-export { UploadedDocumentsList };
+export { GroupDocumentsList };
 
 
 

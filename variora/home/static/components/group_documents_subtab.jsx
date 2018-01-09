@@ -9,9 +9,9 @@ import {
 } from 'react-router-dom'
 import { getCookie, getUrlFormat } from 'util.js'
 
+import { GroupDocumentsList } from './group_documents_list.jsx'
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { UploadedDocumentsList } from './uploaded_documents_list.jsx'
 import axios from 'axios'
 import enUS from 'antd/lib/locale-provider/en_US';
 
@@ -58,6 +58,7 @@ class GroupDocumentsSubtab extends React.Component {
         })
     }
   }
+
   render() {
     self = this;
     var uploadProps = {
@@ -70,7 +71,7 @@ class GroupDocumentsSubtab extends React.Component {
       <div> 
         <h1>{ this.props.coteriePk }</h1>
         <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
-          <UploadedDocumentsList ref={(ele) => this.uploadedDocumentTable = ele} />
+          <GroupDocumentsList ref={(ele) => this.uploadedDocumentTable = ele} coteriePk={this.props.coteriePk} />
         </div>
         <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, padding: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
           <Row>
