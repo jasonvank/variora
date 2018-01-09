@@ -24,7 +24,7 @@ class Coterie(models.Model):
 class CoterieDocument(models.Model):
     title = models.CharField(max_length=1028)
     owner = models.ForeignKey(Coterie)
-    unique_file = models.ForeignKey(UniqueFile)
+    unique_file = models.ForeignKey(UniqueFile, blank=True, null=True)
     num_visit = models.IntegerField(default=0)
     external_url = models.CharField(max_length=2083, blank=True)
 

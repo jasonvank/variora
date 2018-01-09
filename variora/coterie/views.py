@@ -234,21 +234,34 @@ def display_coteriefile_viewer_page(request):
         return render(request, "coterie_file_viewer/pdf_file_viewer_page.html", context)
 
 
+def _handle_dropbox_link(link):
+    if link.endswith('dl=0'):
+        link = link.replace('dl=0', 'raw=1')
+    return link
+
+
 def handle_coteriefile_upload(request):
     coterie = Coterie.objects.get(id=request.POST["coterie_id"])
 
     if get_user(request) in coterie.administrators.all():
-        file_upload = request.FILES["file_upload"]  # this is an UploadedFile object
-        this_file_md5 = md5(file_upload.read()).hexdigest()
+        if 'external_url' in request.POST and request.POST['external_url'] != '':
+            external_url = request.POST['external_url']
+            if external_url.startswith('https://www.dropbox.com'):
+                external_url = _handle_dropbox_link(external_url)
+            document = CoterieDocument(owner=coterie, external_url=external_url, title=request.POST["title"])
+            document.save()
+        else:
+            file_upload = request.FILES["file_upload"]  # this is an UploadedFile object
+            this_file_md5 = md5(file_upload.read()).hexdigest()
 
-        try:
-            unique_file = models.UniqueFile.objects.get(md5=this_file_md5)
-        except ObjectDoesNotExist:
-            unique_file = models.UniqueFile(file_field=file_upload, md5=this_file_md5)
-            unique_file.save()
+            try:
+                unique_file = models.UniqueFile.objects.get(md5=this_file_md5)
+            except ObjectDoesNotExist:
+                unique_file = models.UniqueFile(file_field=file_upload, md5=this_file_md5)
+                unique_file.save()
 
-        document = CoterieDocument(owner=coterie, unique_file=unique_file, title=request.POST["title"])
-        document.save()  # save this document to the database
+            document = CoterieDocument(owner=coterie, unique_file=unique_file, title=request.POST["title"])
+            document.save()  # save this document to the database
 
     url_request_from = request.POST["current_url"]
     return redirect(to=url_request_from)

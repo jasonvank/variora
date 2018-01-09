@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
-from file_viewer import models
+from file_viewer.models import Document, UniqueFile
 from home.models import User
 
 
@@ -31,19 +31,19 @@ def handle_file_upload(request):
         external_url = request.POST['external_url']
         if external_url.startswith('https://www.dropbox.com'):
             external_url = _handle_dropbox_link(external_url)
-        document = models.Document(owner=user, external_url=external_url, title=request.POST["title"])
+        document = Document(owner=user, external_url=external_url, title=request.POST["title"])
         document.save()
     else:
         file_upload = request.FILES["file_upload"]  # this is an UploadedFile object
         this_file_md5 = md5(file_upload.read()).hexdigest()
 
         try:
-            unique_file = models.UniqueFile.objects.get(md5=this_file_md5)
+            unique_file = UniqueFile.objects.get(md5=this_file_md5)
         except ObjectDoesNotExist:
-            unique_file = models.UniqueFile(file_field=file_upload, md5=this_file_md5)
+            unique_file = UniqueFile(file_field=file_upload, md5=this_file_md5)
             unique_file.save()
 
-        document = models.Document(owner=user, unique_file=unique_file, title=request.POST["title"])
+        document = Document(owner=user, unique_file=unique_file, title=request.POST["title"])
         document.save()
 
     return redirect("user_dashboard")
@@ -51,7 +51,7 @@ def handle_file_upload(request):
 
 def handle_uncollect(request):
     user = get_user(request)
-    document = models.Document.objects.get(id=int(request.POST["document_id"]))
+    document = Document.objects.get(id=int(request.POST["document_id"]))
     document.collectors.remove(user)
     document.save()
     return redirect("user_dashboard")

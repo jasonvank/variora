@@ -35,7 +35,9 @@ class GroupDocumentsSubtab extends React.Component {
       data.append('title', this.state.uploadedDocumentName)
       data.append('file_upload', this.state.uploadedDocumentFileList[0])
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-      axios.post('/user_dashboard/handle_file_upload', data, {
+      data.append('coterie_id', this.props.coteriePk)
+      data.append('current_url', window.location.href)
+      axios.post('/coterie/handle_coteriefile_upload', data, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -50,7 +52,9 @@ class GroupDocumentsSubtab extends React.Component {
       data.append('title', this.state.onlineDocumentName)
       data.append('external_url', this.state.onlineDocumentUrl)
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-      axios.post('/user_dashboard/handle_file_upload', data)
+      data.append('coterie_id', this.props.coteriePk)
+      data.append('current_url', window.location.href)
+      axios.post('/coterie/handle_coteriefile_upload', data)
         .then(() => {
           this.setState({ onlineDocumentName: '' })
           this.setState({ onlineDocumentUrl: '' })
@@ -85,6 +89,7 @@ class GroupDocumentsSubtab extends React.Component {
                 style={{ width: '60%', margin: 8 }}
                 onChange={async (e) => this.setState({ uploadedDocumentName: e.target.value })}
                 value={this.state.uploadedDocumentName}
+                placeholder={ 'name of the document' }
               ></Input>
               <div>
                 <Button type="primary" icon="upload" style={{ margin: 8 }} onClick={this.uploadLocalDocument}>upload</Button>
@@ -95,12 +100,14 @@ class GroupDocumentsSubtab extends React.Component {
                 style={{ width: '60%', margin: 8 }}
                 onChange={async (e) => this.setState({ onlineDocumentUrl: e.target.value })}
                 value={this.state.onlineDocumentUrl}
+                placeholder={ 'URL to the online document' }
               >
               </Input>
               <Input
                 style={{ width: '60%', margin: 8 }}
                 onChange={async (e) => this.setState({ onlineDocumentName: e.target.value })}
                 value={this.state.onlineDocumentName}
+                placeholder={ 'name of the document' }
               >
               </Input>
               <div>
