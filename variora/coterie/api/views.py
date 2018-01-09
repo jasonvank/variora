@@ -11,7 +11,6 @@ from django.views.generic import View
 
 from ..models import Coterie, CoterieDocument
 from home.models import User
-from home.api.views import UserEncoder
 from django.contrib.auth.models import AnonymousUser 
 
 
@@ -29,7 +28,13 @@ class CoterieEncoder(DjangoJSONEncoder):
         elif isinstance(obj, CoterieDocument):
             return CoterieDocumentEncoder().default(obj)
         elif isinstance(obj, User):
-            return UserEncoder().default(obj)
+            return {
+                'nickname': obj.nickname,
+                'email_address': obj.email_address,
+                'portrait_url': obj.portrait_url,
+                'date_joined': obj.date_joined,
+                'is_authenticated': obj.is_authenticated,
+            }
         else:
             return super(CoterieEncoder, self).default(obj)
 

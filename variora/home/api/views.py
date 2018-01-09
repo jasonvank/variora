@@ -1,4 +1,4 @@
-from coterie.models import Coterie
+from coterie.models import Coterie, CoterieDocument
 from django.contrib.auth import get_user, login, authenticate, logout
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.serializers.json import DjangoJSONEncoder
@@ -7,6 +7,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.generic import View
 from file_viewer.models import Document
 from file_viewer.api.views import DocumentEncoder
+from coterie.api.views import CoterieEncoder, CoterieDocumentEncoder
 
 from ..models import User
 from django.contrib.auth.models import AnonymousUser 
@@ -45,6 +46,10 @@ def search_api_view(request):
                 return UserEncoder().default(obj)
             elif isinstance(obj, Document):
                 return DocumentEncoder().default(obj)
+            elif isinstance(obj, Coterie):
+                return CoterieEncoder().default(obj)
+            elif isinstance(obj, CoterieDocument):
+                return CoterieDocumentEncoder().default(obj)
             else:
                 return super(CombinedEncoder, self).default(obj)
 
@@ -55,7 +60,8 @@ def search_api_view(request):
     return JsonResponse(
         {
             'resultDocuments': result_documents, 
-            'resultUsers': result_users
+            'resultUsers': result_users,
+            'resultCoteries': result_coteries
         }, 
         encoder=CombinedEncoder, 
         safe=False
