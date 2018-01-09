@@ -58,26 +58,6 @@
 </div>
 {% endfor %}
 
-<script>
-
-$(document).ready(function() {
-    new_annotation_id = '{{ new_annotation_id }}';
-
-    $(".ReplyAnnotationButton").on("click", function() {
-        $(this).parents("footer").children("form").slideToggle({duration: 180, start: function() {
-            if ($(this).is(":hidden")) {
-                // tinyMCE.activeEditor.setContent("");
-            }
-            else {
-                $(".ReplyAnnotationButton").parents("footer").children("form").not($(this)).slideUp(180);
-                // for (editor in tinyMCE.editors)
-                //     tinyMCE.editors[editor].setContent("");
-            }
-        }});
-    });
-});
-</script>
-
 
 
 

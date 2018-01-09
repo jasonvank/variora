@@ -7,7 +7,7 @@ from coterie.models import Coterie
 from django.contrib.auth import get_user
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from file_viewer import models as file_viewer_models
 from home.models import User
@@ -185,7 +185,10 @@ def display_coteriefile_viewer_page(request):
                 "new_annotation_id": annotation.id,
             }
 
-            return render(request, "coterie_file_viewer/annotation_viewer_subpage.html", context)
+            return JsonResponse({
+                'new_annotations_html': render(request, "coterie_file_viewer/annotation_viewer_subpage.html", context).content,
+                'new_annotation_id': annotation.id
+            })
 
         elif request.POST["operation"] == "reply_annotation":
             document = models.CoterieDocument.objects.get(id=int(request.POST["document_id"]))
