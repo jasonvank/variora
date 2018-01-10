@@ -5,11 +5,11 @@ function tinymceInit() {
     forced_root_block: false,
     plugins: [
       'advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker',
-      'searchreplace visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+      'searchreplace visualblocks visualchars codesample fullscreen insertdatetime media nonbreaking',
       'save table contextmenu directionality emoticons template paste textcolor'
     ],
     toolbar: [
-      'styleselect | bold italic | link image | bullist numlist outdent indent | forecolor backcolor'
+      'styleselect | bold italic codesample | link image | bullist numlist outdent indent | forecolor backcolor'
     ],
     paste_as_text: true,
     branding: false,

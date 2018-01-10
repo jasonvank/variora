@@ -1,7 +1,7 @@
 import 'antd/dist/antd.css';
 import 'regenerator-runtime/runtime';
 
-import { Avatar, Button, Col, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, Upload } from 'antd';
+import { Avatar, Button, Col, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, Table, Upload } from 'antd';
 import {
   Link,
   Route,
@@ -20,16 +20,41 @@ const { Header, Content, Sider } = Layout;
 const MenuItemGroup = Menu.ItemGroup;
 
 
+class GroupAdministratorsList extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      coteriePk: this.props.coteriePk,
+      data: [],
+      columns: [{
+        title: 'Id',
+        dataIndex: 'id',
+      }, {
+        title: 'Title',
+        dataIndex: 'title',
+        render: (text, record) => <a href={formatOpenDocumentUrl(record.pk, this.state.coteriePk)}>{text}</a>,
+      }]
+    }
+  }
+
+  render() {
+    return (
+      <Table
+        dataSource={this.state.data}
+        columns={this.state.columns}
+        pagination={false}
+      />
+    )
+  }
+}
+
+
 class GroupMembersSubtab extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      uploadedDocumentFileList: [],
-      uploadedDocumentName: undefined,
-      onlineDocumentUrl: undefined,
-      onlineDocumentName: undefined,
+      'coteriePk': this.props.coteriePk 
     }
-    this.uploadedDocumentTable = undefined
   }
 
   render() {
@@ -43,13 +68,13 @@ class GroupMembersSubtab extends React.Component {
     return (
       <div> 
         <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
-          <GroupDocumentsList ref={(ele) => this.uploadedDocumentTable = ele} coteriePk={this.props.coteriePk} />
+          <GroupDocumentsList ref={(ele) => this.uploadedDocumentTable = ele} coteriePk={this.state.coteriePk} />
         </div>
         <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
-          <GroupDocumentsList ref={(ele) => this.uploadedDocumentTable = ele} coteriePk={this.props.coteriePk} />
+          <GroupDocumentsList ref={(ele) => this.uploadedDocumentTable = ele} coteriePk={this.state.coteriePk} />
         </div>
         <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
-          <GroupDocumentsList ref={(ele) => this.uploadedDocumentTable = ele} coteriePk={this.props.coteriePk} />
+          <GroupDocumentsList ref={(ele) => this.uploadedDocumentTable = ele} coteriePk={this.state.coteriePk} />
         </div>
       </div> 
     )
