@@ -60,14 +60,12 @@ class GroupDocumentsList extends React.Component {
     this.parseResponseData = (responseData) => {
       var groupDocuments = responseData.coteriedocument_set
       var key = 1
-      for (var document of groupDocuments) {
+      for (var document of groupDocuments)
         document.key = document.id = key++
-      }
       return groupDocuments
     }
     this.updateData = (response) => {
-      axios.get(getUrlFormat('/coterie/api/coteries/' + this.state.coteriePk, {
-      }))
+      axios.get(getUrlFormat('/coterie/api/coteries/' + this.state.coteriePk, {}))
       .then(response => {
         this.setState({
           data: this.parseResponseData(response.data)

@@ -25,16 +25,23 @@ class GroupAdministratorsList extends React.Component {
     super(props)
     this.state = {
       coteriePk: this.props.coteriePk,
-      data: [],
+      data: this.props.administrators,
       columns: [{
         title: 'Id',
         dataIndex: 'id',
       }, {
-        title: 'Title',
-        dataIndex: 'title',
-        render: (text, record) => <a href={formatOpenDocumentUrl(record.pk, this.state.coteriePk)}>{text}</a>,
+        title: 'Name',
+        dataIndex: 'nickname',
       }]
     }
+  }
+
+  async componentWillReceiveProps(nextProps) {
+    await this.setState({
+      coteriePk: this.props.coteriePk,
+      data: nextProps.administrators
+    })
+    this.forceUpdate()
   }
 
   render() {
@@ -53,28 +60,49 @@ class GroupMembersSubtab extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      'coteriePk': this.props.coteriePk 
+      'coteriePk': this.props.coteriePk
+    }
+    this.getMemberGroup = (responseData, userType) => {
+      var administrators = responseData[userType]
+      var key = 1
+      for (var document of administrators)
+        document.key = document.id = key++
+      return administrators
+    }
+    this.updateData = (response) => {
+      axios.get(getUrlFormat('/coterie/api/coteries/' + this.state.coteriePk, {}))
+      .then(response => {
+        this.setState({
+          administrators: this.getMemberGroup(response.data, 'administrators'),
+          members: this.getMemberGroup(response.data, 'members'),
+        })
+      })
+      .catch(e => { message.warning(e.message) })
     }
   }
 
+  async componentWillReceiveProps(nextProps) {
+    await this.setState({
+      coteriePk: nextProps.coteriePk
+    })
+    this.updateData()
+  }
+  
+  componentDidMount() {
+    this.updateData()
+  }
+
   render() {
-    self = this;
-    var uploadProps = {
-      accept: 'application/pdf',
-      showUploadList: true,
-      beforeUpload(file, fileList) { self.setState({ uploadedDocumentFileList: [file] }); return false },
-      fileList: this.state.uploadedDocumentFileList,
-    }
     return (
       <div> 
         <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
-          <GroupDocumentsList ref={(ele) => this.uploadedDocumentTable = ele} coteriePk={this.state.coteriePk} />
+          <GroupAdministratorsList coteriePk={this.state.coteriePk} administrators={this.state.administrators} />
         </div>
         <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
-          <GroupDocumentsList ref={(ele) => this.uploadedDocumentTable = ele} coteriePk={this.state.coteriePk} />
+          <GroupDocumentsList coteriePk={this.state.coteriePk} />
         </div>
         <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
-          <GroupDocumentsList ref={(ele) => this.uploadedDocumentTable = ele} coteriePk={this.state.coteriePk} />
+          <GroupDocumentsList coteriePk={this.state.coteriePk} />
         </div>
       </div> 
     )
