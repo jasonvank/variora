@@ -125,7 +125,7 @@ function addAnnotationRelatedListener() {
 
   $(".LikeAnnotationButton").on("click", function() {
     if (is_authenticated) {
-      $this = $(this);
+      var $this = $(this);
       var new_num = parseInt($this.next().text()) + 1;
       $this.next().text(new_num.toString());
       $this.off("click");
