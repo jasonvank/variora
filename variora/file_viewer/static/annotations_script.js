@@ -7,6 +7,9 @@ function removeAnnotation(annotationID) {
 }
 
 function addAnnotationRelatedListener() {
+  $('code').addClass('prettyprint');
+  PR.prettyPrint();
+  
   $(".AnnotationBlock").on("mouseover", function() {
     var annotation_id = $(this).attr("annotation_id");
     var Annotation = $(".Annotation[annotation_id='" + annotation_id + "']");

@@ -3,6 +3,9 @@ import { tinymceInit } from './tinymce_script'
 
 function addCommentRelatedListener() {
   tinymceInit();
+  $('code').addClass('prettyprint');
+  PR.prettyPrint();
+  
   $(".likeCommentButton").on("click", function() {
     if (is_authenticated) {
       var $this = $(this);
