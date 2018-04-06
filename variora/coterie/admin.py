@@ -14,7 +14,7 @@ class CoterieModelAdmin(admin.ModelAdmin):
 
 
 class CoterieDocumentModelAdmin(admin.ModelAdmin):
-    list_display = ["id", "title", "unique_file", "owner"]
+    list_display = ["id", "title", "unique_file", "owner", "file_on_server"]
     list_filter = ["id", "title", "unique_file", "owner"]
     search_fields = ["id", "title", "unique_file", "owner"]
 

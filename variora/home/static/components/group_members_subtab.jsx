@@ -56,6 +56,42 @@ class GroupAdministratorsList extends React.Component {
 }
 
 
+class GroupMembersList extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      coteriePk: this.props.coteriePk,
+      data: this.props.members,
+      columns: [{
+        title: 'Id',
+        dataIndex: 'id',
+      }, {
+        title: 'Name',
+        dataIndex: 'nickname',
+      }]
+    }
+  }
+
+  async componentWillReceiveProps(nextProps) {
+    await this.setState({
+      coteriePk: this.props.coteriePk,
+      data: nextProps.members
+    })
+    this.forceUpdate()
+  }
+
+  render() {
+    return (
+      <Table
+        dataSource={this.state.data}
+        columns={this.state.columns}
+        pagination={false}
+      />
+    )
+  }
+}
+
+
 class GroupMembersSubtab extends React.Component {
   constructor(props) {
     super(props);
@@ -99,12 +135,9 @@ class GroupMembersSubtab extends React.Component {
           <GroupAdministratorsList coteriePk={this.state.coteriePk} administrators={this.state.administrators} />
         </div>
         <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
-          <GroupDocumentsList coteriePk={this.state.coteriePk} />
+          <GroupMembersList coteriePk={this.state.coteriePk} members={this.state.members} />
         </div>
-        <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
-          <GroupDocumentsList coteriePk={this.state.coteriePk} />
-        </div>
-      </div> 
+      </div>
     )
   }
 }

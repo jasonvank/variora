@@ -5,7 +5,9 @@ from . import views
 urlpatterns = [
     url(r'^coteries$', views.CoterieListView.as_view()),
     
-    url(r'coteries/(?P<pk>\d+)', views.CoterieView.as_view()),
+    url(r'coteries/(?P<pk>\d+)$', views.CoterieView.as_view()),
+
+    url(r'coteries/(?P<pk>\d+)/(?P<operation>\w+)', views.CoterieView.as_view()),
 
     url(r'^coteries/create$', views.create_coterie),
 

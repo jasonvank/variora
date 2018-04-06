@@ -13,6 +13,7 @@ import { getCookie, getUrlFormat } from 'util.js'
 
 import { GroupDocumentsSubtab } from './group_documents_subtab.jsx'
 import { GroupMembersSubtab } from './group_members_subtab.jsx'
+import { GroupSettingsSubtab } from './group_settings_subtab.jsx'
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios'
@@ -57,12 +58,13 @@ class GroupTab extends React.Component {
               <Link to="/members"><Icon type="usergroup-add" />Group Members</Link>
             </Menu.Item>
             <Menu.Item key="group-settings">
-              <Icon type="setting" />Group Settings
+              <Link to="/settings"><Icon type="setting" />Group Settings</Link>
             </Menu.Item>
           </Menu>
           <Switch>
             <Route exact path="/" render={() => <GroupDocumentsSubtab coteriePk={this.state.coteriePk} />} />
             <Route exact path="/members" render={() => <GroupMembersSubtab coteriePk={this.state.coteriePk} />} />
+            <Route exact path="/settings" render={() => <GroupSettingsSubtab coteriePk={this.state.coteriePk} />} />
           </Switch>
         </Content>
       </Router>

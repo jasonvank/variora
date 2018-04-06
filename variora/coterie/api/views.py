@@ -71,13 +71,29 @@ class CoterieListView(View):
         )
 
 
+def _delete_coterie(coterie, user):
+    if user in coterie.administrators.all():
+        coterie.delete()
+        return HttpResponse(status=200)
+    else:
+        return HttpResponse(status=403)  # user has no permission
+
 class CoterieView(View):
     def get(self, request, pk, **kwargs):
         try:
-            coterie = Coterie.objects.get(id=pk)
+            coterie = Coterie.objects.get(pk=pk)
             return JsonResponse(coterie, encoder=CoterieEncoder, safe=False)
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
+    
+    def post(self, request, pk, operation):
+        try:
+            coterie = Coterie.objects.get(pk=pk)
+            user = get_user(request)
+            if operation == 'delete':
+                return _delete_coterie(coterie, user)
+        except ObjectDoesNotExist:
+            return HttpResponse(status=404) 
 
 
 def _delete_coteriedocument(document, user):
@@ -103,7 +119,7 @@ def _download_coteriedocument(document):
 class CoterieDocumentView(View):
     def get(self, request, pk, **kwargs):
         try:
-            coteriedocument = CoterieDocument.objects.get(id=pk)
+            coteriedocument = CoterieDocument.objects.get(pk=pk)
             if 'operation' in kwargs:
                 operation = kwargs['operation']
                 if operation == 'download':
@@ -117,7 +133,7 @@ class CoterieDocumentView(View):
 
     def post(self, request, pk, operation):
         try:
-            coteriedocument = CoterieDocument.objects.get(id=pk)
+            coteriedocument = CoterieDocument.objects.get(pk=pk)
             user = get_user(request)
             if operation == 'delete':
                 return _delete_coteriedocument(coteriedocument, user)
