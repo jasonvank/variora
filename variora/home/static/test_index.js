@@ -89,6 +89,9 @@ class App extends React.Component {
           administratedCoteries: newAdministratedCoteries
         })
         this.setCraeteGroupModelVisible(false)
+        this.setState({
+          fields: { ...this.state.fields, coterieName: { value: '' } },
+        });
       })
     }
   }
@@ -224,7 +227,7 @@ const CustomizedForm = Form.create({
 ReactDOM.render(
   <LocaleProvider locale={enUS}>
     <App />
-  </LocaleProvider>, 
+  </LocaleProvider>,
   document.getElementById('main')
 );
 
