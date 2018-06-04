@@ -9,7 +9,7 @@ function removeAnnotation(annotationID) {
 function addAnnotationRelatedListener() {
   $('code').addClass('prettyprint');
   PR.prettyPrint();
-  
+
   $(".AnnotationBlock").on("mouseover", function() {
     var annotation_id = $(this).attr("annotation_id");
     var Annotation = $(".Annotation[annotation_id='" + annotation_id + "']");
@@ -23,7 +23,7 @@ function addAnnotationRelatedListener() {
     $(this).css("box-shadow", 'none');
     Annotation.css("box-shadow", 'none');
   });
-  
+
   $(".AnnotationBlock").on("click", function() { // scroll to the corresponding Anotation when clicking a certain AnnotationBlock
     var annotation_id = $(this).attr("annotation_id");
     var Annotation = $(".Annotation[annotation_id='" + annotation_id + "']");
@@ -33,7 +33,7 @@ function addAnnotationRelatedListener() {
       scrollTop: parseInt(down)
     }, 240);
   });
-  
+
   $(".PostReplyReplyButton").on("click", function() {
     if (is_authenticated) {
       var thisButton = $(this);
@@ -61,7 +61,7 @@ function addAnnotationRelatedListener() {
     } else
       layer.msg('you need to log in to reply');
   })
-  
+
   $(".DeleteAnnotationReplyButton").on("click", function() {
     var index = layer.load(0, {
       shade: 0.18
@@ -83,7 +83,7 @@ function addAnnotationRelatedListener() {
       }
     });
   });
-  
+
   $(".PostAnnotationReplyButton").on("click", function() {
     if (is_authenticated) {
       var thisButton = $(this);
@@ -151,10 +151,10 @@ function addAnnotationRelatedListener() {
     } else
       layer.msg('you need to log in to like');
   });
-  
+
   $(".LikeAnnotationReplyButton").on("click", function() {
     if (is_authenticated) {
-      $this = $(this);
+      var $this = $(this);
       var new_num = parseInt($this.next().text()) + 1;
       $this.next().text(new_num.toString());
       $this.off("click");
