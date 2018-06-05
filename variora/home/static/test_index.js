@@ -189,7 +189,7 @@ class App extends React.Component {
               <Switch>
                 <Route exact path="/" component={DocumentTab} />
                 <Route exact path="/explore" component={GroupTab} />
-                <Route exact path="/groups/:pk" component={GroupTab} />
+                <Route path="/groups/:pk" component={GroupTab} />
               </Switch>
             </Layout>
           </Layout>
