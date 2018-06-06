@@ -4,6 +4,7 @@ from models import CoterieDocument
 from models import CoterieAnnotation
 from models import CoterieAnnotationReply
 from models import CoterieComment
+from models import CoterieInvitation
 
 
 class CoterieModelAdmin(admin.ModelAdmin):
@@ -11,6 +12,12 @@ class CoterieModelAdmin(admin.ModelAdmin):
     list_filter = ["id", "name", "administrators", "members", "applicants"]
     search_fields = ["id", "name", "administrators", "members", "applicants"]
     filter_horizontal = ["administrators", "members", "applicants"]
+
+
+class CoterieInvitationAdmin(admin.ModelAdmin):
+    list_display = ["id", "inviter", "invitee"]
+    list_filter = ["id", "inviter", "invitee"]
+    search_fields = ["id", "inviter", "invitee"]
 
 
 class CoterieDocumentModelAdmin(admin.ModelAdmin):
@@ -42,3 +49,4 @@ admin.site.register(CoterieDocument, CoterieDocumentModelAdmin)
 admin.site.register(CoterieAnnotation, CoterieAnnotationModelAdmin)
 admin.site.register(CoterieComment, CoterieCommentModelAdmin)
 admin.site.register(CoterieAnnotationReply, CoterieAnnotationReplyModelAdmin)
+admin.site.register(CoterieInvitation, CoterieInvitationAdmin)
