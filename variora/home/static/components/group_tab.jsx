@@ -24,50 +24,51 @@ const { Header, Content, Sider } = Layout;
 const MenuItemGroup = Menu.ItemGroup;
 
 
+const SUB_URL_BASE = '/groups/'
+
 class GroupTab extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      baseUrl: '/test' + props.match.url,
       coteriePk: props.match.params.pk
     }
   }
-  
-  async componentWillReceiveProps(nextProps) {
-    await this.setState({ 
-      baseUrl: '/test' + nextProps.match.url,
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
       coteriePk: nextProps.match.params.pk,
     })
-    this.forceUpdate()
   }
-  
+
   render() {
+    var path = this.props.location.pathname;
     return (
-      <Router basename={this.state.baseUrl}>
-        <Content style={{ paddingLeft: 18, paddingRight: 18, paddingTop: 8, margin: 0, minHeight: 280 }}>
-          <Menu
-            onClick={this.handleClick}
-            mode="horizontal"
-            style={{ padding: 0 }}
-            defaultSelectedKeys={['group-documents']}
-          >
-            <Menu.Item key="group-documents">
-              <Link to="/"><Icon type="book" />Group Documents</Link>
-            </Menu.Item>
-            <Menu.Item key="group-members">
-              <Link to="/members"><Icon type="usergroup-add" />Group Members</Link>
-            </Menu.Item>
-            <Menu.Item key="group-settings">
-              <Link to="/settings"><Icon type="setting" />Group Settings</Link>
-            </Menu.Item>
-          </Menu>
-          <Switch>
-            <Route exact path="/" render={() => <GroupDocumentsSubtab coteriePk={this.state.coteriePk} />} />
-            <Route exact path="/members" render={() => <GroupMembersSubtab coteriePk={this.state.coteriePk} />} />
-            <Route exact path="/settings" render={() => <GroupSettingsSubtab coteriePk={this.state.coteriePk} />} />
-          </Switch>
-        </Content>
-      </Router>
+      <Content style={{ paddingLeft: 18, paddingRight: 18, paddingTop: 8, margin: 0, minHeight: 280 }}>
+        <Menu
+          onClick={this.handleClick}
+          mode="horizontal"
+          style={{ padding: 0 }}
+          defaultSelectedKeys={['group-documents']}
+          selectedKeys = {
+            path.includes('members') ? ["group-members"] : path.includes('settings') ? ["group-settings"] : ['group-documents']
+          }
+        >
+          <Menu.Item key="group-documents">
+            <Link to={SUB_URL_BASE + this.state.coteriePk + '/'}><Icon type="book" />Group Documents</Link>
+          </Menu.Item>
+          <Menu.Item key="group-members">
+            <Link to={SUB_URL_BASE + this.state.coteriePk + '/members'}><Icon type="usergroup-add" />Group Members</Link>
+          </Menu.Item>
+          <Menu.Item key="group-settings">
+            <Link to={SUB_URL_BASE + this.state.coteriePk + '/settings'}><Icon type="setting" />Group Settings</Link>
+          </Menu.Item>
+        </Menu>
+        <Switch>
+          <Route exact path={SUB_URL_BASE + this.state.coteriePk + '/'} render={() => <GroupDocumentsSubtab coteriePk={this.state.coteriePk} />} />
+          <Route exact path={SUB_URL_BASE + this.state.coteriePk + '/members'} render={() => <GroupMembersSubtab coteriePk={this.state.coteriePk} />} />
+          <Route exact path={SUB_URL_BASE + this.state.coteriePk + '/settings'} render={() => <GroupSettingsSubtab coteriePk={this.state.coteriePk} />} />
+        </Switch>
+      </Content>
     );
   }
 }

@@ -10,7 +10,7 @@ from file_viewer.api.views import DocumentEncoder
 from coterie.api.views import CoterieEncoder, CoterieDocumentEncoder
 
 from ..models import User
-from django.contrib.auth.models import AnonymousUser 
+from django.contrib.auth.models import AnonymousUser
 
 
 class UserEncoder(DjangoJSONEncoder):
@@ -59,11 +59,11 @@ def search_api_view(request):
     result_coteries = list(Coterie.objects.filter(Q(name__icontains=key) | Q(id__icontains=key)))
     return JsonResponse(
         {
-            'resultDocuments': result_documents, 
+            'resultDocuments': result_documents,
             'resultUsers': result_users,
             'resultCoteries': result_coteries
-        }, 
-        encoder=CombinedEncoder, 
+        },
+        encoder=CombinedEncoder,
         safe=False
     )
 

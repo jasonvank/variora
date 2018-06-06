@@ -11,7 +11,7 @@ from django.views.generic import View
 
 from ..models import Annotation, AnnotationReply, Comment, Document
 from home.models import User
-from django.contrib.auth.models import AnonymousUser 
+from django.contrib.auth.models import AnonymousUser
 
 
 class DocumentEncoder(DjangoJSONEncoder):
@@ -37,6 +37,16 @@ def _delete_document(document, user):
         return HttpResponse(status=200)
     else:
         return HttpResponse(status=403)  # user has no permission
+
+
+def _uncollect_document(document, user):
+    if isinstance(user, AnonymousUser):
+        return HttpResponse(status=403)
+    elif user not in document.collectors:
+        return HttpResponse(status=403)
+    document.collectors.remove(user)
+    document.save()
+    return HttpResponse(status=200)
 
 
 def _download_document(document):
@@ -73,10 +83,12 @@ class DocumentView(View):
             user = get_user(request)
             if operation == 'delete':
                 return _delete_document(document, user)
+            if operation == 'uncollect':
+                return _uncollect_document(document, user)
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
 
-    @method_decorator(login_required(login_url='/'))  
+    @method_decorator(login_required(login_url='/'))
     def delete(self, request, pk):
         try:
             document = Document.objects.get(id=pk)
@@ -93,10 +105,10 @@ class DocumentListView(View):
         collected_documents = [] if isinstance(user, AnonymousUser) else list(user.collected_document_set.all())
         return JsonResponse(
             {
-                'uploadedDocuments': uploaded_documents, 
+                'uploadedDocuments': uploaded_documents,
                 'collectedDocuments': collected_documents
-            }, 
-            encoder=DocumentEncoder, 
+            },
+            encoder=DocumentEncoder,
             safe=False
         )
 

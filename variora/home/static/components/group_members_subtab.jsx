@@ -123,14 +123,14 @@ class GroupMembersSubtab extends React.Component {
     })
     this.updateData()
   }
-  
+
   componentDidMount() {
     this.updateData()
   }
 
   render() {
     return (
-      <div> 
+      <div>
         <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
           <GroupAdministratorsList coteriePk={this.state.coteriePk} administrators={this.state.administrators} />
         </div>
