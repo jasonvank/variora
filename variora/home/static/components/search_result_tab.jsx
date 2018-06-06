@@ -31,7 +31,11 @@ class SearchResultTab extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('/api/search/?key=j').then((response) => {
+    var fullUrl = window.location.href;
+    var searchKey = fullUrl.slice(fullUrl.indexOf('=') + 1);
+    axios.get(getUrlFormat('/api/search', {
+      'key': searchKey
+    })).then((response) => {
       var data =  response.data;
       console.log(data);
       this.setState({

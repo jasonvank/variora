@@ -14,6 +14,7 @@ import { getCookie, getUrlFormat } from 'util.js'
 
 import { DocumentTab } from './components/document_tab.jsx'
 import { GroupTab } from './components/group_tab.jsx'
+import { SearchResultTab } from './components/search_result_tab.jsx'
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios'
@@ -50,12 +51,7 @@ class App extends React.Component {
       },
     }
     this.handleSearch = (searchKey) => {
-      axios.get(getUrlFormat('/api/search', {
-        'key': searchKey,
-      }))
-      .then(response => {
-        console.log(response.data)
-      })
+      window.location.href = decodeURIComponent(URL_BASE + '/search?key=' + searchKey);
     }
     this.setCraeteGroupModelVisible = (visibility) => {
       this.setState({ createGroupModelVisible: visibility });
@@ -189,6 +185,7 @@ class App extends React.Component {
               <Switch>
                 <Route exact path="/" component={DocumentTab} />
                 <Route exact path="/explore" component={GroupTab} />
+                <Route path="/search" component={SearchResultTab} />
                 <Route path="/groups/:pk" component={GroupTab} />
               </Switch>
             </Layout>
