@@ -147,3 +147,6 @@ def handle_search(request):
 
 def test(request):
     return render(request, 'home/test.html', {})
+
+def jason_test(request):
+    return render(request, 'home/jason_test.html', {})
