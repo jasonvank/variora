@@ -165,18 +165,4 @@ class UserResult extends React.Component {
   }
 }
 
-
-
-
-
 export { SearchResultTab }
-
-
-
-
-
-
-
-
-
-

@@ -51,6 +51,12 @@ class App extends React.Component {
       },
     }
     this.handleSearch = (searchKey) => {
+      // axios.get(getUrlFormat('/api/search', {
+      //   'key': searchKey,
+      // }))
+      // .then(response => {
+      //   console.log(response.data)
+      // })
       window.location.href = decodeURIComponent(URL_BASE + '/search?key=' + searchKey);
     }
     this.setCraeteGroupModelVisible = (visibility) => {
