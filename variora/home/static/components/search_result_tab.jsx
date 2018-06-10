@@ -67,20 +67,13 @@ class DocumentResult extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      sortedInfo: null,
       data: this.props.resultDocuments,
-      columns: [{
-        title: 'Document Name',
-        dataIndex: 'title',
-        width: "40%",
-      }, {
-        title: 'Group Owner',
-        dataIndex: '',
-        width: "30%",
-      }, {
-        title: 'Action',
-        key: 'action',
-        width: "30%",
-      }]
+    }
+    this.handleChange = (sorter) => {
+      this.setState({
+        sortedInfo: sorter,
+      });
     }
   }
 
@@ -92,13 +85,32 @@ class DocumentResult extends React.Component {
   }
 
   render() {
+    let sortedInfo = this.state.sortedInfo;
+    sortedInfo = sortedInfo || {};
+
+    const columns = [{
+      title: 'Document Name',
+      dataIndex: 'title',
+      width: "40%",
+      sorter: (a, b) => a.title.localeCompare(b.title),
+    }, {
+      title: 'Group Owner',
+      dataIndex: '',
+      width: "30%",
+    }, {
+      title: 'Action',
+      key: 'action',
+      width: "30%",
+    }];
+
     return (
       <Table
         dataSource={this.state.data}
-        columns={this.state.columns}
+        columns={columns}
         pagination={{ pageSize: 50 }}
         scroll={{ y: 250 }}
         rowKey={record => record.pk}
+        onChange={this.handleChange}
       />
     )
   }
@@ -109,20 +121,13 @@ class GroupResult extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      sortedInfo: null,
       data: this.props.resultCoteries,
-      columns: [{
-        title: 'Group Name',
-        dataIndex: 'name',
-        width: "40%",
-      }, {
-        title: 'Coordinator',
-        dataIndex: '',
-        width: "30%",
-      }, {
-        title: 'Action',
-        key: 'action',
-        width: "30%",
-      }]
+    }
+    this.handleChange = (sorter) => {
+      this.setState({
+        sortedInfo: sorter,
+      });
     }
   }
 
@@ -134,13 +139,32 @@ class GroupResult extends React.Component {
   }
 
   render() {
+    let sortedInfo = this.state.sortedInfo;
+    sortedInfo = sortedInfo || {};
+
+    const columns = [{
+      title: 'Group Name',
+      dataIndex: 'name',
+      width: "40%",
+      sorter: (a, b) => a.name.localeCompare(b.name),
+    }, {
+      title: 'Coordinator',
+      dataIndex: '',
+      width: "30%",
+    }, {
+      title: 'Action',
+      key: 'action',
+      width: "30%",
+    }];
+
     return (
       <Table
         dataSource={this.state.data}
-        columns={this.state.columns}
+        columns={columns}
         pagination={{ pageSize: 50 }}
         scroll={{ y: 250 }}
         rowKey={record => record.pk}
+        onChange={this.handleChange}
       />
     )
   }
@@ -150,21 +174,13 @@ class UserResult extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      sortedInfo: null,
       data: this.props.resultUsers,
-      columns: [{
-        title: 'User Name',
-        dataIndex: 'nickname',
-        width: "40%",
-      }, {
-        title: 'Email Address',
-        dataIndex: 'email_address',
-        width: "30%",
-
-      }, {
-        title: 'Action',
-        key: 'action',
-        width: "30%",
-      }]
+    }
+    this.handleChange = (sorter) => {
+      this.setState({
+        sortedInfo: sorter,
+      });
     }
   }
 
@@ -177,13 +193,31 @@ class UserResult extends React.Component {
 
 
   render() {
+    let sortedInfo = this.state.sortedInfo;
+    sortedInfo = sortedInfo || {};
+    const columns = [{
+      title: 'User Name',
+      dataIndex: 'nickname',
+      width: "40%",
+      sorter: (a, b) => a.nickname.localeCompare(b.nickname),
+    }, {
+      title: 'Email Address',
+      dataIndex: 'email_address',
+      width: "30%",
+    }, {
+      title: 'Action',
+      key: 'action',
+      width: "30%",
+    }];
+
     return (
       <Table
         dataSource={this.state.data}
-        columns={this.state.columns}
+        columns={columns}
         scroll={{ y: 250 }}
         pagination={{ pageSize: 50 }}
         rowKey={record => record.email_address}
+        onChange={this.handleChange}
       />
     )
   }
