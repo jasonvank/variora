@@ -7,4 +7,7 @@
   float: left;
 }
 
-
+.ant-table-pagination {
+  margin: 16px;
+  float: right;
+}
