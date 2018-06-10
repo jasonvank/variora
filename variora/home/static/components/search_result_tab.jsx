@@ -19,7 +19,6 @@ const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 const MenuItemGroup = Menu.ItemGroup;
 
-
 class SearchResultTab extends React.Component {
   constructor(props) {
     super(props);
@@ -36,8 +35,7 @@ class SearchResultTab extends React.Component {
     axios.get(getUrlFormat('/api/search', {
       'key': searchKey
     })).then((response) => {
-      var data =  response.data;
-      console.log(data);
+      var data = response.data;
       this.setState({
         resultDocuments: data.resultDocuments,
         resultCoteries: data.resultCoteries,
@@ -46,18 +44,19 @@ class SearchResultTab extends React.Component {
     })
   }
 
+
   render() {
     return (
-      <div style={{ paddingLeft: 18, paddingRight: 18, paddingTop: 8, margin: 0, minHeight: 280 }}> 
+      <div style={{ paddingLeft: 18, paddingRight: 18, paddingTop: 8, margin: 0, minHeight: 280 }}>
         <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
-          <DocumentResult documentResult={this.state.resultDocuments} />
+          <DocumentResult resultDocuments={this.state.resultDocuments} />
         </div>
         <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
-          <GroupResult groupResult={this.state.resultCoteries} />
+          <GroupResult resultCoteries={this.state.resultCoteries} />
         </div>
         <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
-          <UserResult userResult={this.state.resultUsers} />
-        </div> 
+          <UserResult resultUsers={this.state.resultUsers} />
+        </div>
       </div>
     )
   }
@@ -70,18 +69,24 @@ class DocumentResult extends React.Component {
     this.state = {
       data: this.props.resultDocuments,
       columns: [{
-        title: 'id',
-        dataIndex: 'id',
-      }, {
         title: 'Document Name',
-        dataIndex: 'documentName',
+        dataIndex: 'title',
+        width: "40%",
+      }, {
+        title: 'Group Owner',
+        dataIndex: '',
+        width: "30%",
+      }, {
+        title: 'Action',
+        key: 'action',
+        width: "30%",
       }]
     }
   }
 
   async componentWillReceiveProps(nextProps) {
     await this.setState({
-      data: nextProps.resultDocuments
+      data: nextProps.resultDocuments,
     })
     this.forceUpdate()
   }
@@ -91,7 +96,9 @@ class DocumentResult extends React.Component {
       <Table
         dataSource={this.state.data}
         columns={this.state.columns}
-        pagination={false}
+        pagination={{ pageSize: 50 }}
+        scroll={{ y: 250 }}
+        rowKey={record => record.pk}
       />
     )
   }
@@ -104,19 +111,24 @@ class GroupResult extends React.Component {
     this.state = {
       data: this.props.resultCoteries,
       columns: [{
-
-        title: 'id',
-        dataIndex: 'id',
-      }, {
         title: 'Group Name',
-        dataIndex: 'groupName',
+        dataIndex: 'name',
+        width: "40%",
+      }, {
+        title: 'Coordinator',
+        dataIndex: '',
+        width: "30%",
+      }, {
+        title: 'Action',
+        key: 'action',
+        width: "30%",
       }]
     }
   }
 
   async componentWillReceiveProps(nextProps) {
     await this.setState({
-      data: nextProps.resultCoteries
+      data: nextProps.resultCoteries,
     })
     this.forceUpdate()
   }
@@ -126,7 +138,9 @@ class GroupResult extends React.Component {
       <Table
         dataSource={this.state.data}
         columns={this.state.columns}
-        pagination={false}
+        pagination={{ pageSize: 50 }}
+        scroll={{ y: 250 }}
+        rowKey={record => record.pk}
       />
     )
   }
@@ -138,28 +152,38 @@ class UserResult extends React.Component {
     this.state = {
       data: this.props.resultUsers,
       columns: [{
-        title: 'id',
-        dataIndex: 'id',
-      }, {
         title: 'User Name',
-        dataIndex: 'userName',
+        dataIndex: 'nickname',
+        width: "40%",
+      }, {
+        title: 'Email Address',
+        dataIndex: 'email_address',
+        width: "30%",
+
+      }, {
+        title: 'Action',
+        key: 'action',
+        width: "30%",
       }]
     }
   }
 
   async componentWillReceiveProps(nextProps) {
     await this.setState({
-      data: nextProps.resultUsers
+      data: nextProps.resultUsers,
     })
     this.forceUpdate()
   }
+
 
   render() {
     return (
       <Table
         dataSource={this.state.data}
         columns={this.state.columns}
-        pagination={false}
+        scroll={{ y: 250 }}
+        pagination={{ pageSize: 50 }}
+        rowKey={record => record.email_address}
       />
     )
   }
