@@ -2,7 +2,7 @@ import 'antd/dist/antd.css';
 import './css/test_index.css';
 import 'regenerator-runtime/runtime';
 
-import { Avatar, Breadcrumb, Button, Col, Form, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, Upload } from 'antd';
+import { Avatar, Breadcrumb, Button, Col, Form, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, Upload, message } from 'antd';
 import {
   Link,
   Redirect,
@@ -75,30 +75,35 @@ class App extends React.Component {
       });
     }
     this.submitCreateCoterieForm = () => {
-      var data = new FormData()
-      data.append('coterie_name', this.state.fields.coterieName.value)
-      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-      axios.post('/coterie/api/coteries/create', data, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }).then((response) => {
-        var newAdministratedCoteries = this.state.administratedCoteries.slice()
-        newAdministratedCoteries.push(response.data)
-        this.setState({
-          administratedCoteries: newAdministratedCoteries
+      var coterieName = this.state.fields.coterieName.value
+      if (coterieName == '')
+        message.warning('Group name cannot be empty', 1)
+      else {
+        var data = new FormData()
+        data.append('coterie_name', coterieName)
+        data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+        axios.post('/coterie/api/coteries/create', data, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }).then((response) => {
+          var newAdministratedCoteries = this.state.administratedCoteries.slice()
+          newAdministratedCoteries.push(response.data)
+          this.setCraeteGroupModelVisible(false)
+          this.setState({
+            fields: { ...this.state.fields, coterieName: { value: '' } },
+            administratedCoteries: newAdministratedCoteries
+          });
         })
-        this.setCraeteGroupModelVisible(false)
-        this.setState({
-          fields: { ...this.state.fields, coterieName: { value: '' } },
-        });
-      })
+      }
     }
     this.deleteCoterie = (coteriePk) => {
       var updatedAdministratedCoteries = this.state.administratedCoteries.filter(function(coterie) {return coterie.pk != coteriePk})
       var updatedJoinedCoteries = this.state.joinedCoteries.filter(function(coterie) {return coterie.pk != coteriePk})
-      this.setState({ administratedCoteries: updatedAdministratedCoteries })
-      this.setState({ joinedCoteries: updatedJoinedCoteries })
+      this.setState({
+        administratedCoteries: updatedAdministratedCoteries,
+        joinedCoteries: updatedJoinedCoteries
+      })
     }
   }
 
@@ -109,8 +114,10 @@ class App extends React.Component {
         this.setState({ user: response.data })
     })
     axios.get('/coterie/api/coteries').then((response) => {
-      this.setState({ administratedCoteries: response.data.administratedCoteries })
-      this.setState({ joinedCoteries: response.data.joinedCoteries })
+      this.setState({
+        administratedCoteries: response.data.administratedCoteries,
+        joinedCoteries: response.data.joinedCoteries
+      })
     })
   }
 
@@ -162,8 +169,8 @@ class App extends React.Component {
                   {
                     this.state.administratedCoteries.map((coterie) => {
                       return (
-                        <Menu.Item key={coterie.pk}>{ coterie.name }
-                          <Link to={ '/groups/' + coterie.pk }><span><Icon type='file' />documents</span></Link>
+                        <Menu.Item key={coterie.pk}>
+                          <Link to={ '/groups/' + coterie.pk }><span>{ coterie.name }</span></Link>
                         </Menu.Item>
                       )
                     })
@@ -171,8 +178,8 @@ class App extends React.Component {
                   {
                     this.state.joinedCoteries.map((coterie) => {
                       return (
-                        <Menu.Item key={coterie.pk}>{ coterie.name }
-                          <Link to={ '/groups/' + coterie.pk }><span><Icon type='file' />documents</span></Link>
+                        <Menu.Item key={coterie.pk}>
+                          <Link to={ '/groups/' + coterie.pk }><span>{ coterie.name }</span></Link>
                         </Menu.Item>
                       )
                     })
@@ -236,5 +243,3 @@ ReactDOM.render(
   </LocaleProvider>,
   document.getElementById('main')
 );
-
-
