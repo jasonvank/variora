@@ -22,5 +22,7 @@ urlpatterns = [
 
     url(r'^test', views.test),
 
+    url(r'^jason_test', views.jason_test),
+
     url(r'^sign-in', views.display_sign_in_page),
 ]
