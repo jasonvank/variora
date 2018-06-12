@@ -21,6 +21,16 @@ class Coterie(models.Model):
         return self.name
 
 
+class CoterieInvitation(models.Model):
+    coterie = models.ForeignKey(Coterie)
+    inviter = models.ForeignKey(User, related_name='sent_invitation_set')
+    invitee = models.ForeignKey(User, related_name='received_invitation_set')
+    invitation_message = models.TextField(blank=True)
+    send_datetime = models.DateTimeField(auto_now=False, auto_now_add=True)
+    acceptance = models.NullBooleanField(null=True, blank=True)
+    response_datetime = models.DateTimeField(null=True, blank=True)
+
+
 class CoterieDocument(models.Model):
     title = models.CharField(max_length=1028)
     owner = models.ForeignKey(Coterie)
@@ -38,7 +48,7 @@ class CoterieDocument(models.Model):
     @property
     def file_on_server(self):
         return self.unique_file != None
-    
+
     def __unicode__(self):
         return self.title
 
@@ -77,7 +87,7 @@ class CoterieAnnotation(models.Model):
     top_percent = models.FloatField()
     left_percent = models.FloatField()
     frame_color = models.CharField(max_length=18)
-    
+
     num_like = models.IntegerField(default=0)
 
     def __unicode__(self):

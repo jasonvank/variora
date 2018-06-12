@@ -1,18 +1,18 @@
 import 'antd/dist/antd.css';
 import 'regenerator-runtime/runtime';
 
-import { Avatar, Button, Col, Icon, Input, Layout, Menu, Modal, Row, Popconfirm } from 'antd';
+import { Avatar, Button, Col, Icon, Input, Layout, Menu, Modal, Popconfirm, Row } from 'antd';
 import {
   Link,
   Route,
   BrowserRouter as Router
 } from 'react-router-dom'
-import { getCookie } from 'util.js'
 
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios'
 import enUS from 'antd/lib/locale-provider/en_US';
+import { getCookie } from 'util.js'
 
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
@@ -23,17 +23,20 @@ class GroupSettingsSubtab extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      'coteriePk': this.props.coteriePk
+      'coteriePk': props.coteriePk
     }
     this.deleteGroup = () => {
+      var self = this
       var data = new FormData()
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-      axios.post('/coterie/api/coteries/' + this.state.coteriePk + '/delete', data)
+      axios.post('/coterie/api/coteries/' + this.state.coteriePk + '/delete', data).then(function() {
+        self.props.deleteCoterieCallback(self.state.coteriePk)
+      })
     }
   }
 
-  async componentWillReceiveProps(nextProps) {
-    await this.setState({
+  componentWillReceiveProps(nextProps) {
+    this.setState({
       coteriePk: nextProps.coteriePk
     })
   }
@@ -41,14 +44,14 @@ class GroupSettingsSubtab extends React.Component {
   render() {
     return (
       <div>
-        <Popconfirm 
-          title="Are you sure to delete this group? This cannot be undone." 
-          onConfirm={() => this.deleteGroup()} 
+        <Popconfirm
+          title="Are you sure to delete this group? This cannot be undone."
+          onConfirm={() => this.deleteGroup()}
           okText="Yes" cancelText="No"
         >
           <Button>Delete</Button>
         </Popconfirm>
-      </div> 
+      </div>
     )
   }
 }

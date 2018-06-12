@@ -36,8 +36,8 @@ class GroupAdministratorsList extends React.Component {
     }
   }
 
-  async componentWillReceiveProps(nextProps) {
-    await this.setState({
+  componentWillReceiveProps(nextProps) {
+    this.setState({
       coteriePk: this.props.coteriePk,
       data: nextProps.administrators
     })
@@ -72,8 +72,8 @@ class GroupMembersList extends React.Component {
     }
   }
 
-  async componentWillReceiveProps(nextProps) {
-    await this.setState({
+  componentWillReceiveProps(nextProps) {
+    this.setState({
       coteriePk: this.props.coteriePk,
       data: nextProps.members
     })
@@ -117,8 +117,8 @@ class GroupMembersSubtab extends React.Component {
     }
   }
 
-  async componentWillReceiveProps(nextProps) {
-    await this.setState({
+  componentWillReceiveProps(nextProps) {
+    this.setState({
       coteriePk: nextProps.coteriePk
     })
     this.updateData()

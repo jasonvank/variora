@@ -2,7 +2,7 @@ import 'antd/dist/antd.css';
 import './css/test_index.css';
 import 'regenerator-runtime/runtime';
 
-import { Avatar, Breadcrumb, Button, Col, Form, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, Upload } from 'antd';
+import { Avatar, Breadcrumb, Button, Col, Form, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, Upload, message } from 'antd';
 import {
   Link,
   Redirect,
@@ -59,12 +59,12 @@ class App extends React.Component {
       // })
       window.location.href = decodeURIComponent(URL_BASE + '/search?key=' + searchKey);
     }
-    this.setCraeteGroupModelVisible = (visibility) => {
+    this.setCreateGroupModelVisible = (visibility) => {
       this.setState({ createGroupModelVisible: visibility });
     }
     this.onClickCreateGroupMenuItem = (menuItem) => {
       if (menuItem.key == CREATE_NEW_GROUP_MENU_ITEM_KEY)
-        this.setCraeteGroupModelVisible(true)
+        this.setCreateGroupModelVisible(true)
     }
     this.signOff = () => {
       axios.get('/api/signoff').then(response => {
@@ -77,23 +77,34 @@ class App extends React.Component {
       });
     }
     this.submitCreateCoterieForm = () => {
-      var data = new FormData()
-      data.append('coterie_name', this.state.fields.coterieName.value)
-      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-      axios.post('/coterie/api/coteries/create', data, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }).then((response) => {
-        var newAdministratedCoteries = this.state.administratedCoteries.slice()
-        newAdministratedCoteries.push(response.data)
-        this.setState({
-          administratedCoteries: newAdministratedCoteries
+      var coterieName = this.state.fields.coterieName.value
+      if (coterieName == '')
+        message.warning('Group name cannot be empty', 1)
+      else {
+        var data = new FormData()
+        data.append('coterie_name', coterieName)
+        data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+        axios.post('/coterie/api/coteries/create', data, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }).then((response) => {
+          var newAdministratedCoteries = this.state.administratedCoteries.slice()
+          newAdministratedCoteries.push(response.data)
+          this.setCreateGroupModelVisible(false)
+          this.setState({
+            fields: { ...this.state.fields, coterieName: { value: '' } },
+            administratedCoteries: newAdministratedCoteries
+          });
         })
-        this.setCraeteGroupModelVisible(false)
-        this.setState({
-          fields: { ...this.state.fields, coterieName: { value: '' } },
-        });
+      }
+    }
+    this.deleteCoterie = (coteriePk) => {
+      var updatedAdministratedCoteries = this.state.administratedCoteries.filter(function(coterie) {return coterie.pk != coteriePk})
+      var updatedJoinedCoteries = this.state.joinedCoteries.filter(function(coterie) {return coterie.pk != coteriePk})
+      this.setState({
+        administratedCoteries: updatedAdministratedCoteries,
+        joinedCoteries: updatedJoinedCoteries
       })
     }
   }
@@ -105,8 +116,10 @@ class App extends React.Component {
         this.setState({ user: response.data })
     })
     axios.get('/coterie/api/coteries').then((response) => {
-      this.setState({ administratedCoteries: response.data.administratedCoteries })
-      this.setState({ joinedCoteries: response.data.joinedCoteries })
+      this.setState({
+        administratedCoteries: response.data.administratedCoteries,
+        joinedCoteries: response.data.joinedCoteries
+      })
     })
   }
 
@@ -158,8 +171,8 @@ class App extends React.Component {
                   {
                     this.state.administratedCoteries.map((coterie) => {
                       return (
-                        <Menu.Item key={coterie.pk}>{ coterie.name }
-                          <Link to={ '/groups/' + coterie.pk }><span><Icon type='file' />documents</span></Link>
+                        <Menu.Item key={coterie.pk}>
+                          <Link to={ '/groups/' + coterie.pk }><span>{ coterie.name }</span></Link>
                         </Menu.Item>
                       )
                     })
@@ -167,8 +180,8 @@ class App extends React.Component {
                   {
                     this.state.joinedCoteries.map((coterie) => {
                       return (
-                        <Menu.Item key={coterie.pk}>{ coterie.name }
-                          <Link to={ '/groups/' + coterie.pk }><span><Icon type='file' />documents</span></Link>
+                        <Menu.Item key={coterie.pk}>
+                          <Link to={ '/groups/' + coterie.pk }><span>{ coterie.name }</span></Link>
                         </Menu.Item>
                       )
                     })
@@ -180,7 +193,7 @@ class App extends React.Component {
                   wrapClassName="vertical-center-modal"
                   visible={this.state.createGroupModelVisible}
                   onOk={this.submitCreateCoterieForm}
-                  onCancel={() => this.setCraeteGroupModelVisible(false)}
+                  onCancel={() => this.setCreateGroupModelVisible(false)}
                 >
                   <CustomizedForm {...fields} onChange={this.handleCreateCoterieFromChange} />
                 </Modal>
@@ -192,7 +205,7 @@ class App extends React.Component {
                 <Route exact path="/" component={DocumentTab} />
                 <Route exact path="/explore" component={GroupTab} />
                 <Route path="/search" component={SearchResultTab} />
-                <Route path="/groups/:pk" component={GroupTab} />
+                <Route path="/groups/:pk" render={({match, location}) => <GroupTab deleteCoterieCallback={this.deleteCoterie} match={match} location={location} />} />
               </Switch>
             </Layout>
           </Layout>
@@ -233,7 +246,3 @@ ReactDOM.render(
   </LocaleProvider>,
   document.getElementById('main')
 );
-
-
-
-
