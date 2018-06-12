@@ -37,9 +37,9 @@ class GroupDocumentsList extends React.Component {
         key: 'action',
         render: (text, record) => (
           <span>
-            <Popconfirm 
-              title="Are you sure delete this document? It cannot be undone." 
-              onConfirm={() => this.deleteDocument(record)} 
+            <Popconfirm
+              title="Are you sure delete this document? It cannot be undone."
+              onConfirm={() => this.deleteDocument(record)}
               okText="Yes" cancelText="No"
             >
               <a>Delete</a>
@@ -75,8 +75,8 @@ class GroupDocumentsList extends React.Component {
     }
   }
 
-  async componentWillReceiveProps(nextProps) {
-    await this.setState({
+  componentWillReceiveProps(nextProps) {
+    this.setState({
       coteriePk: nextProps.coteriePk
     })
     this.updateData()
@@ -86,15 +86,15 @@ class GroupDocumentsList extends React.Component {
     this.updateData()
   }
 
-  render() { 
+  render() {
     return (
-      <Table 
+      <Table
         dataSource={this.state.data}
         columns={this.state.columns}
         pagination={false}
       />
     )
-  } 
+  }
 }
 
 export { GroupDocumentsList };

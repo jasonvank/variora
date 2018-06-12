@@ -94,6 +94,12 @@ class App extends React.Component {
         });
       })
     }
+    this.deleteCoterie = (coteriePk) => {
+      var updatedAdministratedCoteries = this.state.administratedCoteries.filter(function(coterie) {return coterie.pk != coteriePk})
+      var updatedJoinedCoteries = this.state.joinedCoteries.filter(function(coterie) {return coterie.pk != coteriePk})
+      this.setState({ administratedCoteries: updatedAdministratedCoteries })
+      this.setState({ joinedCoteries: updatedJoinedCoteries })
+    }
   }
 
   componentDidMount() {
@@ -189,7 +195,7 @@ class App extends React.Component {
               <Switch>
                 <Route exact path="/" component={DocumentTab} />
                 <Route exact path="/explore" component={GroupTab} />
-                <Route path="/groups/:pk" component={GroupTab} />
+                <Route path="/groups/:pk" render={({match, location}) => <GroupTab deleteCoterieCallback={this.deleteCoterie} match={match} location={location} />} />
               </Switch>
             </Layout>
           </Layout>
@@ -230,7 +236,5 @@ ReactDOM.render(
   </LocaleProvider>,
   document.getElementById('main')
 );
-
-
 
 

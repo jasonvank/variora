@@ -66,7 +66,7 @@ class GroupTab extends React.Component {
         <Switch>
           <Route exact path={SUB_URL_BASE + this.state.coteriePk + '/'} render={() => <GroupDocumentsSubtab coteriePk={this.state.coteriePk} />} />
           <Route exact path={SUB_URL_BASE + this.state.coteriePk + '/members'} render={() => <GroupMembersSubtab coteriePk={this.state.coteriePk} />} />
-          <Route exact path={SUB_URL_BASE + this.state.coteriePk + '/settings'} render={() => <GroupSettingsSubtab coteriePk={this.state.coteriePk} />} />
+          <Route exact path={SUB_URL_BASE + this.state.coteriePk + '/settings'} render={() => <GroupSettingsSubtab coteriePk={this.state.coteriePk} deleteCoterieCallback={this.props.deleteCoterieCallback} />} />
         </Switch>
       </Content>
     );
