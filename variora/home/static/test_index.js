@@ -57,12 +57,12 @@ class App extends React.Component {
         console.log(response.data)
       })
     }
-    this.setCraeteGroupModelVisible = (visibility) => {
+    this.setCreateGroupModelVisible = (visibility) => {
       this.setState({ createGroupModelVisible: visibility });
     }
     this.onClickCreateGroupMenuItem = (menuItem) => {
       if (menuItem.key == CREATE_NEW_GROUP_MENU_ITEM_KEY)
-        this.setCraeteGroupModelVisible(true)
+        this.setCreateGroupModelVisible(true)
     }
     this.signOff = () => {
       axios.get('/api/signoff').then(response => {
@@ -89,7 +89,7 @@ class App extends React.Component {
         }).then((response) => {
           var newAdministratedCoteries = this.state.administratedCoteries.slice()
           newAdministratedCoteries.push(response.data)
-          this.setCraeteGroupModelVisible(false)
+          this.setCreateGroupModelVisible(false)
           this.setState({
             fields: { ...this.state.fields, coterieName: { value: '' } },
             administratedCoteries: newAdministratedCoteries
@@ -191,7 +191,7 @@ class App extends React.Component {
                   wrapClassName="vertical-center-modal"
                   visible={this.state.createGroupModelVisible}
                   onOk={this.submitCreateCoterieForm}
-                  onCancel={() => this.setCraeteGroupModelVisible(false)}
+                  onCancel={() => this.setCreateGroupModelVisible(false)}
                 >
                   <CustomizedForm {...fields} onChange={this.handleCreateCoterieFromChange} />
                 </Modal>
