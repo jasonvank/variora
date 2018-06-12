@@ -14,9 +14,9 @@ import { getCookie, getUrlFormat } from 'util.js'
 
 import { DocumentTab } from './components/document_tab.jsx'
 import { GroupTab } from './components/group_tab.jsx'
-import { SearchResultTab } from './components/search_result_tab.jsx'
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { SearchResultTab } from './components/search_result_tab.jsx'
 import axios from 'axios'
 import enUS from 'antd/lib/locale-provider/en_US';
 
@@ -51,12 +51,6 @@ class App extends React.Component {
       },
     }
     this.handleSearch = (searchKey) => {
-      // axios.get(getUrlFormat('/api/search', {
-      //   'key': searchKey,
-      // }))
-      // .then(response => {
-      //   console.log(response.data)
-      // })
       window.location.href = decodeURIComponent(URL_BASE + '/search?key=' + searchKey);
     }
     this.setCreateGroupModelVisible = (visibility) => {
@@ -159,7 +153,7 @@ class App extends React.Component {
                 defaultOpenKeys={['teams']}
                 onClick={this.onClickCreateGroupMenuItem}
                 style={{ height: '100%', borderRight: 0 }}
-                defaultSelectedKeys={['documents']}
+                defaultSelectedKeys={window.location.pathname.endsWith('search') ? [] : ['documents']}
               >
                 <Menu.Item key="explore">
                   <Link to="/"><span><Icon type="compass" />explore</span></Link>

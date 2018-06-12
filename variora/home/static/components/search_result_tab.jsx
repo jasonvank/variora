@@ -1,7 +1,7 @@
 import 'antd/dist/antd.css';
 import 'regenerator-runtime/runtime';
 
-import { Avatar, Button, Col, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, Upload, Table } from 'antd';
+import { Avatar, Button, Col, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, Table, Upload } from 'antd';
 import {
   Link,
   Route,
@@ -14,7 +14,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios'
 import enUS from 'antd/lib/locale-provider/en_US';
-
 
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
