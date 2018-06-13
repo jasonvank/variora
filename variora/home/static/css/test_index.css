@@ -8,6 +8,5 @@
 }
 
 .ant-table-pagination {
-  margin: 16px;
-  float: right;
+  margin: 16px !important;
 }
