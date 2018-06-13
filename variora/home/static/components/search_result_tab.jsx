@@ -108,7 +108,7 @@ class DocumentResult extends React.Component {
         dataSource={this.state.data}
         columns={columns}
         pagination={{ pageSize: 10 }}
-        scroll={{ y: 250 }}
+        // scroll={{ y: 250 }}
         rowKey={record => record.pk}
         onChange={this.handleChange}
       />
@@ -162,7 +162,7 @@ class GroupResult extends React.Component {
         dataSource={this.state.data}
         columns={columns}
         pagination={{ pageSize: 10 }}
-        scroll={{ y: 250 }}
+        // scroll={{ y: 250 }}
         rowKey={record => record.pk}
         onChange={this.handleChange}
       />
@@ -214,7 +214,7 @@ class UserResult extends React.Component {
       <Table
         dataSource={this.state.data}
         columns={columns}
-        scroll={{ y: 250 }}
+        // scroll={{ y: 250 }}
         pagination={{ pageSize: 10 }}
         rowKey={record => record.email_address}
         onChange={this.handleChange}
