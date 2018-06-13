@@ -1,0 +1,353 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test react 1`] = `
+<div
+  className="ant-layout-content"
+  style={
+    Object {
+      "margin": 0,
+      "minHeight": 280,
+      "paddingLeft": 18,
+      "paddingRight": 18,
+      "paddingTop": 8,
+    }
+  }
+>
+  <ul
+    aria-activedescendant=""
+    className="ant-menu ant-menu-horizontal ant-menu-light ant-menu-root"
+    onKeyDown={[Function]}
+    role="menu"
+    style={
+      Object {
+        "padding": 0,
+      }
+    }
+    tabIndex="0"
+  >
+    <li
+      aria-selected={true}
+      className="ant-menu-item-selected ant-menu-item"
+      onClick={[Function]}
+      onMouseEnter={[Function]}
+      onMouseLeave={[Function]}
+      role="menuitem"
+      style={Object {}}
+    >
+      <a
+        href="/test/"
+        onClick={[Function]}
+      >
+        <i
+          className="anticon anticon-mail"
+        />
+        Uploaded Documents
+      </a>
+    </li>
+    <li
+      aria-selected={false}
+      className="ant-menu-item"
+      onClick={[Function]}
+      onMouseEnter={[Function]}
+      onMouseLeave={[Function]}
+      role="menuitem"
+      style={Object {}}
+    >
+      <a
+        href="/test/collected"
+        onClick={[Function]}
+      >
+        <i
+          className="anticon anticon-heart-o"
+        />
+        Collected Documents
+      </a>
+    </li>
+  </ul>
+  <div>
+    <div
+      style={
+        Object {
+          "backgroundColor": "white",
+          "boxShadow": "2px 3px 8px rgba(0, 0, 0, .25)",
+          "marginTop": 18,
+          "overflow": "auto",
+        }
+      }
+    >
+      <div
+        className="ant-table-wrapper"
+      >
+        <div
+          className="ant-spin-nested-loading"
+          style={null}
+        >
+          <div
+            className="ant-spin-container"
+          >
+            <div
+              className="ant-table ant-table-large ant-table-empty ant-table-scroll-position-left"
+              style={Object {}}
+            >
+              <div
+                className="ant-table-content"
+              >
+                <div
+                  className="ant-table-body"
+                  onScroll={[Function]}
+                  style={Object {}}
+                >
+                  <table
+                    className=""
+                    style={Object {}}
+                  >
+                    <colgroup>
+                      <col
+                        style={
+                          Object {
+                            "minWidth": undefined,
+                            "width": undefined,
+                          }
+                        }
+                      />
+                      <col
+                        style={
+                          Object {
+                            "minWidth": undefined,
+                            "width": undefined,
+                          }
+                        }
+                      />
+                      <col
+                        style={
+                          Object {
+                            "minWidth": undefined,
+                            "width": undefined,
+                          }
+                        }
+                      />
+                    </colgroup>
+                    <thead
+                      className="ant-table-thead"
+                    >
+                      <tr
+                        style={null}
+                      >
+                        <th
+                          className=""
+                        >
+                          <span>
+                            Id
+                          </span>
+                        </th>
+                        <th
+                          className=""
+                        >
+                          <span>
+                            Title
+                          </span>
+                        </th>
+                        <th
+                          className=""
+                        >
+                          <span>
+                            Action
+                          </span>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody
+                      className="ant-table-tbody"
+                    />
+                  </table>
+                </div>
+                <div
+                  className="ant-table-placeholder"
+                >
+                  <span>
+                    <i
+                      className="anticon anticon-frown-o"
+                    />
+                    暂无数据
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      style={
+        Object {
+          "backgroundColor": "white",
+          "boxShadow": "2px 3px 8px rgba(0, 0, 0, .25)",
+          "marginTop": 18,
+          "overflow": "auto",
+          "padding": 18,
+        }
+      }
+    >
+      <div
+        className="ant-row"
+      >
+        <div
+          className="ant-col-12"
+          style={
+            Object {
+              "textAlign": "left",
+            }
+          }
+        >
+          <span
+            className=""
+          >
+            <div
+              className="ant-upload ant-upload-select ant-upload-select-text"
+              style={
+                Object {
+                  "display": "",
+                }
+              }
+            >
+              <span
+                className="ant-upload"
+                onClick={[Function]}
+                onDragOver={[Function]}
+                onDrop={[Function]}
+                onKeyDown={[Function]}
+                role="button"
+                tabIndex="0"
+              >
+                <input
+                  accept="application/pdf"
+                  multiple={false}
+                  onChange={[Function]}
+                  style={
+                    Object {
+                      "display": "none",
+                    }
+                  }
+                  type="file"
+                />
+                <button
+                  className="ant-btn"
+                  onClick={[Function]}
+                  style={
+                    Object {
+                      "margin": 8,
+                    }
+                  }
+                  type="button"
+                >
+                  <i
+                    className="anticon anticon-file-add"
+                  />
+                  <span>
+                     Click to Choose File
+                  </span>
+                </button>
+              </span>
+            </div>
+            <div
+              className="ant-upload-list ant-upload-list-text"
+            />
+          </span>
+          <input
+            className="ant-input"
+            disabled={false}
+            onChange={[Function]}
+            onKeyDown={[Function]}
+            placeholder="name of the document"
+            style={
+              Object {
+                "margin": 8,
+                "width": "60%",
+              }
+            }
+            type="text"
+            value=""
+          />
+          <div>
+            <button
+              className="ant-btn ant-btn-primary"
+              onClick={[Function]}
+              style={
+                Object {
+                  "margin": 8,
+                }
+              }
+              type="button"
+            >
+              <i
+                className="anticon anticon-upload"
+              />
+              <span>
+                upload
+              </span>
+            </button>
+          </div>
+        </div>
+        <div
+          className="ant-col-12"
+          style={
+            Object {
+              "textAlign": "left",
+            }
+          }
+        >
+          <input
+            className="ant-input"
+            disabled={false}
+            onChange={[Function]}
+            onKeyDown={[Function]}
+            placeholder="URL to the online document"
+            style={
+              Object {
+                "margin": 8,
+                "width": "60%",
+              }
+            }
+            type="text"
+            value=""
+          />
+          <input
+            className="ant-input"
+            disabled={false}
+            onChange={[Function]}
+            onKeyDown={[Function]}
+            placeholder="name of the document"
+            style={
+              Object {
+                "margin": 8,
+                "width": "60%",
+              }
+            }
+            type="text"
+            value=""
+          />
+          <div>
+            <button
+              className="ant-btn ant-btn-primary"
+              onClick={[Function]}
+              style={
+                Object {
+                  "margin": 8,
+                }
+              }
+              type="button"
+            >
+              <i
+                className="anticon anticon-upload"
+              />
+              <span>
+                upload
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

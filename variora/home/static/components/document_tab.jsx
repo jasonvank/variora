@@ -30,7 +30,7 @@ class DocumentTab extends React.Component {
     super();
     this.state = {}
   }
-  
+
   render() {
     return (
       <Router basename={URL_BASE}>
@@ -97,7 +97,7 @@ class UploadedDocuments extends React.Component {
     }
   }
   render() {
-    self = this;
+    var self = this;
     var uploadProps = {
       accept: 'application/pdf',
       showUploadList: true,
@@ -105,7 +105,7 @@ class UploadedDocuments extends React.Component {
       fileList: this.state.uploadedDocumentFileList,
     }
     return (
-      <div> 
+      <div>
         <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
           <UploadedDocumentsList ref={(ele) => this.uploadedDocumentTable = ele} />
         </div>
@@ -148,7 +148,7 @@ class UploadedDocuments extends React.Component {
             </Col>
           </Row>
         </div>
-      </div> 
+      </div>
     )
   }
 }
@@ -159,11 +159,11 @@ class CollectedDocuments extends React.Component {
   }
   render() {
     return (
-      <div> 
+      <div>
         <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
           <CollectedDocumentsList ref={(ele) => this.uploadedDocumentTable = ele} />
         </div>
-      </div> 
+      </div>
     )
   }
 }
