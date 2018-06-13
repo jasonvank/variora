@@ -1,10 +1,11 @@
 ###### production ######
-django  # framework
+django==1.11.7  # framework
 django-redis-cache  # default cache
 python-memcached  # session cache
 django-proxy # serve external pdf file, solve CORS issue
 pillow
 django-kronos
+validate_email
 
 ###### development ######
 selenium  # write browser-side tests

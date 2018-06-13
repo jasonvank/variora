@@ -5,6 +5,7 @@ python-memcached  # session cache
 django-proxy # serve external pdf file, solve CORS issue
 pillow
 django-kronos
+validate_email
 
 ###### development ######
 selenium  # write browser-side tests

@@ -11,7 +11,10 @@
     "url": "git+https://royl8@bitbucket.org/royl8/variora.git"
   },
   "jest": {
-    "moduleDirectories": ["<rootDir>/node_modules", "<rootDir>/variora/comm_assets"],
+    "moduleDirectories": [
+      "<rootDir>/node_modules",
+      "<rootDir>/variora/comm_assets"
+    ],
     "moduleNameMapper": {
       "\\.(css|less)$": "<rootDir>/jest_tests/__mocks__/style_mock.js"
     },
