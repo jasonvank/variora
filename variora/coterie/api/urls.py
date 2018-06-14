@@ -7,6 +7,10 @@ urlpatterns = [
 
     url(r'^invite$', views.create_invitation),
 
+    url(r'^invitations$', views.InvitationsView.as_view()),
+
+    url(r'^invitations/(?P<pk>\d+)$', views.InvitationView.as_view()),
+
     url(r'^invitations/(?P<pk>\d+)/(?P<operation>\w+)', views.InvitationView.as_view()),
 
     url(r'coteries/(?P<pk>\d+)$', views.CoterieView.as_view()),

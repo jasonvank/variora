@@ -61,10 +61,10 @@ class CoterieInvitationEncoder(DjangoJSONEncoder):
         if isinstance(obj, CoterieInvitation):
             return {
                 'pk': obj.pk,
-                'message': obj.message,
+                'invitation_message': obj.invitation_message,
                 'coterie': obj.coterie.pk,
-                'invitor': obj.invitor.pk,
-                'invitor': obj.invitor.pk,
+                'inviter': obj.inviter.pk,
+                'inviter': obj.inviter.pk,
                 'invitee': obj.invitee.pk,
             }
         return super(CoterieInvitationEncoder, self).default(obj)
@@ -155,6 +155,20 @@ class CoterieDocumentView(View):
             return HttpResponse(status=404)
 
 
+class InvitationsView(View):
+    def get(self, request, **kwargs):
+        try:
+            GET = request.GET
+            invitations = CoterieInvitation.objects.all()
+            if 'from' in GET:
+                invitations = invitations.filter(inviter=User.objects.get(email_address=GET['from']))
+            if 'to' in GET:
+                invitations = invitations.filter(invitee=User.objects.get(email_address=GET['to']))
+            return JsonResponse(list(invitations), encoder=CoterieInvitationEncoder, safe=False)
+        except ObjectDoesNotExist:
+            return HttpResponse(status=404)
+
+
 class InvitationView(View):
     def get(self, request, pk, **kwargs):
         try:
@@ -192,21 +206,21 @@ def create_coterie(request):
     return JsonResponse(coterie, encoder=CoterieEncoder, safe=False)
 
 
-@login_required(login_url='/')
+# @login_required(login_url='/')
 def create_invitation(request):
     POST = request.POST
-    if 'coterie_id' not in POST or 'invitee_email' not in POST or 'message' not in POST:
+    if 'coterie_id' not in POST or 'invitee_email' not in POST or 'invitation_message' not in POST:
         return HttpResponse(status=403)
     try:
         invitation = CoterieInvitation()
-        invitation.invitor = get_user(request)
+        invitation.inviter = get_user(request)
         invitation.coterie = Coterie.objects.get(pk=POST['coterie_id'])
-        invitation.invitee = User.objects.get(pk=POST['invitee_email'])
-        invitation.invitation_message = User.objects.get(pk=POST['invitee_email'])
-        if invitation.invitor not in invitation.coterie.administrators:
+        invitation.invitee = User.objects.get(email_address=POST['invitee_email'])
+        invitation.invitation_message = POST['invitation_message']
+        if invitation.inviter not in invitation.coterie.administrators.all():
             return HttpResponse(status=403)
         invitation.save()
-        return HttpResponse(status=200)
+        return JsonResponse(invitation, encoder=CoterieInvitationEncoder, safe=False)
     except ObjectDoesNotExist:
             return HttpResponse(status=404)
 
