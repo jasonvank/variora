@@ -1,14 +1,15 @@
 import re
 from hashlib import md5
 
-import models
-import variora.settings as settings
-from coterie.models import Coterie
 from django.contrib.auth import get_user
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
+
+import models
+import variora.settings as settings
+from coterie.models import Coterie
 from file_viewer import models as file_viewer_models
 from home.models import User
 from models import CoterieDocument

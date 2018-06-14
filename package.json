@@ -37,6 +37,7 @@
     "element-react": "^1.4.12",
     "element-theme-default": "^1.4.13",
     "element-ui": "^1.4.13",
+    "email-validator": "^2.0.4",
     "file-loader": "^1.1.11",
     "glob": "^7.1.2",
     "jest": "^23.1.0",

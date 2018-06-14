@@ -1,13 +1,13 @@
 from __future__ import unicode_literals
 
-from django.db import models
-from home.models import User
-from file_viewer.models import UniqueFile
-
-
-from django.dispatch import receiver
 import os
 import shutil
+
+from django.db import models
+from django.dispatch import receiver
+
+from file_viewer.models import UniqueFile
+from home.models import User
 
 
 class Coterie(models.Model):
