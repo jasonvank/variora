@@ -61,10 +61,14 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     portrait = models.ImageField(upload_to=upload_to, blank=True, null=True)
 
+    external_portrait_url = models.URLField(max_length=2000, blank=True, null=True)
+
     @property
     def portrait_url(self):
         if self.portrait and hasattr(self.portrait, 'url'):
             return self.portrait.url
+        elif self.external_portrait_url:
+            return self.external_portrait_url
         else:
             return "/media/portrait/default_portrait.png"
 

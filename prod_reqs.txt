@@ -6,6 +6,7 @@ django-proxy # serve external pdf file, solve CORS issue
 pillow
 django-kronos
 validate_email
+google-auth
 
 ###### development ######
 selenium  # write browser-side tests

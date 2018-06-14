@@ -8,7 +8,9 @@ urlpatterns = [
 
     url(r'search', views.search_api_view),
 
-    url(r'signin', views.sign_in),
+    url(r'signin$', views.sign_in),
+
+    url(r'signin/google$', views.google_sign_in),
 
     url(r'signoff', views.sign_off),
 ]

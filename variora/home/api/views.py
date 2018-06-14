@@ -12,6 +12,9 @@ from coterie.api.views import CoterieEncoder, CoterieDocumentEncoder
 from ..models import User
 from django.contrib.auth.models import AnonymousUser
 
+from google.oauth2 import id_token
+from google.auth.transport import requests
+
 
 class UserEncoder(DjangoJSONEncoder):
     def default(self, obj):
@@ -91,7 +94,31 @@ def sign_off(request):
     return HttpResponse()
 
 
+# https://developers.google.com/identity/sign-in/web/backend-auth
+def google_sign_in(request):
+    try:
+        # TODO: do not hardcode client ID, put it into private_settings.py and import from settings
+        userinfo = id_token.verify_oauth2_token(str(request.POST['id_token']), requests.Request(), "519848814448-89p2bv1b6bksdnd3in64r25j9vq1hgc5.apps.googleusercontent.com")
 
+        if userinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
+            raise Exception('Wrong issuer.')
+        if 'error_description' in userinfo:
+            raise Exception('Wrong ID token.')
+        if 'email_verified' not in userinfo or not userinfo['email_verified']:
+            raise Exception('Wrong email.')
+
+        if not User.objects.filter(email_address=userinfo['email']).exists():
+            new_user = User()
+            new_user.set_nickname(userinfo['name'])
+            new_user.set_email_address(userinfo['email'])
+            new_user.external_portrait_url = userinfo['picture']
+            new_user.save()
+        user = User.objects.get(email_address=userinfo['email'])
+        user.backend = 'django.contrib.auth.backends.ModelBackend'
+        login(request, user)
+        return HttpResponse(status=200)
+    except Exception:
+        return HttpResponse("google login fail", status=400)
 
 
 

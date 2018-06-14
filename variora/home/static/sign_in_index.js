@@ -29,6 +29,23 @@ class NormalLoginForm extends React.Component {
       auth2.attachClickHandler(element, {},
           function(googleUser) {
             console.log(googleUser)
+
+            var data = new FormData()
+            data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+            data.append('id_token', googleUser.getAuthResponse().id_token)
+            axios.post('/api/signin/google', data, {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }
+            }).then((response) => {
+              window.location.href = "/test";  // redirect to userdashboard
+            }).catch(e => {
+              console.log(e.response)
+              notification['warning']({
+                message: e.response == undefined ? '' : e.response.data,
+                duration: 1.8,
+              });
+            })
           }, function(error) {
             alert(JSON.stringify(error, undefined, 2));
           });
@@ -44,7 +61,7 @@ class NormalLoginForm extends React.Component {
   }
   redirectToNUSSignIn() {
     var host = 'http://' + window.location.host
-    window.location.href = 
+    window.location.href =
       'https://ivle.nus.edu.sg/api/login/?apikey=Z6Q2MnpaPX8sDSOfHTAnN&url=' + host + '/handle_nus_log_in'
   }
   handleSubmit = (e) => {
@@ -62,10 +79,12 @@ class NormalLoginForm extends React.Component {
         }).then((response) => {
           window.location.href = "/test";  // redirect to userdashboard
         }).catch(e => {
+          console.log(e)
+          console.log(e.response)
           notification['warning']({
-            message: e.message,
-            description: e.response == undefined ? '' : e.response.data,
-            duration: 6,
+            message: e.response == undefined ? '' : e.response.data,
+            // description: e.response == undefined ? '' : e.response.data,
+            duration: 1.8,
           });
         })
       }
@@ -103,8 +122,8 @@ class NormalLoginForm extends React.Component {
               </Button>
               Or <a href="">register now!</a>
               <div id='third-party-login' style={{ marginTop: 28 }}>
-                <Button 
-                  style={{backgroundColor: 'orange', borderColor: 'orange', marginTop: 8, color: 'white'}} 
+                <Button
+                  style={{backgroundColor: 'orange', borderColor: 'orange', marginTop: 8, color: 'white'}}
                   className="login-form-button"
                   htmlType='button'
                   type='primary'
@@ -112,8 +131,8 @@ class NormalLoginForm extends React.Component {
                 >
                   Log in with NUS ID
                 </Button>
-                <Button 
-                  style={{ backgroundColor:'#DD4B39', marginTop: 8, color: 'white' }} 
+                <Button
+                  style={{ backgroundColor:'#DD4B39', marginTop: 8, color: 'white' }}
                   className="login-form-button"
                   htmlType='button'
                   id='google-login'
@@ -135,20 +154,6 @@ const SignInForm = Form.create()(NormalLoginForm);
 ReactDOM.render(
   <LocaleProvider locale={enUS}>
     <SignInForm />
-  </LocaleProvider>, 
+  </LocaleProvider>,
   document.getElementById('main')
 )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
