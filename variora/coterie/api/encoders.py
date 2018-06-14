@@ -69,7 +69,7 @@ class CoterieInvitationEncoder(DjangoJSONEncoder):
                 'invitee_nickname': obj.invitee.nickname,
                 'accept_method': 'post',
                 'reject_method': 'post',
-                'accept_url': '/coterie/api/invitations/' + obj.coterie.pk + '/accept',
-                'reject_url': '/coterie/api/invitations/' + obj.coterie.pk + '/reject',
+                'accept_url': '/coterie/api/invitations/' + str(obj.pk) + '/accept',
+                'reject_url': '/coterie/api/invitations/' + str(obj.pk) + '/reject',
             }
         return super(CoterieInvitationEncoder, self).default(obj)
