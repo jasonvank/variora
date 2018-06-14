@@ -1,13 +1,14 @@
 import random
 import urllib2
 
-import models
-from coterie.models import Coterie
-from django.contrib.auth import get_user, login, authenticate
+from django.contrib.auth import authenticate, get_user, login
 from django.core.mail import EmailMessage  # for sending verification using e-mail
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
+
+import models
+from coterie.models import Coterie
 from file_viewer.models import Document
 from home.models import User
 

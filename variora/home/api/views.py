@@ -1,19 +1,19 @@
-from coterie.models import Coterie, CoterieDocument
-from django.contrib.auth import get_user, login, authenticate, logout
+from django.contrib.auth import authenticate, get_user, login, logout
+from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 from django.views.generic import View
-from file_viewer.models import Document
+from google.auth.transport import requests
+from google.oauth2 import id_token
+
+from coterie.api.views import CoterieDocumentEncoder, CoterieEncoder
+from coterie.models import Coterie, CoterieDocument
 from file_viewer.api.views import DocumentEncoder
-from coterie.api.views import CoterieEncoder, CoterieDocumentEncoder
+from file_viewer.models import Document
 
 from ..models import User
-from django.contrib.auth.models import AnonymousUser
-
-from google.oauth2 import id_token
-from google.auth.transport import requests
 
 
 class UserEncoder(DjangoJSONEncoder):
@@ -119,7 +119,3 @@ def google_sign_in(request):
         return HttpResponse(status=200)
     except Exception:
         return HttpResponse("google login fail", status=400)
-
-
-
-
