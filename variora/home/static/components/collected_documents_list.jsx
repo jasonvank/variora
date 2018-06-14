@@ -1,7 +1,7 @@
 import 'antd/dist/antd.css';
 
 import { Icon, Popconfirm, Table, message } from 'antd';
-import { getCookie, getUrlFormat } from 'util.js'
+import { formatOpenDocumentUrl, getUrlFormat } from 'util.js'
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -10,12 +10,6 @@ import enUS from 'antd/lib/locale-provider/en_US';
 
 const { Column } = Table;
 
-function formatOpenDocumentUrl(documentId) {
-  return getUrlFormat('/file_viewer/', {
-    'document_id': documentId,
-    'csrfmiddlewaretoken': getCookie('csrftoken'),
-  })
-}
 
 class CollectedDocumentsList extends React.Component {
   constructor(props) {
@@ -64,15 +58,15 @@ class CollectedDocumentsList extends React.Component {
   componentDidMount() {
     this.updateData()
   }
-  render() { 
+  render() {
     return (
-      <Table 
+      <Table
         dataSource={this.state.data}
         columns={this.state.columns}
         pagination={false}
       />
     )
-  } 
+  }
 }
 
 export { CollectedDocumentsList };
