@@ -164,6 +164,7 @@ def create_invitation(request):
     try:
         invitations = []
         for invitee_email in POST['invitee_emails'].split(','):
+            invitee_email = invitee_email.strip()
             if validate_email(invitee_email):
                 invitation = CoterieInvitation()
                 invitation.inviter = get_user(request)
