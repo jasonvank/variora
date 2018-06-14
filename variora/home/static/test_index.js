@@ -12,12 +12,12 @@ import {
 } from 'react-router-dom'
 import { getCookie, getUrlFormat } from 'util.js'
 
+import { AvatarWithNotifications } from './components/avatar_with_notifications.jsx'
 import { DocumentTab } from './components/document_tab.jsx'
 import { GroupTab } from './components/group_tab.jsx'
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { SearchResultTab } from './components/search_result_tab.jsx'
-import { ReceivedCoterieInvitationNotifications } from './components/received_coterie_invitation_notifications.jsx'
 import axios from 'axios'
 import enUS from 'antd/lib/locale-provider/en_US';
 
@@ -121,8 +121,6 @@ class App extends React.Component {
   render() {
     const fields = this.state.fields;
     return (
-      <div>
-      <ReceivedCoterieInvitationNotifications />
       <Layout style={{ height: '100%', width: '100%', position: 'absolute' }}>
         <Header className="header" style={{ backgroundColor: '#f6f6f6', diplay: 'inline' }}>
           <Row>
@@ -139,11 +137,7 @@ class App extends React.Component {
             <Col span={6} style={{ textAlign: 'right' }}>
               { this.state.user.is_authenticated ? <a onClick={this.signOff}>sign off</a> : <a href="/sign-in">sign in</a> }
               <span style={{ margin: 18 }}>{ this.state.user.nickname }</span>
-              <Avatar
-                style={{ verticalAlign: 'middle' }}
-                size={'large'}
-                src={this.state.user.portrait_url}
-              />
+              <AvatarWithNotifications avatarSrc={this.state.user.portrait_url} />
             </Col>
           </Row>
         </Header>
@@ -208,7 +202,6 @@ class App extends React.Component {
           </Layout>
         </Router>
       </Layout>
-      </div>
     );
   }
 }
@@ -244,3 +237,4 @@ ReactDOM.render(
   </LocaleProvider>,
   document.getElementById('main')
 );
+
