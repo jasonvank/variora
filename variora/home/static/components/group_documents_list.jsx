@@ -67,8 +67,8 @@ class GroupDocumentsList extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
+  async componentWillReceiveProps(nextProps) {
+    await this.setState({
       coteriePk: nextProps.coteriePk
     })
     this.updateData()
