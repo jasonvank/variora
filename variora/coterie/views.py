@@ -229,7 +229,7 @@ def display_coteriefile_viewer_page(request):
             "file_url": document.url,
             "comments": document.coteriecomment_set.order_by("-post_time"),
             "annotations": document.coterieannotation_set.order_by("page_index"),
-            "coterie_page_url": request.GET["current_url"],
+            "prev_page_url": request.META['HTTP_REFERER'] if 'HTTP_REFERER' in request.META else '/'
         }
         return render(request, "coterie_file_viewer/pdf_file_viewer_page.html", context)
 

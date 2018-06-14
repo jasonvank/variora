@@ -161,6 +161,6 @@ class FileViewerView(View):
             "comments": document.comment_set.order_by("-post_time"),
             "annotations": document.annotation_set.order_by("page_index"),
             "collected": collected,
-            "prev_page_url": request.GET["current_url"],
+            "prev_page_url": request.META['HTTP_REFERER'] if 'HTTP_REFERER' in request.META else '/'
         }
         return render(request, "file_viewer/pdf_file_viewer_page.html", context)

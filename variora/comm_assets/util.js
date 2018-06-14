@@ -60,7 +60,6 @@ function formatOpenCoterieDocumentUrl(documentId, coterieId) {
   return getUrlFormat('/coterie/display_coteriefile_viewer_page', {
     'coterie_id': coterieId,
     'document_id': documentId,
-    'current_url': window.location.href,
     'csrfmiddlewaretoken': getCookie('csrftoken'),
   })
 }
@@ -69,7 +68,6 @@ function formatOpenCoterieDocumentUrl(documentId, coterieId) {
 function formatOpenDocumentUrl(documentId) {
   return getUrlFormat('/file_viewer/', {
     'document_id': documentId,
-    'current_url': window.location.href,
     'csrfmiddlewaretoken': getCookie('csrftokean'),
   })
 }
