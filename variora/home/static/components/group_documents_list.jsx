@@ -1,7 +1,7 @@
 import 'antd/dist/antd.css';
 
 import { Icon, Popconfirm, Table, message } from 'antd';
-import { getCookie, getUrlFormat } from 'util.js'
+import { formatOpenDocumentUrl, getCookie, getUrlFormat } from 'util.js'
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -10,14 +10,6 @@ import enUS from 'antd/lib/locale-provider/en_US';
 
 const { Column } = Table;
 
-function formatOpenDocumentUrl(documentId, coterieId) {
-  return getUrlFormat('/coterie/display_coteriefile_viewer_page', {
-    'coterie_id': coterieId,
-    'document_id': documentId,
-    'csrfmiddlewaretoken': getCookie('csrftoken'),
-    'current_url': window.location.href,
-  })
-}
 
 class GroupDocumentsList extends React.Component {
   constructor(props) {
@@ -98,6 +90,7 @@ class GroupDocumentsList extends React.Component {
 }
 
 export { GroupDocumentsList };
+
 
 
 

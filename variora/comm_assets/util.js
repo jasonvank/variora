@@ -55,6 +55,17 @@ function hexToRgb(hex) {
   } : null;
 }
 
-export { getCookie, getUrlFormat, imgLoad, hexToRgb }
+
+function formatOpenDocumentUrl(documentId, coterieId) {
+  return getUrlFormat('/coterie/display_coteriefile_viewer_page', {
+    'coterie_id': coterieId,
+    'document_id': documentId,
+    'csrfmiddlewaretoken': getCookie('csrftoken'),
+    'current_url': window.location.href,
+  })
+}
+
+
+export { getCookie, getUrlFormat, imgLoad, hexToRgb, formatOpenDocumentUrl }
 
 
