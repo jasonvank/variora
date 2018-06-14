@@ -1,7 +1,7 @@
 import 'antd/dist/antd.css';
 
 import { Icon, Popconfirm, Table, message } from 'antd';
-import { formatOpenDocumentUrl, getCookie, getUrlFormat } from 'util.js'
+import { formatOpenCoterieDocumentUrl, getCookie, getUrlFormat } from 'util.js'
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -23,7 +23,7 @@ class GroupDocumentsList extends React.Component {
       }, {
         title: 'Title',
         dataIndex: 'title',
-        render: (text, record) => <a href={formatOpenDocumentUrl(record.pk, this.state.coteriePk)}>{text}</a>,
+        render: (text, record) => <a href={formatOpenCoterieDocumentUrl(record.pk, this.state.coteriePk)}>{text}</a>,
       }, {
         title: 'Action',
         key: 'action',

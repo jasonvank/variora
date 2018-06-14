@@ -1,21 +1,14 @@
 import 'antd/dist/antd.css';
 
 import { Icon, Popconfirm, Table, message } from 'antd';
-import { getCookie, getUrlFormat } from 'util.js'
+import { formatOpenDocumentUrl, getCookie, getUrlFormat } from 'util.js'
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import axios from 'axios'
 import enUS from 'antd/lib/locale-provider/en_US';
 
 const { Column } = Table;
 
-function formatOpenDocumentUrl(documentId) {
-  return getUrlFormat('/file_viewer/', {
-    'document_id': documentId,
-    'csrfmiddlewaretoken': getCookie('csrftokean'),
-  })
-}
 
 class UploadedDocumentsList extends React.Component {
   constructor(props) {
@@ -34,9 +27,9 @@ class UploadedDocumentsList extends React.Component {
         key: 'action',
         render: (text, record) => (
           <span>
-            <Popconfirm 
-              title="Are you sure delete this document? It cannot be undone." 
-              onConfirm={() => this.deleteDocument(record)} 
+            <Popconfirm
+              title="Are you sure delete this document? It cannot be undone."
+              onConfirm={() => this.deleteDocument(record)}
               okText="Yes" cancelText="No"
             >
               <a>Delete</a>
@@ -76,15 +69,15 @@ class UploadedDocumentsList extends React.Component {
   componentDidMount() {
     this.updateData()
   }
-  render() { 
+  render() {
     return (
-      <Table 
+      <Table
         dataSource={this.state.data}
         columns={this.state.columns}
         pagination={false}
       />
     )
-  } 
+  }
 }
 
 export { UploadedDocumentsList };

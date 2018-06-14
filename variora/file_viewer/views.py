@@ -90,7 +90,7 @@ class FileViewerView(View):
 
         elif request.POST["operation"] == "comment":
             document = Document.objects.get(id=int(request.POST["document_id"]))
-            if request.POST["comment_content"] != "":    
+            if request.POST["comment_content"] != "":
                 comment = Comment()
                 comment.content = request.POST["comment_content"]
                 comment.commenter = get_user(request)
@@ -131,7 +131,7 @@ class FileViewerView(View):
             document = Document.objects.get(id=int(request.POST["document_id"]))
             if request.POST["annotation_reply_content"] != "":
                 annotation_reply = AnnotationReply()
-                annotation = Annotation.objects.get(id=int(request.POST["reply_to_annotation_id"]))    
+                annotation = Annotation.objects.get(id=int(request.POST["reply_to_annotation_id"]))
                 annotation_reply.content = request.POST["annotation_reply_content"]
                 annotation_reply.replier = get_user(request)
                 annotation_reply.reply_to_annotation = annotation
@@ -143,7 +143,7 @@ class FileViewerView(View):
                 "annotations": document.annotation_set.order_by("page_index"),
             }
             return render(request, "file_viewer/annotation_viewer_subpage.html", context)
-    
+
     def get(self, request):
         document = Document.objects.get(id=int(request.GET["document_id"]))
 
@@ -160,6 +160,7 @@ class FileViewerView(View):
             "file_url": document.url,
             "comments": document.comment_set.order_by("-post_time"),
             "annotations": document.annotation_set.order_by("page_index"),
-            "collected": collected
+            "collected": collected,
+            "prev_page_url": request.GET["current_url"],
         }
         return render(request, "file_viewer/pdf_file_viewer_page.html", context)

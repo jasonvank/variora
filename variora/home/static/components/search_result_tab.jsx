@@ -1,23 +1,23 @@
 import 'antd/dist/antd.css';
 import 'regenerator-runtime/runtime';
 
-import { Avatar, Button, Col, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, Table, Upload } from 'antd';
+import { Layout, Menu, Modal, Row, Table } from 'antd';
 import {
   Link,
   Route,
   BrowserRouter as Router
 } from 'react-router-dom'
-import { getCookie, getUrlFormat } from 'util.js'
+import { formatOpenDocumentUrl, getCookie, getUrlFormat } from 'util.js'
 
 import { GroupDocumentsList } from './group_documents_list.jsx'
 import React from 'react';
-import ReactDOM from 'react-dom';
 import axios from 'axios'
 import enUS from 'antd/lib/locale-provider/en_US';
 
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 const MenuItemGroup = Menu.ItemGroup;
+
 
 class SearchResultTab extends React.Component {
   constructor(props) {
@@ -92,6 +92,7 @@ class DocumentResult extends React.Component {
       title: 'Document Name',
       dataIndex: 'title',
       width: "40%",
+      render: (text, record) => <a href={formatOpenDocumentUrl(record.pk, this.state.coteriePk)}>{text}</a>,
       sorter: (a, b) => a.title.localeCompare(b.title),
     }, {
       title: 'Group Owner',

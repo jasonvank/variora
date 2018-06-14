@@ -13,6 +13,8 @@ from ..models import Coterie, CoterieDocument, CoterieInvitation
 from home.models import User
 from django.contrib.auth.models import AnonymousUser
 
+from validate_email import validate_email
+
 
 class CoterieEncoder(DjangoJSONEncoder):
     def default(self, obj):
@@ -209,18 +211,22 @@ def create_coterie(request):
 # @login_required(login_url='/')
 def create_invitation(request):
     POST = request.POST
-    if 'coterie_id' not in POST or 'invitee_email' not in POST or 'invitation_message' not in POST:
+    if 'coterie_id' not in POST or 'invitee_emails' not in POST or 'invitation_message' not in POST:
         return HttpResponse(status=403)
     try:
-        invitation = CoterieInvitation()
-        invitation.inviter = get_user(request)
-        invitation.coterie = Coterie.objects.get(pk=POST['coterie_id'])
-        invitation.invitee = User.objects.get(email_address=POST['invitee_email'])
-        invitation.invitation_message = POST['invitation_message']
-        if invitation.inviter not in invitation.coterie.administrators.all():
-            return HttpResponse(status=403)
-        invitation.save()
-        return JsonResponse(invitation, encoder=CoterieInvitationEncoder, safe=False)
+        invitations = []
+        for invitee_email in POST['invitee_emails'].split(','):
+            if validate_email(invitee_email):
+                invitation = CoterieInvitation()
+                invitation.inviter = get_user(request)
+                invitation.coterie = Coterie.objects.get(pk=POST['coterie_id'])
+                invitation.invitee = User.objects.get(email_address=invitee_email)
+                invitation.invitation_message = POST['invitation_message']
+                if invitation.inviter not in invitation.coterie.administrators.all():
+                    return HttpResponse(status=403)
+                invitation.save()
+                invitations.append(invitation)
+        return JsonResponse(invitations, encoder=CoterieInvitationEncoder, safe=False)
     except ObjectDoesNotExist:
             return HttpResponse(status=404)
 

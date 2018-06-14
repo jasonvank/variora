@@ -56,16 +56,25 @@ function hexToRgb(hex) {
 }
 
 
-function formatOpenDocumentUrl(documentId, coterieId) {
+function formatOpenCoterieDocumentUrl(documentId, coterieId) {
   return getUrlFormat('/coterie/display_coteriefile_viewer_page', {
     'coterie_id': coterieId,
     'document_id': documentId,
-    'csrfmiddlewaretoken': getCookie('csrftoken'),
     'current_url': window.location.href,
+    'csrfmiddlewaretoken': getCookie('csrftoken'),
   })
 }
 
 
-export { getCookie, getUrlFormat, imgLoad, hexToRgb, formatOpenDocumentUrl }
+function formatOpenDocumentUrl(documentId) {
+  return getUrlFormat('/file_viewer/', {
+    'document_id': documentId,
+    'current_url': window.location.href,
+    'csrfmiddlewaretoken': getCookie('csrftokean'),
+  })
+}
+
+
+export { getCookie, getUrlFormat, imgLoad, hexToRgb, formatOpenCoterieDocumentUrl, formatOpenDocumentUrl }
 
 
