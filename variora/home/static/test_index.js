@@ -17,6 +17,7 @@ import { GroupTab } from './components/group_tab.jsx'
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { SearchResultTab } from './components/search_result_tab.jsx'
+import { ReceivedCoterieInvitationNotifications } from './components/received_coterie_invitation_notifications.jsx'
 import axios from 'axios'
 import enUS from 'antd/lib/locale-provider/en_US';
 
@@ -120,6 +121,8 @@ class App extends React.Component {
   render() {
     const fields = this.state.fields;
     return (
+      <div>
+      <ReceivedCoterieInvitationNotifications />
       <Layout style={{ height: '100%', width: '100%', position: 'absolute' }}>
         <Header className="header" style={{ backgroundColor: '#f6f6f6', diplay: 'inline' }}>
           <Row>
@@ -205,6 +208,7 @@ class App extends React.Component {
           </Layout>
         </Router>
       </Layout>
+      </div>
     );
   }
 }
