@@ -100,16 +100,13 @@ class GroupInvitationForm extends React.Component {
         });
         return
       }
+      console.log(this.props);
       var data = new FormData()
       data.append('coterie_id', this.props.coteriePk)
       data.append('invitee_emails', this.state.emailList)
       data.append('invitation_message', this.state.invitationMessage)
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-      axios.post('/coterie/api/invite', data, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }).then((response) => {
+      axios.post('/coterie/api/invite', data).then((response) => {
         notification['success']({
           message: 'Invitations successfully sent',
           description: <ResponseNotificationWrapper response={response}/>,
