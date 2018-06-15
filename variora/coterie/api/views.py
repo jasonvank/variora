@@ -107,7 +107,7 @@ class InvitationsView(View):
     def get(self, request, **kwargs):
         try:
             GET = request.GET
-            invitations = CoterieInvitation.objects.all()
+            invitations = CoterieInvitation.objects.filter(acceptance__isnull=True)
             if 'from' in GET:
                 invitations = invitations.filter(inviter=User.objects.get(email_address=GET['from']))
             if 'to' in GET:
