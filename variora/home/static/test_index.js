@@ -133,7 +133,7 @@ class App extends React.Component {
             <Col span={6} style={{ textAlign: 'right' }}>
               { this.state.user.is_authenticated ? <a onClick={this.signOff}>sign off</a> : <a href="/sign-in">sign in</a> }
               <span style={{ margin: 18 }}>{ this.state.user.nickname }</span>
-              <AvatarWithNotifications avatarSrc={this.state.user.portrait_url} />
+              <AvatarWithNotifications user={ this.state.user } />
             </Col>
           </Row>
         </Header>
@@ -143,7 +143,7 @@ class App extends React.Component {
             <Sider width={200} style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }}>
               <Menu
                 mode="inline"
-                defaultOpenKeys={['admin_teams, member_teams']}
+                defaultOpenKeys={['admin_teams', 'member_teams']}
                 onClick={this.onClickCreateGroupMenuItem}
                 style={{ height: '100%', borderRight: 0 }}
                 defaultSelectedKeys={window.location.pathname.endsWith('search') ? [] : ['documents']}
