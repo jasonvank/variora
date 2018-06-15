@@ -63,6 +63,7 @@ class CoterieInvitationEncoder(DjangoJSONEncoder):
                 'pk': obj.pk,
                 'invitation_message': obj.invitation_message,
                 'coterie_pk': obj.coterie.pk,
+                'coterie_name': obj.coterie.name,
                 'inviter_email': obj.inviter.email_address,
                 'inviter_nickname': obj.inviter.nickname,
                 'invitee_email': obj.invitee.email_address,
