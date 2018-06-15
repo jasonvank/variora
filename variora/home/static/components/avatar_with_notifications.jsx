@@ -34,21 +34,22 @@ class ReceivedCoterieInvitationNotificationContent extends React.Component {
   }
 
   onAcceptClick() {
-    console.log("Accept post: ", this.props.invitation.accept_url)
-
+    var self = this
     var data = new FormData()
     data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
     axios.post(this.props.invitation.accept_url, data).then((response) => {
-      notification.close(this.props.invitation.pk)
+      notification.close(self.props.invitation.pk)
+      self.props.updateCoterieInvitationCallback(self.props.invitation.pk)
     });
   }
 
   onRejectClick() {
-    console.log("Reject post: ", this.props.invitation.reject_url)
+    var self = this
     var data = new FormData()
     data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
     axios.post(this.props.invitation.reject_url, data).then((response) => {
-      notification.close(this.props.invitation.pk)
+      notification.close(self.props.invitation.pk)
+      self.props.updateCoterieInvitationCallback(self.props.invitation.pk)
     });
   }
 
@@ -89,18 +90,18 @@ class AvatarWithNotifications extends React.Component {
           notification.close(invitation.pk)
       this.setState({ showNotifications: show })
     }
+
+    this.updateCoterieInvitationCallback = this.updateCoterieInvitationCallback.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({ ...nextProps })
-    console.log({...nextProps})
     if (this.state.invitations == undefined && nextProps.user != undefined) {
       var self = this
       axios.get(getUrlFormat('/coterie/api/invitations', {
         'to': nextProps.user.email_address
       })).then(function(response) {
         self.setState({ invitations: response.data })
-        // self.displayInvitations(response.data)
       })
     }
   }
@@ -110,11 +111,18 @@ class AvatarWithNotifications extends React.Component {
     for (var invitation of invitations) {
       notification.open({
         message: 'You have a new invitation!',
-        description: <ReceivedCoterieInvitationNotificationContent invitation={invitation} />,
+        description: <ReceivedCoterieInvitationNotificationContent invitation={invitation} updateCoterieInvitationCallback = {this.updateCoterieInvitationCallback} />,
         duration: 0,
         key: invitation.pk,
       })
     }
+  }
+
+  updateCoterieInvitationCallback(invitationPkID) {
+    var updatedInvitations = this.state.invitations.filter(function(invitation) {return invitation.pk != invitationPkID} )
+    this.setState(
+      {invitations: updatedInvitations}
+    )
   }
 
   render() {
