@@ -68,7 +68,7 @@ class ResponseNotificationWrapper extends React.Component {
   render() {
     var data = this.props.response.data
     var emailListItems = data.map(function(invitation) {
-      return <li><p>{invitation.invitee_nickname + '  '}<code>{'<' + invitation.invitee_email + '>'}</code></p></li>
+      return <li key = {invitation.pk} ><p>{invitation.invitee_nickname + '  '}<code>{'<' + invitation.invitee_email + '>'}</code></p></li>
     })
 
     return (
@@ -100,7 +100,6 @@ class GroupInvitationForm extends React.Component {
         });
         return
       }
-      console.log(this.props);
       var data = new FormData()
       data.append('coterie_id', this.props.coteriePk)
       data.append('invitee_emails', this.state.emailList)
