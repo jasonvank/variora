@@ -147,7 +147,7 @@ class App extends React.Component {
             <Sider width={200} style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }}>
               <Menu
                 mode="inline"
-                defaultOpenKeys={['teams']}
+                defaultOpenKeys={['admin_teams, member_teams']}
                 onClick={this.onClickCreateGroupMenuItem}
                 style={{ height: '100%', borderRight: 0 }}
                 defaultSelectedKeys={window.location.pathname.endsWith('search') ? [] : ['documents']}
@@ -158,7 +158,7 @@ class App extends React.Component {
                 <Menu.Item key="documents" disabled={!this.state.user.is_authenticated}>
                   <Link to="/"><span><Icon type='file' />documents</span></Link>
                 </Menu.Item>
-                <SubMenu key="teams" title={<span><Icon type="team" />group</span>} disabled={!this.state.user.is_authenticated}>
+                <SubMenu key="admin_teams" title={<span><Icon type="solution" />admin group</span>} disabled={!this.state.user.is_authenticated}>
                   {
                     this.state.administratedCoteries.map((coterie) => {
                       return (
@@ -168,6 +168,9 @@ class App extends React.Component {
                       )
                     })
                   }
+                  <Menu.Item key={CREATE_NEW_GROUP_MENU_ITEM_KEY}><Icon type="plus"/></Menu.Item>
+                </SubMenu>
+                <SubMenu key="member_teams" title={<span><Icon type="team" />member group</span>} disabled={!this.state.user.is_authenticated}>
                   {
                     this.state.joinedCoteries.map((coterie) => {
                       return (
@@ -177,7 +180,6 @@ class App extends React.Component {
                       )
                     })
                   }
-                  <Menu.Item key={CREATE_NEW_GROUP_MENU_ITEM_KEY}><Icon type="plus"/></Menu.Item>
                 </SubMenu>
                 <Modal
                   title="create a new group"
@@ -237,4 +239,5 @@ ReactDOM.render(
   </LocaleProvider>,
   document.getElementById('main')
 );
+
 

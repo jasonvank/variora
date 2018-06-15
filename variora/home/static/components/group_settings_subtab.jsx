@@ -1,7 +1,7 @@
 import 'antd/dist/antd.css';
 import 'regenerator-runtime/runtime';
 
-import { Button, Col, Icon, Input, Layout, Menu, notification, Popconfirm } from 'antd';
+import { Button, Col, Icon, Input, Layout, Menu, Popconfirm, Row, notification } from 'antd';
 import {
   Link,
   Route,
@@ -54,7 +54,7 @@ class GroupSettingsSubtab extends React.Component {
         </Popconfirm>
 
         <div>
-          <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
+          <div style={{ backgroundColor: 'white', margin: '28px 0 28px 0', boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
             <GroupInvitationForm coteriePk={this.state.coteriePk}/>
           </div>
         </div>
@@ -143,9 +143,9 @@ class GroupInvitationForm extends React.Component {
 
   render() {
     return (
-      <div>
-        <div style={{margin: '38px 0 18px 0' }}>
-          <div style={{ overflow: 'auto', backgroundColor: 'white', width: "60%", margin: 8 }}>
+      <Row>
+        <Col span={12} offset={6}>
+          <div style={{ backgroundColor: 'white', marginTop: 28 }}>
             <TextArea
             rows={2}
             value={this.state.emailList}
@@ -153,7 +153,7 @@ class GroupInvitationForm extends React.Component {
             placeholder={"Multiple emails can be seperated by comma"}
             />
           </div>
-          <div style={{ overflow: 'auto', backgroundColor: 'white', width: "60%", margin: 8 }}>
+          <div style={{ backgroundColor: 'white', marginTop: 28 }}>
             <TextArea
             rows={4}
             value={this.state.invitationMessage}
@@ -162,19 +162,16 @@ class GroupInvitationForm extends React.Component {
             />
           </div>
           <div>
-            <Button type="primary" icon="mail" style={{ margin: 8 }} onClick={this.sendInvitation}>Send Invitation</Button>
+            <Button type="primary" icon="mail" style={{ marginTop: 28, marginBottom: 18, float: 'right' }} onClick={this.sendInvitation}>Send Invitation</Button>
           </div>
-        </div>
-      </div>
+        </Col>
+      </Row>
     )
   }
 }
 
 
 export { GroupSettingsSubtab }
-
-
-
 
 
 
