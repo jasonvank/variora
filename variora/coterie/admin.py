@@ -15,8 +15,8 @@ class CoterieModelAdmin(admin.ModelAdmin):
 
 
 class CoterieInvitationAdmin(admin.ModelAdmin):
-    list_display = ["id", "inviter", "invitee"]
-    list_filter = ["id", "inviter", "invitee"]
+    list_display = ["id", "inviter", "invitee", "acceptance"]
+    list_filter = ["id", "inviter", "invitee", "acceptance"]
     search_fields = ["id", "inviter", "invitee"]
 
 
