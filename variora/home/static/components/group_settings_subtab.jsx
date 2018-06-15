@@ -92,7 +92,8 @@ class GroupInvitationForm extends React.Component {
     }
 
     this.sendInvitation = () => {
-      if (!this.validateEmailListInput(this.state.emailList)) {
+      var [isValid, emailList] = this.preprocessEmailsString(this.state.emailList)
+      if (!isValid) {
         notification['warning']({
           message: 'Email list input is not valid',
           description: 'Please check again!',
@@ -100,9 +101,10 @@ class GroupInvitationForm extends React.Component {
         });
         return
       }
+
       var data = new FormData()
       data.append('coterie_id', this.props.coteriePk)
-      data.append('invitee_emails', this.state.emailList)
+      data.append('invitee_emails', emailList)
       data.append('invitation_message', this.state.invitationMessage)
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
       axios.post('/coterie/api/invite', data).then((response) => {
@@ -126,16 +128,25 @@ class GroupInvitationForm extends React.Component {
     await this.setState({ invitationMessage: e.target.value });
   }
 
-  validateEmailListInput(emailList) {
-    var emailArray = emailList.trim().split(',')
+  _emailsStringToArray(emailsString) {
+    var rows = emailsString.trim().split('\n')
+    var emailsArray = []
+    for (var row of rows)
+      emailsArray = emailsArray.concat(row.trim().split(','))
+    return emailsArray
+  }
+
+  preprocessEmailsString(emailsString) {
+    var emailArray = this._emailsStringToArray(emailsString)
+    var returnedEmailArray = []
     for (var email of emailArray) {
       email = email.trim()
       if (!validator.validate(email))
-        return false
+        return (false, [])
+      returnedEmailArray.push(email)
     }
-    return true
+    return [true, returnedEmailArray.join(',')]
   }
-
 
   render() {
     return (
@@ -168,9 +179,6 @@ class GroupInvitationForm extends React.Component {
 
 
 export { GroupSettingsSubtab }
-
-
-
 
 
 
