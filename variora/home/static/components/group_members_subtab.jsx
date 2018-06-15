@@ -29,9 +29,20 @@ class GroupAdministratorsList extends React.Component {
       columns: [{
         title: 'Id',
         dataIndex: 'id',
+        width: "20%",
+      }, {
+        title: '',
+        dataIndex: 'avatar',
+        width: "20%",
+        render: (text, record) => <Avatar src={ record.portrait_url } size='default' />,
       }, {
         title: 'Name',
         dataIndex: 'nickname',
+        width: "20%",
+      }, {
+        title: 'Email Address',
+        dataIndex: 'email_address',
+        width: "40%",
       }]
     }
   }
@@ -50,6 +61,7 @@ class GroupAdministratorsList extends React.Component {
         dataSource={this.state.data}
         columns={this.state.columns}
         pagination={false}
+        size='middle'
       />
     )
   }
@@ -65,9 +77,20 @@ class GroupMembersList extends React.Component {
       columns: [{
         title: 'Id',
         dataIndex: 'id',
+        width: "20%",
+      }, {
+        title: '',
+        dataIndex: 'avatar',
+        width: "20%",
+        render: (text, record) => <Avatar src={ record.portrait_url } size='default' />,
       }, {
         title: 'Name',
         dataIndex: 'nickname',
+        width: "20%",
+      }, {
+        title: 'Email Address',
+        dataIndex: 'email_address',
+        width: "40%",
       }]
     }
   }
@@ -86,6 +109,7 @@ class GroupMembersList extends React.Component {
         dataSource={this.state.data}
         columns={this.state.columns}
         pagination={false}
+        size='middle'
       />
     )
   }
@@ -131,10 +155,10 @@ class GroupMembersSubtab extends React.Component {
   render() {
     return (
       <div>
-        <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
+        <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .20)' }}>
           <GroupAdministratorsList coteriePk={this.state.coteriePk} administrators={this.state.administrators} />
         </div>
-        <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
+        <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .20)' }}>
           <GroupMembersList coteriePk={this.state.coteriePk} members={this.state.members} />
         </div>
       </div>
@@ -143,9 +167,6 @@ class GroupMembersSubtab extends React.Component {
 }
 
 export { GroupMembersSubtab }
-
-
-
 
 
 

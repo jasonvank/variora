@@ -1,7 +1,7 @@
 import 'antd/dist/antd.css';
 import 'regenerator-runtime/runtime';
 
-import { Layout, Menu, Modal, Row, Table } from 'antd';
+import { Avatar, Layout, Menu, Modal, Row, Table } from 'antd';
 import {
   Link,
   Route,
@@ -199,8 +199,12 @@ class UserResult extends React.Component {
     const columns = [{
       title: 'User Name',
       dataIndex: 'nickname',
-      width: "40%",
+      width: "20%",
       sorter: (a, b) => a.nickname.localeCompare(b.nickname),
+    }, {
+      title: '',
+      dataIndex: 'avatar',
+      render: (text, record) => <Avatar src={ record.portrait_url } size='default' />,
     }, {
       title: 'Email Address',
       dataIndex: 'email_address',
