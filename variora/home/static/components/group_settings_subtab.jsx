@@ -68,7 +68,7 @@ class ResponseNotificationWrapper extends React.Component {
   render() {
     var data = this.props.response.data
     var emailListItems = data.map(function(invitation) {
-      return <li><p>{invitation.invitee_nickname + '  '}<code>{'<' + invitation.invitee_email + '>'}</code></p></li>
+      return <li key = {invitation.pk} ><p>{invitation.invitee_nickname + '  '}<code>{'<' + invitation.invitee_email + '>'}</code></p></li>
     })
 
     return (
@@ -105,11 +105,7 @@ class GroupInvitationForm extends React.Component {
       data.append('invitee_emails', this.state.emailList)
       data.append('invitation_message', this.state.invitationMessage)
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-      axios.post('/coterie/api/invite', data, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }).then((response) => {
+      axios.post('/coterie/api/invite', data).then((response) => {
         notification['success']({
           message: 'Invitations successfully sent',
           description: <ResponseNotificationWrapper response={response}/>,

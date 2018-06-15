@@ -33,11 +33,7 @@ class NormalLoginForm extends React.Component {
             var data = new FormData()
             data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
             data.append('id_token', googleUser.getAuthResponse().id_token)
-            axios.post('/api/signin/google', data, {
-              headers: {
-                'Content-Type': 'multipart/form-data'
-              }
-            }).then((response) => {
+            axios.post('/api/signin/google', data).then((response) => {
               window.location.href = "/test";  // redirect to userdashboard
             }).catch(e => {
               console.log(e.response)
@@ -72,11 +68,7 @@ class NormalLoginForm extends React.Component {
         for (var key in values)
           data.append(key.toString(), values[key])
         data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-        axios.post('/api/signin', data, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }).then((response) => {
+        axios.post('/api/signin', data).then((response) => {
           window.location.href = "/test";  // redirect to userdashboard
         }).catch(e => {
           console.log(e)

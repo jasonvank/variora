@@ -82,11 +82,7 @@ class App extends React.Component {
       var data = new FormData()
       data.append('coterie_name', this.state.fields.coterieName.value)
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-      axios.post('/coterie/api/coteries/create', data, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }).then((response) => {
+      axios.post('/coterie/api/coteries/create', data).then((response) => {
         var newAdministratedCoteries = this.state.administratedCoteries.slice()
         newAdministratedCoteries.push(response.data)
         this.setState({
