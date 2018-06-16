@@ -54,8 +54,7 @@ class GroupDocumentsSubtab extends React.Component {
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
       data.append('coterie_id', this.props.coteriePk)
       data.append('current_url', window.location.href)
-      axios.post('/coterie/handle_coteriefile_upload', data)
-        .then(() => {
+      axios.post('/coterie/handle_coteriefile_upload', data).then(() => {
           this.setState({ onlineDocumentName: '' })
           this.setState({ onlineDocumentUrl: '' })
           this.uploadedDocumentTable.updateData()
@@ -71,52 +70,57 @@ class GroupDocumentsSubtab extends React.Component {
       beforeUpload(file, fileList) { self.setState({ uploadedDocumentFileList: [file] }); return false },
       fileList: this.state.uploadedDocumentFileList,
     }
+
+    var uploadDocumentSection = (
+      <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, padding: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
+        <Row>
+          <Col span={12} style={{ textAlign: 'left' }}>
+            <Upload {...uploadProps}>
+              <Button style={{ margin: 8 }}>
+                <Icon type="file-add" /> Click to Choose File
+              </Button>
+            </Upload>
+            <Input
+              style={{ width: '60%', margin: 8 }}
+              onChange={async (e) => this.setState({ uploadedDocumentName: e.target.value })}
+              value={this.state.uploadedDocumentName}
+              placeholder={ 'name of the document' }
+            ></Input>
+            <div>
+              <Button type="primary" icon="upload" style={{ margin: 8 }} onClick={this.uploadLocalDocument}>upload</Button>
+            </div>
+          </Col>
+          <Col span={12} style={{ textAlign: 'left' }}>
+            <Input
+              style={{ width: '60%', margin: 8 }}
+              onChange={async (e) => this.setState({ onlineDocumentUrl: e.target.value })}
+              value={this.state.onlineDocumentUrl}
+              placeholder={ 'URL to the online document' }
+            >
+            </Input>
+            <Input
+              style={{ width: '60%', margin: 8 }}
+              onChange={async (e) => this.setState({ onlineDocumentName: e.target.value })}
+              value={this.state.onlineDocumentName}
+              placeholder={ 'name of the document' }
+            >
+            </Input>
+            <div>
+              <Button type="primary" icon="upload" style={{ margin: 8 }} onClick={this.uploadOnlineDocument}>upload</Button>
+            </div>
+          </Col>
+        </Row>
+      </div>
+    )
+
     return (
-      <div> 
+      <div>
         <h1>{ this.props.coteriePk }</h1>
         <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
           <GroupDocumentsList ref={(ele) => this.uploadedDocumentTable = ele} coteriePk={this.props.coteriePk} />
         </div>
-        <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, padding: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
-          <Row>
-            <Col span={12} style={{ textAlign: 'left' }}>
-              <Upload {...uploadProps}>
-                <Button style={{ margin: 8 }}>
-                  <Icon type="file-add" /> Click to Choose File
-                </Button>
-              </Upload>
-              <Input
-                style={{ width: '60%', margin: 8 }}
-                onChange={async (e) => this.setState({ uploadedDocumentName: e.target.value })}
-                value={this.state.uploadedDocumentName}
-                placeholder={ 'name of the document' }
-              ></Input>
-              <div>
-                <Button type="primary" icon="upload" style={{ margin: 8 }} onClick={this.uploadLocalDocument}>upload</Button>
-              </div>
-            </Col>
-            <Col span={12} style={{ textAlign: 'left' }}>
-              <Input
-                style={{ width: '60%', margin: 8 }}
-                onChange={async (e) => this.setState({ onlineDocumentUrl: e.target.value })}
-                value={this.state.onlineDocumentUrl}
-                placeholder={ 'URL to the online document' }
-              >
-              </Input>
-              <Input
-                style={{ width: '60%', margin: 8 }}
-                onChange={async (e) => this.setState({ onlineDocumentName: e.target.value })}
-                value={this.state.onlineDocumentName}
-                placeholder={ 'name of the document' }
-              >
-              </Input>
-              <div>
-                <Button type="primary" icon="upload" style={{ margin: 8 }} onClick={this.uploadOnlineDocument}>upload</Button>
-              </div>
-            </Col>
-          </Row>
-        </div>
-      </div> 
+        { this.props.isAdmin ? uploadDocumentSection : null }
+      </div>
     )
   }
 }

@@ -30,13 +30,15 @@ class GroupTab extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      coteriePk: props.match.params.pk
+      coteriePk: props.match.params.coteriePk,
+      isAdmin: props.isAdmin,
     }
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      coteriePk: nextProps.match.params.pk,
+      coteriePk: nextProps.match.params.coteriePk,
+      isAdmin: nextProps.isAdmin,
     })
   }
 
@@ -64,9 +66,9 @@ class GroupTab extends React.Component {
           </Menu.Item>
         </Menu>
         <Switch>
-          <Route exact path={SUB_URL_BASE + this.state.coteriePk + '/'} render={() => <GroupDocumentsSubtab coteriePk={this.state.coteriePk} />} />
-          <Route exact path={SUB_URL_BASE + this.state.coteriePk + '/members'} render={() => <GroupMembersSubtab coteriePk={this.state.coteriePk} />} />
-          <Route exact path={SUB_URL_BASE + this.state.coteriePk + '/settings'} render={() => <GroupSettingsSubtab coteriePk={this.state.coteriePk} deleteCoterieCallback={this.props.deleteCoterieCallback} />} />
+          <Route exact path={SUB_URL_BASE + this.state.coteriePk + '/'} render={() => <GroupDocumentsSubtab isAdmin={this.state.isAdmin} coteriePk={this.state.coteriePk} />} />
+          <Route exact path={SUB_URL_BASE + this.state.coteriePk + '/members'} render={() => <GroupMembersSubtab isAdmin={this.state.isAdmin} coteriePk={this.state.coteriePk} />} />
+          <Route exact path={SUB_URL_BASE + this.state.coteriePk + '/settings'} render={() => <GroupSettingsSubtab isAdmin={this.state.isAdmin} coteriePk={this.state.coteriePk} deleteCoterieCallback={this.props.deleteCoterieCallback} />} />
         </Switch>
       </Content>
     );

@@ -31,7 +31,7 @@ const Search = Input.Search;
 const CREATE_NEW_GROUP_MENU_ITEM_KEY = 'createGroupButton';
 
 
-const URL_BASE = '/test'
+const URL_BASE = ''
 
 class App extends React.Component {
   constructor() {
@@ -97,6 +97,11 @@ class App extends React.Component {
         administratedCoteries: updatedAdministratedCoteries,
         joinedCoteries: updatedJoinedCoteries
       })
+    }
+    this.renderGroupTab = (match, location) => {
+      var coteriePk = parseInt(match.params.coteriePk)
+      var isAdmin = this.state.administratedCoteries.map((coterie) => coterie.pk).includes(coteriePk)
+      return <GroupTab deleteCoterieCallback={this.deleteCoterieCallback} isAdmin={isAdmin} match={match} location={location} />
     }
   }
 
@@ -194,7 +199,7 @@ class App extends React.Component {
                 <Route exact path="/" component={DocumentTab} />
                 <Route exact path="/explore" component={GroupTab} />
                 <Route path="/search" component={SearchResultTab} />
-                <Route path="/groups/:pk" render={({match, location}) => <GroupTab deleteCoterieCallback={this.deleteCoterieCallback} match={match} location={location} />} />
+                <Route path="/groups/:coteriePk" render={ ({match, location}) => this.renderGroupTab(match, location) } />
               </Switch>
             </Layout>
           </Layout>

@@ -23,8 +23,6 @@ const { Header, Content, Sider } = Layout;
 const MenuItemGroup = Menu.ItemGroup;
 
 
-const URL_BASE = '/test'
-
 class DocumentTab extends React.Component {
   constructor() {
     super();
@@ -33,7 +31,7 @@ class DocumentTab extends React.Component {
 
   render() {
     return (
-      <Router basename={URL_BASE}>
+      <Router>
         <Content style={{ paddingLeft: 18, paddingRight: 18, paddingTop: 8, margin: 0, minHeight: 280 }}>
           <Menu
             onClick={this.handleClick}

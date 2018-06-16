@@ -13,7 +13,7 @@ from file_viewer.models import Document
 from home.models import User
 
 
-def display_home_page(request):
+def display_obsolete_home_page(request):
     popular_documents = Document.objects.order_by('-num_visit')
     if len(popular_documents) > 6:
         popular_documents = popular_documents[:6]
@@ -146,8 +146,13 @@ def handle_search(request):
     return render(request, "home/search_result_page.html", context)
 
 
-def test(request):
+def display_index(request):
     return render(request, 'home/test.html', {})
+
+
+def redirect_to_index(request):
+    return redirect('/index/')
+
 
 def jason_test(request):
     return render(request, 'home/jason_test.html', {})

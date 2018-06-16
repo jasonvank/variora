@@ -19,12 +19,9 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from proxy import views as proxy_views
 
-urlpatterns = [
+urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
     # app: admin
     url(r'^admin/', admin.site.urls),
-
-    # app: home
-    url(r'^', include('home.urls')),
 
     # app: file_viewer
     url(r'^file_viewer/', include('file_viewer.urls')),
@@ -38,4 +35,7 @@ urlpatterns = [
     # serve remote servers' pdf file (to fix CORS issue)
     url('proxy/(?P<url>.*)', proxy_views.proxy_view),
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    # MUST BE THE LAST ONE
+    url(r'^', include('home.urls')),
+
+]
