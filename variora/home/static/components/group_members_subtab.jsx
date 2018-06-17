@@ -61,6 +61,7 @@ class GroupAdministratorsList extends React.Component {
         dataSource={this.state.data}
         columns={this.state.columns}
         pagination={false}
+        title={() => 'Group Admin'}
         size='middle'
       />
     )
@@ -109,6 +110,7 @@ class GroupMembersList extends React.Component {
         dataSource={this.state.data}
         columns={this.state.columns}
         pagination={false}
+        title={() => 'Group Member'}
         size='middle'
       />
     )
