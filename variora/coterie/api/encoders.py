@@ -24,7 +24,6 @@ class CoterieEncoder(DjangoJSONEncoder):
                 'coteriedocument_set': list(obj.coteriedocument_set.all()),
                 'administrators': list(obj.administrators.all()),
                 'members': list(obj.members.all()),
-                'applications': list(obj.application_set.all()),
                 'remove_member_method': 'post',
                 'remove_member_url': '/coterie/api/coteries/' + str(obj.pk) + '/remove-member',
             }
@@ -97,8 +96,6 @@ class CoterieApplicationEncoder(DjangoJSONEncoder):
                 'reject_url': '/coterie/api/applications/' + str(obj.pk) + '/reject',
             }
         return super(CoterieApplicationEncoder, self).default(obj)
-
-
 
 
 

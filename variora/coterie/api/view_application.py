@@ -19,7 +19,7 @@ from .encoders import CoterieDocumentEncoder, CoterieEncoder, CoterieApplication
 def create_application(request):
     POST = request.POST
     user = get_user(request)
-    if isinstance(applicant, AnonymousUser):
+    if isinstance(user, AnonymousUser):
         return HttpResponse(status=403)
     if 'coterie_id' not in POST or 'application_message' not in POST:
         return HttpResponse(status=403)

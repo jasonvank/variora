@@ -1,7 +1,7 @@
 import 'antd/dist/antd.css';
 import 'regenerator-runtime/runtime';
 
-import { Avatar, Layout, Menu, Modal, Row, Table } from 'antd';
+import { Avatar, Input, Layout, Menu, Modal, Table } from 'antd';
 import { formatOpenDocumentUrl, getCookie, getUrlFormat } from 'util.js'
 
 import { GroupDocumentsList } from './group_documents_list.jsx'
@@ -11,6 +11,7 @@ import axios from 'axios'
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 const MenuItemGroup = Menu.ItemGroup;
+const { TextArea } = Input;
 
 
 class SearchResultTab extends React.Component {
@@ -19,13 +20,18 @@ class SearchResultTab extends React.Component {
     this.state = {
       resultDocuments: undefined,
       resultCoteries: undefined,
-      resultUsers: undefined
+      resultUsers: undefined,
+      user: undefined,
     }
   }
 
   componentDidMount() {
     var fullUrl = window.location.href;
     var searchKey = fullUrl.slice(fullUrl.indexOf('=') + 1);
+    axios.get('/api/user').then((response) => {
+      if (response.data.is_authenticated)
+        this.setState({ user: response.data })
+    })
     axios.get(getUrlFormat('/api/search', {
       'key': searchKey
     })).then((response) => {
@@ -46,7 +52,7 @@ class SearchResultTab extends React.Component {
           <DocumentResult resultDocuments={this.state.resultDocuments} />
         </div>
         <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
-          <GroupResult resultCoteries={this.state.resultCoteries} />
+          <GroupResult resultCoteries={this.state.resultCoteries} user={this.state.user} />
         </div>
         <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
           <UserResult resultUsers={this.state.resultUsers} />
@@ -118,8 +124,10 @@ class GroupResult extends React.Component {
     this.state = {
       sortedInfo: null,
       data: this.props.resultCoteries,
+      use: this.props.user,
       createApplicationModelVisible: false,
-      targetedGroup: {name: ''},
+      targetedCoterie: {name: ''},
+      applicationMessage: ''
     }
     this.handleChange = (sorter) => {
       this.setState({
@@ -127,20 +135,30 @@ class GroupResult extends React.Component {
       });
     }
     this.onApplyClick = (coterie) => {
-      console.log(coterie)
       this.setState({
         createApplicationModelVisible: true,
-        targetedGroup: coterie,
+        targetedCoterie: coterie,
       })
     }
-    this.submitApplicationCoterieForm = (coteriePk) => {
-
+    this.submitApplicationCoterieForm = () => {
+      var data = new FormData()
+      data.append('coterie_id', this.state.targetedCoterie.pk)
+      data.append('application_message', this.state.applicationMessage)
+      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+      axios.post('/coterie/api/apply', data)
+      .then((response) => {
+        this.setState({
+          applicationMessage: '',
+          createApplicationModelVisible: false,
+        })
+      })
     }
   }
 
   async componentWillReceiveProps(nextProps) {
     await this.setState({
       data: nextProps.resultCoteries,
+      user: nextProps.user,
     })
     this.forceUpdate()
   }
@@ -181,13 +199,16 @@ class GroupResult extends React.Component {
           onChange={this.handleChange}
         />
         <Modal
-          title={"Apply to join: " + this.state.targetedGroup.name}
+          title={"Apply to join: " + this.state.targetedCoterie.name}
           wrapClassName="vertical-center-modal"
           visible={this.state.createApplicationModelVisible}
           onOk={this.submitApplicationCoterieForm}
           onCancel={() => {this.setState({ createApplicationModelVisible: false })}}
         >
-          test
+          <TextArea
+            onChange={async (e) => this.setState({ applicationMessage: e.target.value })}
+            value={this.state.applicationMessage}
+          ></TextArea>
         </Modal>
       </div>
     )
