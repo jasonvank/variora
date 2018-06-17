@@ -1,7 +1,7 @@
 import 'antd/dist/antd.css';
 import 'regenerator-runtime/runtime';
 
-import { Avatar, Button, Col, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, Table, Upload } from 'antd';
+import { Avatar, Button, Col, Dropdown, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, Table, Upload } from 'antd';
 import {
   Link,
   Route,
@@ -61,7 +61,7 @@ class GroupAdministratorsList extends React.Component {
         dataSource={this.state.data}
         columns={this.state.columns}
         pagination={false}
-        title={() => 'Group Admin'}
+        title={ () => <span><Icon type="team" />  Group Admin</span> }
         size='middle'
       />
     )
@@ -72,6 +72,11 @@ class GroupAdministratorsList extends React.Component {
 class GroupMembersList extends React.Component {
   constructor(props) {
     super(props)
+    const menu = (
+      <Menu>
+        <Menu.Item>Remove</Menu.Item>
+      </Menu>
+    );
     this.state = {
       coteriePk: this.props.coteriePk,
       data: this.props.members,
@@ -91,8 +96,20 @@ class GroupMembersList extends React.Component {
       }, {
         title: 'Email Address',
         dataIndex: 'email_address',
-        width: "40%",
-      }]
+        width: "20%",
+      }, {
+        title: 'Action',
+        key: 'action',
+        width: "20%",
+        render: (text, record) => (
+          <Dropdown overlay={menu}>
+            <a className="ant-dropdown-link" href="#">
+              More actions <Icon type="down" />
+            </a>
+          </Dropdown>
+        ),
+      }
+      ]
     }
   }
 
@@ -110,7 +127,7 @@ class GroupMembersList extends React.Component {
         dataSource={this.state.data}
         columns={this.state.columns}
         pagination={false}
-        title={() => 'Group Member'}
+        title={ () => <span><Icon type="solution" />  Group Members</span> }
         size='middle'
       />
     )
