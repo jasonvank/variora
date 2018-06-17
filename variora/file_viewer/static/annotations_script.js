@@ -6,6 +6,11 @@ function removeAnnotation(annotationID) {
   $(".Annotation[annotation_id='" + annotationID + "']").remove();
 }
 
+function removeAnnotationReply(replyId) {
+  $(".AnnotationReplyBlock[annotation_reply_id='" + replyId + "']").remove();
+  $(".AnnotationReplyBlock[reply_to_annotation_reply='" + replyId + "']").remove();
+}
+
 function addAnnotationRelatedListener() {
   $('code').addClass('prettyprint');
   PR.prettyPrint();
@@ -37,9 +42,7 @@ function addAnnotationRelatedListener() {
   $(".PostReplyReplyButton").on("click", function() {
     if (is_authenticated) {
       var thisButton = $(this);
-      var index = layer.load(0, {
-        shade: 0.18
-      }); //0 represent the style, can be 0-2
+      var index = layer.load(1, { shade: 0.18 }); //0 represent the style, can be 0-2
       $.ajax({
         type: "POST",
         url: "",
@@ -63,23 +66,22 @@ function addAnnotationRelatedListener() {
   })
 
   $(".DeleteAnnotationReplyButton").on("click", function() {
-    var index = layer.load(0, {
+    var index = layer.load(1, {
       shade: 0.18
     }); //0 represent the style, can be 0-2
+    var replyId = this.value
     $.ajax({
       type: "POST",
       url: "",
       data: {
         csrfmiddlewaretoken: getCookie('csrftoken'),
         operation: "delete_annotation_reply",
-        reply_id: this.value,
+        reply_id: replyId,
         document_id: $("button[name='document_id']").val(),
       },
       success: function(data) {
-        $("#annotation_update_div").html(data);
-        addAnnotationRelatedListener()
-        tinymceInit();
-        layer.close(index);
+        removeAnnotationReply(replyId)
+        layer.close(index)
       }
     });
   });
@@ -87,7 +89,7 @@ function addAnnotationRelatedListener() {
   $(".PostAnnotationReplyButton").on("click", function() {
     if (is_authenticated) {
       var thisButton = $(this);
-      var index = layer.load(0, {shade: 0.18}); //0 represent the style, can be 0-2
+      var index = layer.load(1, {shade: 0.18}); //0 represent the style, can be 0-2
       $.ajax({
         type: "POST",
         url: "",
@@ -111,6 +113,7 @@ function addAnnotationRelatedListener() {
   })
 
   $(".DeleteAnnotationButton").on("click", function() {
+    var index = layer.load(1, { shade: 0.18 }); //0 represent the style, can be 0-2
     var annotationID = this.value;
     $.ajax({
       type: "POST",
@@ -122,6 +125,7 @@ function addAnnotationRelatedListener() {
       },
       success: function() {
         removeAnnotation(annotationID);
+        layer.close(index)
       }
     });
   });

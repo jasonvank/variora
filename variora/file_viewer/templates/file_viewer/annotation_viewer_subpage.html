@@ -26,7 +26,7 @@
     <br>
     <!-- annotation replies -->
     {% for annotation_reply in annotation.annotationreply_set.all|dictsort:"post_time" %}
-    <blockquote class="AnnotationReplyBlock" annotation_id="{{ annotation_reply.id }}">
+    <blockquote class="AnnotationReplyBlock" annotation_reply_id="{{ annotation_reply.id }}" reply_to_annotation_reply="{{ annotation_reply.reply_to_annotation_reply.id }}">
         {% if annotation_reply.reply_to_annotation_reply.replier %}  <!-- if reply to reply -->
         <span style="font-size: 66%; float: left;">
             <i class="fa fa-share" aria-hidden="true"></i>&nbsp&nbsp&nbspreply to <i><b>{{ annotation_reply.reply_to_annotation_reply.replier.nickname }}</b></i>:
@@ -45,7 +45,7 @@
                     <span style="cursor: pointer;" annotation_reply_id="{{ annotation_reply.id }}" class="LikeAnnotationReplyButton glyphicon glyphicon-thumbs-up"></span>
                     <bold id="num_like">{{ annotation_reply.num_like }}</bold>
                 </div>
-            </div>   
+            </div>
             <form style="display: none">
                 <br>
                 <textarea name="reply_reply_content" class="form-control" rows="2" style="resize: vertical"></textarea>
