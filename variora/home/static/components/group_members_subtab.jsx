@@ -1,19 +1,12 @@
 import 'antd/dist/antd.css';
 import 'regenerator-runtime/runtime';
 
-import { Avatar, Button, Col, Dropdown, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, Table, Upload } from 'antd';
-import {
-  Link,
-  Route,
-  BrowserRouter as Router
-} from 'react-router-dom'
+import { Avatar, Button, Col, Dropdown, Icon, Input, Layout, Menu, Modal, Popconfirm, Row, Table, Upload } from 'antd';
 import { getCookie, getUrlFormat } from 'util.js'
 
 import { GroupDocumentsList } from './group_documents_list.jsx'
 import React from 'react';
-import ReactDOM from 'react-dom';
 import axios from 'axios'
-import enUS from 'antd/lib/locale-provider/en_US';
 
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
@@ -87,19 +80,39 @@ class GroupMembersList extends React.Component {
   }
 
   render() {
-    function DropdownWrapper(props) {
-      var menu = (
-        <Menu onClick={ () => props.exitGroupCallback(props.memberEmailAddress) }>
-          <Menu.Item>Remove</Menu.Item>
-        </Menu>
-      );
-      return (
-        <Dropdown overlay={ menu } trigger={['click']}>
-          <a className="ant-dropdown-link" href="#">
-            Actions <Icon type="down" />
-          </a>
-        </Dropdown>
-      )
+    class DropdownWrapper extends React.Component {
+      constructor(props) {
+        super(props)
+        this.state = {
+          visible: false
+        }
+        this.handleVisibleChange = (flag) => { this.setState({ visible: flag }); }
+      }
+      render() {
+        var menu = (
+          <Menu onClick={this.handleMenuClick}>
+            <Menu.Item>
+              <Popconfirm
+              title="Are you sure to remove this member from the group?"
+              onConfirm={ () => {
+                this.props.exitGroupCallback(this.props.memberEmailAddress)
+                this.setState({ visible: false });
+              }}
+              okText="Yes" cancelText="No"
+              >
+                Remove
+              </Popconfirm>
+            </Menu.Item>
+          </Menu>
+        );
+        return (
+          <Dropdown overlay={ menu } trigger={['click']} onVisibleChange={this.handleVisibleChange} visible={this.state.visible}>
+            <a className="ant-dropdown-link" href="#">
+              Actions <Icon type="down" />
+            </a>
+          </Dropdown>
+        )
+      }
     }
 
     const columns = [{
@@ -206,10 +219,4 @@ class GroupMembersSubtab extends React.Component {
 }
 
 export { GroupMembersSubtab }
-
-
-
-
-
-
 

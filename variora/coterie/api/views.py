@@ -48,10 +48,10 @@ def _exit_coterie(coterie, user):
     return HttpResponse(status=200)
 
 def _remove_member(request, coterie, user):
-    if member_email_address not in request.POST:
+    if 'member_email_address' not in request.POST:
         return HttpResponse(status=403)
     try:
-        member = User.objects.get(email_adress=request.POST['member_email_address'])
+        member = User.objects.get(email_address=request.POST['member_email_address'])
     except ObjectDoesNotExist:
         return HttpResponse(status=403)
     if user in coterie.administrators.all() and member in coterie.members.all():
@@ -74,9 +74,9 @@ class CoterieView(View):
             user = get_user(request)
             if operation == 'delete':
                 return _delete_coterie(coterie, user)
-            if operation == 'exit':
+            elif operation == 'exit':
                 return _exit_coterie(coterie, user)
-            elif operation == 'remove-member':
+            elif operation == 'removemember':
                 return _remove_member(request, coterie, user)
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
