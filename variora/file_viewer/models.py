@@ -72,7 +72,7 @@ class Document(models.Model):
     @property
     def file_on_server(self):
         return self.unique_file != None
-    
+
     def __unicode__(self):
         return self.title
 
@@ -95,6 +95,7 @@ class Comment(models.Model):
                                          related_name="reply_set",
                                          null=True, blank=True)
     num_like = models.IntegerField(default=0)
+    is_anonymous = models.BooleanField(default=False)
 
     def __unicode__(self):
         return str(self.id) + ": " + self.content
@@ -105,6 +106,7 @@ class Annotation(models.Model):
     annotator = models.ForeignKey(User)
     document_this_annotation_belongs = models.ForeignKey(Document)
     content = models.TextField()
+    is_anonymous = models.BooleanField(default=False)
 
     page_index = models.IntegerField()
     height_percent = models.FloatField()
@@ -112,7 +114,7 @@ class Annotation(models.Model):
     top_percent = models.FloatField()
     left_percent = models.FloatField()
     frame_color = models.CharField(max_length=32)
-    
+
     num_like = models.IntegerField(default=0)
 
     def __unicode__(self):
@@ -128,6 +130,7 @@ class AnnotationReply(models.Model):
                                                   null=True, blank=True)
     content = models.TextField()
     num_like = models.IntegerField(default=0)
+    is_anonymous = models.BooleanField(default=False)
 
     def __unicode__(self):
         return str(self.id) + ": " + self.content
