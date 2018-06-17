@@ -19,7 +19,7 @@ from .encoders import CoterieDocumentEncoder, CoterieEncoder, CoterieApplication
 def create_application(request):
     POST = request.POST
     user = get_user(request)
-    if isinstance(applicant, AnonymousUser):
+    if isinstance(user, AnonymousUser):
         return HttpResponse(status=403)
     if 'coterie_id' not in POST or 'application_message' not in POST:
         return HttpResponse(status=403)
@@ -30,7 +30,7 @@ def create_application(request):
         application.coterie = Coterie.objects.get(pk=POST['coterie_id'])
         application.application_message = POST['application_message']
 
-        invitation.save()
+        application.save()
         return JsonResponse(application, encoder=CoterieApplicationEncoder, safe=False)
     except ObjectDoesNotExist:
         return HttpResponse(status=404)
