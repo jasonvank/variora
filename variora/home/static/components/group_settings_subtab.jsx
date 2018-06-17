@@ -34,6 +34,14 @@ class GroupSettingsSubtab extends React.Component {
         self.props.deleteCoterieCallback(self.state.coteriePk)
       })
     }
+    this.exitGroup = () => {
+      // var self = this
+      // var data = new FormData()
+      // data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+      // axios.post('/coterie/api/coteries/' + this.state.coteriePk + '/delete', data).then(function() {
+      //   self.props.deleteCoterieCallback(self.state.coteriePk)
+      // })
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -43,22 +51,36 @@ class GroupSettingsSubtab extends React.Component {
   }
 
   render() {
+    var invitationSection = (
+      <div style={{ backgroundColor: 'white', margin: '28px 0 28px 0', boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
+        <GroupInvitationForm coteriePk={this.state.coteriePk}/>
+      </div>
+    )
+
+    var deleteGroupSection = (
+      <Popconfirm
+        title="Are you sure to delete this group? This cannot be undone."
+        onConfirm={() => this.deleteGroup()}
+        okText="Yes" cancelText="No"
+      >
+        <Button>Delete this group</Button>
+      </Popconfirm>
+    )
+
+    var exitGroupSection = (
+      <Popconfirm
+        title="Are you sure to exit this group?"
+        onConfirm={() => this.exitGroup()}
+        okText="Yes" cancelText="No"
+      >
+        <Button>Exit this group</Button>
+      </Popconfirm>
+    )
+
     return (
       <div>
-        <Popconfirm
-          title="Are you sure to delete this group? This cannot be undone."
-          onConfirm={() => this.deleteGroup()}
-          okText="Yes" cancelText="No"
-        >
-          <Button>Delete</Button>
-        </Popconfirm>
-
-        <div>
-          <div style={{ backgroundColor: 'white', margin: '28px 0 28px 0', boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
-            <GroupInvitationForm coteriePk={this.state.coteriePk}/>
-          </div>
-        </div>
-
+        { this.props.isAdmin ? deleteGroupSection : exitGroupSection }
+        { this.props.isAdmin ? invitationSection : null }
       </div>
     )
   }
