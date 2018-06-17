@@ -141,6 +141,89 @@ class GroupMembersList extends React.Component {
 }
 
 
+class GroupApplicationList extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      coteriePk: this.props.coteriePk,
+      data: this.props.applicantions,
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      coteriePk: this.props.coteriePk,
+      data: nextProps.applicantions,
+    })
+    this.forceUpdate()
+  }
+
+  onAcceptClick() {
+    var self = this
+    var data = new FormData()
+    data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+    axios.post(this.props.applicants.accept_url, data).then((response) => {
+      // self.props.acceptInvitationCallback(self.props.invitation.coterie_pk)
+    });
+  }
+
+  onRejectClick() {
+    var self = this
+    var data = new FormData()
+    data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+    axios.post(this.props.applications.reject_url, data).then((response) => {
+
+    });
+  }
+
+  render() {
+
+    const columns = [{
+      title: 'Id',
+      dataIndex: 'id',
+      width: "20%",
+    }, {
+      title: '',
+      dataIndex: 'avatar',
+      width: "20%",
+      render: (text, record) => <Avatar src={ record.portrait_url } size='default' />,
+    }, {
+      title: 'Name',
+      dataIndex: 'nickname',
+      width: "20%",
+    }, {
+      title: 'Email Address',
+      dataIndex: 'email_address',
+      width: "20%",
+    }, {
+      title: 'Action',
+      key: 'action',
+      width: "40%",
+      render: (text, record) => (
+        <span>
+          <a href="javascript:;" onClick={this.onAcceptClick}>Accept</a>
+          <Divider type="vertical" />
+          <a href="javascript:;" onClick={this.onRejectClick}>Reject</a>
+          <Divider type="vertical" />
+        </span>
+      )
+    }]
+
+    return (
+      <Table
+        dataSource={this.state.data}
+        columns={columns}
+        pagination={false}
+        expandedRowRender={record => <p style={{ margin: 0 }}>{record.application_message}</p>}
+        title={ () => <span><Icon type="usergroup-add" /> Group Applications</span> }
+        size='middle'
+      />
+    )
+  }
+}
+
+
+
 class GroupMembersSubtab extends React.Component {
   constructor(props) {
     super(props);
@@ -148,6 +231,7 @@ class GroupMembersSubtab extends React.Component {
       coteriePk: this.props.coteriePk,
       administrators: [],
       members: [],
+      applications: [],
       coterie: undefined
     }
     this.getMemberGroup = (responseData, userType) => {
@@ -164,6 +248,7 @@ class GroupMembersSubtab extends React.Component {
           coterie: response.data,
           administrators: this.getMemberGroup(response.data, 'administrators'),
           members: this.getMemberGroup(response.data, 'members'),
+          applications: this.getMemberGroup(response.data, 'applications')
         })
       })
       .catch(e => { message.warning(e.message) })
@@ -199,6 +284,9 @@ class GroupMembersSubtab extends React.Component {
         </div>
         <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .20)' }}>
           <GroupMembersList coteriePk={this.state.coteriePk} members={this.state.members} exitGroupCallback={this.exitGroupCallback} />
+        </div>
+        <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .20)' }}>
+          <GroupApplicationList coteriePk={this.state.coteriePk} applications={this.state.applications} />
         </div>
       </div>
     )
