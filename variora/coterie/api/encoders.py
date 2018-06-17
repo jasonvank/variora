@@ -11,7 +11,7 @@ from django.views.generic import View
 
 from home.models import User
 
-from ..models import Coterie, CoterieDocument, CoterieInvitation
+from ..models import Coterie, CoterieDocument, CoterieInvitation, CoterieApplication
 
 
 class CoterieEncoder(DjangoJSONEncoder):
@@ -76,3 +76,30 @@ class CoterieInvitationEncoder(DjangoJSONEncoder):
                 'reject_url': '/coterie/api/invitations/' + str(obj.pk) + '/reject',
             }
         return super(CoterieInvitationEncoder, self).default(obj)
+
+
+class CoterieApplicationEncoder(DjangoJSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, CoterieApplication):
+            return {
+                'pk': obj.pk,
+                'application_message': obj.application_message,
+                'coterie_pk': obj.coterie.pk,
+                'coterie_name': obj.coterie.name,
+                'applicant_email': obj.applicant.email_address,
+                'applicant_nickname': obj.applicant.nickname,
+                'accept_method': 'post',
+                'reject_method': 'post',
+                'accept_url': '/coterie/api/applications/' + str(obj.pk) + '/accept',
+                'reject_url': '/coterie/api/application/' + str(obj.pk) + '/reject',
+            }
+        return super(CoterieApplicationEncoder, self).default(obj)
+
+
+
+
+
+
+
+
+
