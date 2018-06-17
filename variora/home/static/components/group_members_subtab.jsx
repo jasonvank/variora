@@ -104,7 +104,7 @@ class GroupMembersList extends React.Component {
         render: (text, record) => (
           <Dropdown overlay={menu}>
             <a className="ant-dropdown-link" href="#">
-              More actions <Icon type="down" />
+              Actions <Icon type="down" />
             </a>
           </Dropdown>
         ),
@@ -127,7 +127,7 @@ class GroupMembersList extends React.Component {
         dataSource={this.state.data}
         columns={this.state.columns}
         pagination={false}
-        title={ () => <span><Icon type="solution" />  Group Members</span> }
+        title={ () => <span><Icon type="solution" /> Group Members</span> }
         size='middle'
       />
     )

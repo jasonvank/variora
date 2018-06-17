@@ -39,7 +39,8 @@ class ReceivedCoterieInvitationNotificationContent extends React.Component {
     data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
     axios.post(this.props.invitation.accept_url, data).then((response) => {
       notification.close(self.props.invitation.pk)
-      self.props.updateCoterieInvitationCallback(self.props.invitation.pk)
+      self.props.updateLeftInvitationsCallback(self.props.invitation.pk)
+      self.props.acceptInvitationCallback(self.props.invitation.coterie_pk)
     });
   }
 
@@ -49,7 +50,7 @@ class ReceivedCoterieInvitationNotificationContent extends React.Component {
     data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
     axios.post(this.props.invitation.reject_url, data).then((response) => {
       notification.close(self.props.invitation.pk)
-      self.props.updateCoterieInvitationCallback(self.props.invitation.pk)
+      self.props.updateLeftInvitationsCallback(self.props.invitation.pk)
     });
   }
 
@@ -91,7 +92,7 @@ class AvatarWithNotifications extends React.Component {
       this.setState({ showNotifications: show })
     }
 
-    this.updateCoterieInvitationCallback = this.updateCoterieInvitationCallback.bind(this)
+    this.updateLeftInvitationsCallback = this.updateLeftInvitationsCallback.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -111,14 +112,14 @@ class AvatarWithNotifications extends React.Component {
     for (var invitation of invitations) {
       notification.open({
         message: 'You have a new invitation!',
-        description: <ReceivedCoterieInvitationNotificationContent invitation={invitation} updateCoterieInvitationCallback = {this.updateCoterieInvitationCallback} />,
+        description: <ReceivedCoterieInvitationNotificationContent invitation={invitation} acceptInvitationCallback={this.props.acceptInvitationCallback} updateLeftInvitationsCallback={this.updateLeftInvitationsCallback} />,
         duration: 0,
         key: invitation.pk,
       })
     }
   }
 
-  updateCoterieInvitationCallback(invitationPkID) {
+  updateLeftInvitationsCallback(invitationPkID) {
     var updatedInvitations = this.state.invitations.filter(function(invitation) {return invitation.pk != invitationPkID} )
     this.setState(
       {invitations: updatedInvitations}

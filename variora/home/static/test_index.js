@@ -98,6 +98,12 @@ class App extends React.Component {
         joinedCoteries: updatedJoinedCoteries
       })
     }
+    this.acceptInvitationCallback = (coteriePk) => {
+      axios.get('/coterie/api/coteries/' + coteriePk).then((response) => {
+        var updatedJoinedCoteries = this.state.joinedCoteries.concat(response.data)
+        this.setState({ joinedCoteries: updatedJoinedCoteries })
+      })
+    }
     this.renderGroupTab = (match, location) => {
       var coteriePk = parseInt(match.params.coteriePk)
       var isAdmin = this.state.administratedCoteries.map((coterie) => coterie.pk).includes(coteriePk)
@@ -138,7 +144,7 @@ class App extends React.Component {
             <Col span={6} style={{ textAlign: 'right' }}>
               { this.state.user.is_authenticated ? <a onClick={this.signOff}>sign off</a> : <a href="/sign-in">sign in</a> }
               <span style={{ margin: 18 }}>{ this.state.user.nickname }</span>
-              <AvatarWithNotifications user={ this.state.user } />
+              <AvatarWithNotifications user={ this.state.user } acceptInvitationCallback={ this.acceptInvitationCallback } />
             </Col>
           </Row>
         </Header>
