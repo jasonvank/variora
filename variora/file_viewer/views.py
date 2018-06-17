@@ -116,6 +116,7 @@ class FileViewerView(View):
             annotation.top_percent = request.POST["top_percent"]
             annotation.left_percent = request.POST["left_percent"]
             annotation.frame_color = request.POST["frame_color"]
+            annotation.is_public = True if request.POST["is_public"] == 'true' else False
             annotation.save()
             context = {
                 "document": document,

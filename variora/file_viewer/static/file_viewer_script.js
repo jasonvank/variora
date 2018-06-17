@@ -15,15 +15,15 @@ var taskList = [];
 var rendering = false;
 var sampleWidth;
 var sampleHeight;
-var clearnessLevel = 2.4;  // too small then not clear, not large then rendering consumes much resource 
+var clearnessLevel = 2.4;  // too small then not clear, not large then rendering consumes much resource
 var colorPicker;
 
 
 function pdfScale(scaleFactor) {
   currentScale *= scaleFactor;
-  
+
   if (taskList.length > 0) {
-      while (taskList.length > 1) 
+      while (taskList.length > 1)
           taskList.pop();
       taskList.push([taskList[0][0], "PENDING", null]);
   }
@@ -31,23 +31,23 @@ function pdfScale(scaleFactor) {
   for(var i = 0; i < finishList.length; i++) {
       var id = "page_canvas_" + finishList[i];
       var pre = document.getElementById(id);
-      pre.width = 0; 
-      pre.height = 0; 
+      pre.width = 0;
+      pre.height = 0;
       taskList.push([finishList[i], "PENDING", null]);
   }
 
   finishList = [];
   if(!rendering)
       renderTaskList(taskList, finishList, currentScale);
-  
+
   var oldScrollHeight = $("#file_viewer")[0].scrollHeight;
-  
+
   sampleWidth *= scaleFactor;
   sampleHeight *= scaleFactor;
   $(".page_div").each(function() {
       var div = $(this);
       div.css("width", sampleWidth + "px");
-      div.css("height", sampleHeight + "px");              
+      div.css("height", sampleHeight + "px");
   });
   resizeAnnotations(scaleFactor);
 
@@ -143,10 +143,13 @@ function startListeningSelectionBoxCreation() {
           zIndex: 800,
           fixed: false,
           content: '<form id="annotation_form">\
-                                    <textarea name="annotation_content" class="form-control" rows="8" style="resize: vertical"></textarea>\
-                                    <!--i use ajax to submit instead of using submit button-->\
-                                    <button id="post_annotation_button" type="button" class="btn" name="document_id" value="{{ document.id }}"\ style="margin: 8px; float: right; border-radius: 0; color: white; background-color: #1BA39C">post annotation</button>\
-                                </form>',
+                        <textarea name="annotation_content" class="form-control" rows="8" style="resize: vertical"></textarea>\
+                        <!--i use ajax to submit instead of using submit button-->\
+                        <button type="button" class="post_annotation_button anonymously_post_annotation_button btn" name="document_id" value="{{ document.id }}" style="margin: 8px; float: right; border-radius: 0; color: white; background-color: #636e72">\
+                          post anonymously &nbsp <i class="fa fa-user-secret"></i>\
+                        </button>\
+                        <button type="button" class="post_annotation_button btn " name="document_id" value="{{ document.id }}" style="margin: 8px; float: right; border-radius: 0; color: white; background-color: #1BA39C">post annotation</button>\
+                    </form>',
           success: function() {
             tinymceInit();
           },
@@ -157,9 +160,10 @@ function startListeningSelectionBoxCreation() {
 
         // annotationWindowJqueryObject will return the jquery object of the annotation window
         var annotationWindowJqueryObject = $(".layui-layer[times=" + annotationWindow + "]");
-        annotationWindowJqueryObject.find("#post_annotation_button").on("click", function() {
+        annotationWindowJqueryObject.find(".post_annotation_button").on("click", function() {
           if (is_authenticated) {
             // console.log(annotationWindowJqueryObject.find("textarea[name='annotation_content']"))
+            var is_public = !this.classList.contains('anonymously_post_annotation_button')
             $.ajax({
               type: "POST",
               url: "",
@@ -174,6 +178,7 @@ function startListeningSelectionBoxCreation() {
                 width_percent: width_percent,
                 frame_color: annotationColor,
                 document_id: $("button[name='document_id']").val(),
+                is_public: is_public
               },
               success: function(data) {
                 // after uploading the annotation, 选择框将不再可以调整大小和拖动
@@ -190,7 +195,7 @@ function startListeningSelectionBoxCreation() {
             })
             // 在ajax上传的过程中，禁用上传annotation的按钮
             // 以防止用户在ajax上传过程中（需要一小段时间）又重复点击了post_annotation_button
-            annotationWindowJqueryObject.find("#post_annotation_button").attr("disabled", true);
+            annotationWindowJqueryObject.find(".post_annotation_button").attr("disabled", true);
           } else
             layer.msg('you need to log in to post annotation');
         });
@@ -198,7 +203,7 @@ function startListeningSelectionBoxCreation() {
         $(".PageImg, .PageCanvas, .Annotation").off("mousemove");
         $("body").off("mouseup");
         // 重新启用上传annotation的按钮
-        annotationWindowJqueryObject.find("#post_annotation_button").attr("disabled", false);
+        annotationWindowJqueryObject.find(".post_annotation_button").attr("disabled", false);
       }
       // if mouse is released outside of PageImg or PageCanvas, it is invalid
       else {
@@ -455,7 +460,7 @@ function prepareAndRenderAll(url, scale) {
     prepareScrollPageIntoView();
 
     // create the same number of canvases as pages
-    // also 
+    // also
     // initialize the canvases' height and width according to the last page
     pdfDoc.getPage(numPages).then(function(sample_page) {
       var appendPages = "";

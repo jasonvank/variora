@@ -70,6 +70,7 @@ class CoterieComment(models.Model):
                                          related_name="reply_set",
                                          null=True, blank=True)
     num_like = models.IntegerField(default=0)
+    is_public = models.BooleanField(default=True)
 
     def __unicode__(self):
         return str(self.id) + ": " + self.content
@@ -80,6 +81,7 @@ class CoterieAnnotation(models.Model):
     annotator = models.ForeignKey(User)
     document_this_annotation_belongs = models.ForeignKey(CoterieDocument)
     content = models.TextField()
+    is_public = models.BooleanField(default=True)
 
     page_index = models.IntegerField()
     height_percent = models.FloatField()
@@ -103,6 +105,7 @@ class CoterieAnnotationReply(models.Model):
                                                   null=True, blank=True)
     content = models.TextField()
     num_like = models.IntegerField(default=0)
+    is_public = models.BooleanField(default=True)
 
     def __unicode__(self):
         return str(self.id) + ": " + self.content
