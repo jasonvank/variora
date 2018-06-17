@@ -252,7 +252,11 @@ class GroupMembersSubtab extends React.Component {
           coterie: response.data,
           administrators: this.getMemberGroup(response.data, 'administrators'),
           members: this.getMemberGroup(response.data, 'members'),
-          applications: this.getMemberGroup(response.data, 'applications')  //TODO: use /coterie/api/applications/?for={coteriepk} to get application list
+        })
+        axios.get(getUrlFormat('/coterie/api/applications', {
+          'for': response.data.pk
+        })).then(response => {
+          this.setState({ applications: response.data })
         })
       })
       .catch(e => { message.warning(e.message) })
