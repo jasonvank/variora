@@ -146,24 +146,29 @@ class GroupApplicationList extends React.Component {
     super(props)
     this.state = {
       coteriePk: this.props.coteriePk,
-      data: this.props.applicantions,
+      data: this.props.applications,
     }
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log(nextProps)
     this.setState({
-      coteriePk: this.props.coteriePk,
-      data: nextProps.applicantions,
+      coteriePk: nextProps.coteriePk,
+      data: nextProps.applications,
     })
     this.forceUpdate()
+    console.log(this.state.coteriePk)
+    console.log(this.state.data)
+
   }
 
   onAcceptClick() {
     var self = this
     var data = new FormData()
     data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-    axios.post(this.props.applicants.accept_url, data).then((response) => {
+    axios.post(this.props.applicantions.accept_url, data).then((response) => {
       // self.props.acceptInvitationCallback(self.props.invitation.coterie_pk)
+
     });
   }
 
@@ -177,7 +182,6 @@ class GroupApplicationList extends React.Component {
   }
 
   render() {
-
     const columns = [{
       title: 'Id',
       dataIndex: 'id',
@@ -189,11 +193,11 @@ class GroupApplicationList extends React.Component {
       render: (text, record) => <Avatar src={ record.portrait_url } size='default' />,
     }, {
       title: 'Name',
-      dataIndex: 'nickname',
+      dataIndex: 'applicant_nickname',
       width: "20%",
     }, {
       title: 'Email Address',
-      dataIndex: 'email_address',
+      dataIndex: 'applicant_email',
       width: "20%",
     }, {
       title: 'Action',
@@ -201,10 +205,9 @@ class GroupApplicationList extends React.Component {
       width: "40%",
       render: (text, record) => (
         <span>
-          <a href="javascript:;" onClick={this.onAcceptClick}>Accept</a>
-          <Divider type="vertical" />
-          <a href="javascript:;" onClick={this.onRejectClick}>Reject</a>
-          <Divider type="vertical" />
+          <a href="#" onClick={this.onAcceptClick}>Accept</a>
+          <span className="ant-divider" />
+          <a href="#" onClick={this.onRejectClick}>Reject</a>
         </span>
       )
     }]
@@ -214,7 +217,7 @@ class GroupApplicationList extends React.Component {
         dataSource={this.state.data}
         columns={columns}
         pagination={false}
-        expandedRowRender={record => <p style={{ margin: 0 }}>{record.application_message}</p>}
+        expandedRowRender={record => <p style={{ margin: 0 }}>{"Message from this applicant: " + record.application_message}</p>}
         title={ () => <span><Icon type="usergroup-add" /> Group Applications</span> }
         size='middle'
       />
