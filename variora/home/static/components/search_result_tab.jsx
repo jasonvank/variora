@@ -2,17 +2,11 @@ import 'antd/dist/antd.css';
 import 'regenerator-runtime/runtime';
 
 import { Avatar, Layout, Menu, Modal, Row, Table } from 'antd';
-import {
-  Link,
-  Route,
-  BrowserRouter as Router
-} from 'react-router-dom'
 import { formatOpenDocumentUrl, getCookie, getUrlFormat } from 'util.js'
 
 import { GroupDocumentsList } from './group_documents_list.jsx'
 import React from 'react';
 import axios from 'axios'
-import enUS from 'antd/lib/locale-provider/en_US';
 
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
@@ -124,14 +118,23 @@ class GroupResult extends React.Component {
     this.state = {
       sortedInfo: null,
       data: this.props.resultCoteries,
+      createApplicationModelVisible: false,
+      targetedGroup: {name: ''},
     }
     this.handleChange = (sorter) => {
       this.setState({
         sortedInfo: sorter,
       });
     }
-    this.onApplyClick = (coteriePk) => {
-      alert(coteriePk)
+    this.onApplyClick = (coterie) => {
+      console.log(coterie)
+      this.setState({
+        createApplicationModelVisible: true,
+        targetedGroup: coterie,
+      })
+    }
+    this.submitApplicationCoterieForm = (coteriePk) => {
+
     }
   }
 
@@ -162,20 +165,31 @@ class GroupResult extends React.Component {
       width: "30%",
       render: (text, record) => (
         <span>
-          <a href="javascript:;" onClick={() => this.onApplyClick(record.pk)}>Apply</a>
+          <a href="javascript:;" onClick={() => this.onApplyClick(record)}>Apply</a>
         </span>
       )
     }];
 
     return (
-      <Table
-        dataSource={this.state.data}
-        columns={columns}
-        pagination={{ pageSize: 10 }}
-        // scroll={{ y: 250 }}
-        rowKey={record => record.pk}
-        onChange={this.handleChange}
-      />
+      <div>
+        <Table
+          dataSource={this.state.data}
+          columns={columns}
+          pagination={{ pageSize: 10 }}
+          // scroll={{ y: 250 }}
+          rowKey={record => record.pk}
+          onChange={this.handleChange}
+        />
+        <Modal
+          title={"Apply to join: " + this.state.targetedGroup.name}
+          wrapClassName="vertical-center-modal"
+          visible={this.state.createApplicationModelVisible}
+          onOk={this.submitApplicationCoterieForm}
+          onCancel={() => {this.setState({ createApplicationModelVisible: false })}}
+        >
+          test
+        </Modal>
+      </div>
     )
   }
 }
@@ -238,6 +252,5 @@ class UserResult extends React.Component {
 }
 
 export { SearchResultTab }
-
 
 
