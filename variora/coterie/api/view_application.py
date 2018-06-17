@@ -30,7 +30,7 @@ def create_application(request):
         application.coterie = Coterie.objects.get(pk=POST['coterie_id'])
         application.application_message = POST['application_message']
 
-        invitation.save()
+        application.save()
         return JsonResponse(application, encoder=CoterieApplicationEncoder, safe=False)
     except ObjectDoesNotExist:
         return HttpResponse(status=404)
@@ -62,16 +62,16 @@ class ApplicationView(View):
         try:
             user = get_user(request)
             application = CoterieApplication.objects.get(pk=pk)
-            coterie = invitation.coterie
-            applicant = invitation.applicant
+            coterie = application.coterie
+            applicant = application.applicant
             if user not in coterie.administrators.all():
                 return HttpResponse(status=403)
 
             if operation == 'accept':
                 coterie.members.add(applicant)
-                invitation.acceptance = True
+                application.acceptance = True
             elif operation == 'reject':
-                invitation.acceptance = False
+                application.acceptance = False
             application.response_datetime = timezone.now()
             application.save()
             return HttpResponse(status=200)

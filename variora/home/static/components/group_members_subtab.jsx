@@ -144,6 +144,8 @@ class GroupMembersList extends React.Component {
 class GroupApplicationList extends React.Component {
   constructor(props) {
     super(props)
+    this.onAcceptClick = this.onAcceptClick.bind(this)
+    this.onRejectClick = this.onRejectClick.bind(this)
     this.state = {
       coteriePk: this.props.coteriePk,
       data: this.props.applications,
@@ -162,22 +164,21 @@ class GroupApplicationList extends React.Component {
 
   }
 
-  onAcceptClick() {
+  onAcceptClick(application) {
     var self = this
     var data = new FormData()
     data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
     axios.post(this.props.applicantions.accept_url, data).then((response) => {
       // self.props.acceptInvitationCallback(self.props.invitation.coterie_pk)
-
     });
   }
 
-  onRejectClick() {
+  onRejectClick(application) {
     var self = this
     var data = new FormData()
     data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-    axios.post(this.props.applications.reject_url, data).then((response) => {
-
+    axios.post(application.reject_url, data).then((response) => {
+      self.props.updateApplicationListCallback(application.applicant_email)
     });
   }
 
@@ -203,11 +204,11 @@ class GroupApplicationList extends React.Component {
       title: 'Action',
       key: 'action',
       width: "40%",
-      render: (text, record) => (
+      render: (text, applicationRecord) => (
         <span>
-          <a href="#" onClick={this.onAcceptClick}>Accept</a>
+          <a href="#" onClick={() => this.onAcceptClick(applicationRecord)}>Accept</a>
           <span className="ant-divider" />
-          <a href="#" onClick={this.onRejectClick}>Reject</a>
+          <a href="#" onClick={() => this.onRejectClick(applicationRecord)}>Reject</a>
         </span>
       )
     }]
@@ -251,7 +252,7 @@ class GroupMembersSubtab extends React.Component {
           coterie: response.data,
           administrators: this.getMemberGroup(response.data, 'administrators'),
           members: this.getMemberGroup(response.data, 'members'),
-          applications: this.getMemberGroup(response.data, 'applications')
+          applications: this.getMemberGroup(response.data, 'applications')  //TODO: use /coterie/api/applications/?for={coteriepk} to get application list
         })
       })
       .catch(e => { message.warning(e.message) })
@@ -265,6 +266,10 @@ class GroupMembersSubtab extends React.Component {
         var updatedMembers = self.state.members.filter( member => member.email_address != memberEmailAddress)
         self.setState({members:updatedMembers})
       })
+    }
+    this.updateApplicationListCallback = (applicantEmail) => {
+      var updatedApplications = this.state.applications.filter(function(application) {return application.applicant_email != applicantEmail} )
+      this.setState({ applications: updatedApplications })
     }
   }
 
@@ -289,7 +294,7 @@ class GroupMembersSubtab extends React.Component {
           <GroupMembersList coteriePk={this.state.coteriePk} members={this.state.members} exitGroupCallback={this.exitGroupCallback} />
         </div>
         <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .20)' }}>
-          <GroupApplicationList coteriePk={this.state.coteriePk} applications={this.state.applications} />
+          <GroupApplicationList coteriePk={this.state.coteriePk} applications={this.state.applications} updateApplicationListCallback={this.updateApplicationListCallback}/>
         </div>
       </div>
     )

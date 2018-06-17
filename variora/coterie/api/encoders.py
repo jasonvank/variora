@@ -94,7 +94,7 @@ class CoterieApplicationEncoder(DjangoJSONEncoder):
                 'accept_method': 'post',
                 'reject_method': 'post',
                 'accept_url': '/coterie/api/applications/' + str(obj.pk) + '/accept',
-                'reject_url': '/coterie/api/application/' + str(obj.pk) + '/reject',
+                'reject_url': '/coterie/api/applications/' + str(obj.pk) + '/reject',
             }
         return super(CoterieApplicationEncoder, self).default(obj)
 
