@@ -72,44 +72,9 @@ class GroupAdministratorsList extends React.Component {
 class GroupMembersList extends React.Component {
   constructor(props) {
     super(props)
-    const menu = (
-      <Menu>
-        <Menu.Item>Remove</Menu.Item>
-      </Menu>
-    );
     this.state = {
       coteriePk: this.props.coteriePk,
       data: this.props.members,
-      columns: [{
-        title: 'Id',
-        dataIndex: 'id',
-        width: "20%",
-      }, {
-        title: '',
-        dataIndex: 'avatar',
-        width: "20%",
-        render: (text, record) => <Avatar src={ record.portrait_url } size='default' />,
-      }, {
-        title: 'Name',
-        dataIndex: 'nickname',
-        width: "20%",
-      }, {
-        title: 'Email Address',
-        dataIndex: 'email_address',
-        width: "20%",
-      }, {
-        title: 'Action',
-        key: 'action',
-        width: "20%",
-        render: (text, record) => (
-          <Dropdown overlay={menu}>
-            <a className="ant-dropdown-link" href="#">
-              Actions <Icon type="down" />
-            </a>
-          </Dropdown>
-        ),
-      }
-      ]
     }
   }
 
@@ -122,10 +87,51 @@ class GroupMembersList extends React.Component {
   }
 
   render() {
+    function DropdownWrapper(props) {
+      var menu = (
+        <Menu onClick={ () => props.exitGroupCallback(props.memberEmailAddress) }>
+          <Menu.Item>Remove</Menu.Item>
+        </Menu>
+      );
+      return (
+        <Dropdown overlay={ menu } trigger={['click']}>
+          <a className="ant-dropdown-link" href="#">
+            Actions <Icon type="down" />
+          </a>
+        </Dropdown>
+      )
+    }
+
+    const columns = [{
+      title: 'Id',
+      dataIndex: 'id',
+      width: "20%",
+    }, {
+      title: '',
+      dataIndex: 'avatar',
+      width: "20%",
+      render: (text, record) => <Avatar src={ record.portrait_url } size='default' />,
+    }, {
+      title: 'Name',
+      dataIndex: 'nickname',
+      width: "20%",
+    }, {
+      title: 'Email Address',
+      dataIndex: 'email_address',
+      width: "20%",
+    }, {
+      title: 'Action',
+      key: 'action',
+      width: "20%",
+      render: (text, record) => (
+        <DropdownWrapper exitGroupCallback={this.props.exitGroupCallback} memberEmailAddress={ record.email_address } />
+      ),
+    }]
+
     return (
       <Table
         dataSource={this.state.data}
-        columns={this.state.columns}
+        columns={columns}
         pagination={false}
         title={ () => <span><Icon type="solution" /> Group Members</span> }
         size='middle'
@@ -139,7 +145,10 @@ class GroupMembersSubtab extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      'coteriePk': this.props.coteriePk
+      coteriePk: this.props.coteriePk,
+      administrators: [],
+      members: [],
+      coterie: undefined
     }
     this.getMemberGroup = (responseData, userType) => {
       var administrators = responseData[userType]
@@ -152,11 +161,22 @@ class GroupMembersSubtab extends React.Component {
       axios.get(getUrlFormat('/coterie/api/coteries/' + this.state.coteriePk, {}))
       .then(response => {
         this.setState({
+          coterie: response.data,
           administrators: this.getMemberGroup(response.data, 'administrators'),
           members: this.getMemberGroup(response.data, 'members'),
         })
       })
       .catch(e => { message.warning(e.message) })
+    }
+    this.exitGroupCallback = (memberEmailAddress) => {
+      var self = this
+      var data = new FormData()
+      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+      data.append('member_email_address', memberEmailAddress)
+      axios.post(this.state.coterie.remove_member_url, data).then(function() {
+        var updatedMembers = self.state.members.filter( member => member.email_address != memberEmailAddress)
+        self.setState({members:updatedMembers})
+      })
     }
   }
 
@@ -178,7 +198,7 @@ class GroupMembersSubtab extends React.Component {
           <GroupAdministratorsList coteriePk={this.state.coteriePk} administrators={this.state.administrators} />
         </div>
         <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .20)' }}>
-          <GroupMembersList coteriePk={this.state.coteriePk} members={this.state.members} />
+          <GroupMembersList coteriePk={this.state.coteriePk} members={this.state.members} exitGroupCallback={this.exitGroupCallback} />
         </div>
       </div>
     )
