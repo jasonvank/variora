@@ -90,7 +90,7 @@ class App extends React.Component {
         })
       }
     }
-    this.deleteCoterieCallback = (coteriePk) => {
+    this.removeCoterieCallback = (coteriePk) => {
       var updatedAdministratedCoteries = this.state.administratedCoteries.filter(function(coterie) {return coterie.pk != coteriePk})
       var updatedJoinedCoteries = this.state.joinedCoteries.filter(function(coterie) {return coterie.pk != coteriePk})
       this.setState({
@@ -107,7 +107,7 @@ class App extends React.Component {
     this.renderGroupTab = (match, location) => {
       var coteriePk = parseInt(match.params.coteriePk)
       var isAdmin = this.state.administratedCoteries.map((coterie) => coterie.pk).includes(coteriePk)
-      return <GroupTab deleteCoterieCallback={this.deleteCoterieCallback} isAdmin={isAdmin} match={match} location={location} />
+      return <GroupTab removeCoterieCallback={this.removeCoterieCallback} isAdmin={isAdmin} match={match} location={location} />
     }
   }
 

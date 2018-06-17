@@ -31,16 +31,16 @@ class GroupSettingsSubtab extends React.Component {
       var data = new FormData()
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
       axios.post('/coterie/api/coteries/' + this.state.coteriePk + '/delete', data).then(function() {
-        self.props.deleteCoterieCallback(self.state.coteriePk)
+        self.props.removeCoterieCallback(self.state.coteriePk)
       })
     }
     this.exitGroup = () => {
-      // var self = this
-      // var data = new FormData()
-      // data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-      // axios.post('/coterie/api/coteries/' + this.state.coteriePk + '/delete', data).then(function() {
-      //   self.props.deleteCoterieCallback(self.state.coteriePk)
-      // })
+      var self = this
+      var data = new FormData()
+      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+      axios.post('/coterie/api/coteries/' + this.state.coteriePk + '/exit', data).then(function() {
+        self.props.removeCoterieCallback(self.state.coteriePk)
+      })
     }
   }
 
@@ -97,7 +97,7 @@ class ResponseNotificationWrapper extends React.Component {
       <div>
         to<br />
         <ul>
-          {emailListItems}
+          { emailListItems }
         </ul>
       </div>
     )
