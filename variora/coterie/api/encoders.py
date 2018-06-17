@@ -24,6 +24,8 @@ class CoterieEncoder(DjangoJSONEncoder):
                 'coteriedocument_set': list(obj.coteriedocument_set.all()),
                 'administrators': list(obj.administrators.all()),
                 'members': list(obj.members.all()),
+                'remove_member_method': 'post',
+                'remove_member_url': '/coterie/api/coteries/' + str(obj.pk) + '/remove-member',
             }
         elif isinstance(obj, CoterieDocument):
             return CoterieDocumentEncoder().default(obj)
