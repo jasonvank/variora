@@ -130,6 +130,9 @@ class GroupResult extends React.Component {
         sortedInfo: sorter,
       });
     }
+    this.onApplyClick = (coteriePk) => {
+      alert(coteriePk)
+    }
   }
 
   async componentWillReceiveProps(nextProps) {
@@ -152,10 +155,16 @@ class GroupResult extends React.Component {
       title: 'Coordinator',
       dataIndex: '',
       width: "30%",
+      render: (text, record) => record.administrators[0].email_address
     }, {
       title: 'Action',
       key: 'action',
       width: "30%",
+      render: (text, record) => (
+        <span>
+          <a href="javascript:;" onClick={() => this.onApplyClick(record.pk)}>Apply</a>
+        </span>
+      )
     }];
 
     return (
