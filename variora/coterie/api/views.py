@@ -40,6 +40,19 @@ def _delete_coterie(coterie, user):
     else:
         return HttpResponse(status=403)  # user has no permission
 
+def _remove_member(request, coterie, user):
+    if member_email_address not in request.POST:
+        return HttpResponse(status=403)
+    try:
+        member = User.objects.get(email_adress=request.POST['member_email_address'])
+    except ObjectDoesNotExist:
+        return HttpResponse(status=403)
+    if user in coterie.administrators.all() and member in coterie.members.all():
+        coterie.members.remove(member)
+        return HttpResponse(status=200)
+    else:
+        return HttpResponse(status=403)
+
 class CoterieView(View):
     def get(self, request, pk, **kwargs):
         try:
@@ -54,6 +67,8 @@ class CoterieView(View):
             user = get_user(request)
             if operation == 'delete':
                 return _delete_coterie(coterie, user)
+            if operation == 'remove-member':
+                return _remove_member(request, coterie, user)
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
 
