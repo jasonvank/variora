@@ -3,7 +3,7 @@ from django.shortcuts import redirect
 
 from . import views
 
-urlpatterns = [
+urlpatterns = [  # obsolete UI pages
     url(r'^obsolete_home$', views.display_obsolete_home_page),
 
     url(r'^sign_up', views.display_sign_up_page),
@@ -16,14 +16,16 @@ urlpatterns = [
 
     url(r'^handle_search', views.handle_search),
 
-] + [
+] + [  # new UI with react and restful APIs
     url(r'^api/', include('home.api.urls')),
 
     url(r'^jason_test', views.jason_test),
 
     url(r'^sign-in$', views.display_sign_in_page),
 
-    # MUST BE THE LAST ONE
-    url(r'^', views.display_index),
-
+    # index using react router
+    url(r'^$', views.display_index),
+    url(r'^collected', views.display_index),
+    url(r'^groups', views.display_index),
+    url(r'^search', views.display_index),
 ]

@@ -37,5 +37,4 @@ urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
 
     # MUST BE THE LAST ONE
     url(r'^', include('home.urls')),
-
 ]
