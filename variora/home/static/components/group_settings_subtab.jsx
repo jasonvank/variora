@@ -1,7 +1,7 @@
 import 'antd/dist/antd.css';
 import 'regenerator-runtime/runtime';
 
-import { Button, Col, Icon, Input, Layout, Menu, Popconfirm, Row, notification } from 'antd';
+import { Button, Col, Collapse, Icon, Input, Layout, Menu, Popconfirm, Row, notification } from 'antd';
 import {
   Link,
   Route,
@@ -51,35 +51,68 @@ class GroupSettingsSubtab extends React.Component {
   }
 
   render() {
+    const Panel = Collapse.Panel;
+
     var invitationSection = (
-      <div style={{ backgroundColor: 'white', margin: '28px 0 28px 0', boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
+      <div style={{ backgroundColor: 'white', margin: '18px 0 28px 0', boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
         <GroupInvitationForm coteriePk={this.state.coteriePk}/>
       </div>
     )
 
     var deleteGroupSection = (
       <Popconfirm
-        title="Are you sure to delete this group? This cannot be undone."
+        title="Are you sure to delete this group? This cannot be undone"
         onConfirm={() => this.deleteGroup()}
         okText="Yes" cancelText="No"
       >
-        <Button>Delete this group</Button>
+        <a style={{ float: 'right', color: '#F2784B' }}>Delete this group</a>
       </Popconfirm>
     )
 
     var exitGroupSection = (
       <Popconfirm
-        title="Are you sure to exit this group?"
+        title="Are you sure to exit this group? This cannot be undone"
         onConfirm={() => this.exitGroup()}
         okText="Yes" cancelText="No"
       >
-        <Button>Exit this group</Button>
+        <a style={{ float: 'right', color: '#F2784B' }}>Exit this group</a>
       </Popconfirm>
     )
 
+    var deleteDangerZone = (
+        <Row>
+          <Col>
+            <div style={{ marginTop: 18 }}>
+              <Collapse accordion>
+                <Panel header="Danger Zone" key="1">
+                  <span>{"Once you delete the group, all admins and members will no longer have access."}</span>
+                  {deleteGroupSection}
+                </Panel>
+              </Collapse>
+            </div>
+          </Col>
+        </Row>
+    )
+
+    var exitDangerZone = (
+      <Row>
+        <Col>
+          <div style={{ marginTop: 18 }}>
+            <Collapse accordion>
+              <Panel header="Danger Zone" key="1">
+                <span>{"Once you exit the group, you will no longer have access"}</span>
+                {exitGroupSection}
+              </Panel>
+            </Collapse>
+          </div>
+        </Col>
+      </Row>
+  )
+
+
     return (
       <div>
-        { this.props.isAdmin ? deleteGroupSection : exitGroupSection }
+        { this.props.isAdmin ? deleteDangerZone : exitDangerZone }
         { this.props.isAdmin ? invitationSection : null }
       </div>
     )
