@@ -95,7 +95,7 @@ class GroupMembersList extends React.Component {
               <Popconfirm
               title="Are you sure to remove this member from the group?"
               onConfirm={ () => {
-                this.props.exitGroupCallback(this.props.memberEmailAddress)
+                this.props.removeMemberCallback(this.props.memberEmailAddress)
                 this.setState({ visible: false });
               }}
               okText="Yes" cancelText="No"
