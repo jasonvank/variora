@@ -10,6 +10,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import View
 
 from home.models import User
+from home.api.encoders import UserEncoder
 
 from ..models import Coterie, CoterieDocument, CoterieInvitation, CoterieApplication
 
@@ -30,13 +31,7 @@ class CoterieEncoder(DjangoJSONEncoder):
         elif isinstance(obj, CoterieDocument):
             return CoterieDocumentEncoder().default(obj)
         elif isinstance(obj, User):
-            return {
-                'nickname': obj.nickname,
-                'email_address': obj.email_address,
-                'portrait_url': obj.portrait_url,
-                'date_joined': obj.date_joined,
-                'is_authenticated': obj.is_authenticated,
-            }
+            return UserEncoder().default(obj)
         elif isinstance(obj, CoterieApplication):
             return CoterieApplicationEncoder().default(obj)
         else:
@@ -90,11 +85,14 @@ class CoterieApplicationEncoder(DjangoJSONEncoder):
                 'coterie_name': obj.coterie.name,
                 'applicant_email': obj.applicant.email_address,
                 'applicant_nickname': obj.applicant.nickname,
+                'applicant': obj.applicant,
                 'accept_method': 'post',
                 'reject_method': 'post',
                 'accept_url': '/coterie/api/applications/' + str(obj.pk) + '/accept',
                 'reject_url': '/coterie/api/applications/' + str(obj.pk) + '/reject',
             }
+        elif isinstance(obj, User):
+            return UserEncoder().default(obj)
         return super(CoterieApplicationEncoder, self).default(obj)
 
 
