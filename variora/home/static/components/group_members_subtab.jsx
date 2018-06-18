@@ -2,11 +2,6 @@ import 'antd/dist/antd.css';
 import 'regenerator-runtime/runtime';
 
 import { Avatar, Button, Col, Dropdown, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, Table, Upload } from 'antd';
-import {
-  Link,
-  Route,
-  BrowserRouter as Router
-} from 'react-router-dom'
 import { getCookie, getUrlFormat } from 'util.js'
 
 import { GroupDocumentsList } from './group_documents_list.jsx'
@@ -153,15 +148,11 @@ class GroupApplicationList extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps)
     this.setState({
       coteriePk: nextProps.coteriePk,
       data: nextProps.applications,
     })
     this.forceUpdate()
-    console.log(this.state.coteriePk)
-    console.log(this.state.data)
-
   }
 
   onAcceptClick(application) {
@@ -238,8 +229,8 @@ class GroupMembersSubtab extends React.Component {
       applications: [],
       coterie: undefined
     }
-    this.getMemberGroup = (responseData, userType) => {
-      var administrators = responseData[userType]
+    this.addIndexKey = (responseData) => {
+      var administrators = responseData
       var key = 1
       for (var document of administrators)
         document.key = document.id = key++
@@ -250,13 +241,13 @@ class GroupMembersSubtab extends React.Component {
       .then(response => {
         this.setState({
           coterie: response.data,
-          administrators: this.getMemberGroup(response.data, 'administrators'),
-          members: this.getMemberGroup(response.data, 'members'),
+          administrators: this.addIndexKey(response.data.administrators),
+          members: this.addIndexKey(response.data.members),
         })
         axios.get(getUrlFormat('/coterie/api/applications', {
           'for': response.data.pk
         })).then(response => {
-          this.setState({ applications: response.data })
+          this.setState({ applications: this.addIndexKey(response.data) })
         })
       })
       .catch(e => { message.warning(e.message) })
