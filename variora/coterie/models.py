@@ -31,6 +31,15 @@ class CoterieInvitation(models.Model):
     response_datetime = models.DateTimeField(null=True, blank=True)
 
 
+class CoterieApplication(models.Model):
+    coterie = models.ForeignKey(Coterie, related_name='application_set')
+    applicant = models.ForeignKey(User)
+    application_message = models.TextField(blank=True)
+    send_datetime = models.DateTimeField(auto_now=False, auto_now_add=True)
+    acceptance = models.NullBooleanField(null=True, blank=True)
+    response_datetime = models.DateTimeField(null=True, blank=True)
+
+
 class CoterieDocument(models.Model):
     title = models.CharField(max_length=1028)
     owner = models.ForeignKey(Coterie)
