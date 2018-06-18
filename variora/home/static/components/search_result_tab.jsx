@@ -1,7 +1,7 @@
 import 'antd/dist/antd.css';
 import 'regenerator-runtime/runtime';
 
-import { Avatar, Input, Layout, Menu, Modal, Table } from 'antd';
+import { Avatar, Input, Layout, Menu, Modal, Table, notification } from 'antd';
 import { formatOpenDocumentUrl, getCookie, getUrlFormat } from 'util.js'
 
 import { GroupDocumentsList } from './group_documents_list.jsx'
@@ -151,6 +151,11 @@ class GroupResult extends React.Component {
           applicationMessage: '',
           createApplicationModelVisible: false,
         })
+        notification['success']({
+          message: 'Application successfully sent',
+          description: 'Your application has been sent to the administrator successfully!',
+          duration: 4
+        });
       })
     }
   }
