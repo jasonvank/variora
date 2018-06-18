@@ -54,6 +54,7 @@ class GroupAdministratorsList extends React.Component {
     return (
       <Table
         dataSource={this.state.data}
+        rowKey={record => record.email_address}
         columns={this.state.columns}
         pagination={false}
         title={ () => <span><Icon type="team" />  Group Admin</span> }
@@ -126,6 +127,7 @@ class GroupMembersList extends React.Component {
     return (
       <Table
         dataSource={this.state.data}
+        rowKey={record => record.email_address}
         columns={columns}
         pagination={false}
         title={ () => <span><Icon type="solution" /> Group Members</span> }
@@ -160,6 +162,8 @@ class GroupApplicationList extends React.Component {
     var data = new FormData()
     data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
     axios.post(application.accept_url, data).then(() => {
+      self.props.removeApplicationCallback(application.applicant_email)
+      self.props.addMemberCallback(application.applicant)
     });
   }
 
@@ -168,7 +172,7 @@ class GroupApplicationList extends React.Component {
     var data = new FormData()
     data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
     axios.post(application.reject_url, data).then((response) => {
-      self.props.updateApplicationListCallback(application.applicant_email)
+      self.props.removeApplicationCallback(application.applicant_email)
     });
   }
 
@@ -181,7 +185,7 @@ class GroupApplicationList extends React.Component {
       title: '',
       dataIndex: 'avatar',
       width: "20%",
-      render: (text, record) => <Avatar src={ record.portrait_url } size='default' />,
+      render: (text, record) => <Avatar src={ record.applicant.portrait_url } size='default' />,
     }, {
       title: 'Name',
       dataIndex: 'applicant_nickname',
@@ -196,15 +200,16 @@ class GroupApplicationList extends React.Component {
       width: "40%",
       render: (text, applicationRecord) => (
         <span>
-          <a href="#" onClick={() => this.onAcceptClick(applicationRecord)}>Accept</a>
+          <a onClick={(e) => {e.preventDefault(); this.onAcceptClick(applicationRecord)}}>Accept</a>
           <span className="ant-divider" />
-          <a href="#" onClick={() => this.onRejectClick(applicationRecord)}>Reject</a>
+          <a onClick={(e) => {e.preventDefault(); this.onRejectClick(applicationRecord)}}>Reject</a>
         </span>
       )
     }]
 
     return (
       <Table
+        rowKey={record => record.pk}
         dataSource={this.state.data}
         columns={columns}
         pagination={false}
@@ -228,25 +233,24 @@ class GroupMembersSubtab extends React.Component {
       applications: [],
       coterie: undefined
     }
-    this.addIndexKey = (responseData) => {
-      var administrators = responseData
-      var key = 1
-      for (var document of administrators)
-        document.key = document.id = key++
-      return administrators
+    this.addIndexForCount = (records) => {
+      var index = 1
+      for (var record of records)
+        document.id = index++
+      return records
     }
     this.updateData = (response) => {
       axios.get(getUrlFormat('/coterie/api/coteries/' + this.state.coteriePk, {}))
       .then(response => {
         this.setState({
           coterie: response.data,
-          administrators: this.addIndexKey(response.data.administrators),
-          members: this.addIndexKey(response.data.members),
+          administrators: this.addIndexForCount(response.data.administrators),
+          members: this.addIndexForCount(response.data.members),
         })
         axios.get(getUrlFormat('/coterie/api/applications', {
           'for': response.data.pk
         })).then(response => {
-          this.setState({ applications: this.addIndexKey(response.data) })
+          this.setState({ applications: this.addIndexForCount(response.data) })
         })
       })
       .catch(e => { message.warning(e.message) })
@@ -261,9 +265,13 @@ class GroupMembersSubtab extends React.Component {
         self.setState({members:updatedMembers})
       })
     }
-    this.updateApplicationListCallback = (applicantEmail) => {
+    this.removeApplicationCallback = (applicantEmail) => {
       var updatedApplications = this.state.applications.filter(function(application) {return application.applicant_email != applicantEmail} )
       this.setState({ applications: updatedApplications })
+    }
+    this.addMemberCallback = (applicant) => {
+      var updatedMembers = this.state.members.concat([applicant])
+      this.setState({ members: updatedMembers })
     }
   }
 
@@ -288,7 +296,7 @@ class GroupMembersSubtab extends React.Component {
           <GroupMembersList coteriePk={this.state.coteriePk} members={this.state.members} removeMemberCallback={this.removeMemberCallback} />
         </div>
         <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .20)' }}>
-          <GroupApplicationList coteriePk={this.state.coteriePk} applications={this.state.applications} updateApplicationListCallback={this.updateApplicationListCallback}/>
+          <GroupApplicationList coteriePk={this.state.coteriePk} applications={this.state.applications} addMemberCallback={this.addMemberCallback} removeApplicationCallback={this.removeApplicationCallback}/>
         </div>
       </div>
     )
@@ -296,10 +304,6 @@ class GroupMembersSubtab extends React.Component {
 }
 
 export { GroupMembersSubtab }
-
-
-
-
 
 
 
