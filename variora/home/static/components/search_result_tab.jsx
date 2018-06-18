@@ -148,12 +148,12 @@ class GroupResult extends React.Component {
       axios.post('/coterie/api/apply', data)
       .then((response) => {
         this.setState({
-          applicationMessage: '',
+          applicationMessage: this.state.applicationMessage,
           createApplicationModelVisible: false,
         })
         notification['success']({
           message: 'Application successfully sent',
-          description: 'Your application has been sent to the administrator successfully!',
+          description: 'Your application has been sent to Group: ' + this.state.targetedCoterie.name + ' successfully!' + ' With message: ' + this.state.applicationMessage,
           duration: 4
         });
       })
