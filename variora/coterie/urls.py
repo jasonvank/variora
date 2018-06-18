@@ -22,7 +22,8 @@ urlpatterns = [
     url(r'^handle_coteriefile_delete', views.handle_coteriefile_delete, name="handle_coteriefile_delete"),
 
     url(r'^display_coteriefile_viewer_page', views.display_coteriefile_viewer_page, name="display_coteriefile_viewer_page"),
-    
+    url(r'^(?P<coterie_id>\d+)/documents/(?P<title>[\w|\-|&]*)/(?P<pk>\d+)', views.display_coteriefile_viewer_page),
+
     url(r'^edit_coteriedoc_title', views.edit_coteriedoc_title),
 
     url(r'^handle_download_coteriedocument', views.serve_coteriefile),

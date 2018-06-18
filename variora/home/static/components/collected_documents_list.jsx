@@ -22,7 +22,7 @@ class CollectedDocumentsList extends React.Component {
       }, {
         title: 'Title',
         dataIndex: 'title',
-        render: (text, record) => <a href={formatOpenDocumentUrl(record.pk)}>{text}</a>,
+        render: (text, record) => <a href={formatOpenDocumentUrl(record)}>{text}</a>,
       }, {
         title: 'Action',
         key: 'action',

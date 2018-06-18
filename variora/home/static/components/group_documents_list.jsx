@@ -23,7 +23,7 @@ class GroupDocumentsList extends React.Component {
       }, {
         title: 'Title',
         dataIndex: 'title',
-        render: (text, record) => <a href={formatOpenCoterieDocumentUrl(record.pk, this.state.coteriePk)}>{text}</a>,
+        render: (text, record) => <a href={formatOpenCoterieDocumentUrl(record, this.state.coteriePk)}>{text}</a>,
       }, {
         title: 'Action',
         key: 'action',

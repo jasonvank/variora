@@ -25,12 +25,14 @@ urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
 
     # app: file_viewer
     url(r'^file_viewer/', include('file_viewer.urls')),
+    url(r'^documents/', include('file_viewer.urls')),
 
     # app: user_dashboard
     url(r'^user_dashboard/', include('user_dashboard.urls')),
 
     # app: coterie
     url(r'^coterie/', include('coterie.urls')),
+    url(r'^coteries/', include('coterie.urls')),
 
     # serve remote servers' pdf file (to fix CORS issue)
     url('proxy/(?P<url>.*)', proxy_views.proxy_view),

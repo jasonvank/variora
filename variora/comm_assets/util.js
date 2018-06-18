@@ -56,23 +56,27 @@ function hexToRgb(hex) {
 }
 
 
-function formatOpenCoterieDocumentUrl(documentId, coterieId) {
-  return getUrlFormat('/coterie/display_coteriefile_viewer_page', {
-    'coterie_id': coterieId,
-    'document_id': documentId,
-    'csrfmiddlewaretoken': getCookie('csrftoken'),
-  })
+function formatOpenCoterieDocumentUrl(document, coterieId) {
+  return '/coteries/' + coterieId + '/documents/' + document.title.replace(/\s/g, '-') + '/' + document.pk
+  // return getUrlFormat('/coterie/display_coteriefile_viewer_page', {
+  //   'coterie_id': coterieId,
+  //   'document_id': documentId,
+  //   'csrfmiddlewaretoken': getCookie('csrftoken'),
+  // })
 }
 
 
-function formatOpenDocumentUrl(documentId) {
-  return getUrlFormat('/file_viewer/', {
-    'document_id': documentId,
-    'csrfmiddlewaretoken': getCookie('csrftokean'),
-  })
+function formatOpenDocumentUrl(document) {
+  return '/documents/' + document.title.replace(/\s/g, '-') + '/' + document.pk
+  // return getUrlFormat('/file_viewer/', {
+  //   'document_id': documentId,
+  //   'csrfmiddlewaretoken': getCookie('csrftokean'),
+  // })
 }
 
 
 export { getCookie, getUrlFormat, imgLoad, hexToRgb, formatOpenCoterieDocumentUrl, formatOpenDocumentUrl }
+
+
 
 

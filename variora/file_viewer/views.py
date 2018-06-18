@@ -145,8 +145,13 @@ class FileViewerView(View):
             }
             return render(request, "file_viewer/annotation_viewer_subpage.html", context)
 
-    def get(self, request):
-        document = Document.objects.get(id=int(request.GET["document_id"]))
+    def get(self, request, **kwargs):
+        if 'pk' in kwargs:
+            document = Document.objects.get(pk=kwargs['pk'])
+            if 'title' not in kwargs or document.title.replace(' ', '-') != kwargs['title']:
+                return HttpResponse(status=404)
+        else:
+            document = Document.objects.get(id=int(request.GET["document_id"]))
 
         user = get_user(request)
         collected = False

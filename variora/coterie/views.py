@@ -95,7 +95,7 @@ def serve_coteriefile(request):
     return response
 
 
-def display_coteriefile_viewer_page(request):
+def display_coteriefile_viewer_page(request, **kwargs):
     if request.method == "POST":
         if request.POST["operation"] == "delete_annotation":
             annotation = models.CoterieAnnotation.objects.get(id=int(request.POST["annotation_id"]))
@@ -215,13 +215,19 @@ def display_coteriefile_viewer_page(request):
             return render(request, "coterie_file_viewer/annotation_viewer_subpage.html", context)
 
     else:
-        coterie = Coterie.objects.get(id=request.GET["coterie_id"])
         user = get_user(request)
 
-        if user not in coterie.administrators.all() and user not in coterie.members.all():
-            return redirect("user_dashboard")
+        if 'pk' in kwargs:
+            coterie = Coterie.objects.get(id=kwargs['coterie_id'])
+            document = models.CoterieDocument.objects.get(pk=kwargs['pk'])
+            if 'title' not in kwargs or document.title.replace(' ', '-') != kwargs['title']:
+                return HttpResponse(status=404)
+        else:
+            coterie = Coterie.objects.get(id=request.GET["coterie_id"])
+            document = models.CoterieDocument.objects.get(id=int(request.GET["document_id"]))
 
-        document = models.CoterieDocument.objects.get(id=int(request.GET["document_id"]))
+        if user not in coterie.administrators.all() and user not in coterie.members.all():
+            return redirect("/")
 
         document.num_visit += 1
         document.save()

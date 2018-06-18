@@ -101,7 +101,7 @@ class DocumentResult extends React.Component {
       title: 'Document Name',
       dataIndex: 'title',
       width: "40%",
-      render: (text, record) => <a href={formatOpenDocumentUrl(record.pk, this.state.coteriePk)}>{text}</a>,
+      render: (text, record) => <a href={formatOpenDocumentUrl(record)}>{text}</a>,
       sorter: (a, b) => a.title.localeCompare(b.title),
     }, {
       title: 'Group Owner',
