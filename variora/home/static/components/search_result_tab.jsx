@@ -1,7 +1,7 @@
 import 'antd/dist/antd.css';
 import 'regenerator-runtime/runtime';
 
-import { Avatar, Input, Layout, Menu, Modal, Table, notification } from 'antd';
+import { Avatar, Input, Layout, Menu, Modal, Table, Tooltip, notification } from 'antd';
 import { formatOpenDocumentUrl, getCookie, getUrlFormat } from 'util.js'
 
 import React from 'react';
@@ -20,6 +20,8 @@ class SearchResultTab extends React.Component {
       resultDocuments: undefined,
       resultCoteries: undefined,
       resultUsers: undefined,
+      administratedCoteries: [],
+      joinedCoteries: [],
       user: undefined,
     }
   }
@@ -28,8 +30,16 @@ class SearchResultTab extends React.Component {
     var fullUrl = window.location.href;
     var searchKey = fullUrl.slice(fullUrl.indexOf('=') + 1);
     axios.get('/api/user').then((response) => {
+      var user = response.data
       if (response.data.is_authenticated)
-        this.setState({ user: response.data })
+        this.setState({ user: user })
+      if (user.is_authenticated)
+        axios.get('/coterie/api/coteries').then((response) => {
+          this.setState({
+            administratedCoteries: response.data.administratedCoteries,
+            joinedCoteries: response.data.joinedCoteries
+          })
+        })
     })
     axios.get(getUrlFormat('/api/search', {
       'key': searchKey
@@ -51,7 +61,7 @@ class SearchResultTab extends React.Component {
           <DocumentResult resultDocuments={this.state.resultDocuments} />
         </div>
         <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
-          <GroupResult resultCoteries={this.state.resultCoteries} user={this.state.user} />
+          <GroupResult administratedCoteries={this.state.administratedCoteries} joinedCoteries={this.state.joinedCoteries} resultCoteries={this.state.resultCoteries} user={this.state.user} />
         </div>
         <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
           <UserResult resultUsers={this.state.resultUsers} />
@@ -184,11 +194,24 @@ class GroupResult extends React.Component {
       title: 'Action',
       key: 'action',
       width: "30%",
-      render: (text, record) => (
-        <span>
+      render: (text, record) => {
+        var applyLink = (
           <a href="javascript:;" onClick={() => this.onApplyClick(record)}>Apply</a>
-        </span>
-      )
+        )
+        var alreadyMemberLink = (
+          <Tooltip placement="right" title={'You are a member of this group'}>
+            <span><a disabled='disabled'>Apply</a></span>
+          </Tooltip>
+        )
+        var alreadyAdminLink = (
+          <Tooltip placement="right" title={'You are a admin of this group'}>
+            <span><a disabled='disabled'>Apply</a></span>
+          </Tooltip>
+        )
+        var isMember = this.props.joinedCoteries.map(c => c.pk).includes(record.pk)
+        var isAdmin = this.props.administratedCoteries.map(c => c.pk).includes(record.pk)
+        return isAdmin ? alreadyAdminLink : isMember ? alreadyMemberLink : applyLink
+      }
     }];
 
     return (
