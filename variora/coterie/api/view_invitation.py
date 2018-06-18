@@ -41,9 +41,14 @@ def create_invitation(request):
 
 class InvitationsView(View):
     def get(self, request, **kwargs):
+        GET = request.GET
+        user = get_user(request)
+        if isinstance(user, AnonymousUser):
+            return JsonResponse([], encoder=CoterieInvitationEncoder, safe=False)
         try:
-            GET = request.GET
-            invitations = CoterieInvitation.objects.filter(acceptance__isnull=True)
+            if 'to' not in GET:
+                GET['to'] = user.email_address
+            invitations = CoterieInvitation.objects.all()
             if 'from' in GET:
                 invitations = invitations.filter(inviter=User.objects.get(email_address=GET['from']))
             if 'to' in GET:

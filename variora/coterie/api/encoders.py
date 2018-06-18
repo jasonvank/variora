@@ -38,6 +38,19 @@ class CoterieEncoder(DjangoJSONEncoder):
             return super(CoterieEncoder, self).default(obj)
 
 
+class SearchResultCoterieEncoder(DjangoJSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Coterie):
+            return {
+                'pk': obj.pk,
+                'name': obj.name,
+                'description': obj.description,
+                'administrators': list(obj.administrators.all()),
+            }
+        elif isinstance(obj, User):
+            return UserEncoder().default(obj)
+
+
 class CoterieDocumentEncoder(DjangoJSONEncoder):
     def default(self, obj):
         if isinstance(obj, CoterieDocument):

@@ -4,7 +4,6 @@ import 'regenerator-runtime/runtime';
 import { Avatar, Input, Layout, Menu, Modal, Table, notification } from 'antd';
 import { formatOpenDocumentUrl, getCookie, getUrlFormat } from 'util.js'
 
-import { GroupDocumentsList } from './group_documents_list.jsx'
 import React from 'react';
 import axios from 'axios'
 
@@ -109,7 +108,6 @@ class DocumentResult extends React.Component {
         dataSource={this.state.data}
         columns={columns}
         pagination={{ pageSize: 10 }}
-        // scroll={{ y: 250 }}
         rowKey={record => record.pk}
         onChange={this.handleChange}
       />
@@ -178,7 +176,7 @@ class GroupResult extends React.Component {
       width: "40%",
       sorter: (a, b) => a.name.localeCompare(b.name),
     }, {
-      title: 'Coordinator',
+      title: "Admin's Email",
       dataIndex: '',
       width: "30%",
       render: (text, record) => record.administrators[0].email_address
@@ -199,7 +197,6 @@ class GroupResult extends React.Component {
           dataSource={this.state.data}
           columns={columns}
           pagination={{ pageSize: 10 }}
-          // scroll={{ y: 250 }}
           rowKey={record => record.pk}
           onChange={this.handleChange}
         />
@@ -268,7 +265,6 @@ class UserResult extends React.Component {
       <Table
         dataSource={this.state.data}
         columns={columns}
-        // scroll={{ y: 250 }}
         pagination={{ pageSize: 10 }}
         rowKey={record => record.email_address}
         onChange={this.handleChange}

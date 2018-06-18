@@ -24,8 +24,7 @@ class CoterieListView(View):
         user = get_user(request)
         administrated_coteries = [] if isinstance(user, AnonymousUser) else list(user.administrated_coterie_set.all())
         joined_coteries = [] if isinstance(user, AnonymousUser) else list(user.joined_coterie_set.all())
-        return JsonResponse(
-            {
+        return JsonResponse({
                 'administratedCoteries': administrated_coteries,
                 'joinedCoteries': joined_coteries,
             },

@@ -8,7 +8,7 @@ from django.views.generic import View
 from google.auth.transport import requests
 from google.oauth2 import id_token
 
-from coterie.api.views import CoterieDocumentEncoder, CoterieEncoder
+from coterie.api.encoders import CoterieDocumentEncoder, CoterieEncoder, SearchResultCoterieEncoder
 from coterie.models import Coterie, CoterieDocument
 from file_viewer.api.views import DocumentEncoder
 from file_viewer.models import Document
@@ -34,9 +34,7 @@ def search_api_view(request):
             elif isinstance(obj, Document):
                 return DocumentEncoder().default(obj)
             elif isinstance(obj, Coterie):
-                return CoterieEncoder().default(obj)
-            elif isinstance(obj, CoterieDocument):
-                return CoterieDocumentEncoder().default(obj)
+                return SearchResultCoterieEncoder().default(obj)
             else:
                 return super(CombinedEncoder, self).default(obj)
 

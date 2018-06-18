@@ -38,8 +38,13 @@ def create_application(request):
 
 class ApplicationsView(View):
     def get(self, request, **kwargs):
+        GET = request.GET
+        user = get_user(request)
+        if isinstance(user, AnonymousUser):
+            return JsonResponse([], encoder=CoterieApplicationEncoder, safe=False)
         try:
-            GET = request.GET
+            if 'from' not in GET:
+                GET['from'] = user.email_address
             applications = CoterieApplication.objects.filter(acceptance__isnull=True)
             if 'from' in GET:
                 applications = applications.filter(applicant=User.objects.get(email_address=GET['from']))
