@@ -85,7 +85,7 @@ class GroupMembersList extends React.Component {
   render() {
     function DropdownWrapper(props) {
       var menu = (
-        <Menu onClick={ () => props.exitGroupCallback(props.memberEmailAddress) }>
+        <Menu onClick={ () => props.removeMemberCallback(props.memberEmailAddress) }>
           <Menu.Item>Remove</Menu.Item>
         </Menu>
       );
@@ -120,7 +120,7 @@ class GroupMembersList extends React.Component {
       key: 'action',
       width: "20%",
       render: (text, record) => (
-        <DropdownWrapper exitGroupCallback={this.props.exitGroupCallback} memberEmailAddress={ record.email_address } />
+        <DropdownWrapper removeMemberCallback={this.props.removeMemberCallback} memberEmailAddress={ record.email_address } />
       ),
     }]
 
@@ -255,7 +255,7 @@ class GroupMembersSubtab extends React.Component {
       })
       .catch(e => { message.warning(e.message) })
     }
-    this.exitGroupCallback = (memberEmailAddress) => {
+    this.removeMemberCallback = (memberEmailAddress) => {
       var self = this
       var data = new FormData()
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
@@ -293,7 +293,7 @@ class GroupMembersSubtab extends React.Component {
           <GroupAdministratorsList coteriePk={this.state.coteriePk} administrators={this.state.administrators} />
         </div>
         <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .20)' }}>
-          <GroupMembersList coteriePk={this.state.coteriePk} members={this.state.members} exitGroupCallback={this.exitGroupCallback} />
+          <GroupMembersList coteriePk={this.state.coteriePk} members={this.state.members} removeMemberCallback={this.removeMemberCallback} />
         </div>
         <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .20)' }}>
           <GroupApplicationList coteriePk={this.state.coteriePk} applications={this.state.applications} addMemberCallback={this.addMemberCallback} removeApplicationCallback={this.removeApplicationCallback}/>
