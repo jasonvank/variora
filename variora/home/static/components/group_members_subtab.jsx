@@ -159,8 +159,7 @@ class GroupApplicationList extends React.Component {
     var self = this
     var data = new FormData()
     data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-    axios.post(this.props.applicantions.accept_url, data).then((response) => {
-      // self.props.acceptInvitationCallback(self.props.invitation.coterie_pk)
+    axios.post(application.accept_url, data).then(() => {
     });
   }
 
