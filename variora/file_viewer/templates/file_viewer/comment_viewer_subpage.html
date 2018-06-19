@@ -1,7 +1,8 @@
 <br>
 {% for comment in comments %}
+<div class="CommentBlock" comment_id="{{ comment.id }}" reply_to_comment_id="{{ comment.reply_to_comment.id }}">
 <hr>
-<blockquote style="padding: 18px" class="CommentBlock" comment_id="{{ comment.id }}" reply_to_comment_id="{{ comment.reply_to_comment.id }}">
+<blockquote style="padding: 18px">
     {% if comment.reply_to_comment.commenter %}
     <h5 style="float: right;">
         <i class="fa fa-share" aria-hidden="true"></i>&nbsp&nbsp&nbspreply to <b>{{ comment.reply_to_comment.commenter.nickname }}:</b>
@@ -36,4 +37,5 @@
         </form>
     </footer>
 </blockquote>
+</div>
 {% endfor %}
