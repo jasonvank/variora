@@ -122,8 +122,6 @@ class GroupDocumentsList extends React.Component {
         var target = data.find(item => item.pk === key);
         if (target) {
           target[dataIndex] = value;
-          console.log(data)
-          console.log(this.state.data)
           this.setState({ data: data });
         }
       };
