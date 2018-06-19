@@ -1,4 +1,4 @@
-# assume in python virtual environment
+source env/bin/activate
 
 python variora/manage.py makemigrations
 python variora/manage.py migrate
