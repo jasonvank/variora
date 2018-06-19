@@ -71,6 +71,14 @@ class App extends React.Component {
         fields: { ...this.state.fields, ...changedFields },
       });
     }
+    this.routerPage = (currentPage) =>{
+      if(currentPage.endsWith('/search')) return []
+      else if (currentPage.includes('/groups/')){
+        var pageElement = currentPage.split('/')
+        return [pageElement[1] + '/' + pageElement[2]]
+      }
+      else return []
+    }
     this.submitCreateCoterieForm = () => {
       var coterieName = this.state.fields.coterieName.value
       if (coterieName == '')
@@ -161,7 +169,7 @@ class App extends React.Component {
                 defaultOpenKeys={['admin_teams', 'member_teams']}
                 onClick={this.onClickCreateGroupMenuItem}
                 style={{ height: '100%', borderRight: 0 }}
-                defaultSelectedKeys={window.location.pathname.endsWith('search') ? [] : ['documents']}
+                defaultSelectedKeys={this.routerPage(window.location.pathname)}
               >
                 <Menu.Item key="explore">
                   <Link to="/"><span><Icon type="compass" />explore</span></Link>
@@ -173,7 +181,7 @@ class App extends React.Component {
                   {
                     this.state.administratedCoteries.map((coterie) => {
                       return (
-                        <Menu.Item key={coterie.pk}>
+                        <Menu.Item key={'groups/' + coterie.pk}>
                           <Link to={ '/groups/' + coterie.pk }><span>{ coterie.name }</span></Link>
                         </Menu.Item>
                       )
@@ -185,7 +193,7 @@ class App extends React.Component {
                   {
                     this.state.joinedCoteries.map((coterie) => {
                       return (
-                        <Menu.Item key={coterie.pk}>
+                        <Menu.Item key={'groups/' + coterie.pk}>
                           <Link to={ '/groups/' + coterie.pk }><span>{ coterie.name }</span></Link>
                         </Menu.Item>
                       )
