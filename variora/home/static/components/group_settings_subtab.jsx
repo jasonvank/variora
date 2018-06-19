@@ -32,6 +32,7 @@ class GroupSettingsSubtab extends React.Component {
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
       axios.post('/coterie/api/coteries/' + this.state.coteriePk + '/delete', data).then(function() {
         self.props.removeCoterieCallback(self.state.coteriePk)
+        window.location.href = '/'
       })
     }
     this.exitGroup = () => {
