@@ -179,7 +179,7 @@ class GroupApplicationList extends React.Component {
     var data = new FormData()
     data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
     axios.post(application.accept_url, data).then(() => {
-      self.props.removeApplicationCallback(application.applicant_email)
+      self.props.removeApplicationCallback(application.pk)
       self.props.addMemberCallback(application.applicant)
     });
   }
@@ -189,7 +189,7 @@ class GroupApplicationList extends React.Component {
     var data = new FormData()
     data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
     axios.post(application.reject_url, data).then((response) => {
-      self.props.removeApplicationCallback(application.applicant_email)
+      self.props.removeApplicationCallback(application.pk)
     });
   }
 
@@ -282,13 +282,16 @@ class GroupMembersSubtab extends React.Component {
         self.setState({members:updatedMembers})
       })
     }
-    this.removeApplicationCallback = (applicantEmail) => {
-      var updatedApplications = this.state.applications.filter(function(application) {return application.applicant_email != applicantEmail} )
+    this.removeApplicationCallback = (applicationPk) => {
+      var updatedApplications = this.state.applications.filter(function(application) {return application.pk != applicationPk} )
       this.setState({ applications: updatedApplications })
     }
     this.addMemberCallback = (applicant) => {
-      var updatedMembers = this.state.members.concat([applicant])
-      this.setState({ members: updatedMembers })
+      var alreadyMember = this.state.members.find(member => member.pk == applicant.pk) != undefined ? true : false
+      if (!alreadyMember) {
+        var updatedMembers = this.state.members.concat([applicant])
+        this.setState({ members: updatedMembers })
+      }
     }
   }
 
