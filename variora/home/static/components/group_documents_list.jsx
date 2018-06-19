@@ -122,6 +122,8 @@ class GroupDocumentsList extends React.Component {
         var target = data.find(item => item.pk === key);
         if (target) {
           target[dataIndex] = value;
+          console.log(data)
+          console.log(this.state.data)
           this.setState({ data: data });
         }
       };
@@ -150,7 +152,7 @@ class GroupDocumentsList extends React.Component {
         <ChangeDocumentName
           coterieDocument={coterieDocument}
           anchor={ <a href={formatOpenCoterieDocumentUrl(coterieDocument, this.state.coteriePk)}>{text}</a> }
-          onChange={this.onCoterieDocumentRename(coterieDocument, 'title')}
+          onChange={this.onCoterieDocumentRename(coterieDocument.pk, 'title')}
           coteriePk={this.state.coteriePk}
         />),
       }, {
