@@ -10,9 +10,9 @@ from models import CoterieApplication
 
 class CoterieModelAdmin(admin.ModelAdmin):
     list_display = ["id", "name", "description"]
-    list_filter = ["id", "name", "administrators", "members", "applicants"]
-    search_fields = ["id", "name", "administrators", "members", "applicants"]
-    filter_horizontal = ["administrators", "members", "applicants"]
+    list_filter = ["id", "name", "administrators", "members"]
+    search_fields = ["id", "name", "administrators", "members"]
+    filter_horizontal = ["administrators", "members"]
 
 
 class CoterieInvitationAdmin(admin.ModelAdmin):
