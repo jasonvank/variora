@@ -81,6 +81,7 @@ function addCommentRelatedListener() {
   });
   $(".post_comment_reply_button").on("click", function() {
     if (is_authenticated) {
+      var is_public = !this.classList.contains('anonymously_post_comment_reply_button')
       var $thisButton = $(this);
       var index = layer.load(0, {
         shade: 0.18
@@ -91,10 +92,10 @@ function addCommentRelatedListener() {
         data: {
           csrfmiddlewaretoken: getCookie('csrftoken'),
           operation: "comment",
-          comment_content: $thisButton.prev("textarea[name='comment_content']").val(),
+          comment_content: $thisButton.parents('form').find("textarea[name='comment_content']").val(),
           document_id: $("button[name='document_id']").val(),
           reply_to_comment_id: $thisButton.val(),
-          is_public: true,
+          is_public: is_public,
         },
         success: function(data) {
           $("#comment_update_div").html(data);
