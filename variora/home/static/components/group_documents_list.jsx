@@ -6,7 +6,6 @@ import { formatOpenCoterieDocumentUrl, getCookie, getUrlFormat } from 'util.js'
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios'
-import enUS from 'antd/lib/locale-provider/en_US';
 
 const { Column } = Table;
 
@@ -17,20 +16,21 @@ class ChangeDocumentName extends React.Component {
     editable: false,
   }
   handleChange = (e) => {
-    const value = e.target.value;
-    this.setState({ value });
+    this.setState({ value: e.target.value })
   }
   check = () => {
-    this.setState({ editable: false });
-    if (this.props.onChange) {
-      this.props.onChange(this.props.anchor.props.children);
-    }
+    this.setState({ editable: false })
+    var data = new FormData()
+    data.append('new_title', this.state.value)
+    data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+    axios.post(this.props.coterieDocument.renameUrl, data).then((response) => {
+      this.props.onChange(this.state.value)
+    })
   }
   edit = () => {
-    this.setState({ editable: true });
+    this.setState({ editable: true })
   }
   render() {
-    console.log(this.props.anchor.props.children)
     var { value, editable } = this.state;
     var editInput = (
       <div className="editable-cell-input-wrapper">
@@ -48,7 +48,6 @@ class ChangeDocumentName extends React.Component {
         />
       </div>
     )
-    this.props.coterieDocument.title = this.state.value;
     var link = (
       <div className="editable-cell-text-wrapper">
         <a href={formatOpenCoterieDocumentUrl(this.props.coterieDocument, this.props.coteriePk)}>{value || ' '}</a>
@@ -119,12 +118,11 @@ class GroupDocumentsList extends React.Component {
     }
     this.onCoterieDocumentRename = (key, dataIndex) => {
       return (value) => {
-        const dataSource = [...this.state.dataSource];
-        const target = dataSource.find(item => item.pk === key);
-        console.log(target)
+        var data = this.state.data;
+        var target = data.find(item => item.pk === key);
         if (target) {
           target[dataIndex] = value;
-          this.setState({ dataSource });
+          this.setState({ data: data });
         }
       };
     }
@@ -185,12 +183,6 @@ class GroupDocumentsList extends React.Component {
 }
 
 export { GroupDocumentsList };
-
-
-
-
-
-
 
 
 

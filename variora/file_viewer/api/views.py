@@ -26,7 +26,7 @@ class DocumentEncoder(DjangoJSONEncoder):
                 'download_url': '/file_viewer/api/documents/' + str(obj.pk) + '/download',
                 'delete_method': 'post',
                 'delete_url': '/file_viewer/api/documents/' + str(obj.pk) + '/delete',
-                'file_on_server': obj.file_on_server
+                'file_on_server': obj.file_on_server,
             }
         return super(DocumentEncoder, self).default(obj)
 

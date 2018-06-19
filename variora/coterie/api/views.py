@@ -100,7 +100,7 @@ def _download_coteriedocument(document):
     response['Content-Disposition'] = 'attachment; filename=%s.pdf' % document.title
     return response
 
-def _rename_document(document, user, new_title):
+def _rename_coteriedocument(document, user, new_title):
     if user in document.owner.administrators.all():
         document.title = new_title
         document.save()
