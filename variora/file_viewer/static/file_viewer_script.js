@@ -315,7 +315,7 @@ function enableResizeButton() {
 
 
 $(document).ready(function() {
-  prepareAndRenderAll($("#file-url").val(), currentScale);
+  prepareAndRenderAll($("#file-url").val());
   tinymceInit();
   animateOnce();
 
@@ -367,7 +367,7 @@ function renderTaskList(taskList, finishList, scale) {
       var page_canvas_id = "page_canvas_" + num;
       var canvas = document.getElementById(page_canvas_id);
       var context = canvas.getContext('2d');
-      var viewport = page.getViewport(clearnessLevel * scale * sampleWidth / page.getViewport(scale).width);
+      var viewport = page.getViewport(clearnessLevel * scale);
       // refer to the following link for the difference of canvas.height and canvas.style.height
       // https://stackoverflow.com/questions/2588181/canvas-is-stretched-when-using-css-but-normal-with-width-height-properties
       canvas.height = viewport.height;
@@ -443,7 +443,7 @@ function startListeningScroll() {
 }
 
 
-function prepareAndRenderAll(url, scale) {
+function prepareAndRenderAll(url) {
   PDFJS.workerSrc = '/static/pdfjs/pdf.worker.js';
 
   var documentLoadingIcon = layer.load(1, {
@@ -462,9 +462,11 @@ function prepareAndRenderAll(url, scale) {
     // also
     // initialize the canvases' height and width according to the last page
     pdfDoc.getPage(numPages).then(function(sample_page) {
+      currentScale = ($('#file_viewer').width() * 0.66) / sample_page.getViewport(1).width
+
       var appendPages = "";
-      sampleHeight = sample_page.getViewport(scale).height;
-      sampleWidth = sample_page.getViewport(scale).width;
+      sampleHeight = sample_page.getViewport(currentScale).height;
+      sampleWidth = sample_page.getViewport(currentScale).width;
 
       for (var i = 1; i <= pdfDoc.numPages; i++) {
         var new_page_div_id = "page_div_" + i;
@@ -490,10 +492,8 @@ function prepareAndRenderAll(url, scale) {
       taskList.push([Math.min(numPages, 3), "PENDING", null]);
       taskList.push([Math.min(numPages, 4), "PENDING", null]);
       taskList.push([Math.min(numPages, 5), "PENDING", null]);
-      renderTaskList(taskList, finishList, scale);
-
+      renderTaskList(taskList, finishList, currentScale);
       startListeningScroll();
     });
   });
 }
-
