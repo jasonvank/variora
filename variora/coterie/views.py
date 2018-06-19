@@ -97,13 +97,24 @@ def serve_coteriefile(request):
 
 def display_coteriefile_viewer_page(request, **kwargs):
     if request.method == "POST":
+        user = get_user(request)
+        if 'pk' in kwargs:
+            coterie = Coterie.objects.get(id=kwargs['coterie_id'])
+            document = models.CoterieDocument.objects.get(pk=kwargs['pk'])
+            if 'title' not in kwargs or document.title.replace(' ', '-') != kwargs['title']:
+                return HttpResponse(status=404)
+        else:
+            coterie = Coterie.objects.get(id=request.GET["coterie_id"])
+            document = models.CoterieDocument.objects.get(id=int(request.GET["document_id"]))
+        if user not in coterie.administrators.all() and user not in coterie.members.all():
+            return redirect("/")
+
         if request.POST["operation"] == "delete_annotation":
             annotation = models.CoterieAnnotation.objects.get(id=int(request.POST["annotation_id"]))
             annotation.delete()
             return HttpResponse()
 
         elif request.POST["operation"] == "delete_annotation_reply":
-            document = models.CoterieDocument.objects.get(id=int(request.POST["document_id"]))
             reply_annotation = models.CoterieAnnotationReply.objects.get(id=int(request.POST["reply_id"]))
             reply_annotation.delete()
             context = {
@@ -113,7 +124,6 @@ def display_coteriefile_viewer_page(request, **kwargs):
             return render(request, "coterie_file_viewer/annotation_viewer_subpage.html", context)
 
         elif request.POST["operation"] == "delete_comment":
-            document = models.CoterieDocument.objects.get(id=int(request.POST["document_id"]))
             comment = models.CoterieComment.objects.get(id=int(request.POST["comment_id"]))
             comment.delete()
             context = {
@@ -141,7 +151,6 @@ def display_coteriefile_viewer_page(request, **kwargs):
             return HttpResponse()
 
         elif request.POST["operation"] == "refresh":
-            document = models.CoterieDocument.objects.get(id=int(request.POST["document_id"]))
             context = {
                 "document": document,
                 "comments": document.coteriecomment_set.order_by("-post_time"),
@@ -149,7 +158,6 @@ def display_coteriefile_viewer_page(request, **kwargs):
             return render(request, "coterie_file_viewer/comment_viewer_subpage.html", context)
 
         elif request.POST["operation"] == "comment":
-            document = models.CoterieDocument.objects.get(id=int(request.POST["document_id"]))
             if request.POST["comment_content"] != "":
                 comment = models.CoterieComment()
                 comment.content = request.POST["comment_content"]
@@ -159,15 +167,14 @@ def display_coteriefile_viewer_page(request, **kwargs):
                     comment.reply_to_comment = models.CoterieComment.objects.get(
                         id=int(request.POST["reply_to_comment_id"]))
                 comment.save()
+
             context = {
                 "document": document,
                 "comments": document.coteriecomment_set.order_by("-post_time"),
             }
-
             return render(request, "coterie_file_viewer/comment_viewer_subpage.html", context)
 
         elif request.POST["operation"] == "annotate":
-            document = models.CoterieDocument.objects.get(id=int(request.POST["document_id"]))
             annotation = models.CoterieAnnotation()
             annotation.content = request.POST["annotation_content"]
             annotation.annotator = get_user(request)
@@ -193,7 +200,6 @@ def display_coteriefile_viewer_page(request, **kwargs):
             })
 
         elif request.POST["operation"] == "reply_annotation":
-            document = models.CoterieDocument.objects.get(id=int(request.POST["document_id"]))
             if request.POST["annotation_reply_content"] != "":
                 annotation_reply = models.CoterieAnnotationReply()
                 annotation = models.CoterieAnnotation.objects.get(id=int(request.POST["reply_to_annotation_id"]))
@@ -211,7 +217,6 @@ def display_coteriefile_viewer_page(request, **kwargs):
                 "document": document,
                 "annotations": document.coterieannotation_set.order_by("page_index"),
             }
-
             return render(request, "coterie_file_viewer/annotation_viewer_subpage.html", context)
 
     else:

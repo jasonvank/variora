@@ -22,14 +22,20 @@ def edit_doc_title(request):
 
 class FileViewerView(View):
     @method_decorator(login_required(login_url='/'))
-    def post(self, request):
+    def post(self, request, **kwargs):
+        if 'pk' in kwargs:
+            document = Document.objects.get(pk=kwargs['pk'])
+            if 'title' not in kwargs or document.title.replace(' ', '-') != kwargs['title']:
+                return HttpResponse(status=404)
+        else:
+            document = Document.objects.get(id=int(request.GET["document_id"]))
+
         if request.POST["operation"] == "delete_annotation":
             annotation = Annotation.objects.get(id=int(request.POST["annotation_id"]))
             annotation.delete()
             return HttpResponse()
 
         elif request.POST["operation"] == "delete_annotation_reply":
-            document = Document.objects.get(id=int(request.POST["document_id"]))
             reply_annotation = AnnotationReply.objects.get(id=int(request.POST["reply_id"]))
             reply_annotation.delete()
             context = {
@@ -39,7 +45,6 @@ class FileViewerView(View):
             return render(request, "file_viewer/annotation_viewer_subpage.html", context)
 
         elif request.POST["operation"] == "delete_comment":
-            document = Document.objects.get(id=int(request.POST["document_id"]))
             comment = Comment.objects.get(id=int(request.POST["comment_id"]))
             comment.delete()
             context = {
@@ -68,20 +73,17 @@ class FileViewerView(View):
 
         elif request.POST["operation"] == "collect":
             user = get_user(request)
-            document = Document.objects.get(id=int(request.POST["document_id"]))
             document.collectors.add(user)
             document.save()
             return HttpResponse()
 
         elif request.POST["operation"] == "uncollect":
             user = get_user(request)
-            document = Document.objects.get(id=int(request.POST["document_id"]))
             document.collectors.remove(user)
             document.save()
             return HttpResponse()
 
         elif request.POST["operation"] == "refresh":
-            document = Document.objects.get(id=int(request.POST["document_id"]))
             context = {
                 "document": document,
                 "comments": document.comment_set.order_by("-post_time"),
@@ -89,7 +91,6 @@ class FileViewerView(View):
             return render(request, "file_viewer/comment_viewer_subpage.html", context)
 
         elif request.POST["operation"] == "comment":
-            document = Document.objects.get(id=int(request.POST["document_id"]))
             if request.POST["comment_content"] != "":
                 comment = Comment()
                 comment.content = request.POST["comment_content"]
@@ -105,7 +106,6 @@ class FileViewerView(View):
             return render(request, "file_viewer/comment_viewer_subpage.html", context)
 
         elif request.POST["operation"] == "annotate":
-            document = Document.objects.get(id=int(request.POST["document_id"]))
             annotation = Annotation()
             annotation.content = request.POST["annotation_content"]
             annotation.annotator = get_user(request)
@@ -129,7 +129,6 @@ class FileViewerView(View):
             })
 
         elif request.POST["operation"] == "reply_annotation":
-            document = Document.objects.get(id=int(request.POST["document_id"]))
             if request.POST["annotation_reply_content"] != "":
                 annotation_reply = AnnotationReply()
                 annotation = Annotation.objects.get(id=int(request.POST["reply_to_annotation_id"]))

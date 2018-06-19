@@ -143,6 +143,7 @@ MEDIA_URL = '/media/'
 
 
 AUTH_USER_MODEL = 'home.User'
+ANONYMOUS_USER_PORTRAIT_URL = '/media/portrait/anonymous_portrait.png'
 
 ############ cron job related ##############
 KRONOS_MANAGE = os.path.join(BASE_DIR, 'manage.py')

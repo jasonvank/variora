@@ -5,8 +5,13 @@
     <!-- annotation -->
     <div class="annotation-content"> {{ annotation.content|safe|linebreaks }} </div>
     <footer>
+        {% if annotation.is_public %}
         <img class="img-rounded" src="{{ annotation.annotator.portrait_url }}" height="38" width="38">
         {{ annotation.annotator.nickname }} | {{ annotation.post_time.date|date:"Y. M. d" }}
+        {% else %}
+        <img class="img-rounded" src="{{ annotation.annotator.portrait_url }}" height="38" width="38">
+        Anonymous user | {{ annotation.post_time.date|date:"Y. M. d" }}
+        {% endif %}
         <div style="float: right;">
             <button class="ReplyAnnotationButton btn" style="border: none; background: none"><i class="fa fa-reply" aria-hidden="true"></i>&nbspreply</button>
             {% if annotation.annotator == request.user %}
