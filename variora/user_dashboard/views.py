@@ -2,13 +2,15 @@ import os
 import re
 from hashlib import md5
 
-import variora.settings as settings
-from coterie.models import Coterie
 from django.contrib.auth import get_user, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
+
+import variora.settings as settings
+from coterie.models import Coterie
 from file_viewer.models import Document, UniqueFile
 from home.models import User
 
@@ -26,6 +28,10 @@ def _handle_dropbox_link(link):
 
 def handle_file_upload(request):
     user = get_user(request)
+    if 'title' not in request.POST or request.POST['title'] == '':
+        return HttpResponse(status=403)
+    if isinstance（user, AnonymousUser):
+        return HttpResponse(status=403)
 
     if "external_url" in request.POST and request.POST["external_url"] != "":
         external_url = request.POST['external_url']
@@ -36,7 +42,6 @@ def handle_file_upload(request):
     else:
         file_upload = request.FILES["file_upload"]  # this is an UploadedFile object
         this_file_md5 = md5(file_upload.read()).hexdigest()
-
         try:
             unique_file = UniqueFile.objects.get(md5=this_file_md5)
         except ObjectDoesNotExist:
@@ -45,7 +50,6 @@ def handle_file_upload(request):
 
         document = Document(owner=user, unique_file=unique_file, title=request.POST["title"])
         document.save()
-
     return redirect("user_dashboard")
 
 
@@ -104,7 +108,7 @@ def display_group_page(request):
     if role == "administrated":
         return render(request, "user_dashboard/administrated_coterie_page.html", context)
     elif role == "joined":
-        return render(request, "user_dashboard/joined_coterie_page.html", context)		
+        return render(request, "user_dashboard/joined_coterie_page.html", context)
 
 
 @login_required(login_url='/')
@@ -139,7 +143,7 @@ def change_portrait(request):
                 os.mkdir(portrait_dir_path)
 
         portrait_png_file_path = os.path.join(portrait_dir_path, "portrait.png")
-        
+
         # create the png file to be user's portrait and write data (portrait_dataurl) into it
         imgstr = re.search(r'base64,(.*)', portrait_dataurl).group(1)
         portrait_png_file = open(portrait_png_file_path, 'wb')
@@ -149,6 +153,6 @@ def change_portrait(request):
         # use the path relative to "media" folder to assign ImageField
         user.portrait = '{0}/{1}/{2}'.format("portrait", user.email_address, "portrait.png")
 
-        user.save()  
+        user.save()
 
         return HttpResponse()  # ajax will make the user go back his/her user dashboard
