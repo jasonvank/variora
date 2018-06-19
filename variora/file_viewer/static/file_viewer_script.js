@@ -317,7 +317,7 @@ function enableResizeButton() {
 $(document).ready(function() {
   prepareAndRenderAll($("#file-url").val());
   tinymceInit();
-  animateOnce();
+  // animateOnce();
 
   enablePostCommentButton();
   enableRefreshCommentButton();
