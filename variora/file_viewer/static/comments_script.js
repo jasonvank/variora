@@ -1,9 +1,14 @@
 import { getCookie } from 'util.js'
 import { tinymceInit } from './tinymce_script'
 
-function removeComment(commentId) {
-  // $(".CommentBlock[comment_id='" + commentId + "']").remove();
-  // $(".CommentBlock[reply_to_comment_id='" + commentId + "']").remove();
+function removeComment(id) {
+  var queue = $(".CommentBlock[comment_id='" + id + "']").toArray()
+  while (queue.length > 0) {
+    var headCommentJquery = $(queue.shift())
+    var commentId = headCommentJquery.attr('comment_id')
+    queue = queue.concat($(".CommentBlock[reply_to_comment_id='" + commentId + "']").toArray())
+    headCommentJquery.remove()
+  }
 }
 
 function addCommentRelatedListener() {

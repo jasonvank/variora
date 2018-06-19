@@ -6,13 +6,14 @@ function removeAnnotation(annotationID) {
   $(".Annotation[annotation_id='" + annotationID + "']").remove();
 }
 
-function removeAnnotationReply(replyId) {
-  // $(".AnnotationReplyBlock[annotation_reply_id='" + replyId + "']").remove();
-  // var queue = [replyId]
-  // while (queue.length != 0) {
-  //   var head = queue.shift()
-  //   $(".AnnotationReplyBlock[reply_to_annotation_reply='" + replyId + "']").remove();
-  // }
+function removeAnnotationReply(id) {
+  var queue = $(".AnnotationReplyBlock[annotation_reply_id='" + id + "']").toArray()
+  while (queue.length > 0) {
+    var headAnnotationReplyJquery = $(queue.shift())
+    var replyId = headAnnotationReplyJquery.attr('annotation_reply_id')
+    queue = queue.concat($(".AnnotationReplyBlock[reply_to_annotation_reply='" + replyId + "']").toArray())
+    headAnnotationReplyJquery.remove()
+  }
 }
 
 function addAnnotationRelatedListener() {
@@ -54,7 +55,7 @@ function addAnnotationRelatedListener() {
         data: {
           csrfmiddlewaretoken: getCookie('csrftoken'),
           operation: "reply_annotation",
-          annotation_reply_content: thisButton.prev("textarea[name='reply_reply_content']").val(),
+          annotation_reply_content: thisButton.parents('form').find("textarea[name='reply_reply_content']").val(),
           reply_to_annotation_id: thisButton.parents(".AnnotationBlock").find(".PostAnnotationReplyButton").val(),
           reply_to_annotation_reply_id: thisButton.val(),
           document_id: $("button[name='document_id']").val(),
@@ -103,7 +104,7 @@ function addAnnotationRelatedListener() {
         data: {
           csrfmiddlewaretoken: getCookie('csrftoken'),
           operation: "reply_annotation",
-          annotation_reply_content: thisButton.prev("textarea[name='annotation_reply_content']").val(),
+          annotation_reply_content: thisButton.parent('form').find("textarea[name='annotation_reply_content']").val(),
           reply_to_annotation_id: thisButton.val(),
           document_id: $("button[name='document_id']").val(),
           is_public: is_public,
@@ -204,4 +205,3 @@ function addAnnotationRelatedListener() {
 }
 
 export { addAnnotationRelatedListener }
-
