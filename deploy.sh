@@ -1,6 +1,6 @@
 source env/bin/activate
 
-pip install -r prod_reqs
+pip install -r prod_reqs.txt
 
 python variora/manage.py makemigrations
 python variora/manage.py migrate
