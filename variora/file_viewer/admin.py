@@ -16,8 +16,8 @@ class UniqueFileModelAdmin(admin.ModelAdmin):
 
 
 class CommentModelAdmin(admin.ModelAdmin):
-    list_display = ["id", "content", "document_this_comment_belongs", "commenter", "num_like", "post_time"]
-    list_filter = ["id", "document_this_comment_belongs", "commenter", "num_like"]
+    list_display = ["id", "content", "document_this_comment_belongs", "commenter", "num_like", "post_time", "is_public"]
+    list_filter = ["id", "document_this_comment_belongs", "commenter", "num_like", "is_public"]
     search_fields = ["id", "content", "document_this_comment_belongs", "commenter__nickname", "num_like"]
 
 

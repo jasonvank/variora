@@ -1,7 +1,7 @@
 <br>
 {% for comment in comments %}
 <hr>
-<blockquote style="padding: 18px">
+<blockquote style="padding: 18px" class="CommentBlock" comment_id="{{ comment.id }}" reply_to_comment_id="{{ comment.reply_to_comment.id }}">
     {% if comment.reply_to_comment.commenter %}
     <h5 style="float: right;">
         <i class="fa fa-share" aria-hidden="true"></i>&nbsp&nbsp&nbspreply to <b>{{ comment.reply_to_comment.commenter.nickname }}:</b>
@@ -9,8 +9,13 @@
     {% endif %}
     <div class="comment-content" style="font-size: 80%; font-family: Helvetica; padding-bottom: 8px"> {{ comment.content|safe|linebreaks }} </div>
     <footer>
+        {% if comment.is_public %}
         <img class="img-rounded" src="{{ comment.commenter.portrait_url }}" height="38" width="38">
         {{ comment.commenter.nickname }} | {{ comment.post_time }}
+        {% else %}
+        <img class="img-rounded" src="{{ ANONYMOUS_USER_PORTRAIT_URL }}" height="38" width="38">
+        Anonymous user | {{ comment.post_time.date|date:"Y. M. d" }}
+        {% endif %}
         <div style="float: right">
             {% if comment.commenter == request.user %}
                 <button class="delete_comment_button btn" style="border: none; background: none" value="{{ comment.id }}"><i class="fa fa-trash-o" aria-hidden="true"></i>&nbspdelete</button>

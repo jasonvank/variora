@@ -117,20 +117,12 @@ def display_coteriefile_viewer_page(request, **kwargs):
         elif request.POST["operation"] == "delete_annotation_reply":
             reply_annotation = models.CoterieAnnotationReply.objects.get(id=int(request.POST["reply_id"]))
             reply_annotation.delete()
-            context = {
-                "document": document,
-                "annotations": document.coterieannotation_set.order_by("page_index"),
-            }
-            return render(request, "coterie_file_viewer/annotation_viewer_subpage.html", context)
+            return HttpResponse()
 
         elif request.POST["operation"] == "delete_comment":
             comment = models.CoterieComment.objects.get(id=int(request.POST["comment_id"]))
             comment.delete()
-            context = {
-                "document": document,
-                "comments": document.coteriecomment_set.order_by("-post_time"),
-            }
-            return render(request, "file_viewer/comment_viewer_subpage.html", context)
+            return HttpResponse()
 
         elif request.POST["operation"] == "like_comment":
             comment = models.CoterieComment.objects.get(id=int(request.POST["comment_id"]))

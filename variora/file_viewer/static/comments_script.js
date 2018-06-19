@@ -1,6 +1,11 @@
 import { getCookie } from 'util.js'
 import { tinymceInit } from './tinymce_script'
 
+function removeComment(commentId) {
+  $(".CommentBlock[comment_id='" + commentId + "']").remove();
+  $(".CommentBlock[reply_to_comment_id='" + commentId + "']").remove();
+}
+
 function addCommentRelatedListener() {
   tinymceInit();
   $('code').addClass('prettyprint');
@@ -36,18 +41,20 @@ function addCommentRelatedListener() {
       var index = layer.load(0, {
         shade: 0.18
       }); //0 represent the style, can be 0-2
+      var commentId = this.value
       $.ajax({
         type: "POST",
         url: "",
         data: {
           csrfmiddlewaretoken: getCookie('csrftoken'),
           operation: "delete_comment",
-          comment_id: this.value,
+          comment_id: commentId,
           document_id: $("button[name='document_id']").val(),
         },
         success: function(data) {
-          $("#comment_update_div").html(data);
-          addCommentRelatedListener();
+          // $("#comment_update_div").html(data);
+          // addCommentRelatedListener();
+          removeComment(commentId)
           layer.close(index);
         }
       });
@@ -82,6 +89,7 @@ function addCommentRelatedListener() {
           comment_content: $thisButton.prev("textarea[name='comment_content']").val(),
           document_id: $("button[name='document_id']").val(),
           reply_to_comment_id: $thisButton.val(),
+          is_public: true,
         },
         success: function(data) {
           $("#comment_update_div").html(data);
@@ -114,6 +122,7 @@ function enableRefreshCommentButton() {
 
 function enablePostCommentButton() {
   $(".post_comment_button").on('click', function() {
+    var is_public = !this.classList.contains('anonymously_post_comment_button')
     if (is_authenticated) {
       var index = layer.load(0, {
         shade: 0.18
@@ -127,6 +136,7 @@ function enablePostCommentButton() {
           operation: "comment",
           comment_content: $("textarea[name='comment_content']").val(),
           document_id: $("button[name='document_id']").val(),
+          is_public: is_public,
         },
         success: function(data) {
           $("#comment_update_div").html(data);

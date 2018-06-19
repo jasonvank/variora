@@ -44,11 +44,7 @@ class FileViewerView(View):
         elif request.POST["operation"] == "delete_comment":
             comment = Comment.objects.get(id=int(request.POST["comment_id"]))
             comment.delete()
-            context = {
-                "document": document,
-                "comments": document.comment_set.order_by("-post_time"),
-            }
-            return render(request, "file_viewer/comment_viewer_subpage.html", context)
+            return HttpResponse()
 
         elif request.POST["operation"] == "like_annotation":
             annotation = Annotation.objects.get(id=int(request.POST["annotation_id"]))
@@ -84,6 +80,7 @@ class FileViewerView(View):
             context = {
                 "document": document,
                 "comments": document.comment_set.order_by("-post_time"),
+                'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,
             }
             return render(request, "file_viewer/comment_viewer_subpage.html", context)
 
@@ -93,12 +90,14 @@ class FileViewerView(View):
                 comment.content = request.POST["comment_content"]
                 comment.commenter = get_user(request)
                 comment.document_this_comment_belongs = document
+                comment.is_public = True if request.POST["is_public"] == 'true' else False
                 if "reply_to_comment_id" in request.POST:
                     comment.reply_to_comment = Comment.objects.get(id=int(request.POST["reply_to_comment_id"]))
                 comment.save()
             context = {
                 "document": document,
                 "comments": document.comment_set.order_by("-post_time"),
+                'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,
             }
             return render(request, "file_viewer/comment_viewer_subpage.html", context)
 
