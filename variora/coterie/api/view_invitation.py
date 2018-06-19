@@ -46,13 +46,15 @@ class InvitationsView(View):
         if isinstance(user, AnonymousUser):
             return JsonResponse([], encoder=CoterieInvitationEncoder, safe=False)
         try:
-            if 'to' not in GET:
-                GET['to'] = user.email_address
             invitations = CoterieInvitation.objects.all()
-            if 'from' in GET:
-                invitations = invitations.filter(inviter=User.objects.get(email_address=GET['from']))
-            if 'to' in GET:
-                invitations = invitations.filter(invitee=User.objects.get(email_address=GET['to']))
+            if 'to' not in GET and 'from' not in GET:
+                invitations = invitations.filter(invitee=user)
+            else:
+                # TODO: add user right validation. not everyone can view whichever invitation list
+                if 'from' in GET:
+                    invitations = invitations.filter(inviter=User.objects.get(email_address=GET['from']))
+                if 'to' in GET:
+                    invitations = invitations.filter(invitee=User.objects.get(email_address=GET['to']))
             return JsonResponse(list(invitations), encoder=CoterieInvitationEncoder, safe=False)
         except ObjectDoesNotExist:
             return HttpResponse(status=404)

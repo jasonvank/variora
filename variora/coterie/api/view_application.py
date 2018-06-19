@@ -8,11 +8,13 @@ from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.generic import View
-from home.models import User
 from validate_email import validate_email
 
-from ..models import Coterie, CoterieDocument, CoterieApplication
-from .encoders import CoterieDocumentEncoder, CoterieEncoder, CoterieApplicationEncoder
+from home.models import User
+
+from ..models import Coterie, CoterieApplication, CoterieDocument
+from .encoders import (CoterieApplicationEncoder, CoterieDocumentEncoder,
+                       CoterieEncoder)
 
 
 # @login_required(login_url='/')
@@ -43,13 +45,15 @@ class ApplicationsView(View):
         if isinstance(user, AnonymousUser):
             return JsonResponse([], encoder=CoterieApplicationEncoder, safe=False)
         try:
-            if 'from' not in GET:
-                GET['from'] = user.email_address
             applications = CoterieApplication.objects.filter(acceptance__isnull=True)
-            if 'from' in GET:
-                applications = applications.filter(applicant=User.objects.get(email_address=GET['from']))
-            if 'for' in GET:
-                applications = applications.filter(coterie=Coterie.objects.get(pk=GET['for']))
+            if 'from' not in GET and 'for' not in GET:
+                applications = applications.filter(applicant=user)
+            else:
+                # TODO: add user right validation. not everyone can view whichever application list
+                if 'from' in GET:
+                    applications = applications.filter(applicant=User.objects.get(email_address=GET['from']))
+                if 'for' in GET:
+                    applications = applications.filter(coterie=Coterie.objects.get(pk=GET['for']))
             return JsonResponse(list(applications), encoder=CoterieApplicationEncoder, safe=False)
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
@@ -82,4 +86,3 @@ class ApplicationView(View):
             return HttpResponse(status=200)
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
-
