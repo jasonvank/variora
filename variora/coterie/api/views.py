@@ -89,7 +89,6 @@ def _delete_coteriedocument(document, user):
     else:
         return HttpResponse(status=403)  # user has no permission
 
-
 def _download_coteriedocument(document):
     if document.file_on_server:
         file_model = document.unique_file
@@ -101,6 +100,13 @@ def _download_coteriedocument(document):
     response['Content-Disposition'] = 'attachment; filename=%s.pdf' % document.title
     return response
 
+def _rename_document(document, user, new_title):
+    if user in document.owner.administrators.all():
+        document.title = new_title
+        document.save()
+        return JsonResponse(document, encoder=CoterieDocumentEncoder, safe=False)
+    else:
+        return HttpResponse(status=403)  # user has no permission
 
 class CoterieDocumentView(View):
     def get(self, request, pk, **kwargs):
@@ -123,6 +129,10 @@ class CoterieDocumentView(View):
             user = get_user(request)
             if operation == 'delete':
                 return _delete_coteriedocument(coteriedocument, user)
+            if operation == 'rename':
+                if 'new_title' not in request.POST:
+                    return HttpResponse(status=403)
+                return _rename_coteriedocument(coteriedocument, user, request.POST['new_title'])
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
 

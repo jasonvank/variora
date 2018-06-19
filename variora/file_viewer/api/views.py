@@ -38,7 +38,6 @@ def _delete_document(document, user):
     else:
         return HttpResponse(status=403)  # user has no permission
 
-
 def _uncollect_document(document, user):
     if isinstance(user, AnonymousUser):
         return HttpResponse(status=403)
@@ -47,7 +46,6 @@ def _uncollect_document(document, user):
     document.collectors.remove(user)
     document.save()
     return HttpResponse(status=200)
-
 
 def _download_document(document):
     if document.file_on_server:
@@ -60,6 +58,13 @@ def _download_document(document):
     response['Content-Disposition'] = 'attachment; filename=%s.pdf' % document.title
     return response
 
+def _rename_document(document, user, new_title):
+    if document.owner == user:
+        document.title = new_title
+        document.save()
+        return JsonResponse(document, encoder=DocumentEncoder, safe=False)
+    else:
+        return HttpResponse(status=403)  # user has no permission
 
 class DocumentView(View):
     def get(self, request, pk, **kwargs):
@@ -83,8 +88,12 @@ class DocumentView(View):
             user = get_user(request)
             if operation == 'delete':
                 return _delete_document(document, user)
-            if operation == 'uncollect':
+            elif operation == 'uncollect':
                 return _uncollect_document(document, user)
+            elif operation == 'rename':
+                if 'new_title' not in request.POST:
+                    return HttpResponse(status=403)
+                return _rename_document(document, user, request.POST['new_title'])
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
 
