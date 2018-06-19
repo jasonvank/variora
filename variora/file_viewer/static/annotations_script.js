@@ -36,8 +36,8 @@ function addAnnotationRelatedListener() {
     var down = Annotation.offset().top - fileViewer.offset().top + fileViewer.scrollTop() - window.innerHeight * 0.38 + Annotation.height() / 2;
     fileViewer.animate({
       scrollTop: parseInt(down)
-    }, 240);
-  });
+    }, 240)
+  })
 
   $(".PostReplyReplyButton").on("click", function() {
     if (is_authenticated) {
@@ -60,9 +60,9 @@ function addAnnotationRelatedListener() {
           tinymceInit();
           layer.close(index);
         }
-      });
+      })
     } else
-      layer.msg('you need to log in to reply');
+      layer.msg('You need to <a href="/sign-in" style="color: #ECECEC; text-decoration: underline">log in</a> first')
   })
 
   $(".DeleteAnnotationReplyButton").on("click", function() {
@@ -107,9 +107,8 @@ function addAnnotationRelatedListener() {
           layer.close(index);
         }
       });
-    }
-    else
-      layer.msg('you need to log in to reply');
+    } else
+      layer.msg('You need to <a href="/sign-in" style="color: #ECECEC; text-decoration: underline">log in</a> first')
   })
 
   $(".DeleteAnnotationButton").on("click", function() {
@@ -153,7 +152,7 @@ function addAnnotationRelatedListener() {
         },
       });
     } else
-      layer.msg('you need to log in to like');
+      layer.msg('You need to <a href="/sign-in" style="color: #ECECEC; text-decoration: underline">log in</a> first')
   });
 
   $(".LikeAnnotationReplyButton").on("click", function() {
@@ -179,7 +178,7 @@ function addAnnotationRelatedListener() {
         },
       });
     } else
-      layer.msg('you need to log in to like');
+      layer.msg('You need to <a href="/sign-in" style="color: #ECECEC; text-decoration: underline">log in</a> first')
   });
 
   $(".ReplyAnnotationButton").on("click", function() {

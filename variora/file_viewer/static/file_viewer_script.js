@@ -196,7 +196,7 @@ function startListeningSelectionBoxCreation() {
             // 以防止用户在ajax上传过程中（需要一小段时间）又重复点击了post_annotation_button
             annotationWindowJqueryObject.find(".post_annotation_button").attr("disabled", true);
           } else
-            layer.msg('you need to log in to post annotation');
+            layer.msg('You need to <a href="/sign-in" style="color: #ECECEC; text-decoration: underline">log in</a> first')
         });
 
         $(".PageImg, .PageCanvas, .Annotation").off("mousemove");

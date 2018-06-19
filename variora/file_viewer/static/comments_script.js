@@ -34,7 +34,7 @@ function addCommentRelatedListener() {
         },
       });
     } else
-      layer.msg('you need to log in to like');
+      layer.msg('<span style="color: #ECECEC">You need to <a href="/sign-in" style="color: #ECECEC; text-decoration: underline">log in</a> first</span>')
   });
   $(".delete_comment_button").on("click", function() {
     if (is_authenticated) {
@@ -98,7 +98,8 @@ function addCommentRelatedListener() {
           layer.close(index);
         }
       });
-    } else layer.msg('you need to log in to reply');
+    } else
+      layer.msg('<span style="color: #ECECEC">You need to <a href="/sign-in" style="color: #ECECEC; text-decoration: underline">log in</a> first</span>')
   });
 }
 
@@ -145,7 +146,8 @@ function enablePostCommentButton() {
           layer.close(index);
         }
       });
-    } else layer.msg('you need to log in to post comment');
+    } else
+      layer.msg('<span style="color: #ECECEC">You need to <a href="/sign-in" style="color: #ECECEC; text-decoration: underline">log in</a> first</span>')
   });
 }
 
