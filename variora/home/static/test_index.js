@@ -100,8 +100,12 @@ class App extends React.Component {
     }
     this.acceptInvitationCallback = (coteriePk) => {
       axios.get('/coterie/api/coteries/' + coteriePk).then((response) => {
-        var updatedJoinedCoteries = this.state.joinedCoteries.concat(response.data)
-        this.setState({ joinedCoteries: updatedJoinedCoteries })
+        var joinedCoteries = this.state.joinedCoteries
+        var hasAlreadyJoined = joinedCoteries.find(group => group.pk == coteriePk) != undefined ? true : false
+        if (!hasAlreadyJoined) {
+          var updatedJoinedCoteries = this.state.joinedCoteries.concat(response.data)
+          this.setState({ joinedCoteries: updatedJoinedCoteries })
+        }
       })
     }
     this.renderGroupTab = (match, location) => {
