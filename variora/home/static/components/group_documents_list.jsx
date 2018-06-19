@@ -165,10 +165,6 @@ class GroupDocumentsList extends React.Component {
           >
             <a>Delete</a>
           </Popconfirm>
-          <span className="ant-divider" />
-          <a href="#" className="ant-dropdown-link">
-            More actions <Icon type="down" />
-          </a>
         </span>
       ),
     }]
