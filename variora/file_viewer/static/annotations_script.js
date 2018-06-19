@@ -7,8 +7,12 @@ function removeAnnotation(annotationID) {
 }
 
 function removeAnnotationReply(replyId) {
-  $(".AnnotationReplyBlock[annotation_reply_id='" + replyId + "']").remove();
-  $(".AnnotationReplyBlock[reply_to_annotation_reply='" + replyId + "']").remove();
+  // $(".AnnotationReplyBlock[annotation_reply_id='" + replyId + "']").remove();
+  // var queue = [replyId]
+  // while (queue.length != 0) {
+  //   var head = queue.shift()
+  //   $(".AnnotationReplyBlock[reply_to_annotation_reply='" + replyId + "']").remove();
+  // }
 }
 
 function addAnnotationRelatedListener() {
@@ -41,6 +45,7 @@ function addAnnotationRelatedListener() {
 
   $(".PostReplyReplyButton").on("click", function() {
     if (is_authenticated) {
+      var is_public = !this.classList.contains('AnonymouslyPostReplyReplyButton')
       var thisButton = $(this);
       var index = layer.load(1, { shade: 0.18 }); //0 represent the style, can be 0-2
       $.ajax({
@@ -53,6 +58,7 @@ function addAnnotationRelatedListener() {
           reply_to_annotation_id: thisButton.parents(".AnnotationBlock").find(".PostAnnotationReplyButton").val(),
           reply_to_annotation_reply_id: thisButton.val(),
           document_id: $("button[name='document_id']").val(),
+          is_public: is_public,
         },
         success: function(data) {
           $("#annotation_update_div").html(data);
@@ -68,7 +74,7 @@ function addAnnotationRelatedListener() {
   $(".DeleteAnnotationReplyButton").on("click", function() {
     var index = layer.load(1, {
       shade: 0.18
-    }); //0 represent the style, can be 0-2
+    });  // 0 represent the style, can be 0-2
     var replyId = this.value
     $.ajax({
       type: "POST",
@@ -88,6 +94,7 @@ function addAnnotationRelatedListener() {
 
   $(".PostAnnotationReplyButton").on("click", function() {
     if (is_authenticated) {
+      var is_public = !this.classList.contains('AnonymouslyPostAnnotationReplyButton')
       var thisButton = $(this);
       var index = layer.load(1, {shade: 0.18}); //0 represent the style, can be 0-2
       $.ajax({
@@ -99,6 +106,7 @@ function addAnnotationRelatedListener() {
           annotation_reply_content: thisButton.prev("textarea[name='annotation_reply_content']").val(),
           reply_to_annotation_id: thisButton.val(),
           document_id: $("button[name='document_id']").val(),
+          is_public: is_public,
         },
         success: function(data) {
           $("#annotation_update_div").html(data);
@@ -112,7 +120,7 @@ function addAnnotationRelatedListener() {
   })
 
   $(".DeleteAnnotationButton").on("click", function() {
-    var index = layer.load(1, { shade: 0.18 }); //0 represent the style, can be 0-2
+    var index = layer.load(1, { shade: 0.18 });  // 0 represent the style, can be 0-2
     var annotationID = this.value;
     $.ajax({
       type: "POST",
@@ -184,15 +192,16 @@ function addAnnotationRelatedListener() {
   $(".ReplyAnnotationButton").on("click", function() {
     $(this).parents("footer").children("form").slideToggle({duration: 180, start: function() {
         if ($(this).is(":hidden")) {
-            // tinyMCE.activeEditor.setContent("")
+          // tinyMCE.activeEditor.setContent("")
         }
         else {
-            $(".ReplyAnnotationButton").parents("footer").children("form").not($(this)).slideUp(180)
-            // for (editor in tinyMCE.editors)
-            //     tinyMCE.editors[editor].setContent("")
+          $(".ReplyAnnotationButton").parents("footer").children("form").not($(this)).slideUp(180)
+          // for (editor in tinyMCE.editors)
+          //   tinyMCE.editors[editor].setContent("")
         }
     }});
   });
 }
 
 export { addAnnotationRelatedListener }
+

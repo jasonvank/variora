@@ -25,7 +25,10 @@
         <form style="display: none">
             <br>
             <textarea name="annotation_reply_content" class="form-control" rows="2" style="resize: vertical"></textarea>
-            <button type="button" class="PostAnnotationReplyButton btn btn-sm" name="annotation_id" value="{{ annotation.id }}"> reply</button>
+            <button class="PostAnnotationReplyButton AnonymouslyPostAnnotationReplyButton btn btn-sm" type="button" name="annotation_id" value="{{ annotation.id }}" style="background-color: #636e72; margin-left: 8px">
+              <i class="fa fa-user-secret"></i> &nbsp reply anonymously
+            </button>
+            <button class="PostAnnotationReplyButton btn btn-sm" type="button" name="annotation_id" value="{{ annotation.id }}">reply</button>
         </form>
     </footer>
     <br>
@@ -59,6 +62,9 @@
             <form style="display: none">
                 <br>
                 <textarea name="reply_reply_content" class="form-control" rows="2" style="resize: vertical"></textarea>
+                <button type="button" class="PostReplyReplyButton AnonymouslyPostReplyReplyButton btn btn-sm" name="reply_to_annotation_reply_id" value="{{ annotation_reply.id }}" style="background-color: #636e72; margin-left: 6px">
+                  <i class="fa fa-user-secret"></i> &nbsp reply anonymously
+                </button>
                 <button type="button" class="PostReplyReplyButton btn btn-sm" name="reply_to_annotation_reply_id" value="{{ annotation_reply.id }}">reply</button>
             </form>
         </footer>

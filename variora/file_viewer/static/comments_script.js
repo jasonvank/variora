@@ -2,8 +2,8 @@ import { getCookie } from 'util.js'
 import { tinymceInit } from './tinymce_script'
 
 function removeComment(commentId) {
-  $(".CommentBlock[comment_id='" + commentId + "']").remove();
-  $(".CommentBlock[reply_to_comment_id='" + commentId + "']").remove();
+  // $(".CommentBlock[comment_id='" + commentId + "']").remove();
+  // $(".CommentBlock[reply_to_comment_id='" + commentId + "']").remove();
 }
 
 function addCommentRelatedListener() {
@@ -123,8 +123,8 @@ function enableRefreshCommentButton() {
 
 function enablePostCommentButton() {
   $(".post_comment_button").on('click', function() {
-    var is_public = !this.classList.contains('anonymously_post_comment_button')
     if (is_authenticated) {
+      var is_public = !this.classList.contains('anonymously_post_comment_button')
       var index = layer.load(0, {
         shade: 0.18
       }); //0代表加载的风格，支持0-2
