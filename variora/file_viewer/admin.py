@@ -28,8 +28,8 @@ class AnnotationModelAdmin(admin.ModelAdmin):
 
 
 class AnnotationReplyModelAdmin(admin.ModelAdmin):
-    list_display = ["id", "content", "reply_to_annotation", "reply_to_annotation_reply", "replier", "num_like", "post_time"]
-    list_filter = ["id", "reply_to_annotation", "reply_to_annotation_reply", "replier", "num_like"]
+    list_display = ["id", "content", "reply_to_annotation", "reply_to_annotation_reply", "replier", "num_like", "post_time", "is_public"]
+    list_filter = ["id", "reply_to_annotation", "reply_to_annotation_reply", "replier", "num_like", "is_public"]
     search_fields = ["id", "content", "reply_to_annotation", "reply_to_annotation_reply__content", "replier__nickname", "num_like"]
 
 
