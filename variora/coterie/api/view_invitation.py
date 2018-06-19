@@ -46,9 +46,9 @@ class InvitationsView(View):
         if isinstance(user, AnonymousUser):
             return JsonResponse([], encoder=CoterieInvitationEncoder, safe=False)
         try:
-            invitations = CoterieInvitation.objects.all()
+            invitations = CoterieInvitation.objects.all(acceptance__isnull=True)
             if 'to' not in GET and 'from' not in GET:
-                invitations = invitations.filter(invitee=user)
+                invitations = invitations.filter(acceptance__isnull=True, invitee=user)
             else:
                 # TODO: add user right validation. not everyone can view whichever invitation list
                 if 'from' in GET:

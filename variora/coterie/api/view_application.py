@@ -47,7 +47,7 @@ class ApplicationsView(View):
         try:
             applications = CoterieApplication.objects.filter(acceptance__isnull=True)
             if 'from' not in GET and 'for' not in GET:
-                applications = applications.filter(applicant=user)
+                applications = applications.filter(acceptance__isnull=True, applicant=user)
             else:
                 # TODO: add user right validation. not everyone can view whichever application list
                 if 'from' in GET:
