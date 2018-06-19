@@ -144,7 +144,6 @@ function startListeningSelectionBoxCreation() {
           fixed: false,
           content: '<form id="annotation_form">\
                         <textarea name="annotation_content" class="form-control" rows="8" style="resize: vertical"></textarea>\
-                        <!--i use ajax to submit instead of using submit button-->\
                         <button type="button" class="post_annotation_button anonymously_post_annotation_button btn" name="document_id" value="{{ document.id }}" style="margin: 8px; float: right; border-radius: 0; color: white; background-color: #636e72">\
                           post anonymously &nbsp <i class="fa fa-user-secret"></i>\
                         </button>\

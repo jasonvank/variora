@@ -5,7 +5,7 @@ function addCommentRelatedListener() {
   tinymceInit();
   $('code').addClass('prettyprint');
   PR.prettyPrint();
-  
+
   $(".likeCommentButton").on("click", function() {
     if (is_authenticated) {
       var $this = $(this);
@@ -113,7 +113,7 @@ function enableRefreshCommentButton() {
 }
 
 function enablePostCommentButton() {
-  $("#post_comment_button").on('click', function() {
+  $(".post_comment_button").on('click', function() {
     if (is_authenticated) {
       var index = layer.load(0, {
         shade: 0.18

@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <title>Variorum: {{ document.title }}</title>
-    
+
         {% include "home/tools_import_subpage.html" %}
 
         <!--JQUERY CDN-->
@@ -30,26 +30,26 @@
 
         <!--layer-->
     	  <script src="https://cdn.bootcss.com/layer/3.0.1/layer.min.js"></script>
-        
+
         <!-- tinyMCE -->
         <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 
         <!-- fontawesome -->
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-        
+
         <!-- animate.css -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
 
         <link rel="stylesheet" href="https://unpkg.com/huebee@1/dist/huebee.min.css">
         <script src="https://unpkg.com/huebee@1/dist/huebee.pkgd.min.js"></script>
 
-        <!-- code highlight: prettify --> 
+        <!-- code highlight: prettify -->
         <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 
         <script src="/static/bundle/file_viewer/file_viewer_script.js"></script>
         <link rel="stylesheet" href="/static/css/file_viewer.css">
     </head>
-    
+
     <body style="overflow:-Scroll; overflow-y:hidden;">
         {% include "file_viewer/nav_bar_subpage.html" %}
 
@@ -71,7 +71,7 @@
                         <div class="modal-content">
                             <div class="modal-header">
 
-                            <!-- not implemented yet 
+                            <!-- not implemented yet
                                     <div class="dropdown">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                     sorted by
@@ -92,8 +92,10 @@
                                 <div style="overflow: auto;">
                                     <form id="comment_form">
                                         <textarea name="comment_content" class="form-control" rows="2" style="resize: vertical"></textarea>
-                                        <!--i use ajax to submit instead of using submit button-->
-                                        <button id="post_comment_button" type="button" class="btn" name="document_id" value="{{ document.id }}" style="margin: 8px; float: right; border-radius: 0; color: white; background-color: #1BA39C"> post comment</button>
+                                        <button class="post_comment_button btn" type="button" name="document_id" value="{{ document.id }}" style="margin: 8px; float: right; border-radius: 0; color: white; background-color: #636e72">
+                                          post anonymously &nbsp <i class="fa fa-user-secret"></i>
+                                        </button>
+                                        <button class="post_comment_button btn" type="button" name="document_id" value="{{ document.id }}" style="margin: 8px; float: right; border-radius: 0; color: white; background-color: #1BA39C"> post comment</button>
                                     </form>
                                     <div id="comment_update_div">
                                     {% include "file_viewer/comment_viewer_subpage.html" %}
