@@ -30,7 +30,7 @@ def handle_file_upload(request):
     user = get_user(request)
     if 'title' not in request.POST or request.POST['title'] == '':
         return HttpResponse(status=403)
-    if isinstance（user, AnonymousUser):
+    if isinstance(user, AnonymousUser):
         return HttpResponse(status=403)
 
     if "external_url" in request.POST and request.POST["external_url"] != "":
