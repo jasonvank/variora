@@ -1,5 +1,6 @@
 import urllib
 
+from django.conf import settings
 from django.contrib.auth import get_user
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
@@ -38,11 +39,7 @@ class FileViewerView(View):
         elif request.POST["operation"] == "delete_annotation_reply":
             reply_annotation = AnnotationReply.objects.get(id=int(request.POST["reply_id"]))
             reply_annotation.delete()
-            context = {
-                "document": document,
-                "annotations": document.annotation_set.order_by("page_index"),
-            }
-            return render(request, "file_viewer/annotation_viewer_subpage.html", context)
+            return HttpResponse()
 
         elif request.POST["operation"] == "delete_comment":
             comment = Comment.objects.get(id=int(request.POST["comment_id"]))
@@ -121,6 +118,7 @@ class FileViewerView(View):
             context = {
                 "document": document,
                 "annotations": document.annotation_set.order_by("page_index"),
+                'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,
                 "new_annotation_id": annotation.id,
             }
             return JsonResponse({
@@ -141,6 +139,7 @@ class FileViewerView(View):
             context = {
                 "document": document,
                 "annotations": document.annotation_set.order_by("page_index"),
+                'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,
             }
             return render(request, "file_viewer/annotation_viewer_subpage.html", context)
 
@@ -165,6 +164,7 @@ class FileViewerView(View):
             "file_url": document.url,
             "comments": document.comment_set.order_by("-post_time"),
             "annotations": document.annotation_set.order_by("page_index"),
+            'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,
             "collected": collected,
             "prev_page_url": request.META['HTTP_REFERER'] if 'HTTP_REFERER' in request.META else '/'
         }

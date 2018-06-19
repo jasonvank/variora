@@ -9,7 +9,7 @@
         <img class="img-rounded" src="{{ annotation.annotator.portrait_url }}" height="38" width="38">
         {{ annotation.annotator.nickname }} | {{ annotation.post_time.date|date:"Y. M. d" }}
         {% else %}
-        <img class="img-rounded" src="{{ annotation.annotator.portrait_url }}" height="38" width="38">
+        <img class="img-rounded" src="{{ ANONYMOUS_USER_PORTRAIT_URL }}" height="38" width="38">
         Anonymous user | {{ annotation.post_time.date|date:"Y. M. d" }}
         {% endif %}
         <div style="float: right;">
