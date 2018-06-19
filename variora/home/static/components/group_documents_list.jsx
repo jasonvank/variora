@@ -150,7 +150,7 @@ class GroupDocumentsList extends React.Component {
         <ChangeDocumentName
           coterieDocument={coterieDocument}
           anchor={ <a href={formatOpenCoterieDocumentUrl(coterieDocument, this.state.coteriePk)}>{text}</a> }
-          onChange={this.onCoterieDocumentRename(coterieDocument, 'title')}
+          onChange={this.onCoterieDocumentRename(coterieDocument.pk, 'title')}
           coteriePk={this.state.coteriePk}
         />),
       }, {
