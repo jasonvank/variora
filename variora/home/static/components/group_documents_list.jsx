@@ -119,19 +119,25 @@ class GroupDocumentsList extends React.Component {
   }
 
   render() {
+    var changeDocumentName = ((text, coterieDocument) => (
+      <ChangeDocumentName
+        coterieDocument={coterieDocument}
+        anchor={ <a href={formatOpenCoterieDocumentUrl(coterieDocument, this.state.coteriePk)}>{text}</a> }
+        onChange={this.onCoterieDocumentRename(coterieDocument.pk, 'title')}
+        coteriePk={this.state.coteriePk}
+      />)
+    )
+
     const columns = [{
       title: 'Id',
       dataIndex: 'id',
-    }, {
-      title: 'Title',
-      dataIndex: 'title',
-      render: (text, coterieDocument) => (
-        <ChangeDocumentName
-          coterieDocument={coterieDocument}
-          anchor={ <a href={formatOpenCoterieDocumentUrl(coterieDocument, this.state.coteriePk)}>{text}</a> }
-          onChange={this.onCoterieDocumentRename(coterieDocument.pk, 'title')}
-          coteriePk={this.state.coteriePk}
-        />),
+      }, {
+        title: 'Title',
+        dataIndex: 'title',
+        render: (text, coterieDocument) => (
+          this.props.isAdmin ? changeDocumentName(text, coterieDocument) :
+                              <a href={formatOpenCoterieDocumentUrl(coterieDocument, this.state.coteriePk)}>{text}</a>
+        ),
       }, {
       title: 'Action',
       key: 'action',
