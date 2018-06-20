@@ -189,7 +189,7 @@ class GroupResult extends React.Component {
       title: "Admin's Email",
       dataIndex: '',
       width: "30%",
-      render: (text, record) => record.administrators[0].email_address
+      render: (text, record) => record.administrators == [] ? '' : record.administrators[0].email_address
     }, {
       title: 'Action',
       key: 'action',
