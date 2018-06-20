@@ -23,6 +23,7 @@ class ChangeDocumentName extends React.Component {
     var data = new FormData()
     data.append('new_title', this.state.value)
     data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+    console.log(this.props)
     axios.post(this.props.coterieDocument.renameUrl, data).then((response) => {
       this.props.onChange(this.state.value)
     })
@@ -72,28 +73,6 @@ class GroupDocumentsList extends React.Component {
     this.state = {
       coteriePk: this.props.coteriePk,
       data: [],
-      columns: [{
-        title: 'Id',
-        dataIndex: 'id',
-      }, {
-        title: 'Title',
-        dataIndex: 'title',
-        render: (text, record) => <a href={formatOpenCoterieDocumentUrl(record, this.state.coteriePk)}>{text}</a>,
-      }, {
-        title: 'Action',
-        key: 'action',
-        render: (text, record) => (
-          <span>
-            <Popconfirm
-              title="Are you sure delete this document? It cannot be undone."
-              onConfirm={() => this.deleteDocument(record)}
-              okText="Yes" cancelText="No"
-            >
-              <a>Delete</a>
-            </Popconfirm>
-          </span>
-        ),
-      }]
     }
     this.deleteDocument = (record) => {
       var data = new FormData()

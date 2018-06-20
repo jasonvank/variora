@@ -2,6 +2,7 @@ import urllib
 
 from django.contrib.auth import get_user
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse, JsonResponse
@@ -9,9 +10,9 @@ from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
 from django.views.generic import View
 
-from ..models import Annotation, AnnotationReply, Comment, Document
 from home.models import User
-from django.contrib.auth.models import AnonymousUser
+
+from ..models import Annotation, AnnotationReply, Comment, Document
 
 
 class DocumentEncoder(DjangoJSONEncoder):
@@ -27,6 +28,7 @@ class DocumentEncoder(DjangoJSONEncoder):
                 'delete_method': 'post',
                 'delete_url': '/file_viewer/api/documents/' + str(obj.pk) + '/delete',
                 'file_on_server': obj.file_on_server,
+                'renameUrl': '/file_viewer/api/documents/' + str(obj.pk) + '/rename'
             }
         return super(DocumentEncoder, self).default(obj)
 
@@ -120,4 +122,3 @@ class DocumentListView(View):
             encoder=DocumentEncoder,
             safe=False
         )
-

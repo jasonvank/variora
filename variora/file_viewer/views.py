@@ -133,7 +133,6 @@ class FileViewerView(View):
                 annotation_reply.replier = get_user(request)
                 annotation_reply.reply_to_annotation = annotation
                 annotation_reply.is_public = True if request.POST["is_public"] == 'true' else False
-
                 if request.POST.has_key("reply_to_annotation_reply_id"):
                     annotation_reply.reply_to_annotation_reply = AnnotationReply.objects.get(id=int(request.POST["reply_to_annotation_reply_id"]))
                 annotation_reply.save()

@@ -1,7 +1,8 @@
 <br>
 {% for comment in comments %}
+<div class="CommentBlock" comment_id="{{ comment.id }}" reply_to_comment_id="{{ comment.reply_to_comment.id }}">
 <hr>
-<blockquote style="padding: 18px" class="CommentBlock" comment_id="{{ comment.id }}" reply_to_comment_id="{{ comment.reply_to_comment.id }}">
+<blockquote style="padding: 18px">
     {% if comment.reply_to_comment.commenter %}
     <h5 style="float: right;">
         <i class="fa fa-share" aria-hidden="true"></i>&nbsp&nbsp&nbspreply to <b>{{ comment.reply_to_comment.commenter.nickname }}:</b>
@@ -29,8 +30,12 @@
         <form class="reply_comment_form" style="display: none">
             <br>
             <textarea name="comment_content" class="form-control" rows="2" style="resize: vertical"></textarea>
+            <button type="button" class="post_comment_reply_button anonymously_post_comment_reply_button btn btn-sm" name="comment_id" value="{{ comment.id }}" style="margin: 8px; float: right; border-radius: 0; color: white; background-color: #636e72">
+              <i class="fa fa-user-secret"></i> &nbsp reply anonymously
+            </button>
             <button type="button" class="post_comment_reply_button btn btn-sm" name="comment_id" value="{{ comment.id }}" style="margin-top: 8px; float: right; border-radius: 0; color: white; background-color: #1BA39C">reply</button>
         </form>
     </footer>
 </blockquote>
+</div>
 {% endfor %}

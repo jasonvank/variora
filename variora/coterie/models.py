@@ -15,7 +15,6 @@ class Coterie(models.Model):
     description = models.TextField(blank=True)
     administrators = models.ManyToManyField(User, related_name="administrated_coterie_set")
     members = models.ManyToManyField(User, related_name="joined_coterie_set", blank=True)
-    applicants = models.ManyToManyField(User, related_name="appied_coterie_set", blank=True)
 
     def __unicode__(self):
         return self.name
@@ -33,7 +32,7 @@ class CoterieInvitation(models.Model):
 
 class CoterieApplication(models.Model):
     coterie = models.ForeignKey(Coterie, related_name='application_set')
-    applicant = models.ForeignKey(User)
+    applicant = models.ForeignKey(User, related_name='sent_application_set')
     application_message = models.TextField(blank=True)
     send_datetime = models.DateTimeField(auto_now=False, auto_now_add=True)
     acceptance = models.NullBooleanField(null=True, blank=True)

@@ -1,12 +1,8 @@
 import 'antd/dist/antd.css';
 import 'regenerator-runtime/runtime';
 
-import { Button, Col, Icon, Input, Layout, Menu, Modal, Row, Upload } from 'antd';
-import {
-  Link,
-  Route,
-  Switch
-} from 'react-router-dom'
+import { Button, Col, Icon, Input, Layout, Menu, Modal, Row, Upload, notification } from 'antd';
+import { Link, Route, BrowserRouter as Router, Switch } from 'react-router-dom'
 import { getCookie, getUrlFormat } from 'util.js'
 
 import { CollectedDocumentsList } from './collected_documents_list.jsx'
@@ -56,14 +52,22 @@ class UploadedDocuments extends React.Component {
     super();
     this.state = {
       uploadedDocumentFileList: [],
-      uploadedDocumentName: undefined,
-      onlineDocumentUrl: undefined,
-      onlineDocumentName: undefined,
+      uploadedDocumentName: '',
+      onlineDocumentUrl: '',
+      onlineDocumentName: '',
     }
     this.uploadedDocumentTable = undefined
     this.uploadLocalDocument = () => {
+      var title = this.state.uploadedDocumentName
+      if (title == undefined || title == '') {
+        notification['warning']({
+          message: 'Document title cannot be empty',
+          duration: 1.8,
+        });
+        return false
+      }
       var data = new FormData()
-      data.append('title', this.state.uploadedDocumentName)
+      data.append('title', title)
       data.append('file_upload', this.state.uploadedDocumentFileList[0])
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
       axios.post('/user_dashboard/handle_file_upload', data, {
@@ -77,9 +81,25 @@ class UploadedDocuments extends React.Component {
       })
     }
     this.uploadOnlineDocument = () => {
+      var title = this.state.onlineDocumentName
+      var externalUrl = this.state.onlineDocumentUrl
+      if (title == undefined || title == '') {
+        notification['warning']({
+          message: 'Document title cannot be empty',
+          duration: 1.8,
+        })
+        return false
+      }
+      if (externalUrl == undefined || externalUrl == '') {
+        notification['warning']({
+          message: 'URL cannot be empty',
+          duration: 1.8,
+        })
+        return false
+      }
       var data = new FormData()
-      data.append('title', this.state.onlineDocumentName)
-      data.append('external_url', this.state.onlineDocumentUrl)
+      data.append('title', title)
+      data.append('external_url', externalUrl)
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
       axios.post('/user_dashboard/handle_file_upload', data)
         .then(() => {

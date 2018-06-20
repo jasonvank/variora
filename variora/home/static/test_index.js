@@ -71,6 +71,16 @@ class App extends React.Component {
         fields: { ...this.state.fields, ...changedFields },
       });
     }
+    this.getHighlightedMenuItems = () => {
+      var pathname = window.location.pathname
+      if(pathname.endsWith('/search'))
+        return []
+      else if (pathname.includes('/groups/')){
+        var pageElement = pathname.split('/')
+        return [pageElement[1] + pageElement[2]]
+      } else
+        return ['documents']
+    }
     this.submitCreateCoterieForm = () => {
       var coterieName = this.state.fields.coterieName.value
       if (coterieName == '')
@@ -161,7 +171,7 @@ class App extends React.Component {
                 defaultOpenKeys={['admin_teams', 'member_teams']}
                 onClick={this.onClickCreateGroupMenuItem}
                 style={{ height: '100%', borderRight: 0 }}
-                defaultSelectedKeys={window.location.pathname.endsWith('search') ? [] : ['documents']}
+                defaultSelectedKeys={this.getHighlightedMenuItems()}
               >
                 <Menu.Item key="explore">
                   <Link to="/"><span><Icon type="compass" />explore</span></Link>
@@ -173,7 +183,7 @@ class App extends React.Component {
                   {
                     this.state.administratedCoteries.map((coterie) => {
                       return (
-                        <Menu.Item key={coterie.pk}>
+                        <Menu.Item key={'groups' + coterie.pk}>
                           <Link to={ '/groups/' + coterie.pk }><span>{ coterie.name }</span></Link>
                         </Menu.Item>
                       )
@@ -185,7 +195,7 @@ class App extends React.Component {
                   {
                     this.state.joinedCoteries.map((coterie) => {
                       return (
-                        <Menu.Item key={coterie.pk}>
+                        <Menu.Item key={'groups' + coterie.pk}>
                           <Link to={ '/groups/' + coterie.pk }><span>{ coterie.name }</span></Link>
                         </Menu.Item>
                       )
