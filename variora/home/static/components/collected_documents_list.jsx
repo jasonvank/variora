@@ -40,7 +40,7 @@ class CollectedDocumentsList extends React.Component {
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
       axios.post(collectDocument.uncollectUrl, data).then((response) => {
         var updateCollectDocuments = this.state.data.filter(document => document.pk!= collectDocument.pk)
-        this.setState({ data: updateCollectDocuments})
+        this.setState({ data: updateCollectDocuments })
       })
     }
   }
@@ -51,13 +51,16 @@ class CollectedDocumentsList extends React.Component {
     const columns=[{
       title: 'Id',
       dataIndex: 'id',
+      width: '20%'
     }, {
       title: 'Title',
       dataIndex: 'title',
+      width: '40%',
       render: (text, record) => <a href={formatOpenDocumentUrl(record)}>{text}</a>,
     }, {
       title: 'Action',
       key: 'action',
+      width: '40%',
       render: (text, collectedDocument) => (
         <a style={{ color: '#F2784B' }} onClick={() => this.onUncollectDocument(text, collectedDocument)}>Uncollect</a>
       ),

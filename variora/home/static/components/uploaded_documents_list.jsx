@@ -23,6 +23,7 @@ class ChangeOpenDocumentName extends React.Component {
     data.append('new_title', this.state.value)
     data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
     axios.post(this.props.openDocument.renameUrl, data).then((response) => {
+
       this.props.onChange(this.state.value)
     })
   }
@@ -105,6 +106,9 @@ class UploadedDocumentsList extends React.Component {
         }
       };
     }
+    this.updateCollectDocumentCallback = () => {
+
+    }
   }
 
   async componentWillReceiveProps(nextProps) {
@@ -121,9 +125,11 @@ class UploadedDocumentsList extends React.Component {
     const columns = [{
       title: 'Id',
       dataIndex: 'id',
+      width: '20%'
     }, {
       title: 'Title',
       dataIndex: 'title',
+      width: '40%',
       render: (text, openDocument) => (
         <ChangeOpenDocumentName
           openDocument={openDocument}
@@ -134,6 +140,7 @@ class UploadedDocumentsList extends React.Component {
       }, {
       title: 'Action',
       key: 'action',
+      width: '40%',
       render: (text, record) => (
         <span>
           <Popconfirm
