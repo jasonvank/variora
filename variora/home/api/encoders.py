@@ -13,6 +13,7 @@ class UserEncoder(DjangoJSONEncoder):
             }
         if isinstance(obj, User):
             return {
+                'pk': obj.pk,
                 'email_address': obj.email_address,
                 'nickname': obj.nickname,
                 'portrait_url': obj.portrait_url,

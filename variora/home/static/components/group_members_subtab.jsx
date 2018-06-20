@@ -287,7 +287,7 @@ class GroupMembersSubtab extends React.Component {
       this.setState({ applications: updatedApplications })
     }
     this.addMemberCallback = (applicant) => {
-      var alreadyMember = this.state.members.find(member => member.pk == applicant.pk) != undefined ? true : false
+      var alreadyMember = this.state.members.find(member => member.email_address == applicant.email_address) != undefined ? true : false
       if (!alreadyMember) {
         var updatedMembers = this.state.members.concat([applicant])
         this.setState({ members: updatedMembers })

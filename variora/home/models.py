@@ -53,7 +53,7 @@ def upload_to(instance, filename):
 class User(AbstractBaseUser, PermissionsMixin):
     nickname = models.CharField(max_length=254)
 
-    email_address = models.EmailField(max_length=254, unique=True)
+    email_address = models.EmailField(max_length=254, primary_key=True, blank=False, null=False, unique=True)
 
     # field "password" inherited from AbstractBaseUser
 
