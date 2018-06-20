@@ -117,7 +117,7 @@ class GroupDocumentsSubtab extends React.Component {
       <div>
         <h1>{ this.props.coteriePk }</h1>
         <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
-          <GroupDocumentsList ref={(ele) => this.uploadedDocumentTable = ele} coteriePk={this.props.coteriePk} />
+          <GroupDocumentsList ref={(ele) => this.uploadedDocumentTable = ele} coteriePk={this.props.coteriePk} isAdmin={this.props.isAdmin}/>
         </div>
         { this.props.isAdmin ? uploadDocumentSection : null }
       </div>
