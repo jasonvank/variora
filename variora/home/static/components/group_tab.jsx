@@ -1,23 +1,15 @@
 import 'antd/dist/antd.css';
 import 'regenerator-runtime/runtime';
 
-import { Avatar, Button, Col, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, Upload } from 'antd';
-import {
-  Link,
-  Redirect,
-  Route,
-  BrowserRouter as Router,
-  Switch,
-} from 'react-router-dom'
+import { Icon, Input, Layout, Menu } from 'antd';
+import { Link, Route, Switch } from 'react-router-dom'
 import { getCookie, getUrlFormat } from 'util.js'
 
 import { GroupDocumentsSubtab } from './group_documents_subtab.jsx'
 import { GroupMembersSubtab } from './group_members_subtab.jsx'
 import { GroupSettingsSubtab } from './group_settings_subtab.jsx'
 import React from 'react';
-import ReactDOM from 'react-dom';
 import axios from 'axios'
-import enUS from 'antd/lib/locale-provider/en_US';
 
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
@@ -76,7 +68,6 @@ class GroupTab extends React.Component {
 }
 
 export { GroupTab };
-
 
 
 

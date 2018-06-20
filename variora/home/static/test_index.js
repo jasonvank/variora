@@ -206,10 +206,10 @@ class App extends React.Component {
 
             <Layout style={{ marginLeft: 200, padding: 0 }}>
               <Switch>
-                <Route exact path="/" component={DocumentTab} />
                 <Route exact path="/explore" component={GroupTab} />
                 <Route path="/search" component={SearchResultTab} />
                 <Route path="/groups/:coteriePk" render={ ({match, location}) => this.renderGroupTab(match, location) } />
+                <Route path="/" component={DocumentTab} />
               </Switch>
             </Layout>
           </Layout>

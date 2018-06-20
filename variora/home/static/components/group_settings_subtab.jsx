@@ -66,7 +66,7 @@ class GroupSettingsSubtab extends React.Component {
         onConfirm={() => this.deleteGroup()}
         okText="Yes" cancelText="No"
       >
-        <a style={{ float: 'right', color: '#F2784B' }}>Delete this group</a>
+        <a style={{ float: 'right', color: '#F2784B', marginRight: '6%' }}>Delete this group</a>
       </Popconfirm>
     )
 
@@ -76,7 +76,7 @@ class GroupSettingsSubtab extends React.Component {
         onConfirm={() => this.exitGroup()}
         okText="Yes" cancelText="No"
       >
-        <a style={{ float: 'right', color: '#F2784B' }}>Exit this group</a>
+        <a style={{ float: 'right', color: '#F2784B', marginRight: '6%' }}>Exit this group</a>
       </Popconfirm>
     )
 
