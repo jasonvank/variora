@@ -28,7 +28,8 @@ class DocumentEncoder(DjangoJSONEncoder):
                 'delete_method': 'post',
                 'delete_url': '/file_viewer/api/documents/' + str(obj.pk) + '/delete',
                 'file_on_server': obj.file_on_server,
-                'renameUrl': '/file_viewer/api/documents/' + str(obj.pk) + '/rename'
+                'renameUrl': '/file_viewer/api/documents/' + str(obj.pk) + '/rename',
+                'uncollectUrl': '/file_viewer/api/documents/' + str(obj.pk) + '/uncollect'
             }
         return super(DocumentEncoder, self).default(obj)
 
@@ -43,7 +44,7 @@ def _delete_document(document, user):
 def _uncollect_document(document, user):
     if isinstance(user, AnonymousUser):
         return HttpResponse(status=403)
-    elif user not in document.collectors:
+    elif user not in document.collectors.all():
         return HttpResponse(status=403)
     document.collectors.remove(user)
     document.save()
