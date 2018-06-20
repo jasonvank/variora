@@ -109,8 +109,7 @@ class GroupSettingsSubtab extends React.Component {
           </div>
         </Col>
       </Row>
-  )
-
+    )
 
     return (
       <div>
@@ -121,13 +120,12 @@ class GroupSettingsSubtab extends React.Component {
   }
 }
 
-class ResponseNotificationWrapper extends React.Component {
+class SuccessfulInvitationsNotificationWrapper extends React.Component {
   render() {
-    var data = this.props.response.data
-    var emailListItems = data.map(function(invitation) {
-      return <li key = {invitation.pk} ><p>{invitation.invitee_nickname + '  '}<code>{'<' + invitation.invitee_email + '>'}</code></p></li>
+    var successful_applications = this.props.successful_applications
+    var emailListItems = successful_applications.map(function(invitation) {
+      return <li key={invitation.pk} ><p>{invitation.invitee_nickname + '  '}<code>{'<' + invitation.invitee_email + '>'}</code></p></li>
     })
-
     return (
       <div>
         to<br />
@@ -139,6 +137,19 @@ class ResponseNotificationWrapper extends React.Component {
   }
 }
 
+class UnregisteredEmailsNotificationWrapper extends React.Component {
+  render() {
+    var unregistered_emails = this.props.unregistered_emails
+    var listItems = unregistered_emails.map(function(email) {
+      return <li key={email} ><code>{'<' + email + '>'}</code></li>
+    })
+    return (
+      <ul>
+        { listItems }
+      </ul>
+    )
+  }
+}
 
 class GroupInvitationForm extends React.Component {
   constructor() {
@@ -161,15 +172,29 @@ class GroupInvitationForm extends React.Component {
 
       var data = new FormData()
       data.append('coterie_id', this.props.coteriePk)
-      data.append('invitee_emails', emailList)
+      data.append('invitee_emails', this.state.emailList)
       data.append('invitation_message', this.state.invitationMessage)
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
       axios.post('/coterie/api/invite', data).then((response) => {
-        notification['success']({
-          message: 'Invitations successfully sent',
-          description: <ResponseNotificationWrapper response={response}/>,
-          duration: 0
-        });
+        var successful_applications = response.data['successful_invitations']
+        var unregistered_emails = response.data['unregistered_emails']
+        if (successful_applications.length > 0)
+          notification['success']({
+            message: 'Invitations successfully sent',
+            description: <SuccessfulInvitationsNotificationWrapper successful_applications={successful_applications}/>,
+            duration: 0
+          })
+        if (unregistered_emails.length > 0)
+          notification['warning']({
+            message: 'Following emails are not registered yet',
+            description: <UnregisteredEmailsNotificationWrapper unregistered_emails={unregistered_emails}/>,
+            duration: 0,
+            style: {
+              width: 380,
+              marginLeft: 335 - 380,
+            },
+          })
+
       })
     }
 
@@ -236,7 +261,4 @@ class GroupInvitationForm extends React.Component {
 
 
 export { GroupSettingsSubtab }
-
-
-
 

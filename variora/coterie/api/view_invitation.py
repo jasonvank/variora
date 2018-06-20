@@ -21,20 +21,28 @@ def create_invitation(request):
     if 'coterie_id' not in POST or 'invitee_emails' not in POST or 'invitation_message' not in POST:
         return HttpResponse(status=403)
     try:
-        invitations = []
+        successful_invitations = []
+        unregistered_emails = []
         for invitee_email in POST['invitee_emails'].split(','):
             invitee_email = invitee_email.strip()
             if validate_email(invitee_email):
-                invitation = CoterieInvitation()
-                invitation.inviter = get_user(request)
-                invitation.coterie = Coterie.objects.get(pk=POST['coterie_id'])
-                invitation.invitee = User.objects.get(email_address=invitee_email)
-                invitation.invitation_message = POST['invitation_message']
-                if invitation.inviter not in invitation.coterie.administrators.all():
-                    return HttpResponse(status=403)
-                invitation.save()
-                invitations.append(invitation)
-        return JsonResponse(invitations, encoder=CoterieInvitationEncoder, safe=False)
+                try:
+                    invitee = User.objects.get(email_address=invitee_email)
+                    invitation = CoterieInvitation()
+                    invitation.inviter = get_user(request)
+                    invitation.coterie = Coterie.objects.get(pk=POST['coterie_id'])
+                    invitation.invitee = invitee
+                    invitation.invitation_message = POST['invitation_message']
+                    if invitation.inviter not in invitation.coterie.administrators.all():
+                        return HttpResponse(status=403)
+                    invitation.save()
+                    successful_invitations.append(invitation)
+                except ObjectDoesNotExist:
+                    unregistered_emails.append(invitee_email)
+        return JsonResponse({
+            'successful_invitations': successful_invitations,
+            'unregistered_emails': unregistered_emails,
+        }, encoder=CoterieInvitationEncoder, safe=False)
     except ObjectDoesNotExist:
             return HttpResponse(status=404)
 
