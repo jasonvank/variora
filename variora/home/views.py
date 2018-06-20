@@ -70,7 +70,7 @@ def handle_nus_log_in(request):
         user = User.objects.get(email_address=email)
         user.backend = 'django.contrib.auth.backends.ModelBackend'
         login(request, user)
-        return redirect("user_dashboard")
+        return redirect("/")
     return HttpResponse("<h1>NUSNET ID incorrect</h1>")
 
 
