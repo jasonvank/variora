@@ -15,7 +15,7 @@ var taskList = [];
 var rendering = false;
 var sampleWidth;
 var sampleHeight;
-var clearnessLevel = 2.4;  // too small then not clear, not large then rendering consumes much resource
+var clearnessLevel = 1.8;  // too small then not clear, not large then rendering consumes much resource
 var colorPicker;
 
 
