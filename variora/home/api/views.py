@@ -96,6 +96,9 @@ def google_sign_in(request):
             new_user.external_portrait_url = userinfo['picture']
             new_user.save()
         user = User.objects.get(email_address=userinfo['email'])
+        user.set_nickname(userinfo['name'])
+        user.external_portrait_url = userinfo['picture']
+        user.save()
         user.backend = 'django.contrib.auth.backends.ModelBackend'
         login(request, user)
         return HttpResponse(status=200)
