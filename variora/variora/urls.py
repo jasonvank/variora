@@ -35,7 +35,7 @@ urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
     url(r'^coteries/', include('coterie.urls')),
 
     # serve remote servers' pdf file (to fix CORS issue)
-    url('proxy/(?P<url>.*)', proxy_views.proxy_view),
+    url(r'^proxy$', proxy_views.proxy_view),
 
     # MUST BE THE LAST ONE
     url(r'^', include('home.urls')),

@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.http import QueryDict
 
 
-def proxy_view(request, url, requests_args=None):
+def proxy_view(request, requests_args=None):
     """
     Forward as close to an exact copy of the request as possible along to the
     given url.  Respond with as close to an exact copy of the resulting
@@ -12,6 +12,10 @@ def proxy_view(request, url, requests_args=None):
     If there are any additional arguments you wish to send to requests, put
     them in the requests_args dictionary.
     """
+    if 'origurl' not in request.GET:
+        return HttpResponse(status=403)
+
+    url = request.GET['origurl']
     requests_args = (requests_args or {}).copy()
     headers = get_headers(request.META)
     params = request.GET.copy()

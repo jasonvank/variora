@@ -49,7 +49,7 @@ class CoterieDocument(models.Model):
     @property
     def url(self):
         if self.external_url != "":
-            return "/proxy/" + self.external_url
+            return "/proxy/?origurl=" + self.external_url
         else:
             return self.unique_file.file_field.url
 
