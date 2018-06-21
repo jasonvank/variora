@@ -112,26 +112,26 @@
 var is_authenticated = {{ request.user.is_authenticated|yesno:"true,false" }};  // whether the visitor is a logged-in user
 
 function drawAllExistingAnnotationFrame() {
-    {% for annotation in annotations %}
-        var new_annotation = $("<div class='Annotation animated zoomIn'></div>");
-        var top_percent = parseFloat("{{ annotation.top_percent }}");
-        var left_percent = parseFloat("{{ annotation.left_percent }}");
-        var height_percent = parseFloat("{{ annotation.height_percent }}");
-        var width_percent = parseFloat("{{ annotation.width_percent }}");
-        var pageIndex = "{{ annotation.page_index }}";
-        var frame_color = "{{ annotation.frame_color }}";
-        var pageDiv = $("#page_div_" + pageIndex);
-        new_annotation.css({
-            "background": frame_color,
-            "position": "absolute",
-            "width": pageDiv.width() * width_percent + "px",
-            "height": pageDiv.height() * height_percent + "px",
-            "left": pageDiv.width() * left_percent + "px",
-            "top": pageDiv.height() * top_percent + "px",
-        });
-        new_annotation.attr("annotation_id", '{{ annotation.id }}');
-        pageDiv.append(new_annotation);
-    {% endfor %}
+  {% for annotation in annotations %}
+    var new_annotation = $("<div class='Annotation animated zoomIn'></div>");
+    var top_percent = parseFloat("{{ annotation.top_percent }}");
+    var left_percent = parseFloat("{{ annotation.left_percent }}");
+    var height_percent = parseFloat("{{ annotation.height_percent }}");
+    var width_percent = parseFloat("{{ annotation.width_percent }}");
+    var pageIndex = "{{ annotation.page_index }}";
+    var frame_color = "{{ annotation.frame_color }}";
+    var pageDiv = $("#page_div_" + pageIndex);
+    new_annotation.css({
+      "background": frame_color,
+      "position": "absolute",
+      "width": pageDiv.width() * width_percent + "px",
+      "height": pageDiv.height() * height_percent + "px",
+      "left": pageDiv.width() * left_percent + "px",
+      "top": pageDiv.height() * top_percent + "px",
+    });
+    new_annotation.attr("annotation_id", '{{ annotation.id }}');
+    pageDiv.append(new_annotation);
+  {% endfor %}
 }
 </script>
 </html>

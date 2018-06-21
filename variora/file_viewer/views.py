@@ -13,14 +13,6 @@ from django.views.generic import View
 from models import Annotation, AnnotationReply, Comment, Document
 
 
-def edit_doc_title(request):
-    document = Document.objects.get(id=int(request.POST["document_id"]))
-    new_doc_title = request.POST["new_doc_title"]
-    document.title = new_doc_title
-    document.save()
-    return HttpResponse()
-
-
 class FileViewerView(View):
     @method_decorator(login_required(login_url='/'))
     def post(self, request, **kwargs):
