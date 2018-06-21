@@ -3,7 +3,8 @@
     "browser": true,
     "commonjs": true,
     "es6": true,
-    "node": true
+    "node": true,
+    "jquery": true
   },
   "extends": "eslint:recommended",
   "parserOptions": {
@@ -17,21 +18,42 @@
     "react"
   ],
   "rules": {
+    "no-unused-vars": [
+      "off"
+    ],
+    "brace-style": [
+      "error",
+      "1tbs",
+      {
+        "allowSingleLine": true
+      }
+    ],
     "indent": [
       "error",
-      4
+      2
     ],
     "linebreak-style": [
       "error",
       "unix"
     ],
     "quotes": [
-      "error",
+      "warn",
       "single"
     ],
     "semi": [
-      "error",
+      "warn",
       "never"
+    ],
+    "array-element-newline": [
+      "warn",
+      "never"
+    ],
+    "array-bracket-spacing": [
+      "error",
+      "always"
+    ],
+    "no-multi-spaces": [
+      "warn"
     ]
   }
 }

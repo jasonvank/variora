@@ -387,7 +387,7 @@ function renderTaskList(taskList, finishList, scale) {
         taskList.shift();
         finishList.push(num);
         rendering = false;
-        $("#buttonForLarger, #buttonForSmaller").attr("disabled", false　);
+        $("#buttonForLarger, #buttonForSmaller").attr("disabled", false);
         renderTaskList(taskList, finishList, scale);
       }, function(reason) {
         console.log("rejected because of this reason: " + reason);
