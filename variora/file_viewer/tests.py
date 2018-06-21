@@ -23,7 +23,7 @@ class TestDocument(TestCase):
 
     def test_file_on_server_method(self):
         document = Document(owner=self.dummy_user, external_url=EXTERNAL_PDF_URL)
-        self.assertEqual(document.url, "/proxy/?origurl=" + EXTERNAL_PDF_URL)
+        self.assertEqual(document.url, "/proxy?origurl=" + EXTERNAL_PDF_URL)
         self.assertEqual(document.file_on_server, False)
 
         # test if no input given, char field will be set to empty string
