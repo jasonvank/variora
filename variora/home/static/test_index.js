@@ -25,7 +25,7 @@ const FormItem = Form.Item;
 
 
 const { SubMenu } = Menu;
-const { Header, Content, Sider } = Layout;
+const { Header, Content, Sider, Footer } = Layout;
 const MenuItemGroup = Menu.ItemGroup;
 const Search = Input.Search;
 const CREATE_NEW_GROUP_MENU_ITEM_KEY = 'createGroupButton';
@@ -214,14 +214,17 @@ class App extends React.Component {
               </Menu>
             </Sider>
 
-            <Layout style={{ marginLeft: 200, padding: 0 }}>
+            <Content style={{ marginLeft: 200, padding: 0 }}>
               <Switch>
                 <Route exact path="/explore" component={GroupTab} />
                 <Route path="/search" component={SearchResultTab} />
                 <Route path="/groups/:coteriePk" render={ ({match, location}) => this.renderGroupTab(match, location) } />
                 <Route path="/" component={DocumentTab} />
               </Switch>
-            </Layout>
+              <Footer style={{ textAlign: 'center' }}>
+                © 2018 Variora. Contact us at <a href='mailto:variora@outlook.com'>variora@outlook.com</a>
+              </Footer>
+            </Content>
           </Layout>
         </Router>
       </Layout>
