@@ -213,18 +213,19 @@ class App extends React.Component {
                 </Modal>
               </Menu>
             </Sider>
-
-            <Content style={{ marginLeft: 200, padding: 0 }}>
-              <Switch>
-                <Route exact path="/explore" component={GroupTab} />
-                <Route path="/search" component={SearchResultTab} />
-                <Route path="/groups/:coteriePk" render={ ({match, location}) => this.renderGroupTab(match, location) } />
-                <Route path="/" component={DocumentTab} />
-              </Switch>
+            <Layout style={{ marginLeft: 200, padding: 0 }}>
+              <Content>
+                <Switch>
+                  <Route exact path="/explore" component={GroupTab} />
+                  <Route path="/search" component={SearchResultTab} />
+                  <Route path="/groups/:coteriePk" render={ ({match, location}) => this.renderGroupTab(match, location) } />
+                  <Route path="/" component={DocumentTab} />
+                </Switch>
+              </Content>
               <Footer style={{ textAlign: 'center' }}>
-                © 2018 Variora. Contact us at <a href='mailto:variora@outlook.com'>variora@outlook.com</a>
+                  © 2018 GitHub. Reach us via <a href='mailto:variora@outlook.com'>variora@outlook.com</a>
               </Footer>
-            </Content>
+            </Layout>
           </Layout>
         </Router>
       </Layout>
