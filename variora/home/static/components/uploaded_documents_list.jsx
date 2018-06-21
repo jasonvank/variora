@@ -23,7 +23,6 @@ class ChangeOpenDocumentName extends React.Component {
     data.append('new_title', this.state.value)
     data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
     axios.post(this.props.openDocument.renameUrl, data).then((response) => {
-
       this.props.onChange(this.state.value)
     })
   }
@@ -50,7 +49,7 @@ class ChangeOpenDocumentName extends React.Component {
     )
     var link = (
       <div className="editable-cell-text-wrapper">
-        <a href={formatOpenDocumentUrl(this.props.openDocument, this.props.pk)}>{value || ' '}</a>
+        <a href={formatOpenDocumentUrl(this.props.openDocument)}>{value || ' '}</a>
         <Icon
           type="edit"
           className="editable-cell-icon"
@@ -70,7 +69,6 @@ class UploadedDocumentsList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      pk: this.props.pk,
       data: [],
     }
     this.deleteDocument = (record) => {
@@ -111,10 +109,7 @@ class UploadedDocumentsList extends React.Component {
     }
   }
 
-  async componentWillReceiveProps(nextProps) {
-    await this.setState({
-      pk: nextProps.pk
-    })
+  componentWillReceiveProps(nextProps) {
     this.updateData()
   }
 
@@ -133,9 +128,8 @@ class UploadedDocumentsList extends React.Component {
       render: (text, openDocument) => (
         <ChangeOpenDocumentName
           openDocument={openDocument}
-          anchor={ <a href={formatOpenDocumentUrl(openDocument, this.state.pk)}>{text}</a> }
+          anchor={ <a href={formatOpenDocumentUrl(openDocument)}>{text}</a> }
           onChange={this.onOpenDocumentRename(openDocument.pk, 'title')}
-          pk={this.state.pk}
         />),
       }, {
       title: 'Action',
@@ -164,6 +158,7 @@ class UploadedDocumentsList extends React.Component {
 }
 
 export { UploadedDocumentsList };
+
 
 
 
