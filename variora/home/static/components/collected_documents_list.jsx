@@ -17,20 +17,12 @@ class CollectedDocumentsList extends React.Component {
     this.state = {
       data: [],
     }
-    this.parseResponse = (response) => {
-      var uploadedDocuments = response['collectedDocuments']
-      var key = 1
-      for (var document of uploadedDocuments) {
-        document.key = document.id = key++
-      }
-      return uploadedDocuments
-    }
     this.updateData = (response) => {
       axios.get(getUrlFormat('/file_viewer/api/documents', {
       }))
       .then(response => {
         this.setState({
-          data: this.parseResponse(response.data)
+          data: response.data['collectedDocuments']
         })
       })
       .catch(e => { message.warning(e.message) })
@@ -51,7 +43,8 @@ class CollectedDocumentsList extends React.Component {
     const columns=[{
       title: 'Id',
       dataIndex: 'id',
-      width: '20%'
+      width: '20%',
+      render: (text, record) => this.state.data.indexOf(record) + 1
     }, {
       title: 'Title',
       dataIndex: 'title',
@@ -70,6 +63,7 @@ class CollectedDocumentsList extends React.Component {
         dataSource={this.state.data}
         columns={columns}
         pagination={false}
+        rowKey={record => record.pk}
       />
     )
   }

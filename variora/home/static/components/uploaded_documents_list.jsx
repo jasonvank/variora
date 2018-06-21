@@ -76,20 +76,12 @@ class UploadedDocumentsList extends React.Component {
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
       axios.post(record.delete_url, data).then(this.updateData)
     }
-    this.parseResponse = (response) => {
-      var uploadedDocuments = response['uploadedDocuments']
-      var key = 1
-      for (var document of uploadedDocuments) {
-        document.key = document.id = key++
-      }
-      return uploadedDocuments
-    }
     this.updateData = (response) => {
       axios.get(getUrlFormat('/file_viewer/api/documents', {
       }))
       .then(response => {
         this.setState({
-          data: this.parseResponse(response.data)
+          data: response.data['uploadedDocuments']
         })
       })
       .catch(e => { message.warning(e.message) })
@@ -120,7 +112,8 @@ class UploadedDocumentsList extends React.Component {
     const columns = [{
       title: 'Id',
       dataIndex: 'id',
-      width: '20%'
+      width: '20%',
+      render: (text, record) => this.state.data.indexOf(record) + 1
     }, {
       title: 'Title',
       dataIndex: 'title',
@@ -152,6 +145,7 @@ class UploadedDocumentsList extends React.Component {
         dataSource={this.state.data}
         columns={columns}
         pagination={false}
+        rowKey={record => record.pk}
       />
     )
   }

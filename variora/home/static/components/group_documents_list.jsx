@@ -79,18 +79,11 @@ class GroupDocumentsList extends React.Component {
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
       axios.post(record.delete_url, data).then(this.updateData)
     }
-    this.parseResponseData = (responseData) => {
-      var groupDocuments = responseData.coteriedocument_set
-      var key = 1
-      for (var document of groupDocuments)
-        document.key = document.id = key++
-      return groupDocuments
-    }
     this.updateData = (response) => {
       axios.get(getUrlFormat('/coterie/api/coteries/' + this.state.coteriePk, {}))
       .then(response => {
         this.setState({
-          data: this.parseResponseData(response.data)
+          data: response.data.coteriedocument_set
         })
       })
       .catch(e => { message.warning(e.message) })
@@ -129,8 +122,9 @@ class GroupDocumentsList extends React.Component {
     )
 
     const columns = [{
-      title: 'Id',
-      dataIndex: 'id',
+        title: '#',
+        dataIndex: 'id',
+        render: (text, record) => this.state.data.indexOf(record) + 1
       }, {
         title: 'Title',
         dataIndex: 'title',
@@ -158,13 +152,13 @@ class GroupDocumentsList extends React.Component {
         dataSource={this.state.data}
         columns={columns}
         pagination={false}
+        rowKey={record => record.pk}
       />
     )
   }
 }
 
 export { GroupDocumentsList };
-
 
 
 

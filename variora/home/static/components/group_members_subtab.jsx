@@ -19,9 +19,10 @@ class GroupAdministratorsList extends React.Component {
       coteriePk: this.props.coteriePk,
       data: this.props.administrators,
       columns: [{
-        title: 'Id',
+        title: '#',
         dataIndex: 'id',
         width: "20%",
+        render: (text, record) => this.state.data.indexOf(record) + 1
       }, {
         title: '',
         dataIndex: 'avatar',
@@ -116,9 +117,10 @@ class GroupMembersList extends React.Component {
     }
 
     const columns = [{
-      title: 'Id',
+      title: '#',
       dataIndex: 'id',
       width: "20%",
+      render: (text, record) => this.state.data.indexOf(record) + 1
     }, {
       title: '',
       dataIndex: 'avatar',
@@ -195,9 +197,10 @@ class GroupApplicationList extends React.Component {
 
   render() {
     const columns = [{
-      title: 'Id',
+      title: '#',
       dataIndex: 'id',
       width: "20%",
+      render: (text, record) => this.state.data.indexOf(record) + 1
     }, {
       title: '',
       dataIndex: 'avatar',
