@@ -35,7 +35,7 @@ exports[`test react 1`] = `
       style={Object {}}
     >
       <a
-        href="/test/"
+        href="/"
         onClick={[Function]}
       >
         <i
@@ -54,7 +54,7 @@ exports[`test react 1`] = `
       style={Object {}}
     >
       <a
-        href="/test/collected"
+        href="/collected"
         onClick={[Function]}
       >
         <i
@@ -105,24 +105,24 @@ exports[`test react 1`] = `
                       <col
                         style={
                           Object {
-                            "minWidth": undefined,
-                            "width": undefined,
+                            "minWidth": "20%",
+                            "width": "20%",
                           }
                         }
                       />
                       <col
                         style={
                           Object {
-                            "minWidth": undefined,
-                            "width": undefined,
+                            "minWidth": "40%",
+                            "width": "40%",
                           }
                         }
                       />
                       <col
                         style={
                           Object {
-                            "minWidth": undefined,
-                            "width": undefined,
+                            "minWidth": "40%",
+                            "width": "40%",
                           }
                         }
                       />
@@ -244,7 +244,7 @@ exports[`test react 1`] = `
                     className="anticon anticon-file-add"
                   />
                   <span>
-                     Click to Choose File
+                     Click to Choose Local File
                   </span>
                 </button>
               </span>
@@ -258,7 +258,7 @@ exports[`test react 1`] = `
             disabled={false}
             onChange={[Function]}
             onKeyDown={[Function]}
-            placeholder="name of the document"
+            placeholder="Give a title to this document"
             style={
               Object {
                 "margin": 8,
@@ -301,7 +301,7 @@ exports[`test react 1`] = `
             disabled={false}
             onChange={[Function]}
             onKeyDown={[Function]}
-            placeholder="URL to the online document"
+            placeholder="URL to an online document"
             style={
               Object {
                 "margin": 8,
@@ -316,7 +316,7 @@ exports[`test react 1`] = `
             disabled={false}
             onChange={[Function]}
             onKeyDown={[Function]}
-            placeholder="name of the document"
+            placeholder="Give a title to this document"
             style={
               Object {
                 "margin": 8,
