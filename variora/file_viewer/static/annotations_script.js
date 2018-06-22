@@ -41,10 +41,20 @@ function addAnnotationRelatedListenerWithin(jq) {
     Annotation.css("box-shadow", 'none');
   });
 
-  jq.find(".AnnotationBlock").on("click", function(e) { // scroll to the corresponding Anotation when clicking a certain AnnotationBlock
-    if ($(e.target).parents().addBack().hasClass('btn'))
-      return
-    var annotation_id = $(this).attr("annotation_id");
+  // jq.find(".AnnotationBlock").on("click", function(e) { // scroll to the corresponding Anotation when clicking a certain AnnotationBlock
+  //   if ($(e.target).parents().addBack().hasClass('btn'))
+  //     return
+  //   var annotation_id = $(this).attr("annotation_id");
+  //   var Annotation = $(".Annotation[annotation_id='" + annotation_id + "']");
+  //   var fileViewer = $("#file_viewer");
+  //   var down = Annotation.offset().top - fileViewer.offset().top + fileViewer.scrollTop() - window.innerHeight * 0.38 + Annotation.height() / 2;
+  //   fileViewer.animate({
+  //     scrollTop: parseInt(down)
+  //   }, 240)
+  // })
+
+  jq.find(".AnnotationDirectButton").on("click", function(e) {
+    var annotation_id = $(this).parents('.AnnotationDiv').attr("annotation_id");
     var Annotation = $(".Annotation[annotation_id='" + annotation_id + "']");
     var fileViewer = $("#file_viewer");
     var down = Annotation.offset().top - fileViewer.offset().top + fileViewer.scrollTop() - window.innerHeight * 0.38 + Annotation.height() / 2;
