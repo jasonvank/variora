@@ -71,7 +71,7 @@ input {
 }
 
 .Annotation {
-  border-radius: 2.8px;
+  border-radius: 1.8px;
 }
 
 @font-face {
@@ -168,4 +168,9 @@ input {
 
 .AnnotationBlock {
   padding: 18px;
+}
+
+.annotation-content img,
+.comment-content img {
+  border-radius: 1.8px;
 }
