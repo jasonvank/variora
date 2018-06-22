@@ -1,0 +1,39 @@
+<div class="AnnotationDiv" annotation_id="{{ annotation.id }}">
+  <hr>
+  <blockquote class="AnnotationBlock" annotation_id="{{ annotation.id }}">
+    <!-- annotation -->
+    <div class="annotation-content"> {{ annotation.content|safe|linebreaks }} </div>
+    <footer>
+      {% if annotation.is_public %}
+        <img class="img-rounded" src="{{ annotation.annotator.portrait_url }}" height="38" width="38">
+        {{ annotation.annotator.nickname }} | {{ annotation.post_time.date|date:"Y. M. d" }}
+      {% else %}
+        <img class="img-rounded" src="{{ ANONYMOUS_USER_PORTRAIT_URL }}" height="38" width="38">
+        Anonymous user | {{ annotation.post_time.date|date:"Y. M. d" }}
+      {% endif %}
+      <div style="float: right;">
+        <button class="ReplyAnnotationButton btn" style="border: none; background: none"><i class="fa fa-reply" aria-hidden="true"></i>&nbspreply</button>
+        {% if annotation.annotator == request.user %}
+          <button style="border: none; background: none" class="DeleteAnnotationButton btn" value="{{ annotation.id }}"><i class="fa fa-trash-o" aria-hidden="true"></i>&nbspdelete</button>
+        {% endif %}
+        <div class="btn">
+          <span style="cursor: pointer;" annotation_id="{{ annotation.id }}" class="LikeAnnotationButton glyphicon glyphicon-thumbs-up"></span>
+          <bold id="num_like">{{ annotation.num_like }}</bold>
+        </div>
+      </div>
+      <form style="display: none">
+        <br>
+        <textarea name="annotation_reply_content" class="form-control" rows="2" style="resize: vertical"></textarea>
+        <button class="PostAnnotationReplyButton AnonymouslyPostAnnotationReplyButton btn btn-sm" type="button" name="annotation_id" value="{{ annotation.id }}" style="background-color: #636e72; margin-left: 8px">
+          <i class="fa fa-user-secret"></i> &nbsp reply anonymously
+        </button>
+        <button class="PostAnnotationReplyButton btn btn-sm" type="button" name="annotation_id" value="{{ annotation.id }}">reply</button>
+      </form>
+    </footer>
+    <br>
+    <!-- annotation resplies -->
+    {% for annotation_reply in annotation.annotationreply_set.all|dictsort:"post_time" %}
+      {% include "file_viewer/one_annotation_reply.html" with annotation_reply=annotation_reply ANONYMOUS_USER_PORTRAIT_URL=ANONYMOUS_USER_PORTRAIT_URL %}
+    {% endfor %}
+  </blockquote>
+</div>
