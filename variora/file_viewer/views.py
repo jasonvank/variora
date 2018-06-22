@@ -129,11 +129,10 @@ class FileViewerView(View):
                     annotation_reply.reply_to_annotation_reply = AnnotationReply.objects.get(id=int(request.POST["reply_to_annotation_reply_id"]))
                 annotation_reply.save()
             context = {
-                "document": document,
-                "annotations": document.annotation_set.order_by("page_index"),
+                "annotation_reply": annotation_reply,
                 'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,
             }
-            return render(request, "file_viewer/annotation_viewer_subpage.html", context)
+            return render(request, "file_viewer/one_annotation_reply.html", context)
 
     def get(self, request, **kwargs):
         if 'pk' in kwargs:
