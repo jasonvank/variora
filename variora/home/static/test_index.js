@@ -223,7 +223,7 @@ class App extends React.Component {
                 </Switch>
               </Content>
               <Footer style={{ textAlign: 'center' }}>
-                  © 2018 GitHub. Reach us via <a href='mailto:variora@outlook.com'>variora@outlook.com</a>
+                  © 2018 Variora. Reach us via <a href='mailto:variora@outlook.com'>variora@outlook.com</a>
               </Footer>
             </Layout>
           </Layout>
@@ -264,5 +264,3 @@ ReactDOM.render(
   </LocaleProvider>,
   document.getElementById('main')
 );
-
-
