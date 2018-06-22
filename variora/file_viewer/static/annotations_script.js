@@ -41,7 +41,9 @@ function addAnnotationRelatedListenerWithin(jq) {
     Annotation.css("box-shadow", 'none');
   });
 
-  jq.find(".AnnotationBlock").on("click", function() { // scroll to the corresponding Anotation when clicking a certain AnnotationBlock
+  jq.find(".AnnotationBlock").on("click", function(e) { // scroll to the corresponding Anotation when clicking a certain AnnotationBlock
+    if ($(e.target).parents().addBack().hasClass('btn'))
+      return
     var annotation_id = $(this).attr("annotation_id");
     var Annotation = $(".Annotation[annotation_id='" + annotation_id + "']");
     var fileViewer = $("#file_viewer");
@@ -81,7 +83,7 @@ function addAnnotationRelatedListenerWithin(jq) {
     } else
       layer.msg('You need to <a href="/sign-in" style="color: #ECECEC; text-decoration: underline">log in</a> first')
   })
-  
+
   jq.find(".DeleteAnnotationReplyButton").on("click", function() {
     var index = layer.load(1, {
       shade: 0.18
@@ -206,13 +208,13 @@ function addAnnotationRelatedListenerWithin(jq) {
   jq.find(".ReplyAnnotationButton").on("click", function() {
     var currentVisible = !$(this).css('display') ==
     $(this).parents("footer").children("form").slideToggle({duration: 180, start: function() {
-        if (currentVisible) {
-          // tinyMCE.activeEditor.setContent("")
-        } else {
-          $(".ReplyAnnotationButton").parents("footer").children("form").not($(this)).slideUp(180).css('display', 'none')
-          // for (editor in tinyMCE.editors)
-          //   tinyMCE.editors[editor].setContent("")
-        }
+      if (currentVisible) {
+        // tinyMCE.activeEditor.setContent("")
+      } else {
+        $(".ReplyAnnotationButton").parents("footer").children("form").not($(this)).slideUp(180).css('display', 'none')
+        // for (editor in tinyMCE.editors)
+        //   tinyMCE.editors[editor].setContent("")
+      }
     }});
   });
 }
