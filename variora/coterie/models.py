@@ -107,7 +107,7 @@ class CoterieAnnotation(models.Model):
 class CoterieAnnotationReply(models.Model):
     post_time = models.DateTimeField(auto_now=False, auto_now_add=True)
     replier = models.ForeignKey(User)
-    reply_to_annotation = models.ForeignKey(CoterieAnnotation)
+    reply_to_annotation = models.ForeignKey(CoterieAnnotation, related_name='annotationreply_set')
     reply_to_annotation_reply = models.ForeignKey("CoterieAnnotationReply",
                                                   related_name="reply_set",
                                                   null=True, blank=True)

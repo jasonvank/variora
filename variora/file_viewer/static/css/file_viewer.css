@@ -174,3 +174,7 @@ input {
 .comment-content img {
   border-radius: 1.8px;
 }
+
+.btn {
+  padding: 6px 8px
+}

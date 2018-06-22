@@ -1,18 +1,17 @@
 import re
 from hashlib import md5
 
+import models
+from django.conf import settings
 from django.contrib.auth import get_user
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
-
-import models
-import variora.settings as settings
-from coterie.models import Coterie
 from file_viewer import models as file_viewer_models
 from home.models import User
-from models import CoterieDocument
+
+from .models import Coterie, CoterieDocument
 
 
 def handle_create_coterie(request):
@@ -155,16 +154,16 @@ def display_coteriefile_viewer_page(request, **kwargs):
                 comment.content = request.POST["comment_content"]
                 comment.commenter = get_user(request)
                 comment.document_this_comment_belongs = document
+                comment.is_public = comment.is_public = True if request.POST["is_public"] == 'true' else False
                 if "reply_to_comment_id" in request.POST:
-                    comment.reply_to_comment = models.CoterieComment.objects.get(
-                        id=int(request.POST["reply_to_comment_id"]))
+                    comment.reply_to_comment = models.CoterieComment.objects.get(id=int(request.POST["reply_to_comment_id"]))
                 comment.save()
-
             context = {
                 "document": document,
                 "comments": document.coteriecomment_set.order_by("-post_time"),
+                'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,
             }
-            return render(request, "coterie_file_viewer/comment_viewer_subpage.html", context)
+            return render(request, "file_viewer/comment_viewer_subpage.html", context)
 
         elif request.POST["operation"] == "annotate":
             annotation = models.CoterieAnnotation()
@@ -198,18 +197,16 @@ def display_coteriefile_viewer_page(request, **kwargs):
                 annotation_reply.content = request.POST["annotation_reply_content"]
                 annotation_reply.replier = get_user(request)
                 annotation_reply.reply_to_annotation = annotation
-
+                annotation_reply.is_public = True if request.POST["is_public"] == 'true' else False
                 if "reply_to_annotation_reply_id" in request.POST:
                     annotation_reply.reply_to_annotation_reply = models.CoterieAnnotationReply.objects.get(
                         id=int(request.POST["reply_to_annotation_reply_id"]))
-
                 annotation_reply.save()
-
             context = {
-                "document": document,
-                "annotations": document.coterieannotation_set.order_by("page_index"),
+                "annotation_reply": annotation_reply,
+                'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,
             }
-            return render(request, "coterie_file_viewer/annotation_viewer_subpage.html", context)
+            return render(request, "file_viewer/one_annotation_reply.html", context)
 
     else:
         user = get_user(request)
@@ -234,6 +231,7 @@ def display_coteriefile_viewer_page(request, **kwargs):
             "file_url": document.url,
             "comments": document.coteriecomment_set.order_by("-post_time"),
             "annotations": document.coterieannotation_set.order_by("page_index"),
+            'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,
             "prev_page_url": request.META['HTTP_REFERER'] if 'HTTP_REFERER' in request.META else '/'
         }
         return render(request, "coterie_file_viewer/pdf_file_viewer_page.html", context)
