@@ -57,12 +57,11 @@ function pdfScale(scaleFactor) {
 
 
 function startListeningSelectionBoxCreation() {
-  var annotationColor = "rgba(0,0,0,0.28)";
+  var annotationColor = "rgba(0,0,0,0.18)";
 
   colorPicker.on('change', function(color) {
     var rgb = hexToRgb(color)
-    // console.log(hexToRgb(color))
-    annotationColor = 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',0.24)'
+    annotationColor = 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',0.18)'
   })
 
   $("#annotation_color_buttons_div").find(".ColorSelectorButton").on("click", function() {
@@ -161,7 +160,6 @@ function startListeningSelectionBoxCreation() {
         var annotationWindowJqueryObject = $(".layui-layer[times=" + annotationWindow + "]");
         annotationWindowJqueryObject.find(".post_annotation_button").on("click", function() {
           if (is_authenticated) {
-            // console.log(annotationWindowJqueryObject.find("textarea[name='annotation_content']"))
             var is_public = !this.classList.contains('anonymously_post_annotation_button')
             $.ajax({
               type: "POST",
