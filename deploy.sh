@@ -7,5 +7,5 @@ python variora/manage.py migrate
 sudo env/bin/python variora/manage.py collectstatic --noinput
 sudo env/bin/python variora/manage.py installtasks
 
-sudo service redis-server restart
+sudo service memcached restart
 sudo service apache2 restart
