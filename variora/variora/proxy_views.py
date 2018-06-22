@@ -1,8 +1,10 @@
 import requests
 from django.http import HttpResponse
 from django.http import QueryDict
+from django.views.decorators.cache import cache_page
 
 
+@cache_page(60 * 5)
 def proxy_view(request, requests_args=None):
     """
     Forward as close to an exact copy of the request as possible along to the
@@ -17,7 +19,7 @@ def proxy_view(request, requests_args=None):
 
     url = request.GET['origurl']
     requests_args = (requests_args or {}).copy()
-    headers = get_headers(request.META)
+    headers = _get_headers(request.META)
     params = request.GET.copy()
 
     if 'headers' not in requests_args:
@@ -76,7 +78,7 @@ def proxy_view(request, requests_args=None):
     return proxy_response
 
 
-def get_headers(environ):
+def _get_headers(environ):
     """
     Retrieve the HTTP headers from a WSGI environment dictionary.  See
     https://docs.djangoproject.com/en/dev/ref/request-response/#django.http.HttpRequest.META
