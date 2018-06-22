@@ -62,7 +62,7 @@ function startListeningSelectionBoxCreation() {
   colorPicker.on('change', function(color) {
     var rgb = hexToRgb(color)
     // console.log(hexToRgb(color))
-    annotationColor = 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',0.28)'
+    annotationColor = 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',0.24)'
   })
 
   $("#annotation_color_buttons_div").find(".ColorSelectorButton").on("click", function() {
