@@ -482,7 +482,7 @@ function prepareAndRenderAll(url) {
 
         var new_page = "<div class='page_div' id=" + "'" + new_page_div_id + "'>" +
           "<canvas class='PageCanvas' id=" + "'" + new_page_canvas_id + "'" + "></canvas>" +
-          "</div> +
+          "</div>" +
           "<br>";
         appendPages = appendPages + new_page;
       }
