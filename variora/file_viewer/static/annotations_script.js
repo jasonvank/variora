@@ -251,6 +251,15 @@ function addAnnotationRelatedListenerWithin(jq) {
     var target = undefined
 
     jq.find('.Annotation').addBack('.Annotation').on('mousemove', function(e) {
+      if (e.which != 0) {
+        const allAnnotationsInThisPage = $(this).parent('.page_div').find('.Annotation').toArray()
+        for (var a of allAnnotationsInThisPage) {
+          $(a).css("box-shadow", 'none')
+          $(".AnnotationBlock[annotation_id='" + $(a).attr("annotation_id") + "']").css("box-shadow", 'none')
+        }
+        return
+      }
+
       var coverAnnotations = allAnnotationsInThisPage.filter(annotation => _checkCoverage(annotation, e, pageJQ))
 
       var sortedCloseness = coverAnnotations.sort((a, b) => _getRight(a) > _getRight(b))
@@ -274,7 +283,10 @@ function addAnnotationRelatedListenerWithin(jq) {
     })
   })
 
-  jq.find('.Annotation').addBack('.Annotation').on('mouseout', function() {
+  jq.find('.Annotation').addBack('.Annotation').on('mouseout', function(e) {
+    if (e.which != 0)
+      return
+    
     const allAnnotationsInThisPage = $(this).parent('.page_div').find('.Annotation').toArray()
     for (var a of allAnnotationsInThisPage) {
       $(a).css("box-shadow", 'none')
