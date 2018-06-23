@@ -228,11 +228,42 @@ function addAnnotationRelatedListenerWithin(jq) {
     }})
   })
 
-  jq.find('.Annotation').addBack('.Annotation').on('mouseover', function() {
-    const annotationId = $(this).attr("annotation_id")
-    const annotationBlock = $(".AnnotationBlock[annotation_id='" + annotationId + "']")
-    $(this).css("box-shadow", '2px 3px 8px rgba(0, 0, 0, .25)')
-    annotationBlock.css("box-shadow", '2px 3px 8px rgba(0, 0, 0, .25)')
+  jq.find('.Annotation').addBack('.Annotation').on('mouseover', function(e) {
+    const page = $(this).parent('.page_div').children('.PageCanvas')
+    const allAnnotations = $(this).parent('.page_div').find('.Annotation').toArray()
+    var target = undefined
+
+    jq.find('.Annotation').addBack('.Annotation').on('mousemove', function(e) {
+      var mouse_absolute_x = e.pageX;
+      var mouse_absolute_y = e.pageY;
+      var page_top_left_x = page.offset().left;
+      var page_top_left_y = page.offset().top;
+      var top_left_relative_x = mouse_absolute_x - page_top_left_x;
+      var top_left_relative_y = mouse_absolute_y - page_top_left_y;
+      function check(annotation) {
+        const left = parseFloat($(annotation).css('left'))
+        const right = left + $(annotation).width()
+        const top = parseFloat($(annotation).css('top'))
+        const bottom = top + $(annotation).height()
+        return left <= top_left_relative_x && right >= top_left_relative_x && top <= top_left_relative_y && bottom >= top_left_relative_y
+      }
+      var coverAnnotations = allAnnotations.filter(annotation => check(annotation))
+      var newTarget = $(coverAnnotations.sort((a, b) => parseFloat($(a).css('left')) + $(a).width() > parseFloat($(b).css('left')) + $(b).width())[0])
+      if (newTarget != target) {
+        if (target != undefined) {
+          target.css("box-shadow", 'none')
+          $(".AnnotationBlock[annotation_id='" + $(target).attr("annotation_id") + "']").css("box-shadow", 'none')
+        }
+        newTarget.css("box-shadow", '2px 3px 8px rgba(0, 0, 0, .25)')
+        $(".AnnotationBlock[annotation_id='" + $(newTarget).attr("annotation_id") + "']").css("box-shadow", '2px 3px 8px rgba(0, 0, 0, .25)')
+        target = newTarget
+      }
+    })
+
+    // const annotationId = $(this).attr("annotation_id")
+    // const annotationBlock = $(".AnnotationBlock[annotation_id='" + annotationId + "']")
+    // $(this).css("box-shadow", '2px 3px 8px rgba(0, 0, 0, .25)')
+    // annotationBlock.css("box-shadow", '2px 3px 8px rgba(0, 0, 0, .25)')
   })
 
   jq.find('.Annotation').addBack('.Annotation').on('mouseout', function() {
