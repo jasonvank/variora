@@ -1,4 +1,3 @@
-import 'antd/dist/antd.css';
 import './css/test_index.css';
 import 'regenerator-runtime/runtime';
 
@@ -14,9 +13,9 @@ import { getCookie, getUrlFormat } from 'util.js'
 
 import { DocumentTab } from './components/document_tab.jsx'
 import { GroupTab } from './components/group_tab.jsx'
-import { SearchResultTab } from './components/search_result_tab.jsx'
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { SearchResultTab } from './components/search_result_tab.jsx'
 import axios from 'axios'
 import enUS from 'antd/lib/locale-provider/en_US';
 

@@ -1,4 +1,3 @@
-import 'antd/dist/antd.css';
 import './css/sign_in_index.css'
 import 'regenerator-runtime/runtime';
 

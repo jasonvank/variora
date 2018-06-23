@@ -63,3 +63,11 @@ td:hover .editable-cell-icon {
 .editable-cell-icon-check:hover {
   color: #108ee9;
 }
+
+.document-link {
+  color: #666 !important
+}
+
+.ant-table-row a {
+  color: #37b
+}

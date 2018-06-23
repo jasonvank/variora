@@ -1,4 +1,3 @@
-import 'antd/dist/antd.css';
 import 'regenerator-runtime/runtime';
 
 import { Avatar, Badge, Button, notification } from 'antd';
@@ -6,8 +5,6 @@ import { getCookie, getUrlFormat } from 'util.js'
 
 import React from 'react';
 import axios from 'axios'
-
-
 
 class InvitationDetailsWrapper extends React.Component{
   render() {

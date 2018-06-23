@@ -1,4 +1,3 @@
-import 'antd/dist/antd.css';
 import 'regenerator-runtime/runtime';
 
 import { Avatar, Input, Layout, Menu, Modal, Table, Tooltip, notification } from 'antd';

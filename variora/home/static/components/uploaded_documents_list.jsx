@@ -1,5 +1,3 @@
-import 'antd/dist/antd.css';
-
 import { Icon, Input, Popconfirm, Table, message } from 'antd';
 import { formatOpenDocumentUrl, getCookie, getUrlFormat } from 'util.js'
 
@@ -49,7 +47,7 @@ class ChangeOpenDocumentName extends React.Component {
     )
     var link = (
       <div className="editable-cell-text-wrapper">
-        <a href={formatOpenDocumentUrl(this.props.openDocument)}>{value || ' '}</a>
+        <a className='document-link' href={formatOpenDocumentUrl(this.props.openDocument)}>{value || ' '}</a>
         <Icon
           type="edit"
           className="editable-cell-icon"
@@ -121,7 +119,7 @@ class UploadedDocumentsList extends React.Component {
       render: (text, openDocument) => (
         <ChangeOpenDocumentName
           openDocument={openDocument}
-          anchor={ <a href={formatOpenDocumentUrl(openDocument)}>{text}</a> }
+          anchor={ <a className='document-link' href={formatOpenDocumentUrl(openDocument)}>{text}</a> }
           onChange={this.onOpenDocumentRename(openDocument.pk, 'title')}
         />),
       }, {

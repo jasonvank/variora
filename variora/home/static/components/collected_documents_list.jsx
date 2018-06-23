@@ -1,5 +1,3 @@
-import 'antd/dist/antd.css';
-
 import { Icon, Popconfirm, Table, message } from 'antd';
 import { formatOpenDocumentUrl, getCookie, getUrlFormat } from 'util.js'
 

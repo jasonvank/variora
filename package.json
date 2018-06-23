@@ -45,6 +45,7 @@
     "jest": "^23.1.0",
     "less": "^2.7.3",
     "less-loader": "^4.1.0",
+    "less-vars-to-js": "^1.2.1",
     "moment-timezone": "^0.5.14",
     "react": "^16.3.1",
     "react-dom": "^16.3.1",

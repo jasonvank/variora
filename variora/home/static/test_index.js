@@ -1,6 +1,5 @@
-import 'antd/dist/antd.css';
-import './css/test_index.css';
-import 'regenerator-runtime/runtime';
+import './css/test_index.css'
+import 'regenerator-runtime/runtime'
 
 import { Avatar, Breadcrumb, Button, Col, Form, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, Upload, message } from 'antd';
 import {
@@ -157,7 +156,7 @@ class App extends React.Component {
             </Col>
             <Col span={6} style={{ textAlign: 'right' }}>
               { this.state.user.is_authenticated ? <a onClick={this.signOff}>sign off</a> : <a href="/sign-in">sign in</a> }
-              <span style={{ margin: 18 }}>{ this.state.user.nickname }</span>
+              <span style={{ margin: 18, color: '#666' }}>{ this.state.user.nickname }</span>
               <AvatarWithNotifications user={ this.state.user } acceptInvitationCallback={ this.acceptInvitationCallback } />
             </Col>
           </Row>
@@ -235,7 +234,7 @@ class App extends React.Component {
 
 const CustomizedForm = Form.create({
   onFieldsChange(props, changedFields) {
-    props.onChange(changedFields);
+    props.onChange(changedFields)
   },
   mapPropsToFields(props) {
     return {
@@ -263,4 +262,4 @@ ReactDOM.render(
     <App />
   </LocaleProvider>,
   document.getElementById('main')
-);
+)

@@ -1,5 +1,3 @@
-import 'antd/dist/antd.css';
-
 import { Icon, Input, Popconfirm, Table, message } from 'antd';
 import { formatOpenCoterieDocumentUrl, getCookie, getUrlFormat } from 'util.js'
 
@@ -51,7 +49,7 @@ class ChangeDocumentName extends React.Component {
     )
     var link = (
       <div className="editable-cell-text-wrapper">
-        <a href={formatOpenCoterieDocumentUrl(this.props.coterieDocument, this.props.coteriePk)}>{value || ' '}</a>
+        <a className='document-link' href={formatOpenCoterieDocumentUrl(this.props.coterieDocument, this.props.coteriePk)}>{value || ' '}</a>
         <Icon
           type="edit"
           className="editable-cell-icon"
@@ -115,7 +113,7 @@ class GroupDocumentsList extends React.Component {
     var changeDocumentName = ((text, coterieDocument) => (
       <ChangeDocumentName
         coterieDocument={coterieDocument}
-        anchor={ <a href={formatOpenCoterieDocumentUrl(coterieDocument, this.state.coteriePk)}>{text}</a> }
+        anchor={ <a className='document-link' href={formatOpenCoterieDocumentUrl(coterieDocument, this.state.coteriePk)}>{text}</a> }
         onChange={this.onCoterieDocumentRename(coterieDocument.pk, 'title')}
         coteriePk={this.state.coteriePk}
       />)
