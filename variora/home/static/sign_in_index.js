@@ -1,20 +1,20 @@
 import './css/sign_in_index.css'
-import 'regenerator-runtime/runtime';
+import 'regenerator-runtime/runtime'
 
-import { Button, Col, Form, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, notification } from 'antd';
+import { Button, Col, Form, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, notification } from 'antd'
 import { getCookie, getUrlFormat } from 'util.js'
 
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
+import ReactDOM from 'react-dom'
 import axios from 'axios'
-import enUS from 'antd/lib/locale-provider/en_US';
+import enUS from 'antd/lib/locale-provider/en_US'
 
-const FormItem = Form.Item;
+const FormItem = Form.Item
 
-const { SubMenu } = Menu;
-const { Header, Content, Sider } = Layout;
-const MenuItemGroup = Menu.ItemGroup;
-const Search = Input.Search;
+const { SubMenu } = Menu
+const { Header, Content, Sider } = Layout
+const MenuItemGroup = Menu.ItemGroup
+const Search = Input.Search
 
 
 class NormalLoginForm extends React.Component {
@@ -39,20 +39,20 @@ class NormalLoginForm extends React.Component {
               notification['warning']({
                 message: e.response == undefined ? '' : e.response.data,
                 duration: 1.8,
-              });
+              })
             })
           }, function(error) {
-            alert(JSON.stringify(error, undefined, 2));
-          });
+            alert(JSON.stringify(error, undefined, 2))
+          })
     }
     gapi.load('auth2', function(){
       // Retrieve the singleton for the GoogleAuth library and set up the client.
       auth2 = gapi.auth2.init({
         client_id: '519848814448-89p2bv1b6bksdnd3in64r25j9vq1hgc5.apps.googleusercontent.com',
         cookiepolicy: 'single_host_origin',
-      });
-      attachSignin(document.getElementById('google-login'));
-    });
+      })
+      attachSignin(document.getElementById('google-login'))
+    })
   }
   redirectToNUSSignIn() {
     var host = 'http://' + window.location.host
@@ -76,13 +76,13 @@ class NormalLoginForm extends React.Component {
             message: e.response == undefined ? '' : e.response.data,
             // description: e.response == undefined ? '' : e.response.data,
             duration: 1.8,
-          });
+          })
         })
       }
-    });
+    })
   }
   render() {
-    const { getFieldDecorator } = this.props.form;
+    const { getFieldDecorator } = this.props.form
     return (
       <Row style={{ marginTop: '8%' }}>
         <Col span={8} offset={8}>
@@ -136,11 +136,11 @@ class NormalLoginForm extends React.Component {
           </Form>
         </Col>
       </Row>
-    );
+    )
   }
 }
 
-const SignInForm = Form.create()(NormalLoginForm);
+const SignInForm = Form.create()(NormalLoginForm)
 
 ReactDOM.render(
   <LocaleProvider locale={enUS}>

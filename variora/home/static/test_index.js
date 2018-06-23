@@ -1,7 +1,7 @@
 import './css/test_index.css'
 import 'regenerator-runtime/runtime'
 
-import { Avatar, Breadcrumb, Button, Col, Form, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, Upload, message } from 'antd';
+import { Avatar, Breadcrumb, Button, Col, Form, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, Upload, message } from 'antd'
 import {
   Link,
   Redirect,
@@ -14,27 +14,27 @@ import { getCookie, getUrlFormat } from 'util.js'
 import { AvatarWithNotifications } from './components/avatar_with_notifications.jsx'
 import { DocumentTab } from './components/document_tab.jsx'
 import { GroupTab } from './components/group_tab.jsx'
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
+import ReactDOM from 'react-dom'
 import { SearchResultTab } from './components/search_result_tab.jsx'
 import axios from 'axios'
-import enUS from 'antd/lib/locale-provider/en_US';
+import enUS from 'antd/lib/locale-provider/en_US'
 
-const FormItem = Form.Item;
+const FormItem = Form.Item
 
 
-const { SubMenu } = Menu;
-const { Header, Content, Sider, Footer } = Layout;
-const MenuItemGroup = Menu.ItemGroup;
-const Search = Input.Search;
-const CREATE_NEW_GROUP_MENU_ITEM_KEY = 'createGroupButton';
+const { SubMenu } = Menu
+const { Header, Content, Sider, Footer } = Layout
+const MenuItemGroup = Menu.ItemGroup
+const Search = Input.Search
+const CREATE_NEW_GROUP_MENU_ITEM_KEY = 'createGroupButton'
 
 
 const URL_BASE = ''
 
 class App extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       fields: {
         coterieName: {
@@ -51,10 +51,10 @@ class App extends React.Component {
       },
     }
     this.handleSearch = (searchKey) => {
-      window.location.href = decodeURIComponent(URL_BASE + '/search?key=' + searchKey);
+      window.location.href = decodeURIComponent(URL_BASE + '/search?key=' + searchKey)
     }
     this.setCreateGroupModelVisible = (visibility) => {
-      this.setState({ createGroupModelVisible: visibility });
+      this.setState({ createGroupModelVisible: visibility })
     }
     this.onClickCreateGroupMenuItem = (menuItem) => {
       if (menuItem.key == CREATE_NEW_GROUP_MENU_ITEM_KEY)
@@ -68,7 +68,7 @@ class App extends React.Component {
     this.handleCreateCoterieFromChange = (changedFields) => {
       this.setState({
         fields: { ...this.state.fields, ...changedFields },
-      });
+      })
     }
     this.getHighlightedMenuItems = () => {
       var pathname = window.location.pathname
@@ -95,7 +95,7 @@ class App extends React.Component {
           this.setState({
             fields: { ...this.state.fields, coterieName: { value: '' } },
             administratedCoteries: newAdministratedCoteries
-          });
+          })
         })
       }
     }
@@ -139,7 +139,7 @@ class App extends React.Component {
   }
 
   render() {
-    const fields = this.state.fields;
+    const fields = this.state.fields
     return (
       <Layout style={{ height: '100%', width: '100%', position: 'absolute' }}>
         <Header className="header" style={{ backgroundColor: '#f6f6f6', diplay: 'inline' }}>
@@ -228,7 +228,7 @@ class App extends React.Component {
           </Layout>
         </Router>
       </Layout>
-    );
+    )
   }
 }
 
@@ -242,10 +242,10 @@ const CustomizedForm = Form.create({
         ...props.coterieName,
         value: props.coterieName.value,
       },
-    };
+    }
   },
 })((props) => {
-  const { getFieldDecorator } = props.form;
+  const { getFieldDecorator } = props.form
   return (
     <Form layout="inline">
       <FormItem label="group name">
@@ -254,8 +254,8 @@ const CustomizedForm = Form.create({
         })(<Input />)}
       </FormItem>
     </Form>
-  );
-});
+  )
+})
 
 ReactDOM.render(
   <LocaleProvider locale={enUS}>
