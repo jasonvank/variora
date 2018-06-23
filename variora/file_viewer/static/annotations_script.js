@@ -24,7 +24,7 @@ function removeAnnotationReply(id) {
 function addAnnotationRelatedListener() { addAnnotationRelatedListenerWithin($(document)) }
 
 function addAnnotationRelatedListenerWithin(jq) {
-  jq.find('code').addClass('prettyprint');
+  jq.find('code').addClass('prettyprint')
   PR.prettyPrint()
 
   jq.find(".AnnotationBlock").on("mouseover", function() {
@@ -226,6 +226,20 @@ function addAnnotationRelatedListenerWithin(jq) {
         //   tinyMCE.editors[editor].setContent('<img src="https://i.ytimg.com/an_webp/_B8RaLCNUZw/mqdefault_6s.webp?du=3000&amp;sqp=CJjesdkF&amp;rs=AOn4CLBqPkLkYs5Q1IdMgqn99-OYSp5UuQ" alt="" width="320" height="180" />')
       }
     }})
+  })
+
+  jq.find('.Annotation').addBack('.Annotation').on('mouseover', function() {
+    const annotationId = $(this).attr("annotation_id")
+    const annotationBlock = $(".AnnotationBlock[annotation_id='" + annotationId + "']")
+    $(this).css("box-shadow", '2px 3px 8px rgba(0, 0, 0, .25)')
+    annotationBlock.css("box-shadow", '2px 3px 8px rgba(0, 0, 0, .25)')
+  })
+
+  jq.find('.Annotation').addBack('.Annotation').on('mouseout', function() {
+    const annotationId = $(this).attr("annotation_id")
+    const annotationBlock = $(".AnnotationBlock[annotation_id='" + annotationId + "']")
+    $(this).css("box-shadow", 'none')
+    annotationBlock.css("box-shadow", 'none')
   })
 }
 

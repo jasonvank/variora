@@ -23,31 +23,31 @@ function pdfScale(scaleFactor) {
   currentScale *= scaleFactor;
 
   if (taskList.length > 0) {
-      while (taskList.length > 1)
-          taskList.pop();
-      taskList.push([taskList[0][0], "PENDING", null]);
+    while (taskList.length > 1)
+      taskList.pop();
+    taskList.push([taskList[0][0], "PENDING", null]);
   }
 
   for(var i = 0; i < finishList.length; i++) {
-      var id = "page_canvas_" + finishList[i];
-      var pre = document.getElementById(id);
-      pre.width = 0;
-      pre.height = 0;
-      taskList.push([finishList[i], "PENDING", null]);
+    var id = "page_canvas_" + finishList[i];
+    var pre = document.getElementById(id);
+    pre.width = 0;
+    pre.height = 0;
+    taskList.push([finishList[i], "PENDING", null]);
   }
 
   finishList = [];
   if(!rendering)
-      renderTaskList(taskList, finishList, currentScale);
+    renderTaskList(taskList, finishList, currentScale);
 
   var oldScrollHeight = $("#file_viewer")[0].scrollHeight;
 
   sampleWidth *= scaleFactor;
   sampleHeight *= scaleFactor;
   $(".page_div").each(function() {
-      var div = $(this);
-      div.css("width", sampleWidth + "px");
-      div.css("height", sampleHeight + "px");
+    var div = $(this);
+    div.css("width", sampleWidth + "px");
+    div.css("height", sampleHeight + "px");
   });
   resizeAnnotations(scaleFactor);
 
@@ -129,7 +129,7 @@ function startListeningSelectionBoxCreation() {
           containment: "parent"
         }).resizable({
           containment: "parent"
-        });
+        })
 
         // show post-annotation window
         // "annotationWindow" is a number (start from 1), which is the index of this annotation window
@@ -149,10 +149,10 @@ function startListeningSelectionBoxCreation() {
                         <button type="button" class="post_annotation_button btn " name="document_id" value="{{ document.id }}" style="margin: 8px; float: right; border-radius: 0; color: white; background-color: #1BA39C">post annotation</button>\
                     </form>',
           success: function() {
-            tinymceInit();
+            tinymceInit()
           },
           cancel: function() { // 窗口被关闭的回调函数：当窗口被关闭，annotation选定框也一并删除
-            new_annotation.remove();
+            new_annotation.remove()
           }
         });
 
@@ -188,17 +188,18 @@ function startListeningSelectionBoxCreation() {
                   newAnnotationDiv.insertBefore(nextAnnotationDiv)
 
                 addAnnotationRelatedListenerWithin(newAnnotationDiv)
-                tinymceInit();
+                addAnnotationRelatedListenerWithin(new_annotation)
+                tinymceInit()
 
-                new_annotation.attr("annotation_id", data.new_annotation_id);
+                new_annotation.attr("annotation_id", data.new_annotation_id)
 
                 // after uploading the annotation, close the window
-                layer.close(annotationWindow);
+                layer.close(annotationWindow)
               },
             })
             // 在ajax上传的过程中，禁用上传annotation的按钮
             // 以防止用户在ajax上传过程中（需要一小段时间）又重复点击了post_annotation_button
-            annotationWindowJqueryObject.find(".post_annotation_button").attr("disabled", true);
+            annotationWindowJqueryObject.find(".post_annotation_button").attr("disabled", true)
           } else
             layer.msg('You need to <a href="/sign-in" style="color: #ECECEC; text-decoration: underline">log in</a> first')
         });
@@ -206,7 +207,7 @@ function startListeningSelectionBoxCreation() {
         $(".PageImg, .PageCanvas, .Annotation").off("mousemove");
         $("body").off("mouseup");
         // 重新启用上传annotation的按钮
-        annotationWindowJqueryObject.find(".post_annotation_button").attr("disabled", false);
+        annotationWindowJqueryObject.find(".post_annotation_button").attr("disabled", false)
       }
       // if mouse is released outside of PageImg or PageCanvas, it is invalid
       else {
@@ -347,7 +348,6 @@ $(document).ready(function() {
   });
 
   addCommentRelatedListener();
-  addAnnotationRelatedListener();
   setupFileViewerSize();
 
   var wrapper = $("#wrapper");
@@ -484,24 +484,25 @@ function prepareAndRenderAll(url) {
           "<canvas class='PageCanvas' id=" + "'" + new_page_canvas_id + "'" + "></canvas>" +
           "</div>" +
           "<br>";
-        appendPages = appendPages + new_page;
+        appendPages = appendPages + new_page
       }
 
-      $("#file_viewer").append(appendPages);
+      $("#file_viewer").append(appendPages)
 
-      $(".page_div").css("height", sampleHeight + "px");
-      $(".page_div").css("width", sampleWidth + "px");
+      $(".page_div").css("height", sampleHeight + "px")
+      $(".page_div").css("width", sampleWidth + "px")
 
-      startListeningSelectionBoxCreation();
-      drawAllExistingAnnotationFrame();
+      startListeningSelectionBoxCreation()
+      drawAllExistingAnnotationFrame()
+      addAnnotationRelatedListener()
 
-      taskList.push([Math.min(numPages, 1), "PENDING", null]);
-      taskList.push([Math.min(numPages, 2), "PENDING", null]);
-      taskList.push([Math.min(numPages, 3), "PENDING", null]);
-      taskList.push([Math.min(numPages, 4), "PENDING", null]);
-      taskList.push([Math.min(numPages, 5), "PENDING", null]);
-      renderTaskList(taskList, finishList, currentScale);
-      startListeningScroll();
-    });
-  });
+      taskList.push([Math.min(numPages, 1), "PENDING", null])
+      taskList.push([Math.min(numPages, 2), "PENDING", null])
+      taskList.push([Math.min(numPages, 3), "PENDING", null])
+      taskList.push([Math.min(numPages, 4), "PENDING", null])
+      taskList.push([Math.min(numPages, 5), "PENDING", null])
+      renderTaskList(taskList, finishList, currentScale)
+      startListeningScroll()
+    })
+  })
 }
