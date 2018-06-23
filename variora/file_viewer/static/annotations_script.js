@@ -21,6 +21,23 @@ function removeAnnotationReply(id) {
   }
 }
 
+function _checkCoverage(annotationDom, e, pageJQ) {
+  var top_left_relative_x = e.pageX - pageJQ.offset().left
+  var top_left_relative_y = e.pageY - pageJQ.offset().top
+  return _getLeft(annotationDom) <= top_left_relative_x &&
+        _getRight(annotationDom) >= top_left_relative_x &&
+        _getTop(annotationDom) <= top_left_relative_y &&
+        _getBottom(annotationDom) >= top_left_relative_y
+}
+
+function _getLeft(annotationDom) { return parseFloat($(annotationDom).css('left')) }
+
+function _getRight(annotationDom) { return parseFloat($(annotationDom).css('left')) + $(annotationDom).width() }
+
+function _getTop(annotationDom) { return parseFloat($(annotationDom).css('top')) }
+
+function _getBottom(annotationDom) { return parseFloat($(annotationDom).css('top')) + $(annotationDom).height() }
+
 function addAnnotationRelatedListener() { addAnnotationRelatedListenerWithin($(document)) }
 
 function addAnnotationRelatedListenerWithin(jq) {
@@ -30,8 +47,8 @@ function addAnnotationRelatedListenerWithin(jq) {
   jq.find(".AnnotationBlock").on("mouseover", function() {
     var annotation_id = $(this).attr("annotation_id")
     var Annotation = $(".Annotation[annotation_id='" + annotation_id + "']")
-    $(this).css("box-shadow", '2px 3px 8px rgba(0, 0, 0, .25)')
-    Annotation.css("box-shadow", '2px 3px 8px rgba(0, 0, 0, .25)')
+    $(this).css("box-shadow", '3px 3px 8px rgba(0, 0, 0, .25)')
+    Annotation.css("box-shadow", '3px 3px 8px rgba(0, 0, 0, .25)')
   })
 
   jq.find(".AnnotationBlock").on("mouseout", function() {
@@ -228,52 +245,42 @@ function addAnnotationRelatedListenerWithin(jq) {
     }})
   })
 
-  jq.find('.Annotation').addBack('.Annotation').on('mouseover', function(e) {
-    const page = $(this).parent('.page_div').children('.PageCanvas')
-    const allAnnotations = $(this).parent('.page_div').find('.Annotation').toArray()
+  jq.find('.Annotation').addBack('.Annotation').on('mouseover', function() {
+    const pageJQ = $(this).parent('.page_div').children('.PageCanvas')
+    const allAnnotationsInThisPage = $(this).parent('.page_div').find('.Annotation').toArray()
     var target = undefined
 
     jq.find('.Annotation').addBack('.Annotation').on('mousemove', function(e) {
-      var mouse_absolute_x = e.pageX
-      var mouse_absolute_y = e.pageY
-      var page_top_left_x = page.offset().left
-      var page_top_left_y = page.offset().top
-      var top_left_relative_x = mouse_absolute_x - page_top_left_x
-      var top_left_relative_y = mouse_absolute_y - page_top_left_y
-      function check(annotation) {
-        const left = parseFloat($(annotation).css('left'))
-        const right = left + $(annotation).width()
-        const top = parseFloat($(annotation).css('top'))
-        const bottom = top + $(annotation).height()
-        return left <= top_left_relative_x && right >= top_left_relative_x && top <= top_left_relative_y && bottom >= top_left_relative_y
-      }
-      var coverAnnotations = allAnnotations.filter(annotation => check(annotation))
-      var newTarget = $(coverAnnotations.sort((a, b) => parseFloat($(a).css('left')) + $(a).width() > parseFloat($(b).css('left')) + $(b).width())[0])
+      var coverAnnotations = allAnnotationsInThisPage.filter(annotation => _checkCoverage(annotation, e, pageJQ))
+
+      var sortedCloseness = coverAnnotations.sort((a, b) => _getRight(a) > _getRight(b))
+      if (_getRight(sortedCloseness[1]) - _getRight(sortedCloseness[0]) < 9)  // right side too close
+        sortedCloseness = coverAnnotations.sort((a, b) => _getLeft(a) < _getLeft(b))  // add Top and Bottom in the similar way if required
+
+      const newTarget = $(sortedCloseness[0])
+
       if (newTarget != target) {
         if (target != undefined) {
           target.css("box-shadow", 'none')
           $(".AnnotationBlock[annotation_id='" + $(target).attr("annotation_id") + "']").css("box-shadow", 'none')
         }
-        newTarget.css("box-shadow", '2px 3px 8px rgba(0, 0, 0, .25)')
-        $(".AnnotationBlock[annotation_id='" + $(newTarget).attr("annotation_id") + "']").css("box-shadow", '2px 3px 8px rgba(0, 0, 0, .25)')
+        newTarget.css("box-shadow", '3px 3px 8px rgba(0, 0, 0, .25)')
+        $(".AnnotationBlock[annotation_id='" + $(newTarget).attr("annotation_id") + "']").css("box-shadow", '3px 3px 8px rgba(0, 0, 0, .25)')
         target = newTarget
-        newTarget.on('click', function() {
-          scrollAnnotationDivIntoView($(".AnnotationDiv[annotation_id='" + $(this).attr("annotation_id") + "']"))
-        })
+        // newTarget.on('click', function() {
+        //   scrollAnnotationDivIntoView($(".AnnotationDiv[annotation_id='" + $(this).attr("annotation_id") + "']"))
+        // })
       }
     })
-
-    // const annotationId = $(this).attr("annotation_id")
-    // const annotationBlock = $(".AnnotationBlock[annotation_id='" + annotationId + "']")
-    // $(this).css("box-shadow", '2px 3px 8px rgba(0, 0, 0, .25)')
-    // annotationBlock.css("box-shadow", '2px 3px 8px rgba(0, 0, 0, .25)')
   })
 
   jq.find('.Annotation').addBack('.Annotation').on('mouseout', function() {
-    const annotationId = $(this).attr("annotation_id")
-    const annotationBlock = $(".AnnotationBlock[annotation_id='" + annotationId + "']")
-    $(this).css("box-shadow", 'none')
-    annotationBlock.css("box-shadow", 'none')
+    const allAnnotationsInThisPage = $(this).parent('.page_div').find('.Annotation').toArray()
+    for (var a of allAnnotationsInThisPage) {
+      $(a).css("box-shadow", 'none')
+      $(".AnnotationBlock[annotation_id='" + $(a).attr("annotation_id") + "']").css("box-shadow", 'none')
+      $(a).off('mousemove')
+    }
   })
 }
 
