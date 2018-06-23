@@ -25,7 +25,7 @@ function addAnnotationRelatedListener() { addAnnotationRelatedListenerWithin($(d
 
 function addAnnotationRelatedListenerWithin(jq) {
   jq.find('code').addClass('prettyprint');
-  PR.prettyPrint();
+  PR.prettyPrint()
 
   jq.find(".AnnotationBlock").on("mouseover", function() {
     var annotation_id = $(this).attr("annotation_id");
@@ -35,10 +35,10 @@ function addAnnotationRelatedListenerWithin(jq) {
   });
 
   jq.find(".AnnotationBlock").on("mouseout", function() {
-    var annotation_id = $(this).attr("annotation_id");
+    var annotation_id = $(this).attr("annotation_id")
     var Annotation = $(".Annotation[annotation_id='" + annotation_id + "']");
-    $(this).css("box-shadow", 'none');
-    Annotation.css("box-shadow", 'none');
+    $(this).css("box-shadow", 'none')
+    Annotation.css("box-shadow", 'none')
   });
 
   // jq.find(".AnnotationBlock").on("click", function(e) { // scroll to the corresponding Anotation when clicking a certain AnnotationBlock
@@ -54,9 +54,9 @@ function addAnnotationRelatedListenerWithin(jq) {
   // })
 
   jq.find(".AnnotationDirectButton").on("click", function(e) {
-    var annotation_id = $(this).parents('.AnnotationDiv').attr("annotation_id");
-    var Annotation = $(".Annotation[annotation_id='" + annotation_id + "']");
-    var fileViewer = $("#file_viewer");
+    var annotation_id = $(this).parents('.AnnotationDiv').attr("annotation_id")
+    var Annotation = $(".Annotation[annotation_id='" + annotation_id + "']")
+    var fileViewer = $("#file_viewer")
     var down = Annotation.offset().top - fileViewer.offset().top + fileViewer.scrollTop() - window.innerHeight * 0.38 + Annotation.height() / 2;
     fileViewer.animate({
       scrollTop: parseInt(down)
@@ -66,7 +66,7 @@ function addAnnotationRelatedListenerWithin(jq) {
   jq.find(".PostReplyReplyButton").on("click", function() {
     if (is_authenticated) {
       var is_public = !this.classList.contains('AnonymouslyPostReplyReplyButton')
-      var thisButton = $(this);
+      var thisButton = $(this)
       var index = layer.load(1, { shade: 0.18 }); //0 represent the style, can be 0-2
       $.ajax({
         type: "POST",
@@ -112,14 +112,14 @@ function addAnnotationRelatedListenerWithin(jq) {
         removeAnnotationReply(replyId)
         layer.close(index)
       }
-    });
-  });
+    })
+  })
 
   jq.find(".PostAnnotationReplyButton").on("click", function() {
     if (is_authenticated) {
       var is_public = !this.classList.contains('AnonymouslyPostAnnotationReplyButton')
-      var thisButton = $(this);
-      var index = layer.load(1, {shade: 0.18}); //0 represent the style, can be 0-2
+      var thisButton = $(this)
+      var index = layer.load(1, {shade: 0.18}) //0 represent the style, can be 0-2
       $.ajax({
         type: "POST",
         url: "",
@@ -140,14 +140,14 @@ function addAnnotationRelatedListenerWithin(jq) {
           tinymceInit();
           layer.close(index);
         }
-      });
+      })
     } else
       layer.msg('You need to <a href="/sign-in" style="color: #ECECEC; text-decoration: underline">log in</a> first')
   })
 
   jq.find(".DeleteAnnotationButton").on("click", function() {
     var index = layer.load(1, { shade: 0.18 });  // 0 represent the style, can be 0-2
-    var annotationID = this.value;
+    var annotationID = this.value
     $.ajax({
       type: "POST",
       url: "",
@@ -157,19 +157,19 @@ function addAnnotationRelatedListenerWithin(jq) {
         annotation_id: this.value,
       },
       success: function() {
-        removeAnnotation(annotationID);
+        removeAnnotation(annotationID)
         layer.close(index)
       }
-    });
-  });
+    })
+  })
 
   jq.find(".LikeAnnotationButton").on("click", function() {
     if (is_authenticated) {
       const $this = $(this);
-      var new_num = parseInt($this.next().text()) + 1;
-      $this.next().text(new_num.toString());
+      var new_num = parseInt($this.next().text()) + 1
+      $this.next().text(new_num.toString())
       $this.off("click");
-      $this.css("color", "#6495ED");
+      $this.css("color", "#6495ED")
       $this.on("click", function() {
         layer.msg('already liked', {
           icon: 6,
@@ -184,10 +184,10 @@ function addAnnotationRelatedListenerWithin(jq) {
           operation: "like_annotation",
           annotation_id: $this.attr("annotation_id"),
         },
-      });
+      })
     } else
       layer.msg('You need to <a href="/sign-in" style="color: #ECECEC; text-decoration: underline">log in</a> first')
-  });
+  })
 
   jq.find(".LikeAnnotationReplyButton").on("click", function() {
     if (is_authenticated) {
@@ -200,8 +200,8 @@ function addAnnotationRelatedListenerWithin(jq) {
         layer.msg('already liked', {
           icon: 6,
           time: 800,
-        });
-      });
+        })
+      })
       $.ajax({
         type: "POST",
         url: "",
@@ -210,10 +210,10 @@ function addAnnotationRelatedListenerWithin(jq) {
           operation: "like_annotation_reply",
           annotation_reply_id: $this.attr("annotation_reply_id"),
         },
-      });
+      })
     } else
       layer.msg('You need to <a href="/sign-in" style="color: #ECECEC; text-decoration: underline">log in</a> first')
-  });
+  })
 
   jq.find(".ReplyAnnotationButton").on("click", function() {
     const currentVisible = !$(this).css('display') === 'none'
@@ -225,8 +225,8 @@ function addAnnotationRelatedListenerWithin(jq) {
         // for (var editor in tinyMCE.editors)
         //   tinyMCE.editors[editor].setContent('<img src="https://i.ytimg.com/an_webp/_B8RaLCNUZw/mqdefault_6s.webp?du=3000&amp;sqp=CJjesdkF&amp;rs=AOn4CLBqPkLkYs5Q1IdMgqn99-OYSp5UuQ" alt="" width="320" height="180" />')
       }
-    }});
-  });
+    }})
+  })
 }
 
 export { addAnnotationRelatedListener, addAnnotationRelatedListenerWithin }
