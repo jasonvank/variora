@@ -178,15 +178,14 @@ def display_coteriefile_viewer_page(request, **kwargs):
             annotation.frame_color = request.POST["frame_color"]
             annotation.is_public = True if request.POST["is_public"] == 'true' else False
             annotation.save()
-
             context = {
                 "document": document,
-                "annotations": document.coterieannotation_set.order_by("page_index"),
+                "annotation": annotation,
+                'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,
                 "new_annotation_id": annotation.id,
             }
-
             return JsonResponse({
-                'new_annotations_html': render(request, "coterie_file_viewer/annotation_viewer_subpage.html", context).content,
+                'new_annotationdiv_html': render(request, "file_viewer/one_annotation_div.html", context).content,
                 'new_annotation_id': annotation.id
             })
 

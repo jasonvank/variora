@@ -108,12 +108,12 @@ class FileViewerView(View):
             annotation.save()
             context = {
                 "document": document,
-                "annotations": document.annotation_set.order_by("page_index"),
+                'annotation': annotation,
                 'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,
                 "new_annotation_id": annotation.id,
             }
             return JsonResponse({
-                'new_annotations_html': render(request, "file_viewer/annotation_viewer_subpage.html", context).content,
+                'new_annotationdiv_html': render(request, "file_viewer/one_annotation_div.html", context).content,
                 'new_annotation_id': annotation.id
             })
 

@@ -1,7 +1,7 @@
+import { addAnnotationRelatedListener, addAnnotationRelatedListenerWithin } from './annotations_script.js'
 import { addCommentRelatedListener, enablePostCommentButton, enableRefreshCommentButton } from './comments_script.js'
 import { getCookie, hexToRgb, imgLoad } from 'util.js'
 
-import { addAnnotationRelatedListener } from './annotations_script.js'
 import { prepareNavbarFunction } from './navbar_subpage_script.js'
 import { tinymceInit } from './tinymce_script'
 
@@ -180,8 +180,14 @@ function startListeningSelectionBoxCreation() {
               success: function(data) {
                 // after uploading the annotation, 选择框将不再可以调整大小和拖动
                 new_annotation.draggable("destroy").resizable("destroy");
-                $("#annotation_update_div").html(data.new_annotations_html);
-                addAnnotationRelatedListener()
+                var newAnnotationDiv = $(data.new_annotationdiv_html)
+                var nextAnnotationDiv = $($('.AnnotationDiv').toArray().find(div => parseInt(div.getAttribute('page')) >= parseInt(newAnnotationDiv.attr('page'))))
+                if (nextAnnotationDiv[0] == undefined)
+                  $('#annotation_update_div').append(newAnnotationDiv)
+                else
+                  newAnnotationDiv.insertBefore(nextAnnotationDiv)
+
+                addAnnotationRelatedListenerWithin(newAnnotationDiv)
                 tinymceInit();
 
                 new_annotation.attr("annotation_id", data.new_annotation_id);
@@ -251,6 +257,10 @@ function prepareScrollPageIntoView() {
   input.attr("max", numPages.toString());
   button.on("click", function() {
     var pageIndex = input.val();
+    if (pageIndex < 1 || pageIndex > numPages) {
+      layer.msg('Input page index out of bounds')
+      return false
+    }
     var pageDivId = "page_div_" + pageIndex;
     var pageDiv = $("#" + pageDivId);
     scrollPageDivIntoView(pageDiv);

@@ -229,4 +229,4 @@ function addAnnotationRelatedListenerWithin(jq) {
   });
 }
 
-export { addAnnotationRelatedListener }
+export { addAnnotationRelatedListener, addAnnotationRelatedListenerWithin }
