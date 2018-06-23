@@ -17,13 +17,11 @@ class CollectedDocumentsList extends React.Component {
     }
     this.updateData = (response) => {
       axios.get(getUrlFormat('/file_viewer/api/documents', {
-      }))
-      .then(response => {
+      })).then(response => {
         this.setState({
           data: response.data['collectedDocuments']
         })
-      })
-      .catch(e => { message.warning(e.message) })
+      }).catch(e => { message.warning(e.message) })
     }
     this.onUncollectDocument = (test, collectDocument) => {
       var data = new FormData()
@@ -47,13 +45,13 @@ class CollectedDocumentsList extends React.Component {
       title: 'Title',
       dataIndex: 'title',
       width: '40%',
-      render: (text, record) => <a href={formatOpenDocumentUrl(record)}>{text}</a>,
+      render: (text, record) => <a className='document-link' href={formatOpenDocumentUrl(record)}>{text}</a>,
     }, {
       title: 'Action',
       key: 'action',
       width: '40%',
       render: (text, collectedDocument) => (
-        <a style={{ color: '#F2784B' }} onClick={() => this.onUncollectDocument(text, collectedDocument)}>Uncollect</a>
+        <a onClick={() => this.onUncollectDocument(text, collectedDocument)}>Uncollect</a>
       ),
     }]
     return (
