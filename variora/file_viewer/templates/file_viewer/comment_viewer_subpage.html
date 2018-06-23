@@ -15,7 +15,7 @@
         {{ comment.commenter.nickname }} | {{ comment.post_time }}
         {% else %}
         <img class="img-rounded" src="{{ ANONYMOUS_USER_PORTRAIT_URL }}" height="38" width="38">
-        Anonymous user | {{ comment.post_time.date|date:"Y. M. d" }}
+        Anonymous | {{ comment.post_time.date|date:"Y. M. d" }}
         {% endif %}
         <div style="float: right">
             {% if comment.commenter == request.user %}

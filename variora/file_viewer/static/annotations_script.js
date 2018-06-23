@@ -165,7 +165,7 @@ function addAnnotationRelatedListenerWithin(jq) {
 
   jq.find(".LikeAnnotationButton").on("click", function() {
     if (is_authenticated) {
-      var $this = $(this);
+      const $this = $(this);
       var new_num = parseInt($this.next().text()) + 1;
       $this.next().text(new_num.toString());
       $this.off("click");
@@ -191,7 +191,7 @@ function addAnnotationRelatedListenerWithin(jq) {
 
   jq.find(".LikeAnnotationReplyButton").on("click", function() {
     if (is_authenticated) {
-      var $this = $(this);
+      const $this = $(this);
       var new_num = parseInt($this.next().text()) + 1;
       $this.next().text(new_num.toString());
       $this.off("click");
@@ -216,7 +216,7 @@ function addAnnotationRelatedListenerWithin(jq) {
   });
 
   jq.find(".ReplyAnnotationButton").on("click", function() {
-    var currentVisible = !$(this).css('display') ==
+    const currentVisible = !$(this).css('display') === 'none'
     $(this).parents("footer").children("form").slideToggle({duration: 180, start: function() {
       if (currentVisible) {
         // tinyMCE.activeEditor.setContent("")

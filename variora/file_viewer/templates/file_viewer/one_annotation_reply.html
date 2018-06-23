@@ -11,7 +11,7 @@
       {{ annotation_reply.replier.nickname }} | {{ annotation_reply.post_time.date|date:"Y. M. d" }}
       {% else %}
       <img class="img-rounded" src="{{ ANONYMOUS_USER_PORTRAIT_URL }}" height="28" width="28">
-      Anonymous user | {{ annotation_reply.post_time.date|date:"Y. M. d" }}
+      Anonymous | {{ annotation_reply.post_time.date|date:"Y. M. d" }}
       {% endif %}
       <div style="float: right;">
           <button class="ReplyAnnotationButton btn" style="border: none; background: none; padding: 0 4px"><i class="fa fa-reply" aria-hidden="true"></i>&nbspreply</button>
