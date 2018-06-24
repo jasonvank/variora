@@ -62,7 +62,7 @@ class UploadedDocuments extends React.Component {
         notification['warning']({
           message: 'Document title cannot be empty',
           duration: 1.8,
-        });
+        })
         return false
       }
       var data = new FormData()
@@ -107,13 +107,25 @@ class UploadedDocuments extends React.Component {
           this.uploadedDocumentTable.updateData()
         })
     }
+    this.handleDefaultDocumentName = this.handleDefaultDocumentName.bind(this)
+    this.handleUserInputDocumentName = this.handleUserInputDocumentName.bind(this)
   }
+
+  handleDefaultDocumentName(event) {
+    var defaultDocumentName = this.state.uploadedDocumentFileList[0] ? this.state.uploadedDocumentFileList[0].name : 'undefined'
+    this.setState({ uploadedDocumentName: defaultDocumentName })
+  }
+  handleUserInputDocumentName(event) {
+    this.setState({ uploadedDocumentName: event.target.value })
+}
+
+
   render() {
     var self = this;
     var uploadProps = {
       accept: 'application/pdf',
       showUploadList: true,
-      beforeUpload(file, fileList) { self.setState({ uploadedDocumentFileList: [file] }); return false },
+      beforeUpload(file, fileList) { self.setState({ uploadedDocumentFileList: [file], uploadedDocumentName: file.name}); return false },
       fileList: this.state.uploadedDocumentFileList,
     }
     return (
@@ -131,9 +143,9 @@ class UploadedDocuments extends React.Component {
               </Upload>
               <Input
                 style={{ width: '60%', margin: 8 }}
-                onChange={async (e) => this.setState({ uploadedDocumentName: e.target.value })}
                 value={this.state.uploadedDocumentName}
-                placeholder={ 'Give a title to this document' }
+                onChange={ this.handleDefaultDocumentName }
+                onChange={ this.handleUserInputDocumentName }
               ></Input>
               <div>
                 <Button type="primary" icon="upload" style={{ margin: 8 }} onClick={this.uploadLocalDocument}>upload</Button>
