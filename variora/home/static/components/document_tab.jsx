@@ -1,22 +1,22 @@
-import 'regenerator-runtime/runtime';
+import 'regenerator-runtime/runtime'
 
-import { Button, Col, Icon, Input, Layout, Menu, Modal, Row, Upload, notification } from 'antd';
+import { Button, Col, Icon, Input, Layout, Menu, Modal, Row, Upload, notification } from 'antd'
 import { Link, Route, BrowserRouter as Router, Switch } from 'react-router-dom'
 import { getCookie, getUrlFormat } from 'util.js'
 
 import { CollectedDocumentsList } from './collected_documents_list.jsx'
-import React from 'react';
+import React from 'react'
 import { UploadedDocumentsList } from './uploaded_documents_list.jsx'
 import axios from 'axios'
 
-const { SubMenu } = Menu;
-const { Header, Content, Sider } = Layout;
-const MenuItemGroup = Menu.ItemGroup;
+const { SubMenu } = Menu
+const { Header, Content, Sider } = Layout
+const MenuItemGroup = Menu.ItemGroup
 
 
 class DocumentTab extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {}
   }
 
@@ -42,13 +42,13 @@ class DocumentTab extends React.Component {
           <Route exact path="/collected" component={CollectedDocuments}/>
         </Switch>
       </Content>
-    );
+    )
   }
 }
 
 class UploadedDocuments extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       uploadedDocumentFileList: [],
       uploadedDocumentName: '',
@@ -117,11 +117,11 @@ class UploadedDocuments extends React.Component {
   }
   handleUserInputDocumentName(event) {
     this.setState({ uploadedDocumentName: event.target.value })
-}
+  }
 
 
   render() {
-    var self = this;
+    var self = this
     var uploadProps = {
       accept: 'application/pdf',
       showUploadList: true,
@@ -180,7 +180,7 @@ class UploadedDocuments extends React.Component {
 
 class CollectedDocuments extends React.Component {
   constructor() {
-    super();
+    super()
   }
   render() {
     return (
@@ -193,22 +193,4 @@ class CollectedDocuments extends React.Component {
   }
 }
 
-export { DocumentTab };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+export { DocumentTab }
