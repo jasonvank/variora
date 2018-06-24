@@ -144,8 +144,9 @@ class UploadedDocuments extends React.Component {
               <Input
                 style={{ width: '60%', margin: 8 }}
                 value={this.state.uploadedDocumentName}
-                onChange={ this.handleDefaultDocumentName }
-                onChange={ this.handleUserInputDocumentName }
+                onChange={this.handleDefaultDocumentName}
+                onChange={this.handleUserInputDocumentName}
+                placeholder={'Give a title to this document'}
               ></Input>
               <div>
                 <Button type="primary" icon="upload" style={{ margin: 8 }} onClick={this.uploadLocalDocument}>upload</Button>
