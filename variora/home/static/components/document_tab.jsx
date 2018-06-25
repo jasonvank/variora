@@ -58,7 +58,7 @@ class UploadedDocuments extends React.Component {
     this.uploadedDocumentTable = undefined
     this.uploadLocalDocument = () => {
       var title = this.state.uploadedDocumentName
-      var regex = /[^\w|\-|&|.|(|)|:|[|\]|@|<|>]/gm;
+      var invalidSpecialCharacter = /[^\w|\-|&|.|(|)|:|[|\]|@|<|>]/gm;
       if (title == undefined || title == '') {
         notification['warning']({
           message: 'Document title cannot be empty',
@@ -66,7 +66,7 @@ class UploadedDocuments extends React.Component {
         })
         return false
       }
-      if (title.match(regex) != null) {
+      if (title.match(invalidSpecialCharacter) != null) {
         notification['warning']({
           message: 'The document name contains invalid character',
           description: 'The special characters you can include in your document name are "^-_$.():[]@<>"',
@@ -95,7 +95,7 @@ class UploadedDocuments extends React.Component {
     this.uploadOnlineDocument = () => {
       var title = this.state.onlineDocumentName
       var externalUrl = this.state.onlineDocumentUrl
-      var regex = /[^\w|\-|&|.|(|)|:|[|\]|@|<|>]/gm;
+      var invalidSpecialCharacter = /[^\w|\-|&|.|(|)|:|[|\]|@|<|>]/gm;
       if (title == undefined || title == '') {
         notification['warning']({
           message: 'Document title cannot be empty',
@@ -110,7 +110,7 @@ class UploadedDocuments extends React.Component {
         })
         return false
       }
-      if(title.match(regex)!=null){
+      if(title.match(invalidSpecialCharacter)!=null){
         notification['warning']({
           message: 'The document name contains invalid character',
           description: 'The special characters you can include in your document name are "^-_$.():[]@<>"',
