@@ -58,10 +58,19 @@ class UploadedDocuments extends React.Component {
     this.uploadedDocumentTable = undefined
     this.uploadLocalDocument = () => {
       var title = this.state.uploadedDocumentName
+      var regex = /[^\w|\-|&|.|(|)|:|[|\]|@|<|>]/gm;
       if (title == undefined || title == '') {
         notification['warning']({
           message: 'Document title cannot be empty',
           duration: 1.8,
+        })
+        return false
+      }
+      if (title.match(regex) != null) {
+        notification['warning']({
+          message: 'The document name contains invalid character',
+          description: 'The special characters you can include in your document name are "^-_$.():[]@<>"',
+          duration: 0,
         })
         return false
       }
@@ -74,14 +83,19 @@ class UploadedDocuments extends React.Component {
           'Content-Type': 'multipart/form-data'
         }
       }).then(() => {
-        this.setState({ uploadedDocumentFileList: [] })
-        this.setState({ uploadedDocumentName: '' })
+        this.setState({
+          uploadedDocumentFileList: []
+        })
+        this.setState({
+          uploadedDocumentName: ''
+        })
         this.uploadedDocumentTable.updateData()
       })
     }
     this.uploadOnlineDocument = () => {
       var title = this.state.onlineDocumentName
       var externalUrl = this.state.onlineDocumentUrl
+      var regex = /[^\w|\-|&|.|(|)|:|[|\]|@|<|>]/gm;
       if (title == undefined || title == '') {
         notification['warning']({
           message: 'Document title cannot be empty',
@@ -93,6 +107,14 @@ class UploadedDocuments extends React.Component {
         notification['warning']({
           message: 'URL cannot be empty',
           duration: 1.8,
+        })
+        return false
+      }
+      if(title.match(regex)!=null){
+        notification['warning']({
+          message: 'The document name contains invalid character',
+          description: 'The special characters you can include in your document name are "^-_$.():[]@<>"',
+          duration: 0,
         })
         return false
       }
