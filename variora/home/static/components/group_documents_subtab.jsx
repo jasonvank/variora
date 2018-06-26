@@ -42,8 +42,8 @@ class GroupDocumentsSubtab extends React.Component {
       if (title.match(invalidSpecialCharacter) != null) {
         notification['warning']({
           message: 'The document name contains invalid character',
-          description: 'The special characters you can include in your document name are "^-_$.():[]@<>"',
-          duration: 10,
+          description: 'The special characters you can include in your document name are "-|&_.():[]@<>"',
+          duration: 6,
         })
         return false
       }
@@ -84,8 +84,8 @@ class GroupDocumentsSubtab extends React.Component {
       if(title.match(invalidSpecialCharacter)!=null){
         notification['warning']({
           message: 'The document name contains invalid character',
-          description: 'The special characters you can include in your document name are "^-_$.():[]@<>"',
-          duration: 10,
+          description: 'The special characters you can include in your document name are "-|&_.():[]@<>" ',
+          duration: 6,
         })
         return false
       }

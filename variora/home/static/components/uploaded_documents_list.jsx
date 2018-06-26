@@ -1,4 +1,4 @@
-import { Icon, Input, Popconfirm, Table, message } from 'antd';
+import { Icon, Input, Popconfirm, Table, message, notification } from 'antd';
 import { formatOpenDocumentUrl, getCookie, getUrlFormat } from 'util.js'
 
 import React from 'react';
@@ -16,9 +16,26 @@ class ChangeOpenDocumentName extends React.Component {
     this.setState({ value: e.target.value })
   }
   check = () => {
+    var newTitle = this.state.value
+    var invalidSpecialCharacter = /[^\w|\-|&|.|(|)|:|[|\]|@|<|>]/gm
+    if (newTitle == undefined || newTitle == '') {
+      notification['warning']({
+        message: 'Document title cannot be empty',
+        duration: 1.8,
+      })
+      return false
+    }
+    if(newTitle.match(invalidSpecialCharacter)!=null){
+      notification['warning']({
+        message: 'The document name contains invalid character',
+        description: 'The special characters you can include in your document name are "-|&_.():[]@<>"',
+        duration: 6,
+      })
+      return false
+    }
     this.setState({ editable: false })
     var data = new FormData()
-    data.append('new_title', this.state.value)
+    data.append('new_title', newTitle)
     data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
     axios.post(this.props.openDocument.renameUrl, data).then((response) => {
       this.props.onChange(this.state.value)
