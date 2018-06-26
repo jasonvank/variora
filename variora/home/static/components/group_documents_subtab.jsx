@@ -1,6 +1,6 @@
 import 'regenerator-runtime/runtime';
 
-import { Avatar, Button, Col, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, Upload } from 'antd';
+import { Avatar, Button, Col, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, Upload, notification } from 'antd';
 import {
   Link,
   Route,
@@ -30,8 +30,25 @@ class GroupDocumentsSubtab extends React.Component {
     }
     this.uploadedDocumentTable = undefined
     this.uploadLocalDocument = () => {
+      var title = this.state.uploadedDocumentName
+      var invalidSpecialCharacter = /[^\w|\-|&|.|(|)|:|[|\]|@|<|>]/gm;
+      if (title == undefined || title == '') {
+        notification['warning']({
+          message: 'Document title cannot be empty',
+          duration: 1.8,
+        })
+        return false
+      }
+      if (title.match(invalidSpecialCharacter) != null) {
+        notification['warning']({
+          message: 'The document name contains invalid character',
+          description: 'The special characters you can include in your document name are "^-_$.():[]@<>"',
+          duration: 10,
+        })
+        return false
+      }
       var data = new FormData()
-      data.append('title', this.state.uploadedDocumentName)
+      data.append('title', title)
       data.append('file_upload', this.state.uploadedDocumentFileList[0])
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
       data.append('coterie_id', this.props.coteriePk)
@@ -47,9 +64,34 @@ class GroupDocumentsSubtab extends React.Component {
       })
     }
     this.uploadOnlineDocument = () => {
+      var title = this.state.onlineDocumentName
+      var externalUrl = this.state.onlineDocumentUrl
+      var invalidSpecialCharacter = /[^\w|\-|&|.|(|)|:|[|\]|@|<|>]/gm;
+      if (title == undefined || title == '') {
+        notification['warning']({
+          message: 'Document title cannot be empty',
+          duration: 1.8,
+        })
+        return false
+      }
+      if (externalUrl == undefined || externalUrl == '') {
+        notification['warning']({
+          message: 'URL cannot be empty',
+          duration: 1.8,
+        })
+        return false
+      }
+      if(title.match(invalidSpecialCharacter)!=null){
+        notification['warning']({
+          message: 'The document name contains invalid character',
+          description: 'The special characters you can include in your document name are "^-_$.():[]@<>"',
+          duration: 10,
+        })
+        return false
+      }
       var data = new FormData()
-      data.append('title', this.state.onlineDocumentName)
-      data.append('external_url', this.state.onlineDocumentUrl)
+      data.append('title', title)
+      data.append('external_url', externalUrl)
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
       data.append('coterie_id', this.props.coteriePk)
       data.append('current_url', window.location.href)
@@ -59,14 +101,24 @@ class GroupDocumentsSubtab extends React.Component {
           this.uploadedDocumentTable.updateData()
         })
     }
+    this.handleDefaultDocumentName = this.handleDefaultDocumentName.bind(this)
+    this.handleUserInputDocumentName = this.handleUserInputDocumentName.bind(this)
   }
+  handleDefaultDocumentName(event) {
+    var defaultDocumentName = this.state.uploadedDocumentFileList[0] ? this.state.uploadedDocumentFileList[0].name : 'undefined'
+    this.setState({ uploadedDocumentName: defaultDocumentName })
+  }
+  handleUserInputDocumentName(event) {
+    this.setState({ uploadedDocumentName: event.target.value })
+  }
+
 
   render() {
     self = this;
     var uploadProps = {
       accept: 'application/pdf',
       showUploadList: true,
-      beforeUpload(file, fileList) { self.setState({ uploadedDocumentFileList: [file] }); return false },
+      beforeUpload(file, fileList) { self.setState({ uploadedDocumentFileList: [file], uploadedDocumentName: file.name }); return false },
       fileList: this.state.uploadedDocumentFileList,
     }
 
@@ -81,8 +133,9 @@ class GroupDocumentsSubtab extends React.Component {
             </Upload>
             <Input
               style={{ width: '60%', margin: 8 }}
-              onChange={async (e) => this.setState({ uploadedDocumentName: e.target.value })}
               value={this.state.uploadedDocumentName}
+              onChange={this.handleDefaultDocumentName}
+              onChange={this.handleUserInputDocumentName}
               placeholder={ 'name of the document' }
             ></Input>
             <div>
