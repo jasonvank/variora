@@ -138,10 +138,12 @@ class GroupDocumentsList extends React.Component {
     const columns = [{
         title: '#',
         dataIndex: 'id',
+        width:'20%',
         render: (text, record) => this.state.data.indexOf(record) + 1
       }, {
         title: 'Title',
         dataIndex: 'title',
+        width:'40%',
         render: (text, coterieDocument) => (
           this.props.isAdmin ? changeDocumentName(text, coterieDocument) :
                               <a href={formatOpenCoterieDocumentUrl(coterieDocument, this.state.coteriePk)}>{text}</a>
@@ -149,6 +151,7 @@ class GroupDocumentsList extends React.Component {
       }, {
       title: 'Action',
       key: 'action',
+      width:'40%',
       render: (text, record) => (
         <span>
           <Popconfirm
