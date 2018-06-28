@@ -252,7 +252,7 @@ function addAnnotationRelatedListenerWithin(jq) {
 
     jq.find('.Annotation').addBack('.Annotation').on('mousemove', function(e) {
       if (e.which != 0) {
-        const allAnnotationsInThisPage = $(this).parent('.page_div').find('.Annotation').toArray()
+        // const allAnnotationsInThisPage = $(this).parent('.page_div').find('.Annotation').toArray()
         for (var a of allAnnotationsInThisPage) {
           $(a).css("box-shadow", 'none')
           $(".AnnotationBlock[annotation_id='" + $(a).attr("annotation_id") + "']").css("box-shadow", 'none')
@@ -266,7 +266,8 @@ function addAnnotationRelatedListenerWithin(jq) {
       if (_getRight(sortedCloseness[1]) - _getRight(sortedCloseness[0]) < 9)  // right side too close
         sortedCloseness = coverAnnotations.sort((a, b) => _getLeft(a) < _getLeft(b))  // add Top and Bottom in the similar way if required
 
-      const newTarget = $(sortedCloseness[0])
+      // const newTarget = $(sortedCloseness[0])
+      const newTarget = findTargetAnnotation(e, allAnnotationsInThisPage, pageJQ)
 
       if (newTarget != target) {
         if (target != undefined) {
@@ -286,7 +287,7 @@ function addAnnotationRelatedListenerWithin(jq) {
   jq.find('.Annotation').addBack('.Annotation').on('mouseout', function(e) {
     if (e.which != 0)
       return
-    
+
     const allAnnotationsInThisPage = $(this).parent('.page_div').find('.Annotation').toArray()
     for (var a of allAnnotationsInThisPage) {
       $(a).css("box-shadow", 'none')
@@ -304,5 +305,16 @@ function scrollAnnotationDivIntoView(annotationDiv) {
   }, 240)
 }
 
+function findTargetAnnotation(e, allAnnotationsInThisPage, pageJQ) {
+  var coverAnnotations = allAnnotationsInThisPage.filter(annotation => _checkCoverage(annotation, e, pageJQ))
 
-export { addAnnotationRelatedListener, addAnnotationRelatedListenerWithin }
+  var sortedCloseness = coverAnnotations.sort((a, b) => _getRight(a) > _getRight(b))
+  if (_getRight(sortedCloseness[1]) - _getRight(sortedCloseness[0]) < 9)  // right side too close
+    sortedCloseness = coverAnnotations.sort((a, b) => _getLeft(a) < _getLeft(b))  // add Top and Bottom in the similar way if required
+
+  const newTarget = $(sortedCloseness[0])
+  return newTarget
+}
+
+
+export { addAnnotationRelatedListener, addAnnotationRelatedListenerWithin, scrollAnnotationDivIntoView, findTargetAnnotation }
