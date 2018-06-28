@@ -252,7 +252,6 @@ function addAnnotationRelatedListenerWithin(jq) {
 
     jq.find('.Annotation').addBack('.Annotation').on('mousemove', function(e) {
       if (e.which != 0) {
-        // const allAnnotationsInThisPage = $(this).parent('.page_div').find('.Annotation').toArray()
         for (var a of allAnnotationsInThisPage) {
           $(a).css("box-shadow", 'none')
           $(".AnnotationBlock[annotation_id='" + $(a).attr("annotation_id") + "']").css("box-shadow", 'none')
@@ -260,13 +259,6 @@ function addAnnotationRelatedListenerWithin(jq) {
         return
       }
 
-      var coverAnnotations = allAnnotationsInThisPage.filter(annotation => _checkCoverage(annotation, e, pageJQ))
-
-      var sortedCloseness = coverAnnotations.sort((a, b) => _getRight(a) > _getRight(b))
-      if (_getRight(sortedCloseness[1]) - _getRight(sortedCloseness[0]) < 9)  // right side too close
-        sortedCloseness = coverAnnotations.sort((a, b) => _getLeft(a) < _getLeft(b))  // add Top and Bottom in the similar way if required
-
-      // const newTarget = $(sortedCloseness[0])
       const newTarget = findTargetAnnotation(e, allAnnotationsInThisPage, pageJQ)
 
       if (newTarget != target) {
@@ -306,12 +298,18 @@ function scrollAnnotationDivIntoView(annotationDiv) {
 }
 
 function findTargetAnnotation(e, allAnnotationsInThisPage, pageJQ) {
-  var coverAnnotations = allAnnotationsInThisPage.filter(annotation => _checkCoverage(annotation, e, pageJQ))
+  const coverAnnotations = allAnnotationsInThisPage.filter(annotation => _checkCoverage(annotation, e, pageJQ))
 
+  const THREDSHOLD = 9
   var sortedCloseness = coverAnnotations.sort((a, b) => _getRight(a) > _getRight(b))
-  if (_getRight(sortedCloseness[1]) - _getRight(sortedCloseness[0]) < 9)  // right side too close
-    sortedCloseness = coverAnnotations.sort((a, b) => _getLeft(a) < _getLeft(b))  // add Top and Bottom in the similar way if required
-
+  if (_getRight(sortedCloseness[1]) - _getRight(sortedCloseness[0]) < THREDSHOLD) {  // right side too close
+    sortedCloseness = coverAnnotations.sort((a, b) => _getLeft(a) < _getLeft(b))
+    if (_getLeft(sortedCloseness[0]) - _getLeft(sortedCloseness[1]) < THREDSHOLD) {
+      sortedCloseness = coverAnnotations.sort((a, b) => _getBottom(a) > _getBottom(b))
+      if (_getBottom(sortedCloseness[1]) - _getBottom(sortedCloseness[0]) < THREDSHOLD)
+        sortedCloseness = coverAnnotations.sort((a, b) => _getTop(a) < _getTop(b))
+    }
+  }
   const newTarget = $(sortedCloseness[0])
   return newTarget
 }
