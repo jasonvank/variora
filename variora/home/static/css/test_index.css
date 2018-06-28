@@ -11,6 +11,32 @@
   margin: 16px !important;
 }
 
+/* .editable-cell-icon-check {
+  position: absolute;
+  right: 0;
+  padding: 7px
+}
+
+.editable-cell-icon{
+  position: absolute !important;
+}
+
+
+.editable-cell {
+  position: relative;
+} */
+
+
+
+
+
+
+
+
+
+
+
+
 .editable-cell {
   position: relative;
 }
@@ -45,12 +71,3 @@ td:hover .editable-cell-icon {
 .ant-table-row a {
   color: #37b
 }
-
-.editable-cell-text-wrapper{
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical
-}
-
