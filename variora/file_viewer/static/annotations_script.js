@@ -269,9 +269,6 @@ function addAnnotationRelatedListenerWithin(jq) {
         newTarget.css("box-shadow", '3px 3px 8px rgba(0, 0, 0, .38)')
         $(".AnnotationBlock[annotation_id='" + $(newTarget).attr("annotation_id") + "']").css("box-shadow", '3px 3px 8px rgba(0, 0, 0, .38)')
         target = newTarget
-        // newTarget.on('click', function() {
-        //   scrollAnnotationDivIntoView($(".AnnotationDiv[annotation_id='" + $(this).attr("annotation_id") + "']"))
-        // })
       }
     })
   })
