@@ -6,6 +6,7 @@ from django.core.mail import EmailMessage  # for sending verification using e-ma
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 from coterie.models import Coterie
 from file_viewer.models import Document
@@ -37,6 +38,7 @@ def display_sign_up_page(request):
     return render(request, "home/sign_up_page.html")
 
 
+@ensure_csrf_cookie
 def display_sign_in_page(request):
     return render(request, "home/sign_in_page.html")
 
