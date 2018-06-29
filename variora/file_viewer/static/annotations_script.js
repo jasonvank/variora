@@ -47,8 +47,8 @@ function addAnnotationRelatedListenerWithin(jq) {
   jq.find(".AnnotationBlock").on("mouseover", function() {
     var annotation_id = $(this).attr("annotation_id")
     var Annotation = $(".Annotation[annotation_id='" + annotation_id + "']")
-    $(this).css("box-shadow", '3px 3px 8px rgba(0, 0, 0, .25)')
-    Annotation.css("box-shadow", '3px 3px 8px rgba(0, 0, 0, .25)')
+    $(this).css("box-shadow", '3px 3px 8px rgba(0, 0, 0, .38)')
+    Annotation.css("box-shadow", '3px 3px 8px rgba(0, 0, 0, .38)')
   })
 
   jq.find(".AnnotationBlock").on("mouseout", function() {
@@ -266,8 +266,8 @@ function addAnnotationRelatedListenerWithin(jq) {
           target.css("box-shadow", 'none')
           $(".AnnotationBlock[annotation_id='" + $(target).attr("annotation_id") + "']").css("box-shadow", 'none')
         }
-        newTarget.css("box-shadow", '3px 3px 8px rgba(0, 0, 0, .25)')
-        $(".AnnotationBlock[annotation_id='" + $(newTarget).attr("annotation_id") + "']").css("box-shadow", '3px 3px 8px rgba(0, 0, 0, .25)')
+        newTarget.css("box-shadow", '3px 3px 8px rgba(0, 0, 0, .38)')
+        $(".AnnotationBlock[annotation_id='" + $(newTarget).attr("annotation_id") + "']").css("box-shadow", '3px 3px 8px rgba(0, 0, 0, .38)')
         target = newTarget
         // newTarget.on('click', function() {
         //   scrollAnnotationDivIntoView($(".AnnotationDiv[annotation_id='" + $(this).attr("annotation_id") + "']"))
