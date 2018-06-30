@@ -53,7 +53,24 @@
       "never"
     ],
     "no-multi-spaces": [
-      "warn"
+      "warn", {
+        "ignoreEOLComments": true
+      }
+    ],
+    "space-before-function-paren": [
+      "error", {
+        "anonymous": "never",
+        "named": "never"
+      }
+    ],
+    "keyword-spacing": [
+      "error", {
+        "before": true,
+        "after": true
+      }
+    ],
+    "space-infix-ops": [
+      "error"
     ]
   }
 }

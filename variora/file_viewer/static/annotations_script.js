@@ -44,18 +44,18 @@ function addAnnotationRelatedListenerWithin(jq) {
   jq.find('code').addClass('prettyprint')
   PR.prettyPrint()
 
-  jq.find(".AnnotationBlock").on("mouseover", function() {
-    var annotation_id = $(this).attr("annotation_id")
+  jq.find('.AnnotationBlock').on('mouseover', function() {
+    var annotation_id = $(this).attr('annotation_id')
     var Annotation = $(".Annotation[annotation_id='" + annotation_id + "']")
-    $(this).css("box-shadow", '3px 3px 8px rgba(0, 0, 0, .38)')
-    Annotation.css("box-shadow", '3px 3px 8px rgba(0, 0, 0, .38)')
+    $(this).css('box-shadow', '3px 3px 8px rgba(0, 0, 0, .38)')
+    Annotation.css('box-shadow', '3px 3px 8px rgba(0, 0, 0, .38)')
   })
 
-  jq.find(".AnnotationBlock").on("mouseout", function() {
-    var annotation_id = $(this).attr("annotation_id")
+  jq.find('.AnnotationBlock').on('mouseout', function() {
+    var annotation_id = $(this).attr('annotation_id')
     var Annotation = $(".Annotation[annotation_id='" + annotation_id + "']")
-    $(this).css("box-shadow", 'none')
-    Annotation.css("box-shadow", 'none')
+    $(this).css('box-shadow', 'none')
+    Annotation.css('box-shadow', 'none')
   })
 
   // jq.find(".AnnotationBlock").on("click", function(e) { // scroll to the corresponding Anotation when clicking a certain AnnotationBlock
@@ -151,8 +151,8 @@ function addAnnotationRelatedListenerWithin(jq) {
         success: function(data) {
           var reply = $(data)
           $(".AnnotationBlock[annotation_id='" + thisButton.val() + "']").append(reply)
-          $(".ReplyAnnotationButton").parents("footer").children("form").css('display', 'none')
-          tinyMCE.activeEditor.setContent("")
+          $('.ReplyAnnotationButton').parents('footer').children('form').css('display', 'none')
+          tinyMCE.activeEditor.setContent('')
           addAnnotationRelatedListenerWithin(reply)
           tinymceInit()
           layer.close(index)
@@ -163,7 +163,7 @@ function addAnnotationRelatedListenerWithin(jq) {
   })
 
   jq.find(".DeleteAnnotationButton").on("click", function() {
-    var index = layer.load(1, { shade: 0.18 });  // 0 represent the style, can be 0-2
+    var index = layer.load(1, { shade: 0.18 })  // 0 represent the style, can be 0-2
     var annotationID = this.value
     $.ajax({
       type: "POST",
