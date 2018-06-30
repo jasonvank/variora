@@ -6,9 +6,11 @@ install:
   - sudo pip install --upgrade pip
   - npm i -g npm
 
-  - sudo pip install -r prod_reqs.txt
-  - npm install -g webpack eslint lint-diff yarn
+  - sudo pip install -r dev_reqs.txt
+  - sudo pip install git-lint
+  - npm install -g yarn webpack eslint lint-diff
   - yarn install
 script:
   - lint-diff $TRAVIS_COMMIT_RANGE
+  - git reset --soft ${TRAVIS_COMMIT_RANGE%...*} && git lint
   - npm test
