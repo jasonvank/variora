@@ -183,8 +183,8 @@ function addAnnotationRelatedListenerWithin(jq) {
   jq.find(".LikeAnnotationButton").on("click", function() {
     if (is_authenticated) {
       const $this = $(this)
-      var new_num = parseInt($this.next().text()) + 1
-      $this.next().text(new_num.toString())
+      var new_num = parseInt($this.find('.num_like').text()) + 1
+      $this.find('.num_like').text(new_num.toString())
       $this.off("click")
       $this.css("color", "#6495ED")
       $this.on("click", function() {
@@ -209,8 +209,8 @@ function addAnnotationRelatedListenerWithin(jq) {
   jq.find(".LikeAnnotationReplyButton").on("click", function() {
     if (is_authenticated) {
       const $this = $(this)
-      var new_num = parseInt($this.next().text()) + 1
-      $this.next().text(new_num.toString())
+      var new_num = parseInt($this.find('.num_like').text()) + 1
+      $this.find('.num_like').text(new_num.toString())
       $this.off("click")
       $this.css("color", "#6495ED")
       $this.on("click", function() {
