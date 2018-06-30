@@ -4,6 +4,7 @@ install:
   - sudo apt-get install nodejs
   - sudo apt-get install npm
   - sudo apt-get install python-pip
-  - pip install -r prod_reqs.txt
+  - sudo pip install --upgrade pip
+  - sudo pip install -r prod_reqs.txt
 script:
   - npm test
