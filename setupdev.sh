@@ -1,14 +1,8 @@
-# install python dependencies recorded in dev_reqs.txt
-pip install -r dev_reqs.txt
+pip install --upgrade pip
+npm i -g npm
 
-# install webpack globally
-npm install webpack -g
+npm install webpack yarn -g
 
-# install yarn as the replacement of npm
-npm install yarn -g
-
-# install node dependencies recorded in package.json
 yarn install
-
-
+pip install -r dev_reqs.txt
 
