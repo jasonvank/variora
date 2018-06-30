@@ -7,8 +7,8 @@ install:
   - npm i -g npm
 
   - sudo pip install -r prod_reqs.txt
-  - npm install
-  - npm install -g webpack lint-diff
+  - yarn install
+  - npm install -g webpack eslint lint-diff
 script:
   - lint-diff $TRAVIS_COMMIT_RANGE
   - npm test
