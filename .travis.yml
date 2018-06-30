@@ -1,0 +1,9 @@
+sudo: enabled
+install:
+  - sudo apt-get update
+  - sudo apt-get install nodejs
+  - sudo apt-get install npm
+  - sudo apt-get install python-pip
+  - pip install -r prod_reqs.txt
+script:
+  - npm test
