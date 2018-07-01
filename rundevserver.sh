@@ -7,7 +7,7 @@ python variora/manage.py migrate
 # remove the obsolte bundle
 rm -r ./variora/bundled_static/dev/*
 
-webpack --config webpack.config.dev.js &  # run webpack watching mode in background
+webpack --config webpack.config.dev.js --mode development &  # run webpack watching mode in background
 
 if [ $# -ge 1 ]; then
     python variora/manage.py runserver $1  # run Django development server on specify port

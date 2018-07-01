@@ -9,9 +9,9 @@ install:
   - sudo pip install --upgrade pip
   - npm i -g npm
 
-  - sudo pip install -r dev_reqs.txt
   - sudo pip install git-lint
-  - npm install -g yarn webpack eslint eslint-plugin-react lint-diff
+  - npm install -g yarn webpack webpack-cli eslint eslint-plugin-react lint-diff
+  - sudo pip install -r dev_reqs.txt
   - yarn install
 script:
   - lint-diff $TRAVIS_COMMIT_RANGE
