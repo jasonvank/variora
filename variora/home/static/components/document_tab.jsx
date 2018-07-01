@@ -54,6 +54,7 @@ class UploadedDocuments extends React.Component {
       uploadedDocumentName: '',
       onlineDocumentUrl: '',
       onlineDocumentName: '',
+      uploadBtnLoading: false,
     }
     this.uploadedDocumentTable = undefined
     this.uploadLocalDocument = () => {
@@ -64,6 +65,7 @@ class UploadedDocuments extends React.Component {
       data.append('title', title)
       data.append('file_upload', this.state.uploadedDocumentFileList[0])
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+      this.setState({ uploadBtnLoading: true })
       axios.post('/user_dashboard/handle_file_upload', data, {
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -71,7 +73,8 @@ class UploadedDocuments extends React.Component {
       }).then(() => {
         this.setState({
           uploadedDocumentFileList: [],
-          uploadedDocumentName: ''
+          uploadedDocumentName: '',
+          uploadBtnLoading: false
         })
         this.uploadedDocumentTable.updateData()
       })
@@ -135,7 +138,7 @@ class UploadedDocuments extends React.Component {
                 placeholder={ 'Give a title to this document' }
               ></Input>
               <div>
-                <Button type="primary" icon="upload" style={{ margin: 8 }} onClick={this.uploadLocalDocument}>upload</Button>
+                <Button type="primary" icon="upload" style={{ margin: 8 }} loading={this.state.uploadBtnLoading} onClick={this.uploadLocalDocument}>upload</Button>
               </div>
             </Col>
             <Col span={12} style={{ textAlign: 'left' }}>
