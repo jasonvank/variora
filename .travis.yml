@@ -8,7 +8,7 @@ install:
 
   - bash setupdev.sh
 
-  - sudo pip install git-lint
+  - pip install git-lint
   - npm install -g eslint eslint-plugin-react lint-diff
 script:
   - lint-diff $TRAVIS_COMMIT_RANGE
