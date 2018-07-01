@@ -36,7 +36,7 @@ class GroupTab extends React.Component {
   render() {
     var path = this.props.location.pathname
     return (
-      <Content style={{ paddingLeft: 18, paddingRight: 18, paddingTop: 8, margin: 0, minHeight: 280 }}>
+      <Content style={{ paddingLeft: 18, paddingRight: 18, paddingTop: 16, margin: 0, minHeight: 280 }}>
         <Menu
           onClick={this.handleClick}
           mode="horizontal"

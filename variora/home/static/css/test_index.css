@@ -1,37 +1,21 @@
-.logo {
-  width: 120px;
-  height: 31px;
-  background: #FFF;
-  border-radius: 6px;
-  margin: 16px 28px 16px 0;
-  float: left;
+.header {
+  z-index: 0;
+  box-shadow: 0px 1px 3px rgba(26, 26, 26, .1);
+}
+
+.sider {
+  border-top: 1px solid #e8e8e8;
+}
+
+.card {
+  border-radius: 2px;
+  box-shadow: 0px 1px 3px rgba(26, 26, 26, .1);
+  background-color: white;
 }
 
 .ant-table-pagination {
   margin: 16px !important;
 }
-
-/* .editable-cell-icon-check {
-  position: absolute;
-  right: 0;
-  padding: 7px
-}
-
-.editable-cell-icon{
-  position: absolute !important;
-}
-
-
-.editable-cell {
-  position: relative;
-} */
-
-
-
-
-
-
-
 
 
 
@@ -71,3 +55,15 @@ td:hover .editable-cell-icon {
 .ant-table-row a {
   color: #37b
 }
+
+
+
+/*.logo {*/
+  /*width: 120px;*/
+  /*height: 31px;*/
+  /*background: #FFF;*/
+  /*border-radius: 6px;*/
+  /*margin: 16px 28px 16px 0;*/
+  /*float: left;*/
+  /*text-align: center;*/
+/*}*/

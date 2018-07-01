@@ -22,9 +22,10 @@ class DocumentTab extends React.Component {
 
   render() {
     return (
-      <Content style={{ paddingLeft: 18, paddingRight: 18, paddingTop: 8, margin: 0, minHeight: 280 }}>
+      <Content style={{ paddingLeft: 18, paddingRight: 18, paddingTop: 16, margin: 0, minHeight: 280 }}>
         <Menu
           onClick={this.handleClick}
+          className={'card'}
           mode="horizontal"
           style={{ padding: 0 }}
           defaultSelectedKeys={['uploaded-documents']}
@@ -117,10 +118,10 @@ class UploadedDocuments extends React.Component {
     }
     return (
       <div>
-        <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
+        <div className={'card'} style={{ overflow: 'auto', marginTop: 16 }}>
           <UploadedDocumentsList ref={(ele) => this.uploadedDocumentTable = ele} />
         </div>
-        <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, padding: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
+        <div className={'card'} style={{ overflow: 'auto', marginTop: 16, padding: 18 }}>
           <Row>
             <Col span={12} style={{ textAlign: 'left' }}>
               <Upload {...uploadProps}>
@@ -171,7 +172,7 @@ class CollectedDocuments extends React.Component {
   render() {
     return (
       <div>
-        <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
+        <div className={'card'} style={{ overflow: 'auto', marginTop: 18 }}>
           <CollectedDocumentsList ref={(ele) => this.uploadedDocumentTable = ele} />
         </div>
       </div>

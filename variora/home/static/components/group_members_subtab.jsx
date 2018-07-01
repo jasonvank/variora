@@ -312,16 +312,16 @@ class GroupMembersSubtab extends React.Component {
 
   render() {
     var groupApplicationList = (
-      <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .20)' }}>
+      <div className={'card'} style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}>
         <GroupApplicationList coteriePk={this.state.coteriePk} applications={this.state.applications} addMemberCallback={this.addMemberCallback} removeApplicationCallback={this.removeApplicationCallback}/>
       </div>
     )
     return (
       <div>
-        <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .20)' }}>
+        <div className={'card'} style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}>
           <GroupAdministratorsList coteriePk={this.state.coteriePk} administrators={this.state.administrators} />
         </div>
-        <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .20)' }}>
+        <div className={'card'} style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}>
           <GroupMembersList coteriePk={this.state.coteriePk} members={this.state.members} removeMemberCallback={this.removeMemberCallback} isAdmin={this.props.isAdmin} />
         </div>
         { this.props.isAdmin ? groupApplicationList : null }

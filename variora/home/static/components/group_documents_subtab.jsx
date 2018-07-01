@@ -101,7 +101,7 @@ class GroupDocumentsSubtab extends React.Component {
     }
 
     var uploadDocumentSection = (
-      <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, padding: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
+      <div className={'card'} style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, padding: 18 }}>
         <Row>
           <Col span={12} style={{ textAlign: 'left' }}>
             <Upload {...uploadProps}>
@@ -145,7 +145,7 @@ class GroupDocumentsSubtab extends React.Component {
 
     return (
       <div>
-        <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
+        <div className={'card'} style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}>
           <GroupDocumentsList ref={(ele) => this.uploadedDocumentTable = ele} coteriePk={this.props.coteriePk} isAdmin={this.props.isAdmin}/>
         </div>
         { this.props.isAdmin ? uploadDocumentSection : null }
