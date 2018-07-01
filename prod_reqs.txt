@@ -5,6 +5,8 @@ python-memcached  # session cache
 django-kronos
 validate_email
 google-auth
+requests
+pillow
 
 ###### development ######
 selenium  # write browser-side tests
