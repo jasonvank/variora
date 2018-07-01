@@ -1,34 +1,40 @@
-import { Icon, Input, Popconfirm, Table, message } from 'antd';
-import { formatOpenDocumentUrl, getCookie, getUrlFormat } from 'util.js'
+import { Icon, Input, Popconfirm, Table, message, notification } from 'antd'
+import { formatOpenDocumentUrl, getCookie, getUrlFormat, validateDocumentTitle } from 'util.js'
 
-import React from 'react';
-import axios from 'axios';
-import enUS from 'antd/lib/locale-provider/en_US';
+import React from 'react'
+import axios from 'axios'
+import enUS from 'antd/lib/locale-provider/en_US'
 
-const { Column } = Table;
+const { Column } = Table
 
 class ChangeOpenDocumentName extends React.Component {
-  state = {
-    value: this.props.anchor.props.children,
-    editable: false,
-  }
-  handleChange = (e) => {
-    this.setState({ value: e.target.value })
-  }
-  check = () => {
-    this.setState({ editable: false })
-    var data = new FormData()
-    data.append('new_title', this.state.value)
-    data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-    axios.post(this.props.openDocument.renameUrl, data).then((response) => {
-      this.props.onChange(this.state.value)
-    })
-  }
-  edit = () => {
-    this.setState({ editable: true })
+  constructor(props){
+    super(props)
+    this.state = {
+      value: this.props.anchor.props.children,
+      editable: false,
+    }
+    this.handleChange = (e) => {
+      this.setState({ value: e.target.value })
+    }
+    this.check = () => {
+      var newTitle = this.state.value
+      if (!validateDocumentTitle(newTitle))
+        return false
+      this.setState({ editable: false })
+      var data = new FormData()
+      data.append('new_title', newTitle)
+      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+      axios.post(this.props.openDocument.renameUrl, data).then((response) => {
+        this.props.onChange(this.state.value)
+      })
+    }
+    this.edit = () => {
+      this.setState({ editable: true })
+    }
   }
   render() {
-    var { value, editable } = this.state;
+    var { value, editable } = this.state
     var editInput = (
       <div className="editable-cell-input-wrapper">
         <Input
@@ -59,7 +65,7 @@ class ChangeOpenDocumentName extends React.Component {
       <div className="editable-cell">
         { editable ? editInput : link }
       </div>
-    );
+    )
   }
 }
 
@@ -77,22 +83,22 @@ class UploadedDocumentsList extends React.Component {
     this.updateData = (response) => {
       axios.get(getUrlFormat('/file_viewer/api/documents', {
       }))
-      .then(response => {
-        this.setState({
-          data: response.data['uploadedDocuments']
+        .then(response => {
+          this.setState({
+            data: response.data['uploadedDocuments']
+          })
         })
-      })
-      .catch(e => { message.warning(e.message) })
+        .catch(e => { message.warning(e.message) })
     }
     this.onOpenDocumentRename = (key, dataIndex) => {
       return (value) => {
-        var data = this.state.data;
-        var target = data.find(item => item.pk === key);
+        var data = this.state.data
+        var target = data.find(item => item.pk === key)
         if (target) {
-          target[dataIndex] = value;
-          this.setState({ data: data });
+          target[dataIndex] = value
+          this.setState({ data: data })
         }
-      };
+      }
     }
     this.updateCollectDocumentCallback = () => {
 
@@ -122,7 +128,7 @@ class UploadedDocumentsList extends React.Component {
           anchor={ <a className='document-link' href={formatOpenDocumentUrl(openDocument)}>{text}</a> }
           onChange={this.onOpenDocumentRename(openDocument.pk, 'title')}
         />),
-      }, {
+    }, {
       title: 'Action',
       key: 'action',
       width: '40%',
@@ -149,7 +155,7 @@ class UploadedDocumentsList extends React.Component {
   }
 }
 
-export { UploadedDocumentsList };
+export { UploadedDocumentsList }
 
 
 

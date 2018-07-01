@@ -1,9 +1,9 @@
-import 'regenerator-runtime/runtime';
+import 'regenerator-runtime/runtime'
 
-import { Avatar, Badge, Button, notification } from 'antd';
+import { Avatar, Badge, Button, notification } from 'antd'
 import { getCookie, getUrlFormat } from 'util.js'
 
-import React from 'react';
+import React from 'react'
 import axios from 'axios'
 
 class InvitationDetailsWrapper extends React.Component{
@@ -38,7 +38,7 @@ class ReceivedCoterieInvitationNotificationContent extends React.Component {
       notification.close(self.props.invitation.pk)
       self.props.updateLeftInvitationsCallback(self.props.invitation.pk)
       self.props.acceptInvitationCallback(self.props.invitation.coterie_pk)
-    });
+    })
   }
 
   onRejectClick() {
@@ -48,13 +48,13 @@ class ReceivedCoterieInvitationNotificationContent extends React.Component {
     axios.post(this.props.invitation.reject_url, data).then((response) => {
       notification.close(self.props.invitation.pk)
       self.props.updateLeftInvitationsCallback(self.props.invitation.pk)
-    });
+    })
   }
 
   render() {
     return (
       <div>
-      <InvitationDetailsWrapper invitation={this.props.invitation}/>
+        <InvitationDetailsWrapper invitation={this.props.invitation}/>
         <div>
           <Button style={{ margin: '12px 8px 6px 8px' }} type="primary" size="small" onClick={this.onAcceptClick}>
             Accept
@@ -127,18 +127,18 @@ class AvatarWithNotifications extends React.Component {
     return (
       <Badge count={this.state.invitations == undefined ? 0 : this.state.invitations.length}
         style={{ backgroundColor: '#F89406' }}>
-      <Avatar
-        style={{ cursor: 'pointer', verticalAlign: 'middle' }}
-        size={'large'}
-        src={this.state.user.portrait_url}
-        onClick={this.onClick}
-      />
+        <Avatar
+          style={{ cursor: 'pointer', verticalAlign: 'middle' }}
+          size={'large'}
+          src={this.state.user.portrait_url}
+          onClick={this.onClick}
+        />
       </Badge>
     )
   }
 }
 
-export { AvatarWithNotifications };
+export { AvatarWithNotifications }
 
 
 

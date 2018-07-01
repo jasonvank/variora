@@ -1,20 +1,20 @@
-import 'regenerator-runtime/runtime';
+import 'regenerator-runtime/runtime'
 
-import { Avatar, Input, Layout, Menu, Modal, Table, Tooltip, notification } from 'antd';
+import { Avatar, Input, Layout, Menu, Modal, Table, Tooltip, notification } from 'antd'
 import { formatOpenDocumentUrl, getCookie, getUrlFormat } from 'util.js'
 
-import React from 'react';
+import React from 'react'
 import axios from 'axios'
 
-const { SubMenu } = Menu;
-const { Header, Content, Sider } = Layout;
-const MenuItemGroup = Menu.ItemGroup;
-const { TextArea } = Input;
+const { SubMenu } = Menu
+const { Header, Content, Sider } = Layout
+const MenuItemGroup = Menu.ItemGroup
+const { TextArea } = Input
 
 
 class SearchResultTab extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       resultDocuments: undefined,
       resultCoteries: undefined,
@@ -26,8 +26,8 @@ class SearchResultTab extends React.Component {
   }
 
   componentDidMount() {
-    var fullUrl = window.location.href;
-    var searchKey = fullUrl.slice(fullUrl.indexOf('=') + 1);
+    var fullUrl = window.location.href
+    var searchKey = fullUrl.slice(fullUrl.indexOf('=') + 1)
     axios.get('/api/user').then((response) => {
       var user = response.data
       if (response.data.is_authenticated)
@@ -43,7 +43,7 @@ class SearchResultTab extends React.Component {
     axios.get(getUrlFormat('/api/search', {
       'key': searchKey
     })).then((response) => {
-      var data = response.data;
+      var data = response.data
       this.setState({
         resultDocuments: data.resultDocuments,
         resultCoteries: data.resultCoteries,
@@ -81,7 +81,7 @@ class DocumentResult extends React.Component {
     this.handleChange = (sorter) => {
       this.setState({
         sortedInfo: sorter,
-      });
+      })
     }
   }
 
@@ -93,8 +93,8 @@ class DocumentResult extends React.Component {
   }
 
   render() {
-    let sortedInfo = this.state.sortedInfo;
-    sortedInfo = sortedInfo || {};
+    let sortedInfo = this.state.sortedInfo
+    sortedInfo = sortedInfo || {}
 
     const columns = [{
       title: 'Document Name',
@@ -110,7 +110,7 @@ class DocumentResult extends React.Component {
       title: 'Action',
       key: 'action',
       width: "30%",
-    }];
+    }]
 
     return (
       <Table
@@ -139,7 +139,7 @@ class GroupResult extends React.Component {
     this.handleChange = (sorter) => {
       this.setState({
         sortedInfo: sorter,
-      });
+      })
     }
     this.onApplyClick = (coterie) => {
       this.setState({
@@ -162,7 +162,7 @@ class GroupResult extends React.Component {
           message: 'Application successfully sent',
           description: 'Your application has been sent to Group: ' + this.state.targetedCoterie.name + ' successfully!' + ' With message: ' + this.state.applicationMessage,
           duration: 4
-        });
+        })
       })
     }
   }
@@ -176,8 +176,8 @@ class GroupResult extends React.Component {
   }
 
   render() {
-    let sortedInfo = this.state.sortedInfo;
-    sortedInfo = sortedInfo || {};
+    let sortedInfo = this.state.sortedInfo
+    sortedInfo = sortedInfo || {}
 
     const columns = [{
       title: 'Group Name',
@@ -211,7 +211,7 @@ class GroupResult extends React.Component {
         var isAdmin = this.props.administratedCoteries.map(c => c.pk).includes(record.pk)
         return isAdmin ? alreadyAdminLink : isMember ? alreadyMemberLink : applyLink
       }
-    }];
+    }]
 
     return (
       <div>
@@ -249,7 +249,7 @@ class UserResult extends React.Component {
     this.handleChange = (sorter) => {
       this.setState({
         sortedInfo: sorter,
-      });
+      })
     }
   }
 
@@ -262,8 +262,8 @@ class UserResult extends React.Component {
 
 
   render() {
-    let sortedInfo = this.state.sortedInfo;
-    sortedInfo = sortedInfo || {};
+    let sortedInfo = this.state.sortedInfo
+    sortedInfo = sortedInfo || {}
     const columns = [{
       title: 'User Name',
       dataIndex: 'nickname',
@@ -281,7 +281,7 @@ class UserResult extends React.Component {
       title: 'Action',
       key: 'action',
       width: "30%",
-    }];
+    }]
 
     return (
       <Table

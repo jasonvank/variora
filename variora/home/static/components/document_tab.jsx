@@ -1,22 +1,22 @@
-import 'regenerator-runtime/runtime';
+import 'regenerator-runtime/runtime'
 
-import { Button, Col, Icon, Input, Layout, Menu, Modal, Row, Upload, notification } from 'antd';
+import { Button, Col, Icon, Input, Layout, Menu, Modal, Row, Upload, notification } from 'antd'
 import { Link, Route, BrowserRouter as Router, Switch } from 'react-router-dom'
-import { getCookie, getUrlFormat } from 'util.js'
+import { getCookie, getUrlFormat, validateDocumentTitle } from 'util.js'
 
 import { CollectedDocumentsList } from './collected_documents_list.jsx'
-import React from 'react';
+import React from 'react'
 import { UploadedDocumentsList } from './uploaded_documents_list.jsx'
 import axios from 'axios'
 
-const { SubMenu } = Menu;
-const { Header, Content, Sider } = Layout;
-const MenuItemGroup = Menu.ItemGroup;
+const { SubMenu } = Menu
+const { Header, Content, Sider } = Layout
+const MenuItemGroup = Menu.ItemGroup
 
 
 class DocumentTab extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {}
   }
 
@@ -42,13 +42,13 @@ class DocumentTab extends React.Component {
           <Route exact path="/collected" component={CollectedDocuments}/>
         </Switch>
       </Content>
-    );
+    )
   }
 }
 
 class UploadedDocuments extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       uploadedDocumentFileList: [],
       uploadedDocumentName: '',
@@ -58,13 +58,8 @@ class UploadedDocuments extends React.Component {
     this.uploadedDocumentTable = undefined
     this.uploadLocalDocument = () => {
       var title = this.state.uploadedDocumentName
-      if (title == undefined || title == '') {
-        notification['warning']({
-          message: 'Document title cannot be empty',
-          duration: 1.8,
-        });
+      if (!validateDocumentTitle(title))
         return false
-      }
       var data = new FormData()
       data.append('title', title)
       data.append('file_upload', this.state.uploadedDocumentFileList[0])
@@ -74,21 +69,18 @@ class UploadedDocuments extends React.Component {
           'Content-Type': 'multipart/form-data'
         }
       }).then(() => {
-        this.setState({ uploadedDocumentFileList: [] })
-        this.setState({ uploadedDocumentName: '' })
+        this.setState({
+          uploadedDocumentFileList: [],
+          uploadedDocumentName: ''
+        })
         this.uploadedDocumentTable.updateData()
       })
     }
     this.uploadOnlineDocument = () => {
       var title = this.state.onlineDocumentName
       var externalUrl = this.state.onlineDocumentUrl
-      if (title == undefined || title == '') {
-        notification['warning']({
-          message: 'Document title cannot be empty',
-          duration: 1.8,
-        })
+      if (!validateDocumentTitle(title))
         return false
-      }
       if (externalUrl == undefined || externalUrl == '') {
         notification['warning']({
           message: 'URL cannot be empty',
@@ -108,12 +100,19 @@ class UploadedDocuments extends React.Component {
         })
     }
   }
+
   render() {
-    var self = this;
+    var self = this
     var uploadProps = {
       accept: 'application/pdf',
       showUploadList: true,
-      beforeUpload(file, fileList) { self.setState({ uploadedDocumentFileList: [file] }); return false },
+      beforeUpload(file, fileList) {
+        self.setState({
+          uploadedDocumentFileList: [file],
+          uploadedDocumentName: file.name.endsWith('.pdf') ? file.name.slice(0, file.name.length - 4) : file.name
+        })
+        return false
+      },
       fileList: this.state.uploadedDocumentFileList,
     }
     return (
@@ -131,8 +130,8 @@ class UploadedDocuments extends React.Component {
               </Upload>
               <Input
                 style={{ width: '60%', margin: 8 }}
-                onChange={async (e) => this.setState({ uploadedDocumentName: e.target.value })}
                 value={this.state.uploadedDocumentName}
+                onChange={async (e) => this.setState({ uploadedDocumentName: e.target.value })}
                 placeholder={ 'Give a title to this document' }
               ></Input>
               <div>
@@ -167,7 +166,7 @@ class UploadedDocuments extends React.Component {
 
 class CollectedDocuments extends React.Component {
   constructor() {
-    super();
+    super()
   }
   render() {
     return (
@@ -180,22 +179,4 @@ class CollectedDocuments extends React.Component {
   }
 }
 
-export { DocumentTab };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+export { DocumentTab }

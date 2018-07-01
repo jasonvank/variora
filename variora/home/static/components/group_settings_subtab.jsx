@@ -1,27 +1,27 @@
-import 'regenerator-runtime/runtime';
+import 'regenerator-runtime/runtime'
 
-import { Button, Col, Collapse, Icon, Input, Layout, Menu, Popconfirm, Row, notification } from 'antd';
+import { Button, Col, Collapse, Icon, Input, Layout, Menu, Popconfirm, Row, notification } from 'antd'
 import {
   Link,
   Route,
   BrowserRouter as Router
 } from 'react-router-dom'
 
-import React from 'react';
+import React from 'react'
 import axios from 'axios'
-import enUS from 'antd/lib/locale-provider/en_US';
+import enUS from 'antd/lib/locale-provider/en_US'
 import { getCookie } from 'util.js'
 import validator from 'email-validator'
 
-const { SubMenu } = Menu;
-const { Header, Content, Sider } = Layout;
-const { TextArea } = Input;
-const MenuItemGroup = Menu.ItemGroup;
+const { SubMenu } = Menu
+const { Header, Content, Sider } = Layout
+const { TextArea } = Input
+const MenuItemGroup = Menu.ItemGroup
 
 
 class GroupSettingsSubtab extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       'coteriePk': props.coteriePk
     }
@@ -52,7 +52,7 @@ class GroupSettingsSubtab extends React.Component {
   }
 
   render() {
-    const Panel = Collapse.Panel;
+    const Panel = Collapse.Panel
 
     var invitationSection = (
       <div style={{ backgroundColor: 'white', margin: '18px 0 28px 0', boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
@@ -165,7 +165,7 @@ class GroupInvitationForm extends React.Component {
           message: 'Email list input is not valid',
           description: 'Please check again!',
           duration: 2
-        });
+        })
         return
       }
 
@@ -202,11 +202,11 @@ class GroupInvitationForm extends React.Component {
   }
 
   async onEmailListInputChange(e) {
-    await this.setState({ emailList: e.target.value });
+    await this.setState({ emailList: e.target.value })
   }
 
   async onInvitationMessageInputChange(e) {
-    await this.setState({ invitationMessage: e.target.value });
+    await this.setState({ invitationMessage: e.target.value })
   }
 
   _emailsStringToArray(emailsString) {
