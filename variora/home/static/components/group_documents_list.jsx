@@ -1,9 +1,10 @@
 import { Icon, Input, Popconfirm, Table, message, notification } from 'antd'
-import { formatOpenCoterieDocumentUrl, getCookie, getUrlFormat, validateDocumentTitle } from 'util.js'
+import { formatOpenCoterieDocumentUrl, getCookie, getUrlFormat } from 'util.js'
 
 import React from 'react'
 import ReactDOM from 'react-dom'
 import axios from 'axios'
+import { validateDocumentTitle } from 'home_util.'
 
 const { Column } = Table
 

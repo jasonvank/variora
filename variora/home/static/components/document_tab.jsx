@@ -2,12 +2,13 @@ import 'regenerator-runtime/runtime'
 
 import { Button, Col, Icon, Input, Layout, Menu, Modal, Row, Upload, notification } from 'antd'
 import { Link, Route, BrowserRouter as Router, Switch } from 'react-router-dom'
-import { getCookie, getUrlFormat, validateDocumentTitle } from 'util.js'
+import { getCookie, getUrlFormat } from 'util.js'
 
 import { CollectedDocumentsList } from './collected_documents_list.jsx'
 import React from 'react'
 import { UploadedDocumentsList } from './uploaded_documents_list.jsx'
 import axios from 'axios'
+import { validateDocumentTitle } from 'home_util.'
 
 const { SubMenu } = Menu
 const { Header, Content, Sider } = Layout

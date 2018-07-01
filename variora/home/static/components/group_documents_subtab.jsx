@@ -6,13 +6,14 @@ import {
   Route,
   BrowserRouter as Router
 } from 'react-router-dom'
-import { getCookie, getUrlFormat, validateDocumentTitle } from 'util.js'
+import { getCookie, getUrlFormat } from 'util.js'
 
 import { GroupDocumentsList } from './group_documents_list.jsx'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import axios from 'axios'
 import enUS from 'antd/lib/locale-provider/en_US'
+import { validateDocumentTitle } from 'home_util.'
 
 const { SubMenu } = Menu
 const { Header, Content, Sider } = Layout
