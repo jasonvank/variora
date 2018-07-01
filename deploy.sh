@@ -1,5 +1,10 @@
-source env/bin/activate
+npm install -g webpack webpack-cli
+# remove the obsolte bundle (both development version and production version)
+rm -r ./variora/bundled_static/*
+# generate new production-version bundle
+webpack --config webpack.config.js --mode production
 
+source env/bin/activate
 pip install -r prod_reqs.txt
 
 python variora/manage.py makemigrations
