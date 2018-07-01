@@ -1,4 +1,4 @@
-import { addAnnotationRelatedListener, addAnnotationRelatedListenerWithin } from './annotations_script.js'
+import { addAnnotationRelatedListener, addAnnotationRelatedListenerWithin, scrollAnnotationDivIntoView, findTargetAnnotation } from './annotations_script.js'
 import { addCommentRelatedListener, enablePostCommentButton, enableRefreshCommentButton } from './comments_script.js'
 import { getCookie, hexToRgb, imgLoad } from 'util.js'
 
@@ -124,6 +124,20 @@ function startListeningSelectionBoxCreation() {
         var left_percent = parseFloat(new_annotation.css("left")) / page_width
         var height_percent = parseFloat(new_annotation.css("height")) / page_height
         var width_percent = parseFloat(new_annotation.css("width")) / page_width
+
+        // click, not drag
+        if (height_percent < 0.008 && width_percent < 0.008) {
+          const pageJQ = new_annotation.parent('.page_div')
+          new_annotation.remove()
+          const allAnnotationsInThisPage = pageJQ.find('.Annotation').toArray()
+          const targetAnnotation = findTargetAnnotation(e, allAnnotationsInThisPage, pageJQ)
+          scrollAnnotationDivIntoView($(".AnnotationDiv[annotation_id='" + targetAnnotation.attr("annotation_id") + "']"))
+
+          $(".PageImg, .PageCanvas, .Annotation").off("mousemove")
+          $("body").off("mouseup")
+          e.stopPropagation()
+          return
+        }
 
         new_annotation.draggable({
           containment: "parent"

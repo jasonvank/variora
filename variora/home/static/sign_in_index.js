@@ -111,7 +111,7 @@ class NormalLoginForm extends React.Component {
               <Button type="primary" htmlType="submit" className="login-form-button">
                 Log in
               </Button>
-              Or <a href="">register now!</a>
+              Or <a href="">register now!</a> (coming soon)
               <div id='third-party-login' style={{ marginTop: 28 }}>
                 <Button
                   style={{backgroundColor: 'orange', borderColor: 'orange', marginTop: 8, color: 'white'}}

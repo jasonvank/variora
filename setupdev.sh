@@ -1,14 +1,11 @@
-# install python dependencies recorded in dev_reqs.txt
-pip install -r dev_reqs.txt
+sudo --set-home pip install --upgrade pip
+npm i -g npm
 
-# install webpack globally
-npm install webpack -g
-
-# install yarn as the replacement of npm
-npm install yarn -g
-
-# install node dependencies recorded in package.json
+npm install webpack webpack-cli yarn -g
 yarn install
 
-
+sudo --set-home pip install virtualenv
+virtualenv env
+./env/bin/activate
+pip install -r dev_reqs.txt
 

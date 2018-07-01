@@ -18,9 +18,9 @@
           {% if annotation_reply.replier == request.user %}
               <button class="DeleteAnnotationReplyButton btn" style="border: none; background: none; padding: 0 4px" value="{{ annotation_reply.id }}"><i class="fa fa-trash-o" aria-hidden="true"></i>&nbspdelete</button>
           {% endif %}
-          <div class="btn" style="padding: 0 4px">
-              <span style="cursor: pointer;" annotation_reply_id="{{ annotation_reply.id }}" class="LikeAnnotationReplyButton glyphicon glyphicon-thumbs-up"></span>
-              <bold id="num_like">{{ annotation_reply.num_like }}</bold>
+          <div class="btn LikeAnnotationReplyButton" annotation_reply_id="{{ annotation_reply.id }}" style="padding: 0 4px">
+              <span style="cursor: pointer;" class="glyphicon glyphicon-thumbs-up"></span>
+              <bold class="num_like">{{ annotation_reply.num_like }}</bold>
           </div>
       </div>
       <form style="display: none">

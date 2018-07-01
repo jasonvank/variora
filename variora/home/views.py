@@ -6,8 +6,8 @@ from django.core.mail import EmailMessage  # for sending verification using e-ma
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
+from django.views.decorators.csrf import ensure_csrf_cookie
 
-import models
 from coterie.models import Coterie
 from file_viewer.models import Document
 from home.models import User
@@ -38,6 +38,7 @@ def display_sign_up_page(request):
     return render(request, "home/sign_up_page.html")
 
 
+@ensure_csrf_cookie
 def display_sign_in_page(request):
     return render(request, "home/sign_in_page.html")
 
@@ -63,7 +64,7 @@ def handle_nus_log_in(request):
         # if no such user in database, means this is the first time login using NUS id, so create a new user
         if not User.objects.filter(email_address=email).exists():
             nickname = urllib2.urlopen("https://ivle.nus.edu.sg/api/Lapi.svc/UserName_Get?APIKey=Z6Q2MnpaPX8sDSOfHTAnN&Token="+token).read()[1:-1]
-            new_user = models.User()
+            new_user = User()
             new_user.set_nickname(nickname)
             new_user.set_email_address(email)
             new_user.save()

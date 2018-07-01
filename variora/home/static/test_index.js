@@ -1,7 +1,7 @@
 import './css/test_index.css'
 import 'regenerator-runtime/runtime'
 
-import { Avatar, Breadcrumb, Button, Col, Form, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, Upload, message } from 'antd'
+import { Avatar, Breadcrumb, Button, Col, Form, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, message } from 'antd'
 import {
   Link,
   Redirect,
@@ -72,9 +72,9 @@ class App extends React.Component {
     }
     this.getHighlightedMenuItems = () => {
       var pathname = window.location.pathname
-      if(pathname.endsWith('/search'))
+      if (pathname.endsWith('/search'))
         return []
-      else if (pathname.includes('/groups/')){
+      else if (pathname.includes('/groups/')) {
         var pageElement = pathname.split('/')
         return [pageElement[1] + pageElement[2]]
       } else

@@ -28,30 +28,14 @@ class UniqueFile(models.Model):
 # "sender" and "**kwargs" are required though they are of no use here, do not delete them
 def delete_local_file(sender, instance, **kwargs):
     # get the location of the file to be deleted.
-    # eg: jpg/1.jpg
+    # eg: pdf/test.pdf
     file_location = instance.file_field.name
-
-    file_local_location = instance.file_field.storage.path(instance.file_field)
-    file_local_directory_name, file_name_and_extension = os.path.split(file_local_location)
-    file_name = file_name_and_extension.split(".")[0]
-    associated_folder_local_location = os.path.join(file_local_directory_name, file_name)
-    type_level_dir_name = os.path.dirname(file_local_location)
 
     # instance.file_field.storage will return an instance of Storage' subclass,
     # which handle the file store and delete and other operations
     # use its delete method to delete the local file
     # associated with the corresponding file_field of the model to be deleted
     instance.file_field.storage.delete(file_location)
-
-    # delete associate image folder (for zip files, rar files and so on)
-    if os.path.isdir(associated_folder_local_location):
-        shutil.rmtree(associated_folder_local_location)
-
-    # if the type-level folder such as folder named "doc" or "pdf" is empty
-    # that is, if there is no UniqueFile of this type
-    # then delete this type_level folder
-    if os.path.isdir(type_level_dir_name) and os.listdir(type_level_dir_name).__len__() == 0:
-        os.rmdir(type_level_dir_name)
 
 
 class Document(models.Model):

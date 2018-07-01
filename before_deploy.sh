@@ -2,4 +2,4 @@
 rm -r ./variora/bundled_static/*
 
 # generate new production-version bundle
-webpack --config webpack.config.js -p
+webpack --config webpack.config.js --mode production

@@ -21,9 +21,9 @@
         {% if annotation.annotator == request.user %}
           <button style="border: none; background: none" class="DeleteAnnotationButton btn" value="{{ annotation.id }}"><i class="fa fa-trash-o" aria-hidden="true"></i>&nbspdelete</button>
         {% endif %}
-        <div class="btn">
-          <span style="cursor: pointer;" annotation_id="{{ annotation.id }}" class="LikeAnnotationButton glyphicon glyphicon-thumbs-up"></span>
-          <bold id="num_like">{{ annotation.num_like }}</bold>
+        <div class="btn LikeAnnotationButton" annotation_id="{{ annotation.id }}">
+          <span style="cursor: pointer;" class="glyphicon glyphicon-thumbs-up"></span>
+          <bold class="num_like">{{ annotation.num_like }}</bold>
         </div>
       </div>
       <form style="display: none">

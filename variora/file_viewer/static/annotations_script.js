@@ -44,18 +44,18 @@ function addAnnotationRelatedListenerWithin(jq) {
   jq.find('code').addClass('prettyprint')
   PR.prettyPrint()
 
-  jq.find(".AnnotationBlock").on("mouseover", function() {
-    var annotation_id = $(this).attr("annotation_id")
+  jq.find('.AnnotationBlock').on('mouseover', function() {
+    var annotation_id = $(this).attr('annotation_id')
     var Annotation = $(".Annotation[annotation_id='" + annotation_id + "']")
-    $(this).css("box-shadow", '3px 3px 8px rgba(0, 0, 0, .25)')
-    Annotation.css("box-shadow", '3px 3px 8px rgba(0, 0, 0, .25)')
+    $(this).css('box-shadow', '3px 3px 8px rgba(0, 0, 0, .38)')
+    Annotation.css('box-shadow', '3px 3px 8px rgba(0, 0, 0, .38)')
   })
 
-  jq.find(".AnnotationBlock").on("mouseout", function() {
-    var annotation_id = $(this).attr("annotation_id")
+  jq.find('.AnnotationBlock').on('mouseout', function() {
+    var annotation_id = $(this).attr('annotation_id')
     var Annotation = $(".Annotation[annotation_id='" + annotation_id + "']")
-    $(this).css("box-shadow", 'none')
-    Annotation.css("box-shadow", 'none')
+    $(this).css('box-shadow', 'none')
+    Annotation.css('box-shadow', 'none')
   })
 
   // jq.find(".AnnotationBlock").on("click", function(e) { // scroll to the corresponding Anotation when clicking a certain AnnotationBlock
@@ -151,8 +151,8 @@ function addAnnotationRelatedListenerWithin(jq) {
         success: function(data) {
           var reply = $(data)
           $(".AnnotationBlock[annotation_id='" + thisButton.val() + "']").append(reply)
-          $(".ReplyAnnotationButton").parents("footer").children("form").css('display', 'none')
-          tinyMCE.activeEditor.setContent("")
+          $('.ReplyAnnotationButton').parents('footer').children('form').css('display', 'none')
+          tinyMCE.activeEditor.setContent('')
           addAnnotationRelatedListenerWithin(reply)
           tinymceInit()
           layer.close(index)
@@ -163,7 +163,7 @@ function addAnnotationRelatedListenerWithin(jq) {
   })
 
   jq.find(".DeleteAnnotationButton").on("click", function() {
-    var index = layer.load(1, { shade: 0.18 });  // 0 represent the style, can be 0-2
+    var index = layer.load(1, { shade: 0.18 })  // 0 represent the style, can be 0-2
     var annotationID = this.value
     $.ajax({
       type: "POST",
@@ -183,8 +183,8 @@ function addAnnotationRelatedListenerWithin(jq) {
   jq.find(".LikeAnnotationButton").on("click", function() {
     if (is_authenticated) {
       const $this = $(this)
-      var new_num = parseInt($this.next().text()) + 1
-      $this.next().text(new_num.toString())
+      var new_num = parseInt($this.find('.num_like').text()) + 1
+      $this.find('.num_like').text(new_num.toString())
       $this.off("click")
       $this.css("color", "#6495ED")
       $this.on("click", function() {
@@ -209,8 +209,8 @@ function addAnnotationRelatedListenerWithin(jq) {
   jq.find(".LikeAnnotationReplyButton").on("click", function() {
     if (is_authenticated) {
       const $this = $(this)
-      var new_num = parseInt($this.next().text()) + 1
-      $this.next().text(new_num.toString())
+      var new_num = parseInt($this.find('.num_like').text()) + 1
+      $this.find('.num_like').text(new_num.toString())
       $this.off("click")
       $this.css("color", "#6495ED")
       $this.on("click", function() {
@@ -252,7 +252,6 @@ function addAnnotationRelatedListenerWithin(jq) {
 
     jq.find('.Annotation').addBack('.Annotation').on('mousemove', function(e) {
       if (e.which != 0) {
-        const allAnnotationsInThisPage = $(this).parent('.page_div').find('.Annotation').toArray()
         for (var a of allAnnotationsInThisPage) {
           $(a).css("box-shadow", 'none')
           $(".AnnotationBlock[annotation_id='" + $(a).attr("annotation_id") + "']").css("box-shadow", 'none')
@@ -260,25 +259,16 @@ function addAnnotationRelatedListenerWithin(jq) {
         return
       }
 
-      var coverAnnotations = allAnnotationsInThisPage.filter(annotation => _checkCoverage(annotation, e, pageJQ))
-
-      var sortedCloseness = coverAnnotations.sort((a, b) => _getRight(a) > _getRight(b))
-      if (_getRight(sortedCloseness[1]) - _getRight(sortedCloseness[0]) < 9)  // right side too close
-        sortedCloseness = coverAnnotations.sort((a, b) => _getLeft(a) < _getLeft(b))  // add Top and Bottom in the similar way if required
-
-      const newTarget = $(sortedCloseness[0])
+      const newTarget = findTargetAnnotation(e, allAnnotationsInThisPage, pageJQ)
 
       if (newTarget != target) {
         if (target != undefined) {
           target.css("box-shadow", 'none')
           $(".AnnotationBlock[annotation_id='" + $(target).attr("annotation_id") + "']").css("box-shadow", 'none')
         }
-        newTarget.css("box-shadow", '3px 3px 8px rgba(0, 0, 0, .25)')
-        $(".AnnotationBlock[annotation_id='" + $(newTarget).attr("annotation_id") + "']").css("box-shadow", '3px 3px 8px rgba(0, 0, 0, .25)')
+        newTarget.css("box-shadow", '3px 3px 8px rgba(0, 0, 0, .38)')
+        $(".AnnotationBlock[annotation_id='" + $(newTarget).attr("annotation_id") + "']").css("box-shadow", '3px 3px 8px rgba(0, 0, 0, .38)')
         target = newTarget
-        // newTarget.on('click', function() {
-        //   scrollAnnotationDivIntoView($(".AnnotationDiv[annotation_id='" + $(this).attr("annotation_id") + "']"))
-        // })
       }
     })
   })
@@ -286,7 +276,7 @@ function addAnnotationRelatedListenerWithin(jq) {
   jq.find('.Annotation').addBack('.Annotation').on('mouseout', function(e) {
     if (e.which != 0)
       return
-    
+
     const allAnnotationsInThisPage = $(this).parent('.page_div').find('.Annotation').toArray()
     for (var a of allAnnotationsInThisPage) {
       $(a).css("box-shadow", 'none')
@@ -304,5 +294,22 @@ function scrollAnnotationDivIntoView(annotationDiv) {
   }, 240)
 }
 
+function findTargetAnnotation(e, allAnnotationsInThisPage, pageJQ) {
+  const coverAnnotations = allAnnotationsInThisPage.filter(annotation => _checkCoverage(annotation, e, pageJQ))
 
-export { addAnnotationRelatedListener, addAnnotationRelatedListenerWithin }
+  const THREDSHOLD = 9
+  var sortedCloseness = coverAnnotations.sort((a, b) => _getRight(a) > _getRight(b))
+  if (_getRight(sortedCloseness[1]) - _getRight(sortedCloseness[0]) < THREDSHOLD) {  // right side too close
+    sortedCloseness = coverAnnotations.sort((a, b) => _getLeft(a) < _getLeft(b))
+    if (_getLeft(sortedCloseness[0]) - _getLeft(sortedCloseness[1]) < THREDSHOLD) {
+      sortedCloseness = coverAnnotations.sort((a, b) => _getBottom(a) > _getBottom(b))
+      if (_getBottom(sortedCloseness[1]) - _getBottom(sortedCloseness[0]) < THREDSHOLD)
+        sortedCloseness = coverAnnotations.sort((a, b) => _getTop(a) < _getTop(b))
+    }
+  }
+  const newTarget = $(sortedCloseness[0])
+  return newTarget
+}
+
+
+export { addAnnotationRelatedListener, addAnnotationRelatedListenerWithin, scrollAnnotationDivIntoView, findTargetAnnotation }

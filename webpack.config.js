@@ -52,7 +52,7 @@ module.exports = {
     },
   },
   module: {
-    loaders: [
+    rules: [
       // use babel-loader with es2015 and react settign to load .js and .jsx files
       {
         test: /.jsx?$/,
