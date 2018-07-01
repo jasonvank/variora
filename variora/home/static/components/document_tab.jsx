@@ -109,8 +109,8 @@ class UploadedDocuments extends React.Component {
       beforeUpload(file, fileList) {
         self.setState({
           uploadedDocumentFileList: [file],
-          uploadedDocumentName: file.name
-        });
+          uploadedDocumentName: file.name.endsWith('.pdf') ? file.name.slice(0, file.name.length - 4) : file.name
+        })
         return false
       },
       fileList: this.state.uploadedDocumentFileList,
