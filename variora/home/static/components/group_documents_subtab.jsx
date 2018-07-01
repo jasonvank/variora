@@ -6,7 +6,7 @@ import {
   Route,
   BrowserRouter as Router
 } from 'react-router-dom'
-import { getCookie, getUrlFormat } from 'util.js'
+import { getCookie, getUrlFormat, validateDocumentTitle } from 'util.js'
 
 import { GroupDocumentsList } from './group_documents_list.jsx'
 import React from 'react';
@@ -31,22 +31,24 @@ class GroupDocumentsSubtab extends React.Component {
     this.uploadedDocumentTable = undefined
     this.uploadLocalDocument = () => {
       var title = this.state.uploadedDocumentName
-      var invalidSpecialCharacter = /[^\w|\-|&|.|(|)|:|[|\]|@|<|>]/gm;
-      if (title == undefined || title == '') {
-        notification['warning']({
-          message: 'Document title cannot be empty',
-          duration: 1.8,
-        })
+      if (!validateDocumentTitle(title))
         return false
-      }
-      if (title.match(invalidSpecialCharacter) != null) {
-        notification['warning']({
-          message: 'The document name contains invalid character',
-          description: 'The special characters you can include in your document name are "-|&_.():[]@<>"',
-          duration: 6,
-        })
-        return false
-      }
+      // var invalidSpecialCharacter = /[^\w|\-|&|.|(|)|:|[|\]|@|<|>]/gm;
+      // if (title == undefined || title == '') {
+      //   notification['warning']({
+      //     message: 'Document title cannot be empty',
+      //     duration: 1.8,
+      //   })
+      //   return false
+      // }
+      // if (title.match(invalidSpecialCharacter) != null) {
+      //   notification['warning']({
+      //     message: 'The document name contains invalid character',
+      //     description: 'The special characters you can include in your document name are "-|&_.():[]@<>"',
+      //     duration: 6,
+      //   })
+      //   return false
+      // }
       var data = new FormData()
       data.append('title', title)
       data.append('file_upload', this.state.uploadedDocumentFileList[0])
@@ -66,26 +68,12 @@ class GroupDocumentsSubtab extends React.Component {
     this.uploadOnlineDocument = () => {
       var title = this.state.onlineDocumentName
       var externalUrl = this.state.onlineDocumentUrl
-      var invalidSpecialCharacter = /[^\w|\-|&|.|(|)|:|[|\]|@|<|>]/gm;
-      if (title == undefined || title == '') {
-        notification['warning']({
-          message: 'Document title cannot be empty',
-          duration: 1.8,
-        })
+      if (!validateDocumentTitle(title))
         return false
-      }
       if (externalUrl == undefined || externalUrl == '') {
         notification['warning']({
           message: 'URL cannot be empty',
           duration: 1.8,
-        })
-        return false
-      }
-      if(title.match(invalidSpecialCharacter)!=null){
-        notification['warning']({
-          message: 'The document name contains invalid character',
-          description: 'The special characters you can include in your document name are "-|&_.():[]@<>" ',
-          duration: 6,
         })
         return false
       }
@@ -118,7 +106,13 @@ class GroupDocumentsSubtab extends React.Component {
     var uploadProps = {
       accept: 'application/pdf',
       showUploadList: true,
-      beforeUpload(file, fileList) { self.setState({ uploadedDocumentFileList: [file], uploadedDocumentName: file.name }); return false },
+      beforeUpload(file, fileList) {
+        self.setState({
+          uploadedDocumentFileList: [file],
+          uploadedDocumentName: file.name.endsWith('.pdf') ? file.name.slice(0, file.name.length - 4) : file.name
+        })
+        return false
+      },
       fileList: this.state.uploadedDocumentFileList,
     }
 

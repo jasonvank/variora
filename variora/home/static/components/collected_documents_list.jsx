@@ -1,12 +1,12 @@
-import { Icon, Popconfirm, Table, message } from 'antd';
+import { Icon, Popconfirm, Table, message } from 'antd'
 import { formatOpenDocumentUrl, getCookie, getUrlFormat } from 'util.js'
 
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
+import ReactDOM from 'react-dom'
 import axios from 'axios'
-import enUS from 'antd/lib/locale-provider/en_US';
+import enUS from 'antd/lib/locale-provider/en_US'
 
-const { Column } = Table;
+const { Column } = Table
 
 
 class CollectedDocumentsList extends React.Component {
@@ -27,7 +27,7 @@ class CollectedDocumentsList extends React.Component {
       var data = new FormData()
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
       axios.post(collectDocument.uncollectUrl, data).then((response) => {
-        var updateCollectDocuments = this.state.data.filter(document => document.pk!= collectDocument.pk)
+        var updateCollectDocuments = this.state.data.filter(document => document.pk != collectDocument.pk)
         this.setState({ data: updateCollectDocuments })
       })
     }
@@ -36,7 +36,7 @@ class CollectedDocumentsList extends React.Component {
     this.updateData()
   }
   render() {
-    const columns=[{
+    const columns = [{
       title: 'Id',
       dataIndex: 'id',
       width: '20%',
@@ -65,7 +65,7 @@ class CollectedDocumentsList extends React.Component {
   }
 }
 
-export { CollectedDocumentsList };
+export { CollectedDocumentsList }
 
 
 

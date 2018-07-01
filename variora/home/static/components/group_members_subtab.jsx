@@ -148,7 +148,7 @@ class GroupMembersList extends React.Component {
       <Table
         dataSource={this.state.data}
         rowKey={record => record.email_address}
-        columns={this.state.isAdmin ? columns: columns.pop() ? columns : []}
+        columns={this.state.isAdmin ? columns : columns.pop() ? columns : []}
         pagination={false}
         title={ () => <span><Icon type="solution" /> Group Members</span> }
         size='middle'
@@ -324,7 +324,7 @@ class GroupMembersSubtab extends React.Component {
         <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .20)' }}>
           <GroupMembersList coteriePk={this.state.coteriePk} members={this.state.members} removeMemberCallback={this.removeMemberCallback} isAdmin={this.props.isAdmin} />
         </div>
-        { this.props.isAdmin ? groupApplicationList: null }
+        { this.props.isAdmin ? groupApplicationList : null }
       </div>
     )
   }

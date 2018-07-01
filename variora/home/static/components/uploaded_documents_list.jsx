@@ -1,11 +1,11 @@
-import { Icon, Input, Popconfirm, Table, message, notification } from 'antd';
-import { formatOpenDocumentUrl, getCookie, getUrlFormat } from 'util.js'
+import { Icon, Input, Popconfirm, Table, message, notification } from 'antd'
+import { formatOpenDocumentUrl, getCookie, getUrlFormat, validateDocumentTitle } from 'util.js'
 
-import React from 'react';
-import axios from 'axios';
-import enUS from 'antd/lib/locale-provider/en_US';
+import React from 'react'
+import axios from 'axios'
+import enUS from 'antd/lib/locale-provider/en_US'
 
-const { Column } = Table;
+const { Column } = Table
 
 class ChangeOpenDocumentName extends React.Component {
   state = {
@@ -17,22 +17,8 @@ class ChangeOpenDocumentName extends React.Component {
   }
   check = () => {
     var newTitle = this.state.value
-    var invalidSpecialCharacter = /[^\w|\-|&|.|(|)|:|[|\]|@|<|>]/gm
-    if (newTitle == undefined || newTitle == '') {
-      notification['warning']({
-        message: 'Document title cannot be empty',
-        duration: 1.8,
-      })
+    if (!validateDocumentTitle(newTitle))
       return false
-    }
-    if(newTitle.match(invalidSpecialCharacter)!=null){
-      notification['warning']({
-        message: 'The document name contains invalid character',
-        description: 'The special characters you can include in your document name are "-|&_.():[]@<>"',
-        duration: 6,
-      })
-      return false
-    }
     this.setState({ editable: false })
     var data = new FormData()
     data.append('new_title', newTitle)
@@ -45,7 +31,7 @@ class ChangeOpenDocumentName extends React.Component {
     this.setState({ editable: true })
   }
   render() {
-    var { value, editable } = this.state;
+    var { value, editable } = this.state
     var editInput = (
       <div className="editable-cell-input-wrapper">
         <Input
@@ -76,7 +62,7 @@ class ChangeOpenDocumentName extends React.Component {
       <div className="editable-cell">
         { editable ? editInput : link }
       </div>
-    );
+    )
   }
 }
 
@@ -103,13 +89,13 @@ class UploadedDocumentsList extends React.Component {
     }
     this.onOpenDocumentRename = (key, dataIndex) => {
       return (value) => {
-        var data = this.state.data;
-        var target = data.find(item => item.pk === key);
+        var data = this.state.data
+        var target = data.find(item => item.pk === key)
         if (target) {
-          target[dataIndex] = value;
-          this.setState({ data: data });
+          target[dataIndex] = value
+          this.setState({ data: data })
         }
-      };
+      }
     }
     this.updateCollectDocumentCallback = () => {
 
@@ -166,7 +152,7 @@ class UploadedDocumentsList extends React.Component {
   }
 }
 
-export { UploadedDocumentsList };
+export { UploadedDocumentsList }
 
 
 
