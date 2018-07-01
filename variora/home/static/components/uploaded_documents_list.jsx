@@ -4,7 +4,7 @@ import { formatOpenDocumentUrl, getCookie, getUrlFormat } from 'util.js'
 import React from 'react'
 import axios from 'axios'
 import enUS from 'antd/lib/locale-provider/en_US'
-import { validateDocumentTitle } from 'home_util.'
+import { validateDocumentTitle } from 'home_util.js'
 
 const { Column } = Table
 

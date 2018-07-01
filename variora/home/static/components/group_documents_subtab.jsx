@@ -13,7 +13,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import axios from 'axios'
 import enUS from 'antd/lib/locale-provider/en_US'
-import { validateDocumentTitle } from 'home_util.'
+import { validateDocumentTitle } from 'home_util.js'
 
 const { SubMenu } = Menu
 const { Header, Content, Sider } = Layout

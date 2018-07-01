@@ -8,7 +8,7 @@ import { CollectedDocumentsList } from './collected_documents_list.jsx'
 import React from 'react'
 import { UploadedDocumentsList } from './uploaded_documents_list.jsx'
 import axios from 'axios'
-import { validateDocumentTitle } from 'home_util.'
+import { validateDocumentTitle } from 'home_util.js'
 
 const { SubMenu } = Menu
 const { Header, Content, Sider } = Layout

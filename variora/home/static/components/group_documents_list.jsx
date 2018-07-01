@@ -4,7 +4,7 @@ import { formatOpenCoterieDocumentUrl, getCookie, getUrlFormat } from 'util.js'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import axios from 'axios'
-import { validateDocumentTitle } from 'home_util.'
+import { validateDocumentTitle } from 'home_util.js'
 
 const { Column } = Table
 
