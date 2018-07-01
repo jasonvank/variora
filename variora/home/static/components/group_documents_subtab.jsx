@@ -1,6 +1,6 @@
-import 'regenerator-runtime/runtime';
+import 'regenerator-runtime/runtime'
 
-import { Avatar, Button, Col, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, Upload, notification } from 'antd';
+import { Avatar, Button, Col, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, Upload, notification } from 'antd'
 import {
   Link,
   Route,
@@ -9,19 +9,19 @@ import {
 import { getCookie, getUrlFormat, validateDocumentTitle } from 'util.js'
 
 import { GroupDocumentsList } from './group_documents_list.jsx'
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
+import ReactDOM from 'react-dom'
 import axios from 'axios'
-import enUS from 'antd/lib/locale-provider/en_US';
+import enUS from 'antd/lib/locale-provider/en_US'
 
-const { SubMenu } = Menu;
-const { Header, Content, Sider } = Layout;
-const MenuItemGroup = Menu.ItemGroup;
+const { SubMenu } = Menu
+const { Header, Content, Sider } = Layout
+const MenuItemGroup = Menu.ItemGroup
 
 
 class GroupDocumentsSubtab extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       uploadedDocumentFileList: [],
       uploadedDocumentName: undefined,
@@ -33,22 +33,6 @@ class GroupDocumentsSubtab extends React.Component {
       var title = this.state.uploadedDocumentName
       if (!validateDocumentTitle(title))
         return false
-      // var invalidSpecialCharacter = /[^\w|\-|&|.|(|)|:|[|\]|@|<|>]/gm;
-      // if (title == undefined || title == '') {
-      //   notification['warning']({
-      //     message: 'Document title cannot be empty',
-      //     duration: 1.8,
-      //   })
-      //   return false
-      // }
-      // if (title.match(invalidSpecialCharacter) != null) {
-      //   notification['warning']({
-      //     message: 'The document name contains invalid character',
-      //     description: 'The special characters you can include in your document name are "-|&_.():[]@<>"',
-      //     duration: 6,
-      //   })
-      //   return false
-      // }
       var data = new FormData()
       data.append('title', title)
       data.append('file_upload', this.state.uploadedDocumentFileList[0])
@@ -102,7 +86,7 @@ class GroupDocumentsSubtab extends React.Component {
 
 
   render() {
-    self = this;
+    self = this
     var uploadProps = {
       accept: 'application/pdf',
       showUploadList: true,

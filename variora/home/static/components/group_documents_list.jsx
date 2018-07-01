@@ -1,38 +1,41 @@
-import { Icon, Input, Popconfirm, Table, message, notification } from 'antd';
+import { Icon, Input, Popconfirm, Table, message, notification } from 'antd'
 import { formatOpenCoterieDocumentUrl, getCookie, getUrlFormat, validateDocumentTitle } from 'util.js'
 
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
+import ReactDOM from 'react-dom'
 import axios from 'axios'
 
-const { Column } = Table;
+const { Column } = Table
 
 
 class ChangeDocumentName extends React.Component {
-  state = {
+  constructor(props){
+    super(props)
+    this.state = {
     value: this.props.anchor.props.children,
     editable: false,
-  }
-  handleChange = (e) => {
-    this.setState({ value: e.target.value })
-  }
-  check = () => {
-    var newTitle = this.state.value
-    if (!validateDocumentTitle(newTitle))
-      return false
-    this.setState({ editable: false })
-    var data = new FormData()
-    data.append('new_title', newTitle)
-    data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-    axios.post(this.props.coterieDocument.renameUrl, data).then((response) => {
-      this.props.onChange(this.state.value)
-    })
-  }
-  edit = () => {
-    this.setState({ editable: true })
+    }
+    this.handleChange = (e) => {
+      this.setState({ value: e.target.value })
+    }
+    this.check = () => {
+      var newTitle = this.state.value
+      if (!validateDocumentTitle(newTitle))
+        return false
+      this.setState({ editable: false })
+      var data = new FormData()
+      data.append('new_title', newTitle)
+      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+      axios.post(this.props.coterieDocument.renameUrl, data).then((response) => {
+        this.props.onChange(this.state.value)
+      })
+    }
+    this.edit = () => {
+      this.setState({ editable: true })
+    }
   }
   render() {
-    var { value, editable } = this.state;
+    var { value, editable } = this.state
     var editInput = (
       <div className="editable-cell-input-wrapper">
         <Input
@@ -63,7 +66,7 @@ class ChangeDocumentName extends React.Component {
       <div className="editable-cell">
         { editable ? editInput : link }
       </div>
-    );
+    )
   }
 }
 
@@ -90,13 +93,13 @@ class GroupDocumentsList extends React.Component {
     }
     this.onCoterieDocumentRename = (key, dataIndex) => {
       return (value) => {
-        var data = this.state.data;
-        var target = data.find(item => item.pk === key);
+        var data = this.state.data
+        var target = data.find(item => item.pk === key)
         if (target) {
-          target[dataIndex] = value;
-          this.setState({ data: data });
+          target[dataIndex] = value
+          this.setState({ data: data })
         }
-      };
+      }
     }
   }
 
@@ -161,7 +164,7 @@ class GroupDocumentsList extends React.Component {
   }
 }
 
-export { GroupDocumentsList };
+export { GroupDocumentsList }
 
 
 

@@ -8,27 +8,30 @@ import enUS from 'antd/lib/locale-provider/en_US'
 const { Column } = Table
 
 class ChangeOpenDocumentName extends React.Component {
-  state = {
-    value: this.props.anchor.props.children,
-    editable: false,
-  }
-  handleChange = (e) => {
-    this.setState({ value: e.target.value })
-  }
-  check = () => {
-    var newTitle = this.state.value
-    if (!validateDocumentTitle(newTitle))
-      return false
-    this.setState({ editable: false })
-    var data = new FormData()
-    data.append('new_title', newTitle)
-    data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-    axios.post(this.props.openDocument.renameUrl, data).then((response) => {
-      this.props.onChange(this.state.value)
-    })
-  }
-  edit = () => {
-    this.setState({ editable: true })
+  constructor(props){
+    super(props)
+    this.state = {
+      value: this.props.anchor.props.children,
+      editable: false,
+    }
+    this.handleChange = (e) => {
+      this.setState({ value: e.target.value })
+    }
+    this.check = () => {
+      var newTitle = this.state.value
+      if (!validateDocumentTitle(newTitle))
+        return false
+      this.setState({ editable: false })
+      var data = new FormData()
+      data.append('new_title', newTitle)
+      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+      axios.post(this.props.openDocument.renameUrl, data).then((response) => {
+        this.props.onChange(this.state.value)
+      })
+    }
+    this.edit = () => {
+      this.setState({ editable: true })
+    }
   }
   render() {
     var { value, editable } = this.state
@@ -80,12 +83,12 @@ class UploadedDocumentsList extends React.Component {
     this.updateData = (response) => {
       axios.get(getUrlFormat('/file_viewer/api/documents', {
       }))
-      .then(response => {
-        this.setState({
-          data: response.data['uploadedDocuments']
+        .then(response => {
+          this.setState({
+            data: response.data['uploadedDocuments']
+          })
         })
-      })
-      .catch(e => { message.warning(e.message) })
+        .catch(e => { message.warning(e.message) })
     }
     this.onOpenDocumentRename = (key, dataIndex) => {
       return (value) => {
@@ -125,7 +128,7 @@ class UploadedDocumentsList extends React.Component {
           anchor={ <a className='document-link' href={formatOpenDocumentUrl(openDocument)}>{text}</a> }
           onChange={this.onOpenDocumentRename(openDocument.pk, 'title')}
         />),
-      }, {
+    }, {
       title: 'Action',
       key: 'action',
       width: '40%',

@@ -1,6 +1,6 @@
-import 'regenerator-runtime/runtime';
+import 'regenerator-runtime/runtime'
 
-import { Avatar, Button, Col, Dropdown, Icon, Input, Layout, Menu, Modal, Popconfirm, Row, Table } from 'antd';
+import { Avatar, Button, Col, Dropdown, Icon, Input, Layout, Menu, Modal, Popconfirm, Row, Table } from 'antd'
 import { getCookie, getUrlFormat } from 'util.js'
 
 import React from 'react'
@@ -88,7 +88,7 @@ class GroupMembersList extends React.Component {
         this.state = {
           visible: false
         }
-        this.handleVisibleChange = (flag) => { this.setState({ visible: flag }); }
+        this.handleVisibleChange = (flag) => { this.setState({ visible: flag }) }
       }
       render() {
         var menu = (
@@ -98,7 +98,7 @@ class GroupMembersList extends React.Component {
                 title="Are you sure to remove this member from the group?"
                 onConfirm={ () => {
                   this.props.removeMemberCallback(this.props.memberEmailAddress)
-                  this.setState({ visible: false });
+                  this.setState({ visible: false })
                 }}
                 okText="Yes" cancelText="No"
               >
@@ -184,7 +184,7 @@ class GroupApplicationList extends React.Component {
     axios.post(application.accept_url, data).then(() => {
       self.props.removeApplicationCallback(application.pk)
       self.props.addMemberCallback(application.applicant)
-    });
+    })
   }
 
   onRejectClick(application) {
@@ -193,7 +193,7 @@ class GroupApplicationList extends React.Component {
     data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
     axios.post(application.reject_url, data).then((response) => {
       self.props.removeApplicationCallback(application.pk)
-    });
+    })
   }
 
   render() {
