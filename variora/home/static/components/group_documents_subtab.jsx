@@ -28,6 +28,7 @@ class GroupDocumentsSubtab extends React.Component {
       uploadedDocumentName: undefined,
       onlineDocumentUrl: undefined,
       onlineDocumentName: undefined,
+      uploadBtnLoading: false,
     }
     this.uploadedDocumentTable = undefined
     this.uploadLocalDocument = () => {
@@ -40,6 +41,7 @@ class GroupDocumentsSubtab extends React.Component {
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
       data.append('coterie_id', this.props.coteriePk)
       data.append('current_url', window.location.href)
+      this.setState({ uploadBtnLoading: true })
       axios.post('/coterie/handle_coteriefile_upload', data, {
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -47,6 +49,7 @@ class GroupDocumentsSubtab extends React.Component {
       }).then(() => {
         this.setState({ uploadedDocumentFileList: [] })
         this.setState({ uploadedDocumentName: '' })
+        this.setState({ uploadBtnLoading: false })
         this.uploadedDocumentTable.updateData()
       })
     }
@@ -118,7 +121,7 @@ class GroupDocumentsSubtab extends React.Component {
               placeholder={ 'name of the document' }
             ></Input>
             <div>
-              <Button type="primary" icon="upload" style={{ margin: 8 }} onClick={this.uploadLocalDocument}>upload</Button>
+              <Button type="primary" icon="upload" style={{ margin: 8 }} loading={this.state.uploadBtnLoading} onClick={this.uploadLocalDocument}>upload</Button>
             </div>
           </Col>
           <Col span={12} style={{ textAlign: 'left' }}>
