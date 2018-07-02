@@ -36,6 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'kronos',
+    'cachalot',
+    'memcache_status',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -74,10 +76,6 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         'LOCATION': '127.0.0.1:11211',
     },
-    'memcached': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
-    },
     'redis': {
         'BACKEND': 'redis_cache.RedisCache',
         'LOCATION': 'localhost:6379',
@@ -107,7 +105,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
-SESSION_CACHE_ALIAS = 'memcached'
+SESSION_CACHE_ALIAS = 'default'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
