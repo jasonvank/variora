@@ -11,9 +11,9 @@ import {
 } from 'react-router-dom'
 import { getCookie, getUrlFormat } from 'util.js'
 
-import { AvatarWithNotifications } from './components/avatar_with_notifications.jsx'
 import { DocumentTab } from './components/document_tab.jsx'
 import { GroupTab } from './components/group_tab.jsx'
+import { NotificationsToggleButton } from './components/avatar_with_notifications.jsx'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { SearchResultTab } from './components/search_result_tab.jsx'
@@ -157,8 +157,13 @@ class App extends React.Component {
             </Col>
             <Col span={6} style={{ textAlign: 'right' }}>
               { this.state.user.is_authenticated ? <a onClick={this.signOff}>sign off</a> : <a href="/sign-in">sign in</a> }
-              <span style={{ margin: 18, color: '#666' }}>{ this.state.user.nickname }</span>
-              <AvatarWithNotifications user={ this.state.user } acceptInvitationCallback={ this.acceptInvitationCallback } />
+              <span style={{ margin: 24, color: '#666' }}>{ this.state.user.nickname }</span>
+              <NotificationsToggleButton user={ this.state.user } acceptInvitationCallback={ this.acceptInvitationCallback } />
+              <Avatar
+                style={{ marginRight: 18, marginLeft: 38, marginTop: -6, verticalAlign: 'middle' }}
+                size={'large'}
+                src={this.state.user.portrait_url}
+              />
             </Col>
           </Row>
         </Header>

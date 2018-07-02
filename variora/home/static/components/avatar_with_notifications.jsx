@@ -1,6 +1,6 @@
 import 'regenerator-runtime/runtime'
 
-import { Avatar, Badge, Button, notification } from 'antd'
+import { Badge, Button, Icon, notification } from 'antd'
 import { getCookie, getUrlFormat } from 'util.js'
 
 import React from 'react'
@@ -68,7 +68,7 @@ class ReceivedCoterieInvitationNotificationContent extends React.Component {
   }
 }
 
-class AvatarWithNotifications extends React.Component {
+class NotificationsToggleButton extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -125,20 +125,20 @@ class AvatarWithNotifications extends React.Component {
 
   render() {
     return (
-      <Badge count={this.state.invitations == undefined ? 0 : this.state.invitations.length}
-        style={{ backgroundColor: '#F89406' }}>
-        <Avatar
-          style={{ cursor: 'pointer', verticalAlign: 'middle' }}
-          size={'large'}
-          src={this.state.user.portrait_url}
-          onClick={this.onClick}
+      <Badge
+        count={this.state.invitations == undefined ? 0 : this.state.invitations.length}
+        style={{ cursor: 'pointer', backgroundColor: '#F89406', marginTop: -2 }}
+        onClick={this.onClick}
+      >
+        <Icon type="bell"
+          style={{ cursor: 'pointer', fontSize: 16, marginTop: -2 }}
         />
       </Badge>
     )
   }
 }
 
-export { AvatarWithNotifications }
+export { NotificationsToggleButton }
 
 
 
