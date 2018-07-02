@@ -148,7 +148,7 @@ class App extends React.Component {
           <Row>
             <Col span={6}>
               {/* <div className="logo" /> */}
-              <img src="https://www.dropbox.com/s/it8a74t3onqp5qa/logo.png?raw=1" height={48} style={{ verticalAlign: 'middle', marginLeft: 28 }}/>
+              <img src="/media/logo.png" height={48} style={{ verticalAlign: 'middle', marginLeft: 28 }}/>
             </Col>
             <Col span={8} style={{ textAlign: 'right' }}>
               <Search
