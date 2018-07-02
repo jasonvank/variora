@@ -75,6 +75,9 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         'LOCATION': '127.0.0.1:11211',
+        'OPTIONS': {
+            'server_max_value_length': 1024 * 1024 * 5,
+        }
     },
     'redis': {
         'BACKEND': 'redis_cache.RedisCache',
