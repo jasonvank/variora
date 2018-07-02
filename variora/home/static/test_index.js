@@ -61,7 +61,9 @@ class App extends React.Component {
         this.setCreateGroupModelVisible(true)
     }
     this.signOff = () => {
-      axios.get('/api/signoff').then(response => {
+      var data = new FormData()
+      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+      axios.post('/api/signoff', data).then(response => {
         window.location.reload()
       })
     }
