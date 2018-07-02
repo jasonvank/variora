@@ -13,7 +13,7 @@ import { getCookie, getUrlFormat } from 'util.js'
 
 import { DocumentTab } from './components/document_tab.jsx'
 import { GroupTab } from './components/group_tab.jsx'
-import { NotificationsToggleButton } from './components/avatar_with_notifications.jsx'
+import { NotificationsToggleButton } from './components/notifications_toggle_button.jsx'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { SearchResultTab } from './components/search_result_tab.jsx'
@@ -159,8 +159,9 @@ class App extends React.Component {
               { this.state.user.is_authenticated ? <a onClick={this.signOff}>sign off</a> : <a href="/sign-in">sign in</a> }
               <span style={{ margin: 24, color: '#666' }}>{ this.state.user.nickname }</span>
               <NotificationsToggleButton user={ this.state.user } acceptInvitationCallback={ this.acceptInvitationCallback } />
+              <Icon type="bell" style={{ cursor: 'pointer', fontSize: 18, marginLeft: 28, verticalAlign: 'middle', marginTop: -2 }} />
               <Avatar
-                style={{ marginRight: 18, marginLeft: 38, marginTop: -6, verticalAlign: 'middle' }}
+                style={{ marginRight: 18, marginLeft: 38, marginTop: -2, verticalAlign: 'middle' }}
                 size={'large'}
                 src={this.state.user.portrait_url}
               />

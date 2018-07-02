@@ -127,11 +127,11 @@ class NotificationsToggleButton extends React.Component {
     return (
       <Badge
         count={this.state.invitations == undefined ? 0 : this.state.invitations.length}
-        style={{ cursor: 'pointer', backgroundColor: '#F89406', marginTop: -2 }}
+        style={{ cursor: 'pointer', backgroundColor: '#FABE58', marginTop: -5 }}
         onClick={this.onClick}
       >
-        <Icon type="bell"
-          style={{ cursor: 'pointer', fontSize: 16, marginTop: -2 }}
+        <Icon type="inbox"
+          style={{ cursor: 'pointer', fontSize: 18, marginTop: -1 }}
         />
       </Badge>
     )
