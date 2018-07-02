@@ -148,20 +148,20 @@ class App extends React.Component {
               {/* <div className="logo" /> */}
               <img src="https://www.dropbox.com/s/it8a74t3onqp5qa/logo.png?raw=1" height={48} style={{ verticalAlign: 'middle', marginLeft: 28 }}/>
             </Col>
-            <Col span={12} style={{ textAlign: 'right' }}>
+            <Col span={8} style={{ textAlign: 'right' }}>
               <Search
                 placeholder="input search text"
-                style={{ width: 280 }}
+                style={{ width: '60%' }}
                 onSearch={this.handleSearch}
               />
             </Col>
-            <Col span={6} style={{ textAlign: 'right' }}>
-              { this.state.user.is_authenticated ? <a onClick={this.signOff}>sign off</a> : <a href="/sign-in">sign in</a> }
-              <span style={{ margin: 24, color: '#666' }}>{ this.state.user.nickname }</span>
+            <Col span={10} style={{ textAlign: 'right' }}>
               <NotificationsToggleButton user={ this.state.user } acceptInvitationCallback={ this.acceptInvitationCallback } />
               <Icon type="bell" style={{ cursor: 'pointer', fontSize: 18, marginLeft: 28, verticalAlign: 'middle', marginTop: -2 }} />
+              <span style={{ marginRight: 12, marginLeft: 28, color: '#666' }}>{ this.state.user.nickname }</span>
+              { this.state.user.is_authenticated ? <a onClick={this.signOff}>sign off</a> : <a href="/sign-in">sign in</a> }
               <Avatar
-                style={{ marginRight: 18, marginLeft: 38, marginTop: -2, verticalAlign: 'middle' }}
+                style={{ marginLeft: 28, marginRight: 18, marginTop: -2, verticalAlign: 'middle' }}
                 size={'large'}
                 src={this.state.user.portrait_url}
               />
