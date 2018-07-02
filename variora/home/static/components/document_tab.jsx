@@ -2,12 +2,13 @@ import 'regenerator-runtime/runtime'
 
 import { Button, Col, Icon, Input, Layout, Menu, Modal, Row, Upload, notification } from 'antd'
 import { Link, Route, BrowserRouter as Router, Switch } from 'react-router-dom'
-import { getCookie, getUrlFormat, validateDocumentTitle } from 'util.js'
+import { getCookie, getUrlFormat } from 'util.js'
 
 import { CollectedDocumentsList } from './collected_documents_list.jsx'
 import React from 'react'
 import { UploadedDocumentsList } from './uploaded_documents_list.jsx'
 import axios from 'axios'
+import { validateDocumentTitle } from 'home_util.js'
 
 const { SubMenu } = Menu
 const { Header, Content, Sider } = Layout
@@ -22,9 +23,10 @@ class DocumentTab extends React.Component {
 
   render() {
     return (
-      <Content style={{ paddingLeft: 18, paddingRight: 18, paddingTop: 8, margin: 0, minHeight: 280 }}>
+      <Content style={{ paddingLeft: 18, paddingRight: 18, paddingTop: 16, margin: 0, minHeight: 280 }}>
         <Menu
           onClick={this.handleClick}
+          className={'card'}
           mode="horizontal"
           style={{ padding: 0 }}
           defaultSelectedKeys={['uploaded-documents']}
@@ -120,10 +122,10 @@ class UploadedDocuments extends React.Component {
     }
     return (
       <div>
-        <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
+        <div className={'card'} style={{ overflow: 'auto', marginTop: 16 }}>
           <UploadedDocumentsList ref={(ele) => this.uploadedDocumentTable = ele} />
         </div>
-        <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, padding: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
+        <div className={'card'} style={{ overflow: 'auto', marginTop: 16, padding: 18 }}>
           <Row>
             <Col span={12} style={{ textAlign: 'left' }}>
               <Upload {...uploadProps}>
@@ -174,7 +176,7 @@ class CollectedDocuments extends React.Component {
   render() {
     return (
       <div>
-        <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
+        <div className={'card'} style={{ overflow: 'auto', marginTop: 18 }}>
           <CollectedDocumentsList ref={(ele) => this.uploadedDocumentTable = ele} />
         </div>
       </div>

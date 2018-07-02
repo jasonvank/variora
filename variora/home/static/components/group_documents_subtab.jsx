@@ -6,13 +6,14 @@ import {
   Route,
   BrowserRouter as Router
 } from 'react-router-dom'
-import { getCookie, getUrlFormat, validateDocumentTitle } from 'util.js'
+import { getCookie, getUrlFormat } from 'util.js'
 
 import { GroupDocumentsList } from './group_documents_list.jsx'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import axios from 'axios'
 import enUS from 'antd/lib/locale-provider/en_US'
+import { validateDocumentTitle } from 'home_util.js'
 
 const { SubMenu } = Menu
 const { Header, Content, Sider } = Layout
@@ -104,7 +105,7 @@ class GroupDocumentsSubtab extends React.Component {
     }
 
     var uploadDocumentSection = (
-      <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, padding: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
+      <div className={'card'} style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, padding: 18 }}>
         <Row>
           <Col span={12} style={{ textAlign: 'left' }}>
             <Upload {...uploadProps}>
@@ -148,7 +149,7 @@ class GroupDocumentsSubtab extends React.Component {
 
     return (
       <div>
-        <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
+        <div className={'card'} style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}>
           <GroupDocumentsList ref={(ele) => this.uploadedDocumentTable = ele} coteriePk={this.props.coteriePk} isAdmin={this.props.isAdmin}/>
         </div>
         { this.props.isAdmin ? uploadDocumentSection : null }

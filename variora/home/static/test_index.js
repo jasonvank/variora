@@ -142,15 +142,16 @@ class App extends React.Component {
     const fields = this.state.fields
     return (
       <Layout style={{ height: '100%', width: '100%', position: 'absolute' }}>
-        <Header className="header" style={{ backgroundColor: '#f6f6f6', diplay: 'inline' }}>
+        <Header className="header" style={{ backgroundColor: '#fff', diplay: 'inline' }}>
           <Row>
             <Col span={6}>
-              <div className="logo" />
+              {/* <div className="logo" /> */}
+              <img src="https://www.dropbox.com/s/it8a74t3onqp5qa/logo.png?raw=1" height={48} style={{ verticalAlign: 'middle', marginLeft: 28 }}/>
             </Col>
             <Col span={12} style={{ textAlign: 'right' }}>
               <Search
                 placeholder="input search text"
-                style={{ width: 200 }}
+                style={{ width: 280 }}
                 onSearch={this.handleSearch}
               />
             </Col>
@@ -164,7 +165,7 @@ class App extends React.Component {
 
         <Router basename={URL_BASE}>
           <Layout>
-            <Sider width={200} style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }}>
+            <Sider className='sider' width={200} style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }}>
               <Menu
                 mode="inline"
                 defaultOpenKeys={['admin_teams', 'member_teams']}

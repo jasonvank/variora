@@ -55,7 +55,7 @@ class GroupSettingsSubtab extends React.Component {
     const Panel = Collapse.Panel
 
     var invitationSection = (
-      <div style={{ backgroundColor: 'white', margin: '18px 0 28px 0', boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
+      <div className={'card'} style={{ backgroundColor: 'white', margin: '18px 0 28px 0' }}>
         <GroupInvitationForm coteriePk={this.state.coteriePk}/>
       </div>
     )

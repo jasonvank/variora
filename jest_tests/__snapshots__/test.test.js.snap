@@ -9,13 +9,13 @@ exports[`test react 1`] = `
       "minHeight": 280,
       "paddingLeft": 18,
       "paddingRight": 18,
-      "paddingTop": 8,
+      "paddingTop": 16,
     }
   }
 >
   <ul
     aria-activedescendant=""
-    className="ant-menu ant-menu-horizontal ant-menu-light ant-menu-root"
+    className="ant-menu ant-menu-horizontal card ant-menu-light ant-menu-root"
     onKeyDown={[Function]}
     role="menu"
     style={
@@ -66,11 +66,10 @@ exports[`test react 1`] = `
   </ul>
   <div>
     <div
+      className="card"
       style={
         Object {
-          "backgroundColor": "white",
-          "boxShadow": "2px 3px 8px rgba(0, 0, 0, .25)",
-          "marginTop": 18,
+          "marginTop": 16,
           "overflow": "auto",
         }
       }
@@ -178,11 +177,10 @@ exports[`test react 1`] = `
       </div>
     </div>
     <div
+      className="card"
       style={
         Object {
-          "backgroundColor": "white",
-          "boxShadow": "2px 3px 8px rgba(0, 0, 0, .25)",
-          "marginTop": 18,
+          "marginTop": 16,
           "overflow": "auto",
           "padding": 18,
         }

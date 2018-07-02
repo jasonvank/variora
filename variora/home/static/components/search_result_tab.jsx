@@ -56,13 +56,13 @@ class SearchResultTab extends React.Component {
   render() {
     return (
       <div style={{ paddingLeft: 18, paddingRight: 18, paddingTop: 8, margin: 0, minHeight: 280 }}>
-        <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
+        <div className='card' style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}>
           <DocumentResult resultDocuments={this.state.resultDocuments} />
         </div>
-        <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
+        <div className='card' style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}>
           <GroupResult administratedCoteries={this.state.administratedCoteries} joinedCoteries={this.state.joinedCoteries} resultCoteries={this.state.resultCoteries} user={this.state.user} />
         </div>
-        <div style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, boxShadow: '2px 3px 8px rgba(0, 0, 0, .25)' }}>
+        <div className='card' style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}>
           <UserResult resultUsers={this.state.resultUsers} />
         </div>
       </div>
