@@ -39,7 +39,7 @@ def delete_local_file(sender, instance, **kwargs):
 
 class Document(models.Model):
     uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
-    title = models.CharField(max_length=1028)
+    title = models.CharField(max_length=1028, db_index=True)
     owner = models.ForeignKey(User)  # many Documents to one User
     collectors = models.ManyToManyField(User, related_name="collected_document_set", blank=True)
     unique_file = models.ForeignKey(UniqueFile, blank=True, null=True)  # many Documents to one UniqueFile

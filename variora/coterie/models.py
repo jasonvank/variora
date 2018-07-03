@@ -11,7 +11,7 @@ from home.models import User
 
 class Coterie(models.Model):
     uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=256)
+    name = models.CharField(max_length=256, db_index=True)
     description = models.TextField(blank=True)
     administrators = models.ManyToManyField(User, related_name="administrated_coterie_set")
     members = models.ManyToManyField(User, related_name="joined_coterie_set", blank=True)
@@ -43,7 +43,7 @@ class CoterieApplication(models.Model):
 
 class CoterieDocument(models.Model):
     uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
-    title = models.CharField(max_length=1028)
+    title = models.CharField(max_length=1028, db_index=True)
     owner = models.ForeignKey(Coterie)
     unique_file = models.ForeignKey(UniqueFile, blank=True, null=True)
     num_visit = models.IntegerField(default=0)
@@ -111,7 +111,7 @@ class CoterieAnnotation(models.Model):
 
 class CoterieAnnotationReply(models.Model):
     uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
-    post_time = models.DateTimeField(auto_now=False, auto_now_add=True)
+    post_time = models.DateTimeField(auto_now=False, auto_now_add=True, db_index=True)
     replier = models.ForeignKey(User)
     reply_to_annotation = models.ForeignKey(CoterieAnnotation, related_name='annotationreply_set')
     reply_to_annotation_reply = models.ForeignKey("CoterieAnnotationReply",
