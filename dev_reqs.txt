@@ -9,6 +9,7 @@ requests
 pillow
 django-cachalot
 django-memcache-status
+django-notifications-hq
 
 ###### development ######
 selenium  # write browser-side tests
