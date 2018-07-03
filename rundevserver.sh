@@ -1,10 +1,10 @@
-# modify database scheme acording to the change of models.py
+# modify database scheme according to the change of models.py
 python variora/manage.py makemigrations
 
-#  apply database scheme change to database
+# apply above migrations
 python variora/manage.py migrate
 
-# remove the obsolte bundle
+# remove the obsolete bundle
 rm -r ./variora/bundled_static/dev/*
 
 webpack --config webpack.config.dev.js --mode development &  # run webpack watching mode in background
