@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'kronos',
     'cachalot',
     'memcache_status',
+    'notifications',
 ]
 
 MIDDLEWARE_CLASSES = [
