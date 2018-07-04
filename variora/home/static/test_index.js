@@ -14,6 +14,8 @@ import { getCookie, getUrlFormat } from 'util.js'
 import { DocumentTab } from './components/document_tab.jsx'
 import { GroupTab } from './components/group_tab.jsx'
 import { NotificationsToggleButton } from './components/notifications_toggle_button.jsx'
+import { NotificationsAlertButton } from './components/notifications_alert_button.jsx'
+
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { SearchResultTab } from './components/search_result_tab.jsx'
@@ -159,7 +161,9 @@ class App extends React.Component {
             </Col>
             <Col span={10} style={{ textAlign: 'right' }}>
               <NotificationsToggleButton user={ this.state.user } acceptInvitationCallback={ this.acceptInvitationCallback } />
-              <Icon type="bell" style={{ cursor: 'pointer', fontSize: 18, marginLeft: 28, verticalAlign: 'middle', marginTop: -2 }} />
+              <NotificationsAlertButton />
+
+              {/* <Icon type="bell" style={{ cursor: 'pointer', fontSize: 18, marginLeft: 28, verticalAlign: 'middle', marginTop: -2 }} /> */}
               <span style={{ marginRight: 12, marginLeft: 28, color: '#666' }}>{ this.state.user.nickname }</span>
               { this.state.user.is_authenticated ? <a onClick={this.signOff}>sign off</a> : <a href="/sign-in">sign in</a> }
               <Avatar
