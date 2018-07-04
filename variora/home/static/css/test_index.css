@@ -67,3 +67,11 @@ td:hover .editable-cell-icon {
   /*float: left;*/
   /*text-align: center;*/
 /*}*/
+
+.editable-cell-text-wrapper{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical
+}
