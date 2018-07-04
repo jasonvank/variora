@@ -1,30 +1,32 @@
 <div id="navbar">
-    <a class="awesome blue" href="{{ prev_page_url }}" placeholder="Page" style="float: left; height: 28px;"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i></a>
-    <h4 style="display: inline-block; color:white; margin: 5px 0 0 8%;"><i>{{ document.title }}</i></h4>
-    <div id="scroll_page_into_view_div">
-        <input type="number"/ >
-        <button class="awesome blue">Go</button>
-    </div>
-    <div id="resize_buttons_div">
-        <button class="awesome blue" style="height: 28px;" type="button" id="buttonForLarger"><i class="pe-7s-plus pe-lg"></i></button>
-        <button class="awesome blue" style="height: 28px;" type="button" id="buttonForSmaller"><i class="pe-7s-less pe-lg"></i></button>
-    </div>
-    <button class="awesome blue" id="show_annotation_frame_button" style="height: 28px;">Show</button>
-    <button class="awesome blue" id="hide_annotation_frame_button" style="height: 28px;">Hide</button>
-    <button class="awesome blue" id="comment_button" data-toggle="modal" data-target="#comment_modal" style="height: 28px;">
-        <i class="fa fa-comments" aria-hidden="true"></i>&nbspComments
+  <a class="awesome blue" href="{{ prev_page_url }}" placeholder="Page" style="float: left; height: 28px;"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i></a>
+  <div title="{{ document.title }}" style="text-align: center; display: inline-block; color:white; margin: 5px 0 0 8%; width: 28%; overflow: hidden; text-overflow: ellipsis;">
+  {{ document.title }}
+  </div>
+  <div id="scroll_page_into_view_div">
+    <input type="number" style="width: 60px" />
+    <button class="awesome blue">Go</button>
+  </div>
+  <div id="resize_buttons_div">
+    <button class="awesome blue" style="height: 28px;" type="button" id="buttonForLarger"><i class="pe-7s-plus pe-lg"></i></button>
+    <button class="awesome blue" style="height: 28px;" type="button" id="buttonForSmaller"><i class="pe-7s-less pe-lg"></i></button>
+  </div>
+  <button class="awesome blue" id="show_annotation_frame_button" style="height: 28px;">Show</button>
+  <button class="awesome blue" id="hide_annotation_frame_button" style="height: 28px;">Hide</button>
+  <button class="awesome blue" id="comment_button" data-toggle="modal" data-target="#comment_modal" style="height: 28px;">
+    <i class="fa fa-comments" aria-hidden="true"></i>&nbspComments
+  </button>
+  <div class="dropdown" id="annotation_color_buttons_div">
+    <button class="awesome blue dropdown-toggle" style="height: 28px;" data-toggle="dropdown"><i class="fa fa-paint-brush" aria-hidden="true"></i>&nbspColor
+        <b class="caret"></b>
     </button>
-    <div class="dropdown" id="annotation_color_buttons_div">
-        <button class="awesome blue dropdown-toggle" style="height: 28px;" data-toggle="dropdown"><i class="fa fa-paint-brush" aria-hidden="true"></i>&nbspColor
-            <b class="caret"></b>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-right" style="min-width: 80%">
-          <li><input class="color-picker"></li>
-        </ul>
-    </div>
-    <form id="download" method="get" action="/coterie/handle_download_coteriedocument" style="display: inline-block;">
-        {% csrf_token %}
-        <button type="submit" class="awesome blue" style="height: 28px" name="document_id" value={{ document.id }}><i class="fa fa-cloud-download" aria-hidden="true"></i>&nbspdownload</button>
-    </form>
-    <b id="num_visit" style="float: right; color: white; padding-top: 4px;">{{ document.num_visit }} visits</b>
+    <ul class="dropdown-menu dropdown-menu-right" style="min-width: 80%">
+      <li><input class="color-picker"></li>
+    </ul>
+  </div>
+  <form id="download" method="get" action="/coterie/handle_download_coteriedocument" style="display: inline-block;">
+    {% csrf_token %}
+    <button type="submit" class="awesome blue" style="height: 28px" name="document_id" value={{ document.id }}><i class="fa fa-cloud-download" aria-hidden="true"></i>&nbspdownload</button>
+  </form>
+  <!-- <b id="num_visit" style="float: right; color: white; padding-top: 4px;">{{ document.num_visit }} visits</b> -->
 </div>

@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 
-import os
-import shutil
+import uuid
 
 from django.db import models
 from django.dispatch import receiver
@@ -39,7 +38,8 @@ def delete_local_file(sender, instance, **kwargs):
 
 
 class Document(models.Model):
-    title = models.CharField(max_length=1028)
+    uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=1028, db_index=True)
     owner = models.ForeignKey(User)  # many Documents to one User
     collectors = models.ManyToManyField(User, related_name="collected_document_set", blank=True)
     unique_file = models.ForeignKey(UniqueFile, blank=True, null=True)  # many Documents to one UniqueFile
@@ -71,6 +71,7 @@ def may_delete_unique_file(sender, instance, **kwargs):
 
 
 class Comment(models.Model):
+    uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
     post_time = models.DateTimeField(auto_now=False, auto_now_add=True)
     commenter = models.ForeignKey(User)  # many Comments to one User
     document_this_comment_belongs = models.ForeignKey(Document)  # many Comments to one Document
@@ -86,6 +87,7 @@ class Comment(models.Model):
 
 
 class Annotation(models.Model):
+    uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
     post_time = models.DateTimeField(auto_now=False, auto_now_add=True)
     annotator = models.ForeignKey(User)
     document_this_annotation_belongs = models.ForeignKey(Document)
@@ -106,6 +108,7 @@ class Annotation(models.Model):
 
 
 class AnnotationReply(models.Model):
+    uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
     post_time = models.DateTimeField(auto_now=False, auto_now_add=True)
     replier = models.ForeignKey(User)  # many Comments to one User
     reply_to_annotation = models.ForeignKey(Annotation)

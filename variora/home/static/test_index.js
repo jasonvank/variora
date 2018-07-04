@@ -11,9 +11,9 @@ import {
 } from 'react-router-dom'
 import { getCookie, getUrlFormat } from 'util.js'
 
-import { AvatarWithNotifications } from './components/avatar_with_notifications.jsx'
 import { DocumentTab } from './components/document_tab.jsx'
 import { GroupTab } from './components/group_tab.jsx'
+import { NotificationsToggleButton } from './components/notifications_toggle_button.jsx'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { SearchResultTab } from './components/search_result_tab.jsx'
@@ -61,7 +61,9 @@ class App extends React.Component {
         this.setCreateGroupModelVisible(true)
     }
     this.signOff = () => {
-      axios.get('/api/signoff').then(response => {
+      var data = new FormData()
+      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+      axios.post('/api/signoff', data).then(response => {
         window.location.reload()
       })
     }
@@ -146,19 +148,25 @@ class App extends React.Component {
           <Row>
             <Col span={6}>
               {/* <div className="logo" /> */}
-              <img src="https://www.dropbox.com/s/it8a74t3onqp5qa/logo.png?raw=1" height={48} style={{ verticalAlign: 'middle', marginLeft: 28 }}/>
+              <img src="/media/logo.png" height={48} style={{ verticalAlign: 'middle', marginLeft: 28 }}/>
             </Col>
-            <Col span={12} style={{ textAlign: 'right' }}>
+            <Col span={8} style={{ textAlign: 'right' }}>
               <Search
                 placeholder="input search text"
-                style={{ width: 280 }}
+                style={{ width: '60%' }}
                 onSearch={this.handleSearch}
               />
             </Col>
-            <Col span={6} style={{ textAlign: 'right' }}>
+            <Col span={10} style={{ textAlign: 'right' }}>
+              <NotificationsToggleButton user={ this.state.user } acceptInvitationCallback={ this.acceptInvitationCallback } />
+              <Icon type="bell" style={{ cursor: 'pointer', fontSize: 18, marginLeft: 28, verticalAlign: 'middle', marginTop: -2 }} />
+              <span style={{ marginRight: 12, marginLeft: 28, color: '#666' }}>{ this.state.user.nickname }</span>
               { this.state.user.is_authenticated ? <a onClick={this.signOff}>sign off</a> : <a href="/sign-in">sign in</a> }
-              <span style={{ margin: 18, color: '#666' }}>{ this.state.user.nickname }</span>
-              <AvatarWithNotifications user={ this.state.user } acceptInvitationCallback={ this.acceptInvitationCallback } />
+              <Avatar
+                style={{ marginLeft: 28, marginRight: 18, marginTop: -2, verticalAlign: 'middle' }}
+                size={'large'}
+                src={this.state.user.portrait_url}
+              />
             </Col>
           </Row>
         </Header>

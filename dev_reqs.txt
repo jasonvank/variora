@@ -7,6 +7,9 @@ validate_email
 google-auth
 requests
 pillow
+django-cachalot
+django-memcache-status
+django-notifications-hq
 
 ###### development ######
 selenium  # write browser-side tests

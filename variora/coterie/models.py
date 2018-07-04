@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 
-import os
-import shutil
+import uuid
 
 from django.db import models
 from django.dispatch import receiver
@@ -11,7 +10,8 @@ from home.models import User
 
 
 class Coterie(models.Model):
-    name = models.CharField(max_length=256)
+    uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=256, db_index=True)
     description = models.TextField(blank=True)
     administrators = models.ManyToManyField(User, related_name="administrated_coterie_set")
     members = models.ManyToManyField(User, related_name="joined_coterie_set", blank=True)
@@ -21,6 +21,7 @@ class Coterie(models.Model):
 
 
 class CoterieInvitation(models.Model):
+    uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
     coterie = models.ForeignKey(Coterie)
     inviter = models.ForeignKey(User, related_name='sent_invitation_set')
     invitee = models.ForeignKey(User, related_name='received_invitation_set')
@@ -31,6 +32,7 @@ class CoterieInvitation(models.Model):
 
 
 class CoterieApplication(models.Model):
+    uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
     coterie = models.ForeignKey(Coterie, related_name='application_set')
     applicant = models.ForeignKey(User, related_name='sent_application_set')
     application_message = models.TextField(blank=True)
@@ -40,7 +42,8 @@ class CoterieApplication(models.Model):
 
 
 class CoterieDocument(models.Model):
-    title = models.CharField(max_length=1028)
+    uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=1028, db_index=True)
     owner = models.ForeignKey(Coterie)
     unique_file = models.ForeignKey(UniqueFile, blank=True, null=True)
     num_visit = models.IntegerField(default=0)
@@ -70,6 +73,7 @@ def may_delete_unique_file(sender, instance, **kwargs):
             unique_file.delete()
 
 class CoterieComment(models.Model):
+    uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
     post_time = models.DateTimeField(auto_now=False, auto_now_add=True)
     commenter = models.ForeignKey(User)
     document_this_comment_belongs = models.ForeignKey(CoterieDocument)
@@ -85,6 +89,7 @@ class CoterieComment(models.Model):
 
 
 class CoterieAnnotation(models.Model):
+    uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
     post_time = models.DateTimeField(auto_now=False, auto_now_add=True)
     annotator = models.ForeignKey(User)
     document_this_annotation_belongs = models.ForeignKey(CoterieDocument)
@@ -105,7 +110,8 @@ class CoterieAnnotation(models.Model):
 
 
 class CoterieAnnotationReply(models.Model):
-    post_time = models.DateTimeField(auto_now=False, auto_now_add=True)
+    uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
+    post_time = models.DateTimeField(auto_now=False, auto_now_add=True, db_index=True)
     replier = models.ForeignKey(User)
     reply_to_annotation = models.ForeignKey(CoterieAnnotation, related_name='annotationreply_set')
     reply_to_annotation_reply = models.ForeignKey("CoterieAnnotationReply",
