@@ -21,7 +21,7 @@ def proxy_view(request, requests_args=None):
 
     url = request.GET['origurl']
     if not (Document.objects.filter(external_url=url).exists() or CoterieDocument.objects.filter(external_url=url).exists()):
-        return HttpResponse(status=403)
+        return HttpResponse(status=404)
 
     requests_args = (requests_args or {}).copy()
     headers = _get_headers(request.META)
