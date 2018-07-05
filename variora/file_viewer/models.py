@@ -44,7 +44,7 @@ class Document(models.Model):
     collectors = models.ManyToManyField(User, related_name="collected_document_set", blank=True)
     unique_file = models.ForeignKey(UniqueFile, blank=True, null=True)  # many Documents to one UniqueFile
     num_visit = models.IntegerField(default=0)
-    external_url = models.CharField(max_length=2083, blank=True)
+    external_url = models.CharField(max_length=2083, blank=True, db_index=True)
 
     @property
     def url(self):
