@@ -51,7 +51,8 @@ class App extends React.Component {
       },
     }
     this.handleSearch = (searchKey) => {
-      window.location.href = decodeURIComponent(URL_BASE + '/search?key=' + searchKey)
+      if (searchKey != '')
+        window.location.href = decodeURIComponent(URL_BASE + '/search?key=' + searchKey)
     }
     this.setCreateGroupModelVisible = (visibility) => {
       this.setState({ createGroupModelVisible: visibility })
