@@ -145,6 +145,11 @@ ANONYMOUS_USER_PORTRAIT_URL = '/media/portrait/anonymous_portrait.png'
 KRONOS_MANAGE = os.path.join(BASE_DIR, 'manage.py')
 CRON_CLASSES = []
 
+############ Django Notifications ##########
+DJANGO_NOTIFICATIONS_CONFIG = {
+    'USE_JSONFIELD': True
+}
+
 
 
 

@@ -9,6 +9,8 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
 from django.views.generic import View
+from notifications.signals import notify
+
 
 from models import Annotation, AnnotationReply, Comment, Document
 
@@ -127,7 +129,13 @@ class FileViewerView(View):
                 annotation_reply.is_public = True if request.POST["is_public"] == 'true' else False
                 if request.POST.has_key("reply_to_annotation_reply_id"):
                     annotation_reply.reply_to_annotation_reply = AnnotationReply.objects.get(id=int(request.POST["reply_to_annotation_reply_id"]))
+                    notify.send(annotation_reply.replier,
+                                recipient=annotation_reply.reply_to_annotation_reply.replyer,
+                                verb='reply to annotation reply')
                 annotation_reply.save()
+                notify.send(annotation_reply.replier,
+                            recipient=annotation_reply.reply_to_annotation.annotator,
+                            verb='reply to annotation')
             context = {
                 "annotation_reply": annotation_reply,
                 'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,

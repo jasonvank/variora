@@ -18,7 +18,13 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
 import proxy_views
-import notifications.urls
+from home.api import views_notifications
+
+
+custom_notifications_urls = [
+
+]
+
 
 urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
     # app: admin
@@ -38,8 +44,10 @@ urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
     # serve remote servers' pdf file (to fix CORS issue)
     url(r'^proxy$', proxy_views.proxy_view),
 
-    url('^notifications/', include(notifications.urls, namespace='notifications')),
+    url(r'^notifications/', include(custom_notifications_urls)),
 
     # MUST BE THE LAST ONE
     url(r'^', include('home.urls')),
 ]
+
+
