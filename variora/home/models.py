@@ -93,7 +93,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     def get_full_name(self):
-        return self.nickname + "<" + self.email_address + ">" + "level:" + str(self.level) + " superuser:" + str(self.is_superuser) + " staff:" + str(self.is_staff)
+        return self.nickname + " <" + self.email_address + ">"
 
     def get_short_name(self):
         return self.nickname

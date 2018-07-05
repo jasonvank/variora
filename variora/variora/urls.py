@@ -22,7 +22,7 @@ from home.api import views_notifications
 
 
 custom_notifications_urls = [
-
+    url(r'^api/unread', views_notifications.get_unread_notification_list),
 ]
 
 

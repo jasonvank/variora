@@ -25,20 +25,25 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
-    'home',
-    'file_viewer',
-    'user_dashboard',
-    'coterie',
+    # 3rd party apps
+    'notifications',
+    'kronos',
+    'cachalot',
+    'memcache_status',
+
+    # django apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'kronos',
-    'cachalot',
-    'memcache_status',
-    'notifications',
+
+    # my apps
+    'home',
+    'file_viewer',
+    'user_dashboard',
+    'coterie',
 ]
 
 MIDDLEWARE_CLASSES = [
