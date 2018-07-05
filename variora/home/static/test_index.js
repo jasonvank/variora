@@ -162,8 +162,6 @@ class App extends React.Component {
             <Col span={10} style={{ textAlign: 'right' }}>
               <NotificationsToggleButton user={ this.state.user } acceptInvitationCallback={ this.acceptInvitationCallback } />
               <NotificationsAlertButton />
-
-              {/* <Icon type="bell" style={{ cursor: 'pointer', fontSize: 18, marginLeft: 28, verticalAlign: 'middle', marginTop: -2 }} /> */}
               <span style={{ marginRight: 12, marginLeft: 28, color: '#666' }}>{ this.state.user.nickname }</span>
               { this.state.user.is_authenticated ? <a onClick={this.signOff}>sign off</a> : <a href="/sign-in">sign in</a> }
               <Avatar

@@ -28,7 +28,6 @@ class NotificationsDetailsWrapper extends React.Component{
       newNotification: this.props.newNotification
     }
   }
-
   render() {
     return (
       <div>
@@ -72,8 +71,8 @@ class NotificationsList extends React.Component{
         columns={columns}
         pagination={false}
         showHeader={false}
+        scroll={{ y: 600 }}
         rowKey={record => record.id}
-        pagination={{ pageSize: 5 }}
       />
     )
   }
@@ -159,11 +158,80 @@ class NotificationsAlertButton extends React.Component {
       extra: '进行中',
       status: 'processing',
       type: '待办',
+    }, {
+      id: '000000013',
+      title: 'ABCD 版本发布',
+      description: '冠霖提交于 2017-01-06，需在 2017-01-07 前完成代码变更任务',
+      extra: '进行中',
+      status: 'processing',
+      type: '待办',
+    }, {
+      id: '000000014',
+      title: 'ABCD 版本发布',
+      description: '冠霖提交于 2017-01-06，需在 2017-01-07 前完成代码变更任务',
+      extra: '进行中',
+      status: 'processing',
+      type: '待办',
+    }, {
+      id: '000000015',
+      title: 'ABCD 版本发布',
+      description: '冠霖提交于 2017-01-06，需在 2017-01-07 前完成代码变更任务',
+      extra: '进行中',
+      status: 'processing',
+      type: '待办',
+    }, {
+      id: '000000016',
+      title: 'ABCD 版本发布',
+      description: '冠霖提交于 2017-01-06，需在 2017-01-07 前完成代码变更任务',
+      extra: '进行中',
+      status: 'processing',
+      type: '待办',
+    }, {
+      id: '000000017',
+      title: 'ABCD 版本发布',
+      description: '冠霖提交于 2017-01-06，需在 2017-01-07 前完成代码变更任务',
+      extra: '进行中',
+      status: 'processing',
+      type: '待办',
+    }, {
+      id: '000000018',
+      title: 'ABCD 版本发布',
+      description: '冠霖提交于 2017-01-06，需在 2017-01-07 前完成代码变更任务',
+      extra: '进行中',
+      status: 'processing',
+      type: '待办',
+    }, {
+      id: '000000019',
+      title: 'ABCD 版本发布',
+      description: '冠霖提交于 2017-01-06，需在 2017-01-07 前完成代码变更任务',
+      extra: '进行中',
+      status: 'processing',
+      type: '待办',
+    }, {
+      id: '000000021',
+      title: 'ABCD 版本发布',
+      description: '冠霖提交于 2017-01-06，需在 2017-01-07 前完成代码变更任务',
+      extra: '进行中',
+      status: 'processing',
+      type: '待办',
+    }, {
+      id: '000000022',
+      title: 'ABCD 版本发布',
+      description: '冠霖提交于 2017-01-06，需在 2017-01-07 前完成代码变更任务',
+      extra: '进行中',
+      status: 'processing',
+      type: '待办',
+    }, {
+      id: '000002012',
+      title: 'ABCD 版本发布',
+      description: '冠霖提交于 2017-01-06，需在 2017-01-07 前完成代码变更任务',
+      extra: '进行中',
+      status: 'processing',
+      type: '待办',
     }]
     return (
       <Popover
-        content={ <NotificationsList data={data}/> }
-        // content={<a onClick={this.hide}>{ <NotificationsList data={data}/> }</a>}
+        content={ <NotificationsList data={data} /> }
         trigger="click"
         visible={this.state.visible}
         onVisibleChange={this.handleVisibleChange}

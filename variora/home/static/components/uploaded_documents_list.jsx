@@ -124,13 +124,12 @@ class UploadedDocumentsList extends React.Component {
       dataIndex: 'title',
       width: '40%',
       render: (text, openDocument) => (
-        // text => <span title={text}>{text}</span>
         <ChangeOpenDocumentName
           openDocument={openDocument}
           anchor={ <a className='document-link' href={formatOpenDocumentUrl(openDocument)}>{text}</a> }
           onChange={this.onOpenDocumentRename(openDocument.pk, 'title')}
         />
-        ),
+      ),
     }, {
       title: 'Action',
       key: 'action',
