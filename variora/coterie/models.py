@@ -27,7 +27,7 @@ class CoterieInvitation(models.Model):
     invitee = models.ForeignKey(User, related_name='received_invitation_set')
     invitation_message = models.TextField(blank=True)
     send_datetime = models.DateTimeField(auto_now=False, auto_now_add=True)
-    acceptance = models.NullBooleanField(null=True, blank=True)
+    acceptance = models.NullBooleanField(null=True, blank=True, db_index=True)
     response_datetime = models.DateTimeField(null=True, blank=True)
 
 
@@ -37,7 +37,7 @@ class CoterieApplication(models.Model):
     applicant = models.ForeignKey(User, related_name='sent_application_set')
     application_message = models.TextField(blank=True)
     send_datetime = models.DateTimeField(auto_now=False, auto_now_add=True)
-    acceptance = models.NullBooleanField(null=True, blank=True)
+    acceptance = models.NullBooleanField(null=True, blank=True, db_index=True)
     response_datetime = models.DateTimeField(null=True, blank=True)
 
 
