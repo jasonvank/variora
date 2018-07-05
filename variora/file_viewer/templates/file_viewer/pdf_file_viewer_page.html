@@ -1,113 +1,114 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
-    <head>
-        <meta charset="utf-8">
-        <title>Variora: {{ document.title }}</title>
+  <head>
+    <meta charset="utf-8">
+    <link rel="icon" href="/media/logo.png">
+    <title>Variora: {{ document.title }}</title>
 
-        {% include "home/tools_import_subpage.html" %}
+    {% include "home/tools_import_subpage.html" %}
 
-        <!--JQUERY CDN-->
-        <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.3.min.js" type="text/javascript"></script>
+    <!--JQUERY CDN-->
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.3.min.js" type="text/javascript"></script>
 
-        <!--BOOTSTRAP CDN-->
-        <!-- Latest compiled and minified CSS -->
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-        <!-- Latest compiled and minified JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <!--BOOTSTRAP CDN-->
+    <!-- Latest compiled and minified CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-        <!--support marked down for comment-->
-        <script src="//cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js"></script>
+    <!--support marked down for comment-->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js"></script>
 
-        <!--pdf.js-->
-        <script src="/static/pdfjs/compatibility.js"></script>
-        <script src="/static/pdfjs/pdf.js"></script>
-        <script src="/static/pdfjs/pdf.worker.js"></script>
+    <!--pdf.js-->
+    <script src="/static/pdfjs/compatibility.js"></script>
+    <script src="/static/pdfjs/pdf.js"></script>
+    <script src="/static/pdfjs/pdf.worker.js"></script>
 
-        <!--jquery.ui-->
-        <script src="http://code.jquery.com/ui/1.12.0-rc.2/jquery-ui.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.css"/>
+    <!--jquery.ui-->
+    <script src="http://code.jquery.com/ui/1.12.0-rc.2/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.css"/>
 
-        <!--layer-->
-    	  <script src="https://cdn.bootcss.com/layer/3.0.1/layer.min.js"></script>
+    <!--layer-->
+    <script src="https://cdn.bootcss.com/layer/3.0.1/layer.min.js"></script>
 
-        <!-- tinyMCE -->
-        <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+    <!-- tinyMCE -->
+    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 
-        <!-- fontawesome -->
-        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <!-- fontawesome -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
-        <!-- animate.css -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <!-- animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
 
-        <link rel="stylesheet" href="https://unpkg.com/huebee@1/dist/huebee.min.css">
-        <script src="https://unpkg.com/huebee@1/dist/huebee.pkgd.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/huebee@1/dist/huebee.min.css">
+    <script src="https://unpkg.com/huebee@1/dist/huebee.pkgd.min.js"></script>
 
-        <!-- code highlight: prettify -->
-        <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+    <!-- code highlight: prettify -->
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 
-        <script src="/static/bundle/file_viewer/file_viewer_script.js"></script>
-        <link rel="stylesheet" href="/static/css/file_viewer.css">
-    </head>
+    <script src="/static/bundle/file_viewer/file_viewer_script.js"></script>
+    <link rel="stylesheet" href="/static/css/file_viewer.css">
+  </head>
 
-    <body style="overflow:-Scroll; overflow-y:hidden;">
-        {% include "file_viewer/nav_bar_subpage.html" %}
+  <body style="overflow:-Scroll; overflow-y:hidden;">
+    {% include "file_viewer/nav_bar_subpage.html" %}
 
-        <input value="{{ file_url }}" id="file-url" style="display: none">  <!-- TODO: refactoring this -->
+    <input value="{{ file_url }}" id="file-url" style="display: none">  <!-- TODO: refactoring this -->
 
-        <div id="wrapper">
-            <div id="file_viewer">
-            </div>
+    <div id="wrapper">
+      <div id="file_viewer">
+      </div>
 
-            <div id="horizontal_draggable"></div>
+      <div id="horizontal_draggable"></div>
 
-            <div id="annotation_update_div">
-                {% include "file_viewer/annotation_viewer_subpage.html" %}
-            </div>
+      <div id="annotation_update_div">
+          {% include "file_viewer/annotation_viewer_subpage.html" %}
+      </div>
 
-            <div class="modal fade" id="comment_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal_content">
-                        <div class="modal-content">
-                            <div class="modal-header">
+      <div class="modal fade" id="comment_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal_content">
+                <div class="modal-content">
+                  <div class="modal-header">
 
-                            <!-- not implemented yet
-                                    <div class="dropdown">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                    sorted by
-                                    <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                        <li>time</li>
-                                        <li>like</li>
-                                    </ul>
-                                </div> -->
+                  <!-- not implemented yet
+                          <div class="dropdown">
+                          <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                          sorted by
+                          <span class="caret"></span>
+                          </button>
+                          <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                              <li>time</li>
+                              <li>like</li>
+                          </ul>
+                      </div> -->
 
-                                <button id="refresh_comment_button" type="button" class="btn btn-default"><i class="fa fa-refresh" aria-hidden="true"></i>&nbsprefresh comment</button>
+                      <button id="refresh_comment_button" type="button" class="btn btn-default"><i class="fa fa-refresh" aria-hidden="true"></i>&nbsprefresh comment</button>
 
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            </div>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  </div>
 
-                            <div class="modal-body">
-                                <div style="overflow: auto;">
-                                    <form id="comment_form">
-                                        <textarea name="comment_content" class="form-control" rows="2" style="resize: vertical"></textarea>
-                                        <button class="post_comment_button btn anonymously_post_comment_button" type="button" name="document_id" value="{{ document.id }}" style="margin: 8px; float: right; border-radius: 0; color: white; background-color: #636e72">
-                                          <i class="fa fa-user-secret"></i> &nbsp post anonymously
-                                        </button>
-                                        <button class="post_comment_button btn" type="button" name="document_id" value="{{ document.id }}" style="margin: 8px; float: right; border-radius: 0; color: white; background-color: #1BA39C"> post comment</button>
-                                    </form>
-                                    <div id="comment_update_div">
-                                    {% include "file_viewer/comment_viewer_subpage.html" %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                  <div class="modal-body">
+                    <div style="overflow: auto;">
+                      <form id="comment_form">
+                        <textarea name="comment_content" class="form-control" rows="2" style="resize: vertical"></textarea>
+                        <button class="post_comment_button btn anonymously_post_comment_button" type="button" name="document_id" value="{{ document.id }}" style="margin: 8px; float: right; border-radius: 0; color: white; background-color: #636e72">
+                          <i class="fa fa-user-secret"></i> &nbsp post anonymously
+                        </button>
+                        <button class="post_comment_button btn" type="button" name="document_id" value="{{ document.id }}" style="margin: 8px; float: right; border-radius: 0; color: white; background-color: #1BA39C"> post comment</button>
+                      </form>
+                      <div id="comment_update_div">
+                      {% include "file_viewer/comment_viewer_subpage.html" %}
+                      </div>
                     </div>
+                  </div>
                 </div>
             </div>
         </div>
-    </body>
+      </div>
+    </div>
+  </body>
 <script>
 var is_authenticated = {{ request.user.is_authenticated|yesno:"true,false" }};  // whether the visitor is a logged-in user
 
