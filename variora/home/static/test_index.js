@@ -156,6 +156,7 @@ class App extends React.Component {
                 placeholder="input search text"
                 style={{ width: '60%' }}
                 onSearch={this.handleSearch}
+                defaultValue={window.location.pathname == '/search' ? new URL(window.location.href).searchParams.get("key") : '' }
               />
             </Col>
             <Col span={10} style={{ textAlign: 'right' }}>
