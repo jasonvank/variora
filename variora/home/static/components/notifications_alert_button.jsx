@@ -15,8 +15,12 @@ class NotificationsAvaratWrapper extends React.Component{
   }
 
   render() {
+    var defaultAvatarUrl = 'https://gw.alipayobjects.com/zos/rmsportal/ThXAXghbEsBCCSDihZxY.png'
+    // var defaultAvatarUrl = 'variora/home/static/assets/img/ico/defaultAvatar.png'
+    var defaultAvatar = <Avatar src = { defaultAvatarUrl }  style={{ verticalAlign: 'middle', background: 'white' }}></Avatar>
+    var userAvatar = <Avatar src = { this.state.newNotification.avatar } style={{ verticalAlign: 'middle', background: 'white' }}></Avatar>
     return (
-      <Avatar src = {this.state.newNotification.avatar} style={{verticalAlign: 'middle'}}></Avatar>
+      this.state.newNotification.avatar ? userAvatar : defaultAvatar
     )
   }
 }
@@ -43,7 +47,10 @@ class NotificationsList extends React.Component{
   constructor(props){
     super(props)
     this.state = {
-      data: this.props.data
+      data: this.props.data,
+      status: this.props.data.status
+    }
+    this.handleReadStatus = (record, index, event) => {
     }
   }
 
@@ -52,7 +59,7 @@ class NotificationsList extends React.Component{
       title: 'Avatar',
       // dataIndex: 'this.state.data.avatar',
       key: 'avatar',
-      width: 50,
+      width: '20%',
       render: (text, record, index) => (
         <NotificationsAvaratWrapper newNotification = {record}/>
       ),
@@ -60,9 +67,16 @@ class NotificationsList extends React.Component{
       title: 'title',
       // dataIndex: 'this.state.data',
       key: 'title',
-      width: 250,
+      width: '75%',
       render: (text, record, index) => (
         <NotificationsDetailsWrapper newNotification = {record}/>
+      ),
+    }, {
+      title: 'Read',
+      key: 'read',
+      width: '5%',
+      render: (text, record, index) => (
+        <Badge style={{ verticalAlign: 'middle' }} status="processing" />
       ),
     }]
     return (
@@ -72,7 +86,9 @@ class NotificationsList extends React.Component{
         pagination={false}
         showHeader={false}
         scroll={{ y: 600 }}
+        style={{ cursor: 'pointer', width: '300px' }}
         rowKey={record => record.id}
+        onRowClick={this.handleReadStatus}
       />
     )
   }
@@ -103,6 +119,8 @@ class NotificationsAlertButton extends React.Component {
       id: '000000001',
       avatar: 'https://gw.alipayobjects.com/zos/rmsportal/ThXAXghbEsBCCSDihZxY.png',
       title: '你收到了 14 份新周报',
+      status: 'read',
+
       datetime: '2017-08-09',
       type: '通知',
     }, {
@@ -110,6 +128,7 @@ class NotificationsAlertButton extends React.Component {
       avatar: 'https://gw.alipayobjects.com/zos/rmsportal/OKJXDXrmkNshAMvwtvhu.png',
       title: '你推荐的 曲妮妮 已通过第三轮面试',
       datetime: '2017-08-08',
+      status: 'read',
       type: '通知',
     }, {
       id: '000000003',
@@ -117,6 +136,7 @@ class NotificationsAlertButton extends React.Component {
       title: '这种模板可以区分多种通知类型',
       datetime: '2017-08-07',
       read: true,
+      status: 'read',
       type: '通知',
     }, {
       id: '000000004',
@@ -128,6 +148,7 @@ class NotificationsAlertButton extends React.Component {
       id: '000000005',
       avatar: 'https://gw.alipayobjects.com/zos/rmsportal/ThXAXghbEsBCCSDihZxY.png',
       title: '内容不要超过两行字，超出时自动截断',
+      status: 'read',
       datetime: '2017-08-07',
       type: '通知',
     }, {
@@ -135,6 +156,7 @@ class NotificationsAlertButton extends React.Component {
       avatar: 'https://gw.alipayobjects.com/zos/rmsportal/fcHMVNCjPOsbUGdEduuv.jpeg',
       title: '曲丽丽 评论了你',
       description: '描述信息描述信息描述信息',
+      status: 'read',
       datetime: '2017-08-07',
       type: '消息',
     }, {
@@ -142,12 +164,14 @@ class NotificationsAlertButton extends React.Component {
       avatar: 'https://gw.alipayobjects.com/zos/rmsportal/fcHMVNCjPOsbUGdEduuv.jpeg',
       title: '朱偏右 回复了你',
       description: '这种模板用于提醒谁与你发生了互动，左侧放『谁』的头像',
+      status: 'read',
       datetime: '2017-08-07',
       type: '消息',
     }, {
       id: '000000008',
       avatar: 'https://gw.alipayobjects.com/zos/rmsportal/fcHMVNCjPOsbUGdEduuv.jpeg',
       title: '标题',
+      status: 'read',
       description: '这种模板用于提醒谁与你发生了互动，左侧放『谁』的头像',
       datetime: '2017-08-07',
       type: '消息',
@@ -156,77 +180,77 @@ class NotificationsAlertButton extends React.Component {
       title: 'ABCD 版本发布',
       description: '冠霖提交于 2017-01-06，需在 2017-01-07 前完成代码变更任务',
       extra: '进行中',
-      status: 'processing',
+      status: 'unread',
       type: '待办',
     }, {
       id: '000000013',
       title: 'ABCD 版本发布',
       description: '冠霖提交于 2017-01-06，需在 2017-01-07 前完成代码变更任务',
       extra: '进行中',
-      status: 'processing',
+      status: 'read',
       type: '待办',
     }, {
       id: '000000014',
       title: 'ABCD 版本发布',
       description: '冠霖提交于 2017-01-06，需在 2017-01-07 前完成代码变更任务',
       extra: '进行中',
-      status: 'processing',
+      status: 'read',
       type: '待办',
     }, {
       id: '000000015',
       title: 'ABCD 版本发布',
       description: '冠霖提交于 2017-01-06，需在 2017-01-07 前完成代码变更任务',
       extra: '进行中',
-      status: 'processing',
+      status: 'read',
       type: '待办',
     }, {
       id: '000000016',
       title: 'ABCD 版本发布',
       description: '冠霖提交于 2017-01-06，需在 2017-01-07 前完成代码变更任务',
       extra: '进行中',
-      status: 'processing',
+      status: 'read',
       type: '待办',
     }, {
       id: '000000017',
       title: 'ABCD 版本发布',
       description: '冠霖提交于 2017-01-06，需在 2017-01-07 前完成代码变更任务',
       extra: '进行中',
-      status: 'processing',
+      status: 'unread',
       type: '待办',
     }, {
       id: '000000018',
       title: 'ABCD 版本发布',
       description: '冠霖提交于 2017-01-06，需在 2017-01-07 前完成代码变更任务',
       extra: '进行中',
-      status: 'processing',
+      status: 'read',
       type: '待办',
     }, {
       id: '000000019',
       title: 'ABCD 版本发布',
       description: '冠霖提交于 2017-01-06，需在 2017-01-07 前完成代码变更任务',
       extra: '进行中',
-      status: 'processing',
+      status: 'unread',
       type: '待办',
     }, {
       id: '000000021',
       title: 'ABCD 版本发布',
       description: '冠霖提交于 2017-01-06，需在 2017-01-07 前完成代码变更任务',
       extra: '进行中',
-      status: 'processing',
+      status: 'read',
       type: '待办',
     }, {
       id: '000000022',
       title: 'ABCD 版本发布',
       description: '冠霖提交于 2017-01-06，需在 2017-01-07 前完成代码变更任务',
       extra: '进行中',
-      status: 'processing',
+      status: 'read',
       type: '待办',
     }, {
       id: '000002012',
       title: 'ABCD 版本发布',
       description: '冠霖提交于 2017-01-06，需在 2017-01-07 前完成代码变更任务',
       extra: '进行中',
-      status: 'processing',
+      status: 'read',
       type: '待办',
     }]
     return (
