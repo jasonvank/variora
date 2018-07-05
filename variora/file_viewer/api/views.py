@@ -13,6 +13,7 @@ from django.views.generic import View
 from home.models import User
 
 from ..models import Annotation, AnnotationReply, Comment, Document
+from variora import utils
 
 
 class DocumentEncoder(DjangoJSONEncoder):
@@ -20,6 +21,8 @@ class DocumentEncoder(DjangoJSONEncoder):
         if isinstance(obj, Document):
             return {
                 'pk': obj.pk,
+                'uuid': obj.uuid,
+                'slug': utils.uuid2slug(obj.uuid),
                 'title': obj.title,
                 'num_visit': str(obj.num_visit),
                 'url': obj.url,

@@ -1,7 +1,7 @@
 import { notification } from 'antd'
 
 function validateDocumentTitle(title) {
-  const INVALID_DOCUMENT_NAME_PATTERN = /[^\w|\s|\-|&|.|(|)|:|[|\]|@|<|>]/gm
+  const INVALID_DOCUMENT_NAME_PATTERN = /[]/gm
   if (title == undefined || title == '') {
     notification['warning']({
       message: 'Document title cannot be empty',

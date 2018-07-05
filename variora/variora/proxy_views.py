@@ -2,6 +2,8 @@ import requests
 from django.http import HttpResponse
 from django.http import QueryDict
 from django.views.decorators.cache import cache_page
+from file_viewer.models import Document
+from coterie.models import CoterieDocument
 
 
 @cache_page(60 * 5)
@@ -18,6 +20,9 @@ def proxy_view(request, requests_args=None):
         return HttpResponse(status=403)
 
     url = request.GET['origurl']
+    if not (Document.objects.filter(external_url=url).exists() or CoterieDocument.objects.filter(external_url=url).exists()):
+        return HttpResponse(status=404)
+
     requests_args = (requests_args or {}).copy()
     headers = _get_headers(request.META)
     params = request.GET.copy()

@@ -1,7 +1,6 @@
 import random
-import urllib2
 
-from django.contrib.auth import authenticate, get_user, login
+from django.contrib.auth import get_user
 from django.core.mail import EmailMessage  # for sending verification using e-mail
 from django.db.models import Q
 from django.http import HttpResponse
@@ -41,38 +40,6 @@ def display_sign_up_page(request):
 @ensure_csrf_cookie
 def display_sign_in_page(request):
     return render(request, "home/sign_in_page.html")
-
-
-def handle_log_in(request):
-    input_email_address = request.POST['email_address']
-    input_password = request.POST['password']
-    user = authenticate(email_address=input_email_address, password=input_password)
-    if user is not None:
-        if user.is_active:
-            login(request, user)
-            return redirect("user_dashboard")
-        else:
-            return HttpResponse("<h1>your account is not active</h1>")
-    else:
-        return HttpResponse("<h1>email address or password is wrong</h1>")
-
-
-def handle_nus_log_in(request):
-    token = request.GET['token']
-    email = urllib2.urlopen("https://ivle.nus.edu.sg/api/Lapi.svc/UserEmail_Get?APIKey=Z6Q2MnpaPX8sDSOfHTAnN&Token="+token).read()[1:-1]
-    if email != "":  # email not empty means NUS login successful
-        # if no such user in database, means this is the first time login using NUS id, so create a new user
-        if not User.objects.filter(email_address=email).exists():
-            nickname = urllib2.urlopen("https://ivle.nus.edu.sg/api/Lapi.svc/UserName_Get?APIKey=Z6Q2MnpaPX8sDSOfHTAnN&Token="+token).read()[1:-1]
-            new_user = User()
-            new_user.set_nickname(nickname)
-            new_user.set_email_address(email)
-            new_user.save()
-        user = User.objects.get(email_address=email)
-        user.backend = 'django.contrib.auth.backends.ModelBackend'
-        login(request, user)
-        return redirect("/")
-    return HttpResponse("<h1>NUSNET ID incorrect</h1>")
 
 
 # temp_user_information_dic is a python dictionary

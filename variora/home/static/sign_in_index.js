@@ -57,7 +57,7 @@ class NormalLoginForm extends React.Component {
   redirectToNUSSignIn() {
     var host = 'http://' + window.location.host
     window.location.href =
-      'https://ivle.nus.edu.sg/api/login/?apikey=Z6Q2MnpaPX8sDSOfHTAnN&url=' + host + '/handle_nus_log_in'
+      'https://ivle.nus.edu.sg/api/login/?apikey=Z6Q2MnpaPX8sDSOfHTAnN&url=' + host + '/api/signin/nus'
   }
   handleSubmit = (e) => {
     e.preventDefault()

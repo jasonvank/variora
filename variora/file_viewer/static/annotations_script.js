@@ -242,6 +242,7 @@ function addAnnotationRelatedListenerWithin(jq) {
         // for (var editor in tinyMCE.editors)
         //   tinyMCE.editors[editor].setContent('<img src="https://i.ytimg.com/an_webp/_B8RaLCNUZw/mqdefault_6s.webp?du=3000&amp;sqp=CJjesdkF&amp;rs=AOn4CLBqPkLkYs5Q1IdMgqn99-OYSp5UuQ" alt="" width="320" height="180" />')
       }
+      tinyMCE.get($(this).find('textarea').attr('id')).focus()
     }})
   })
 

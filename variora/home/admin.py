@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.sessions.models import Session
+from .admin_notifications import *
 
 import models
 
@@ -17,5 +18,4 @@ class SessionAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Session, SessionAdmin)
-
 admin.site.register(models.User, UserModelAdmin)

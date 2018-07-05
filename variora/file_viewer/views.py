@@ -9,17 +9,18 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
 from django.views.generic import View
+from notifications.signals import notify
+
 
 from models import Annotation, AnnotationReply, Comment, Document
+from variora import utils
 
 
 class FileViewerView(View):
     @method_decorator(login_required(login_url='/'))
     def post(self, request, **kwargs):
-        if 'pk' in kwargs:
-            document = Document.objects.get(pk=kwargs['pk'])
-            if 'title' not in kwargs or document.title.replace(' ', '-') != kwargs['title']:
-                return HttpResponse(status=404)
+        if 'slug' in kwargs:
+            document = Document.objects.get(uuid=utils.slug2uuid(kwargs['slug']))
         else:
             document = Document.objects.get(id=int(request.GET["document_id"]))
 
@@ -127,20 +128,38 @@ class FileViewerView(View):
                 annotation_reply.is_public = True if request.POST["is_public"] == 'true' else False
                 if request.POST.has_key("reply_to_annotation_reply_id"):
                     annotation_reply.reply_to_annotation_reply = AnnotationReply.objects.get(id=int(request.POST["reply_to_annotation_reply_id"]))
+                    notify.send(
+                        sender=annotation_reply.replier,
+                        recipient=annotation_reply.reply_to_annotation_reply.replier,
+                        action_object=annotation_reply,
+                        data={'url': ''},
+                        verb='reply to annotation reply'
+                    )
                 annotation_reply.save()
-            context = {
-                "annotation_reply": annotation_reply,
-                'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,
-            }
-            return render(request, "file_viewer/one_annotation_reply.html", context)
+                notify.send(
+                    sender=annotation_reply.replier,
+                    recipient=annotation_reply.reply_to_annotation.annotator,
+                    action_object=annotation_reply,
+                    data={'url': ''},
+                    verb='reply to annotation'
+                )
+                context = {
+                    "annotation_reply": annotation_reply,
+                    'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,
+                }
+                return render(request, "file_viewer/one_annotation_reply.html", context)
+            return HttpResponse(status=200)
 
     def get(self, request, **kwargs):
-        if 'pk' in kwargs:
-            document = Document.objects.get(pk=kwargs['pk'])
-            if 'title' not in kwargs or document.title.replace(' ', '-') != kwargs['title']:
-                return HttpResponse(status=404)
-        else:
-            document = Document.objects.get(id=int(request.GET["document_id"]))
+        try:
+            if 'slug' in kwargs:
+                document = Document.objects.get(uuid=utils.slug2uuid(kwargs['slug']))
+                if 'title' not in kwargs or document.title.replace(' ', '-') != kwargs['title']:
+                    return redirect('/documents/' + utils.uuid2slug(document.uuid) + '/' + document.title.replace(' ', '-'))
+            else:
+                document = Document.objects.get(id=int(request.GET["document_id"]))
+        except ObjectDoesNotExist:
+            return HttpResponse(status=404)
 
         user = get_user(request)
         collected = False

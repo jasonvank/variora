@@ -25,7 +25,7 @@
       </div>
       <form style="display: none">
           <br>
-          <textarea name="reply_reply_content" class="form-control" rows="2" style="resize: vertical"></textarea>
+          <textarea id="annotation_reply_reply_form_{{ annotation_reply.id }}}" name="reply_reply_content" class="form-control" rows="2" style="resize: vertical"></textarea>
           <button type="button" class="PostReplyReplyButton AnonymouslyPostReplyReplyButton btn btn-sm" name="reply_to_annotation_reply_id" value="{{ annotation_reply.id }}" style="background-color: #636e72; margin-left: 6px">
             <i class="fa fa-user-secret"></i> &nbsp reply anonymously
           </button>

@@ -7,9 +7,10 @@ from django.dispatch import receiver
 
 from file_viewer.models import UniqueFile
 from home.models import User
+from variora.utils import ModelWithCleanUUID
 
 
-class Coterie(models.Model):
+class Coterie(ModelWithCleanUUID):
     uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=256, db_index=True)
     description = models.TextField(blank=True)
@@ -20,28 +21,28 @@ class Coterie(models.Model):
         return self.name
 
 
-class CoterieInvitation(models.Model):
+class CoterieInvitation(ModelWithCleanUUID):
     uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
     coterie = models.ForeignKey(Coterie)
     inviter = models.ForeignKey(User, related_name='sent_invitation_set')
     invitee = models.ForeignKey(User, related_name='received_invitation_set')
     invitation_message = models.TextField(blank=True)
     send_datetime = models.DateTimeField(auto_now=False, auto_now_add=True)
-    acceptance = models.NullBooleanField(null=True, blank=True)
+    acceptance = models.NullBooleanField(null=True, blank=True, db_index=True)
     response_datetime = models.DateTimeField(null=True, blank=True)
 
 
-class CoterieApplication(models.Model):
+class CoterieApplication(ModelWithCleanUUID):
     uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
     coterie = models.ForeignKey(Coterie, related_name='application_set')
     applicant = models.ForeignKey(User, related_name='sent_application_set')
     application_message = models.TextField(blank=True)
     send_datetime = models.DateTimeField(auto_now=False, auto_now_add=True)
-    acceptance = models.NullBooleanField(null=True, blank=True)
+    acceptance = models.NullBooleanField(null=True, blank=True, db_index=True)
     response_datetime = models.DateTimeField(null=True, blank=True)
 
 
-class CoterieDocument(models.Model):
+class CoterieDocument(ModelWithCleanUUID):
     uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=1028, db_index=True)
     owner = models.ForeignKey(Coterie)
@@ -72,7 +73,7 @@ def may_delete_unique_file(sender, instance, **kwargs):
         if len(unique_file.document_set.all()) + len(unique_file.coteriedocument_set.all()) == 0:
             unique_file.delete()
 
-class CoterieComment(models.Model):
+class CoterieComment(ModelWithCleanUUID):
     uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
     post_time = models.DateTimeField(auto_now=False, auto_now_add=True)
     commenter = models.ForeignKey(User)
@@ -88,7 +89,7 @@ class CoterieComment(models.Model):
         return str(self.id) + ": " + self.content
 
 
-class CoterieAnnotation(models.Model):
+class CoterieAnnotation(ModelWithCleanUUID):
     uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
     post_time = models.DateTimeField(auto_now=False, auto_now_add=True)
     annotator = models.ForeignKey(User)
@@ -109,7 +110,7 @@ class CoterieAnnotation(models.Model):
         return str(self.id) + ": " + self.content
 
 
-class CoterieAnnotationReply(models.Model):
+class CoterieAnnotationReply(ModelWithCleanUUID):
     uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
     post_time = models.DateTimeField(auto_now=False, auto_now_add=True, db_index=True)
     replier = models.ForeignKey(User)

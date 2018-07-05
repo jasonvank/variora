@@ -25,20 +25,25 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
-    'home',
-    'file_viewer',
-    'user_dashboard',
-    'coterie',
+    # 3rd party apps
+    'notifications',
+    'kronos',
+    'cachalot',
+    'memcache_status',
+
+    # django apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'kronos',
-    'cachalot',
-    'memcache_status',
-    'notifications',
+
+    # my apps
+    'home',
+    'file_viewer',
+    'user_dashboard',
+    'coterie',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -144,6 +149,11 @@ ANONYMOUS_USER_PORTRAIT_URL = '/media/portrait/anonymous_portrait.png'
 ############ cron job related ##############
 KRONOS_MANAGE = os.path.join(BASE_DIR, 'manage.py')
 CRON_CLASSES = []
+
+############ Django Notifications ##########
+DJANGO_NOTIFICATIONS_CONFIG = {
+    'USE_JSONFIELD': True
+}
 
 
 
