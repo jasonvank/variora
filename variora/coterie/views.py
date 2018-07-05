@@ -12,6 +12,7 @@ from file_viewer import models as file_viewer_models
 from home.models import User
 
 from .models import Coterie, CoterieDocument
+from variora import utils
 
 
 def handle_create_coterie(request):
@@ -97,14 +98,16 @@ def serve_coteriefile(request):
 def display_coteriefile_viewer_page(request, **kwargs):
     if request.method == "POST":
         user = get_user(request)
-        if 'pk' in kwargs:
-            coterie = Coterie.objects.get(id=kwargs['coterie_id'])
-            document = models.CoterieDocument.objects.get(pk=kwargs['pk'])
-            if 'title' not in kwargs or document.title.replace(' ', '-') != kwargs['title']:
-                return HttpResponse(status=404)
-        else:
-            coterie = Coterie.objects.get(id=request.GET["coterie_id"])
-            document = models.CoterieDocument.objects.get(id=int(request.GET["document_id"]))
+        try:
+            if 'document_slug' in kwargs:
+                coterie = Coterie.objects.get(id=kwargs['coterie_id'])
+                document = models.CoterieDocument.objects.get(uuid=utils.slug2uuid(kwargs['document_slug']))
+            else:
+                coterie = Coterie.objects.get(id=request.GET["coterie_id"])
+                document = models.CoterieDocument.objects.get(id=int(request.GET["document_id"]))
+        except ObjectDoesNotExist:
+            return HttpResponse(status=404)
+
         if user not in coterie.administrators.all() and user not in coterie.members.all():
             return redirect("/")
 
@@ -210,14 +213,17 @@ def display_coteriefile_viewer_page(request, **kwargs):
     else:
         user = get_user(request)
 
-        if 'pk' in kwargs:
-            coterie = Coterie.objects.get(id=kwargs['coterie_id'])
-            document = models.CoterieDocument.objects.get(pk=kwargs['pk'])
-            if 'title' not in kwargs or document.title.replace(' ', '-') != kwargs['title']:
-                return HttpResponse(status=404)
-        else:
-            coterie = Coterie.objects.get(id=request.GET["coterie_id"])
-            document = models.CoterieDocument.objects.get(id=int(request.GET["document_id"]))
+        try:
+            if 'document_slug' in kwargs:
+                coterie = Coterie.objects.get(id=kwargs['coterie_id'])
+                document = models.CoterieDocument.objects.get(uuid=utils.slug2uuid(kwargs['document_slug']))
+                if 'title' not in kwargs or document.title.replace(' ', '-') != kwargs['title']:
+                    return redirect('/coteries/' + str(coterie.id) + '/documents/' + utils.uuid2slug(document.uuid) + '/' + document.title)
+            else:
+                coterie = Coterie.objects.get(id=request.GET["coterie_id"])
+                document = models.CoterieDocument.objects.get(id=int(request.GET["document_id"]))
+        except ObjectDoesNotExist:
+            return HttpResponse(status=404)
 
         if user not in coterie.administrators.all() and user not in coterie.members.all():
             return redirect("/")

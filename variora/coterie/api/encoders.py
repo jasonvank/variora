@@ -13,6 +13,7 @@ from home.models import User
 from home.api.encoders import UserEncoder
 
 from ..models import Coterie, CoterieDocument, CoterieInvitation, CoterieApplication
+from variora import utils
 
 
 class CoterieEncoder(DjangoJSONEncoder):
@@ -56,6 +57,8 @@ class CoterieDocumentEncoder(DjangoJSONEncoder):
         if isinstance(obj, CoterieDocument):
             return {
                 'pk': obj.pk,
+                'uuid': obj.uuid,
+                'slug': utils.uuid2slug(obj.uuid),
                 'title': obj.title,
                 'num_visit': str(obj.num_visit),
                 'url': obj.url,

@@ -13,15 +13,14 @@ from notifications.signals import notify
 
 
 from models import Annotation, AnnotationReply, Comment, Document
+from variora import utils
 
 
 class FileViewerView(View):
     @method_decorator(login_required(login_url='/'))
     def post(self, request, **kwargs):
-        if 'pk' in kwargs:
-            document = Document.objects.get(pk=kwargs['pk'])
-            if 'title' not in kwargs or document.title.replace(' ', '-') != kwargs['title']:
-                return HttpResponse(status=404)
+        if 'slug' in kwargs:
+            document = Document.objects.get(uuid=utils.slug2uuid(kwargs['slug']))
         else:
             document = Document.objects.get(id=int(request.GET["document_id"]))
 
@@ -143,12 +142,15 @@ class FileViewerView(View):
             return render(request, "file_viewer/one_annotation_reply.html", context)
 
     def get(self, request, **kwargs):
-        if 'pk' in kwargs:
-            document = Document.objects.get(pk=kwargs['pk'])
-            if 'title' not in kwargs or document.title.replace(' ', '-') != kwargs['title']:
-                return HttpResponse(status=404)
-        else:
-            document = Document.objects.get(id=int(request.GET["document_id"]))
+        try:
+            if 'slug' in kwargs:
+                document = Document.objects.get(uuid=utils.slug2uuid(kwargs['slug']))
+                if 'title' not in kwargs or document.title.replace(' ', '-') != kwargs['title']:
+                    return redirect('/documents/' + utils.uuid2slug(document.uuid) + '/' + document.title)
+            else:
+                document = Document.objects.get(id=int(request.GET["document_id"]))
+        except ObjectDoesNotExist:
+            return HttpResponse(status=404)
 
         user = get_user(request)
         collected = False

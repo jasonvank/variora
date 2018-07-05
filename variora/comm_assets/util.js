@@ -57,7 +57,7 @@ function hexToRgb(hex) {
 
 
 function formatOpenCoterieDocumentUrl(document, coterieId) {
-  return '/coteries/' + coterieId + '/documents/' + document.title.replace(/\s/g, '-') + '/' + document.pk
+  return '/coteries/' + coterieId + '/documents/' + document.slug + '/' + document.title.replace(/\s/g, '-')
   // return getUrlFormat('/coterie/display_coteriefile_viewer_page', {
   //   'coterie_id': coterieId,
   //   'document_id': documentId,
@@ -67,7 +67,7 @@ function formatOpenCoterieDocumentUrl(document, coterieId) {
 
 
 function formatOpenDocumentUrl(document) {
-  return '/documents/' + document.title.replace(/\s/g, '-') + '/' + document.pk
+  return '/documents/' + document.slug + '/' + document.title.replace(/\s/g, '-')
   // return getUrlFormat('/file_viewer/', {
   //   'document_id': documentId,
   //   'csrfmiddlewaretoken': getCookie('csrftokean'),
