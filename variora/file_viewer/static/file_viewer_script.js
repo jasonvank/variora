@@ -125,13 +125,22 @@ function startListeningSelectionBoxCreation() {
         var height_percent = parseFloat(new_annotation.css("height")) / page_height
         var width_percent = parseFloat(new_annotation.css("width")) / page_width
 
+        if (top_percent + height_percent > 1 || left_percent + width_percent > 1) {
+          new_annotation.remove()
+          $(".PageImg, .PageCanvas, .Annotation").off("mousemove")
+          $("body").off("mouseup")
+          e.stopPropagation()
+          return
+        }
+
         // click, not drag
         if (height_percent < 0.008 && width_percent < 0.008) {
           const pageJQ = new_annotation.parent('.page_div')
           new_annotation.remove()
           const allAnnotationsInThisPage = pageJQ.find('.Annotation').toArray()
           const targetAnnotation = findTargetAnnotation(e, allAnnotationsInThisPage, pageJQ)
-          scrollAnnotationDivIntoView($(".AnnotationDiv[annotation_id='" + targetAnnotation.attr("annotation_id") + "']"))
+          if (targetAnnotation[0] != undefined)
+            scrollAnnotationDivIntoView($(".AnnotationDiv[annotation_id='" + targetAnnotation.attr("annotation_id") + "']"))
 
           $(".PageImg, .PageCanvas, .Annotation").off("mousemove")
           $("body").off("mouseup")
