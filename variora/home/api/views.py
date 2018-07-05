@@ -27,6 +27,11 @@ class UserAPIView(View):
 
 
 def search_api_view(request):
+    if 'key' not in request.GET or request.GET['key'] == '':
+        return HttpResponse(status=403)
+
+    key = request.GET['key']
+
     class CombinedEncoder(DjangoJSONEncoder):
         def default(self, obj):
             if isinstance(obj, User):
@@ -38,7 +43,6 @@ def search_api_view(request):
             else:
                 return super(CombinedEncoder, self).default(obj)
 
-    key = request.GET['key']
     result_documents = list(Document.objects.filter(title__icontains=key))  # case-insensitive contain
     result_users = list(User.objects.filter(Q(nickname__icontains=key) | Q(email_address__icontains=key)))
     result_coteries = list(Coterie.objects.filter(Q(name__icontains=key) | Q(id__icontains=key)))
