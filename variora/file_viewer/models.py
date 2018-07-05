@@ -5,6 +5,7 @@ import uuid
 from django.db import models
 from django.dispatch import receiver
 from home.models import User
+from variora.utils import ModelWithCleanUUID
 
 
 def upload_to(instance, filename):
@@ -37,7 +38,7 @@ def delete_local_file(sender, instance, **kwargs):
     instance.file_field.storage.delete(file_location)
 
 
-class Document(models.Model):
+class Document(ModelWithCleanUUID):
     uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=1028, db_index=True)
     owner = models.ForeignKey(User)  # many Documents to one User
@@ -70,7 +71,7 @@ def may_delete_unique_file(sender, instance, **kwargs):
             unique_file.delete()
 
 
-class Comment(models.Model):
+class Comment(ModelWithCleanUUID):
     uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
     post_time = models.DateTimeField(auto_now=False, auto_now_add=True)
     commenter = models.ForeignKey(User)  # many Comments to one User
@@ -86,7 +87,7 @@ class Comment(models.Model):
         return str(self.id) + ": " + self.content
 
 
-class Annotation(models.Model):
+class Annotation(ModelWithCleanUUID):
     uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
     post_time = models.DateTimeField(auto_now=False, auto_now_add=True)
     annotator = models.ForeignKey(User)
@@ -107,7 +108,7 @@ class Annotation(models.Model):
         return str(self.id) + ": " + self.content
 
 
-class AnnotationReply(models.Model):
+class AnnotationReply(ModelWithCleanUUID):
     uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
     post_time = models.DateTimeField(auto_now=False, auto_now_add=True)
     replier = models.ForeignKey(User)  # many Comments to one User
@@ -121,3 +122,4 @@ class AnnotationReply(models.Model):
 
     def __unicode__(self):
         return str(self.id) + ": " + self.content
+

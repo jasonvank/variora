@@ -204,12 +204,12 @@ def display_coteriefile_viewer_page(request, **kwargs):
                     annotation_reply.reply_to_annotation_reply = models.CoterieAnnotationReply.objects.get(
                         id=int(request.POST["reply_to_annotation_reply_id"]))
                 annotation_reply.save()
-            context = {
-                "annotation_reply": annotation_reply,
-                'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,
-            }
-            return render(request, "file_viewer/one_annotation_reply.html", context)
-
+                context = {
+                    "annotation_reply": annotation_reply,
+                    'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,
+                }
+                return render(request, "file_viewer/one_annotation_reply.html", context)
+            return HttpResponse(status=200)
     else:
         user = get_user(request)
 

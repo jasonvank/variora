@@ -129,17 +129,18 @@ class FileViewerView(View):
                 if request.POST.has_key("reply_to_annotation_reply_id"):
                     annotation_reply.reply_to_annotation_reply = AnnotationReply.objects.get(id=int(request.POST["reply_to_annotation_reply_id"]))
                     notify.send(annotation_reply.replier,
-                                recipient=annotation_reply.reply_to_annotation_reply.replyer,
+                                recipient=annotation_reply.reply_to_annotation_reply.replier,
                                 verb='reply to annotation reply')
                 annotation_reply.save()
                 notify.send(annotation_reply.replier,
                             recipient=annotation_reply.reply_to_annotation.annotator,
                             verb='reply to annotation')
-            context = {
-                "annotation_reply": annotation_reply,
-                'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,
-            }
-            return render(request, "file_viewer/one_annotation_reply.html", context)
+                context = {
+                    "annotation_reply": annotation_reply,
+                    'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,
+                }
+                return render(request, "file_viewer/one_annotation_reply.html", context)
+            return HttpResponse(status=200)
 
     def get(self, request, **kwargs):
         try:
