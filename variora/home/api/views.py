@@ -1,3 +1,5 @@
+import urllib2
+
 from django.contrib.auth import authenticate, get_user, login, logout
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
@@ -7,6 +9,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.generic import View
 from google.auth.transport import requests
 from google.oauth2 import id_token
+from django.shortcuts import redirect, render
 
 from coterie.api.encoders import CoterieDocumentEncoder, CoterieEncoder, SearchResultCoterieEncoder
 from coterie.models import Coterie, CoterieDocument
@@ -108,3 +111,21 @@ def google_sign_in(request):
         return HttpResponse(status=200)
     except Exception:
         return HttpResponse("google login fail", status=400)
+
+
+def nus_sign_in(request):
+    token = request.GET['token']
+    email = urllib2.urlopen("https://ivle.nus.edu.sg/api/Lapi.svc/UserEmail_Get?APIKey=Z6Q2MnpaPX8sDSOfHTAnN&Token="+token).read()[1:-1]
+    if email != "":  # email not empty means NUS login successful
+        # if no such user in database, means this is the first time login using NUS id, so create a new user
+        if not User.objects.filter(email_address=email).exists():
+            nickname = urllib2.urlopen("https://ivle.nus.edu.sg/api/Lapi.svc/UserName_Get?APIKey=Z6Q2MnpaPX8sDSOfHTAnN&Token="+token).read()[1:-1]
+            new_user = User()
+            new_user.set_nickname(nickname)
+            new_user.set_email_address(email)
+            new_user.save()
+        user = User.objects.get(email_address=email)
+        user.backend = 'django.contrib.auth.backends.ModelBackend'
+        login(request, user)
+        return redirect("/")
+    return HttpResponse("<h1>NUSNET ID incorrect</h1>")
