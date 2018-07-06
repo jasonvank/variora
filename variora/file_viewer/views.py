@@ -133,7 +133,7 @@ class FileViewerView(View):
                         sender=annotation_reply.replier,
                         recipient=annotation_reply.reply_to_annotation_reply.replier,
                         action_object=annotation_reply,
-                        data={'url': ''},
+                        redirect_url=annotation.url,
                         verb='reply to annotation reply'
                     )
                 annotation_reply.save()
@@ -141,7 +141,7 @@ class FileViewerView(View):
                     sender=annotation_reply.replier,
                     recipient=annotation_reply.reply_to_annotation.annotator,
                     action_object=annotation_reply,
-                    data={'url': ''},
+                    redirect_url=annotation.url,
                     verb='reply to annotation'
                 )
                 context = {

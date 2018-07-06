@@ -6,6 +6,7 @@ from django.db import models
 from django.dispatch import receiver
 from home.models import User
 from variora.utils import ModelWithCleanUUID
+from variora import utils
 
 
 def upload_to(instance, filename):
@@ -106,6 +107,12 @@ class Annotation(ModelWithCleanUUID):
 
     def __unicode__(self):
         return str(self.id) + ": " + self.content
+
+    @property
+    def url(self):
+        document = self.document_this_annotation_belongs
+        return '/documents/' + utils.uuid2slug(document.uuid) + '/' + document.title.replace(' ', '-') + \
+               '?annotation=' + self.clean_uuid
 
 
 class AnnotationReply(ModelWithCleanUUID):

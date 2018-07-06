@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, get_user
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from notifications.models import Notification
 from notifications.utils import id2slug, slug2id
 from django.contrib.auth.models import AnonymousUser
@@ -13,8 +13,9 @@ from ..models import User
 class NotificationEncoder(DjangoJSONEncoder):
     def default(self, obj):
         if isinstance(obj, Notification):
+            slug = str(id2slug(obj.id))
             return {
-                'slug': id2slug(obj.id),
+                'slug': slug,
                 'actor': str(obj.actor),
                 'verb': obj.verb,
                 'description': obj.description,
@@ -23,6 +24,7 @@ class NotificationEncoder(DjangoJSONEncoder):
                 'timestamp': obj.timestamp,
                 'data': obj.data,
                 'unread': obj.unread,
+                'mark_read_url': '/notifications/api/notifications/' + slug + '/mark-read',
             }
         return super(NotificationEncoder, self).default(obj)
 
@@ -45,3 +47,33 @@ def get_unread_notification_list(request):
         num_to_fetch = 10  # If casting to an int fails, just make it 5.
 
     return JsonResponse(list(request.user.notifications.unread()[0:num_to_fetch]), encoder=NotificationEncoder, safe=False)
+
+
+def mark_notification_as_read(request, slug):
+    notification_id = slug2id(slug)
+
+    notification = Notification.objects.get(recipient=request.user, id=notification_id)
+    notification.mark_as_read()
+
+    return HttpResponse(status=200)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -151,9 +151,7 @@ KRONOS_MANAGE = os.path.join(BASE_DIR, 'manage.py')
 CRON_CLASSES = []
 
 ############ Django Notifications ##########
-DJANGO_NOTIFICATIONS_CONFIG = {
-    'USE_JSONFIELD': True
-}
+NOTIFICATIONS_USE_JSONFIELD = True
 
 
 
