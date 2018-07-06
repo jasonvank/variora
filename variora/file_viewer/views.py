@@ -133,16 +133,18 @@ class FileViewerView(View):
                         sender=annotation_reply.replier,
                         recipient=annotation_reply.reply_to_annotation_reply.replier,
                         action_object=annotation_reply,
+                        verb='reply to annotation reply',
                         redirect_url=annotation.url,
-                        verb='reply to annotation reply'
+                        image_url=annotation_reply.replier.portrait_url,
                     )
                 annotation_reply.save()
                 notify.send(
                     sender=annotation_reply.replier,
                     recipient=annotation_reply.reply_to_annotation.annotator,
                     action_object=annotation_reply,
+                    verb='reply to annotation',
                     redirect_url=annotation.url,
-                    verb='reply to annotation'
+                    image_url=annotation_reply.replier.portrait_url,
                 )
                 context = {
                     "annotation_reply": annotation_reply,

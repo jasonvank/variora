@@ -17,10 +17,6 @@
   margin: 16px !important;
 }
 
-
-
-
-
 .editable-cell {
   position: relative;
 }
@@ -74,4 +70,14 @@ td:hover .editable-cell-icon {
   display: -webkit-box!important;
   -webkit-line-clamp: 1!important;
   -webkit-box-orient: vertical!important
+}
+
+.notification-alert-list-wrapper{
+  overflow: hidden!important;
+  text-overflow: ellipsis!important;
+  display: -webkit-box!important;
+  margin-top: 4px!important;
+  margin-bottom: 6px!important;
+  -webkit-line-clamp: 2!important;
+  -webkit-box-orient: vertical!important;
 }
