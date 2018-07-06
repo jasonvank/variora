@@ -36,7 +36,7 @@ class ChangeOpenDocumentName extends React.Component {
   render() {
     var { value, editable } = this.state
     var editInput = (
-      <div className="editable-cell-input-wrapper">
+      <div className="editable-cell-input-wrapper" title={value}>
         <Input
           value={value}
           onChange={this.handleChange}
@@ -52,7 +52,7 @@ class ChangeOpenDocumentName extends React.Component {
       </div>
     )
     var link = (
-      <div className="editable-cell-text-wrapper">
+      <div className="editable-cell-text-wrapper" title={value}>
         <a className='document-link' href={formatOpenDocumentUrl(this.props.openDocument)}>{value || ' '}</a>
         <Icon
           type="edit"
@@ -124,7 +124,8 @@ class UploadedDocumentsList extends React.Component {
           openDocument={openDocument}
           anchor={ <a className='document-link' href={formatOpenDocumentUrl(openDocument)}>{text}</a> }
           onChange={this.onOpenDocumentRename(openDocument.pk, 'title')}
-        />),
+        />
+      ),
     }, {
       title: 'Action',
       key: 'action',

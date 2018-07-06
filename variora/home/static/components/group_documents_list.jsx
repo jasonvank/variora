@@ -54,7 +54,7 @@ class ChangeDocumentName extends React.Component {
       </div>
     )
     var link = (
-      <div className="editable-cell-text-wrapper">
+      <div className="editable-cell-text-wrapper" title={value}>
         <a className='document-link' href={formatOpenCoterieDocumentUrl(this.props.coterieDocument, this.props.coteriePk)}>{value || ' '}</a>
         <Icon
           type="edit"
@@ -64,7 +64,7 @@ class ChangeDocumentName extends React.Component {
       </div>
     )
     return (
-      <div className="editable-cell">
+      <div className="editable-cell" title={value}>
         { editable ? editInput : link }
       </div>
     )
