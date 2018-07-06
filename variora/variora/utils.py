@@ -1,4 +1,5 @@
 import uuid
+
 from django.db import models
 
 
@@ -20,5 +21,6 @@ class ModelWithCleanUUID(models.Model):
     class Meta:
         abstract = True
 
+    @property
     def clean_uuid(self):
         return str(self.uuid).replace('-', '')

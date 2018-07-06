@@ -105,13 +105,10 @@ class UploadedDocumentsList extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.updateData()
-  }
-
   componentDidMount() {
     this.updateData()
   }
+
   render() {
     const columns = [{
       title: 'Id',
