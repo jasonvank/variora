@@ -15,8 +15,7 @@ class NotificationsAvaratWrapper extends React.Component{
   }
 
   render() {
-    var defaultAvatarUrl = 'https://gw.alipayobjects.com/zos/rmsportal/ThXAXghbEsBCCSDihZxY.png'
-    // var defaultAvatarUrl = 'variora/home/static/assets/img/ico/defaultAvatar.png'
+    var defaultAvatarUrl = '/media/defaultAvatar.png'
     var defaultAvatar = <Avatar src = { defaultAvatarUrl }  style={{ verticalAlign: 'middle', background: 'white' }}></Avatar>
     var userAvatar = <Avatar src = { this.state.newNotification.avatar } style={{ verticalAlign: 'middle', background: 'white' }}></Avatar>
     return (
@@ -120,7 +119,6 @@ class NotificationsAlertButton extends React.Component {
       avatar: 'https://gw.alipayobjects.com/zos/rmsportal/ThXAXghbEsBCCSDihZxY.png',
       title: '你收到了 14 份新周报',
       status: 'read',
-
       datetime: '2017-08-09',
       type: '通知',
     }, {
