@@ -133,6 +133,7 @@ db.sqlite3
 **/temp_sessions/
 .vscode
 **/bundled_static/dev/*
+**/media/images/*
 **/media/pdf/*
 **/media/portrait/*/*
 

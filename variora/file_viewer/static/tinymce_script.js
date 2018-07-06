@@ -1,3 +1,15 @@
+import { getCookie } from 'util.js'
+import axios from 'axios'
+
+
+function generateSlug(length) {
+  var text = ''
+  var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'
+  for (var i = 0; i < length; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length))
+  return text
+}
+
 function tinymceInit() {
   tinymce.init({
     menubar: false,
@@ -14,17 +26,41 @@ function tinymceInit() {
     paste_as_text: true,
     branding: false,
     width: 'calc(100% - 2px)',
+    images_upload_handler: function(blobInfo, success, failure) {
+      const n = blobInfo.filename()
+      const extension = '.' + n.split('.')[n.split('.').length - 1]
+      const file = new File([blobInfo.blob()], generateSlug(16) + extension)
+      if (file && file.size > 0.5 * 1024 * 1024) {
+        layer.alert('Image selected is too big, should be < 0.5 MB <br> <a target="_blank" href="https://compressnow.com/">Compress here</a>', {
+          skin: 'layui-layer-molv',
+          btn: 0,
+          title: false
+        })
+        success('')
+        return false
+      }
+      var data = new FormData()
+      data.append('file_upload', file)
+      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+      axios.post('/upload-image', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then((response) => {
+        success(response.data.url)
+      })
+    },
     setup: function(editor) {
       editor.on('change', function() {
         editor.save()
       })
     }
-  });
+  })
   $(document).on('focusin', function(e) {
     // this is to solve the issue of being unable to edit link and image link in bootstrap model
     if ($(e.target).closest(".mce-window").length)
       e.stopImmediatePropagation()
-  });
+  })
 }
 
 export { tinymceInit }

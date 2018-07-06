@@ -1,15 +1,16 @@
 import random
 
 from django.contrib.auth import get_user
+from django.contrib.auth.models import AnonymousUser
 from django.core.mail import EmailMessage  # for sending verification using e-mail
 from django.db.models import Q
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from coterie.models import Coterie
 from file_viewer.models import Document
-from home.models import User
+from home.models import UploadedImage, User
 
 
 def display_obsolete_home_page(request):
@@ -124,3 +125,17 @@ def redirect_to_index(request):
 
 def jason_test(request):
     return render(request, 'home/jason_test.html', {})
+
+
+def handle_image_upload(request):
+    user = get_user(request)
+    if isinstance(user, AnonymousUser):
+        return HttpResponse(status=403)
+    file_uploaded = request.FILES["file_upload"]
+    if file_uploaded.size > 1024 * 500:  # 500 KB
+        return HttpResponse(status=403)
+    uploaded_image = UploadedImage(image_field=file_uploaded, uploader=user)
+    uploaded_image.save()
+    return JsonResponse({
+        'url': uploaded_image.image_field.url
+    })

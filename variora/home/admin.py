@@ -12,6 +12,11 @@ class UserModelAdmin(admin.ModelAdmin):
     search_fields = ['id', "nickname", "email_address"]
     filter_horizontal = ['groups', 'user_permissions', 'following_users']
 
+
+class UploadedImageModelAdmin(admin.ModelAdmin):
+    list_display = ['id', "url"]
+
+
 class SessionAdmin(admin.ModelAdmin):
     def _session_data(self, obj):
         return obj.get_decoded()
@@ -20,3 +25,4 @@ class SessionAdmin(admin.ModelAdmin):
 
 admin.site.register(Session, SessionAdmin)
 admin.site.register(models.User, UserModelAdmin)
+admin.site.register(models.UploadedImage, UploadedImageModelAdmin)

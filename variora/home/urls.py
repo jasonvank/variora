@@ -16,6 +16,8 @@ urlpatterns = [  # obsolete UI pages
 
     url(r'^sign-in$', views.display_sign_in_page),
 
+    url(r'^upload-image$', views.handle_image_upload),
+
     # index using react router
     url(r'^$', views.display_index),
     url(r'^collected', views.display_index),

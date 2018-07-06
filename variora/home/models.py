@@ -49,7 +49,6 @@ def upload_to(instance, filename):
     # the file will be store at media/portrait/user@email.com/portrait.png
     return '{0}/{1}/{2}.{3}'.format("portrait", instance.email_address, "portrait", extension)
 
-
 class User(AbstractBaseUser, PermissionsMixin):
     nickname = models.CharField(max_length=254)
 
@@ -109,7 +108,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __unicode__(self):
         return self.get_full_name()
 
-
 @receiver(models.signals.pre_delete, sender=User)
 # "sender" and "**kwargs" are required though they are of no use here, do not delete them
 def delete_local_portrait(sender, instance, **kwargs):
@@ -123,3 +121,25 @@ def delete_local_portrait(sender, instance, **kwargs):
 
         if os.path.isdir(img_local_dirname):
             shutil.rmtree(img_local_dirname)
+
+
+def image_upload_to(instance, filename):
+    name_without_extension, extension = filename.split(".")
+    return 'images/{0}/{1}'.format(extension, filename)
+
+class UploadedImage(models.Model):
+    image_field = models.ImageField(upload_to=image_upload_to)
+    uploader = models.ForeignKey(User)
+
+    def __unicode__(self):
+        return self.image_field.name
+
+    @property
+    def url(self):
+        return self.image_field.url
+
+@receiver(models.signals.pre_delete, sender=UploadedImage)
+# "sender" and "**kwargs" are required though they are of no use here, do not delete them
+def delete_local_file(sender, instance, **kwargs):
+    file_location = instance.image_field.name
+    instance.image_field.storage.delete(file_location)
