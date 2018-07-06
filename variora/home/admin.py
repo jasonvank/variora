@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.sessions.models import Session
 from .admin_notifications import *
+from .admin_django_auth import *
 
 import models
 
