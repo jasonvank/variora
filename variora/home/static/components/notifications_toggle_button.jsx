@@ -10,9 +10,9 @@ class InvitationDetailsWrapper extends React.Component{
   render() {
     var message = this.props.invitation
     var messageListItems =
-      <p>Invitation from Group: {message.coterie_name}
-        <br />
-        { message.invitation_message }
+      <p>
+        Group name: <b>{message.coterie_name}</b><br />
+        Message: { message.invitation_message }
       </p>
 
     return (
