@@ -9,11 +9,11 @@ from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.generic import View
 
-from home.models import User
 from home.api.encoders import UserEncoder
-
-from ..models import Coterie, CoterieDocument, CoterieInvitation, CoterieApplication
+from home.models import User
 from variora import utils
+
+from ..models import Coterie, CoterieApplication, CoterieDocument, CoterieInvitation
 
 
 class CoterieEncoder(DjangoJSONEncoder):
@@ -111,10 +111,3 @@ class CoterieApplicationEncoder(DjangoJSONEncoder):
         elif isinstance(obj, User):
             return UserEncoder().default(obj)
         return super(CoterieApplicationEncoder, self).default(obj)
-
-
-
-
-
-
-

@@ -8,8 +8,9 @@ from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.generic import View
-from home.models import User
 from validate_email import validate_email
+
+from home.models import User
 
 from ..models import Coterie, CoterieDocument, CoterieInvitation
 from .encoders import CoterieDocumentEncoder, CoterieEncoder, CoterieInvitationEncoder
@@ -94,4 +95,3 @@ class InvitationView(View):
             return HttpResponse(status=200)
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
-

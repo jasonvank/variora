@@ -1,11 +1,11 @@
 from django.contrib.auth import authenticate, get_user
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import redirect, get_object_or_404
-from notifications.models import Notification
-from notifications.utils import id2slug, slug2id
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.serializers.json import DjangoJSONEncoder
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404, redirect
+from notifications.models import Notification
+from notifications.utils import id2slug, slug2id
 
 from ..models import User
 
@@ -56,24 +56,3 @@ def mark_notification_as_read(request, slug):
     notification.mark_as_read()
 
     return HttpResponse(status=200)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
