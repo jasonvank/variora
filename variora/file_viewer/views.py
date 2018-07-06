@@ -115,7 +115,8 @@ class FileViewerView(View):
             }
             return JsonResponse({
                 'new_annotationdiv_html': render(request, "file_viewer/one_annotation_div.html", context).content,
-                'new_annotation_id': annotation.id
+                'new_annotation_id': annotation.id,
+                'new_annotation_uuid': str(annotation.clean_uuid),
             })
 
         elif request.POST["operation"] == "reply_annotation":

@@ -40,6 +40,39 @@ function _getBottom(annotationDom) { return parseFloat($(annotationDom).css('top
 
 function addAnnotationRelatedListener() { addAnnotationRelatedListenerWithin($(document)) }
 
+function scrollAnnotationDivIntoView(annotationDiv) {
+  var annotationsDiv = $("#annotation_update_div")
+  var down = annotationDiv.offset().top - annotationsDiv.offset().top + annotationsDiv.scrollTop()
+  annotationsDiv.animate({
+    scrollTop: parseInt(down)
+  }, 240)
+}
+
+function scrollAnnotationIntoView(annotation) {
+  var fileViewer = $("#file_viewer")
+  var down = annotation.offset().top - fileViewer.offset().top + fileViewer.scrollTop() - window.innerHeight * 0.38 + annotation.height() / 2
+  fileViewer.animate({
+    scrollTop: parseInt(down)
+  }, 240)
+}
+
+function findTargetAnnotation(e, allAnnotationsInThisPage, pageJQ) {
+  const coverAnnotations = allAnnotationsInThisPage.filter(annotation => _checkCoverage(annotation, e, pageJQ))
+
+  const THREDSHOLD = 9
+  var sortedCloseness = coverAnnotations.sort((a, b) => _getRight(a) > _getRight(b))
+  if (_getRight(sortedCloseness[1]) - _getRight(sortedCloseness[0]) < THREDSHOLD) {  // right side too close
+    sortedCloseness = coverAnnotations.sort((a, b) => _getLeft(a) < _getLeft(b))
+    if (_getLeft(sortedCloseness[0]) - _getLeft(sortedCloseness[1]) < THREDSHOLD) {
+      sortedCloseness = coverAnnotations.sort((a, b) => _getBottom(a) > _getBottom(b))
+      if (_getBottom(sortedCloseness[1]) - _getBottom(sortedCloseness[0]) < THREDSHOLD)
+        sortedCloseness = coverAnnotations.sort((a, b) => _getTop(a) < _getTop(b))
+    }
+  }
+  const newTarget = $(sortedCloseness[0])
+  return newTarget
+}
+
 function addAnnotationRelatedListenerWithin(jq) {
   jq.find('code').addClass('prettyprint')
   PR.prettyPrint()
@@ -72,12 +105,8 @@ function addAnnotationRelatedListenerWithin(jq) {
 
   jq.find(".AnnotationDirectButton").on("click", function(e) {
     var annotation_id = $(this).parents('.AnnotationDiv').attr("annotation_id")
-    var Annotation = $(".Annotation[annotation_id='" + annotation_id + "']")
-    var fileViewer = $("#file_viewer")
-    var down = Annotation.offset().top - fileViewer.offset().top + fileViewer.scrollTop() - window.innerHeight * 0.38 + Annotation.height() / 2
-    fileViewer.animate({
-      scrollTop: parseInt(down)
-    }, 240)
+    var annotation = $(".Annotation[annotation_id='" + annotation_id + "']")
+    scrollAnnotationIntoView(annotation)
   })
 
   jq.find(".PostReplyReplyButton").on("click", function() {
@@ -287,30 +316,5 @@ function addAnnotationRelatedListenerWithin(jq) {
   })
 }
 
-function scrollAnnotationDivIntoView(annotationDiv) {
-  var annotationsDiv = $("#annotation_update_div")
-  var down = annotationDiv.offset().top - annotationsDiv.offset().top + annotationsDiv.scrollTop()
-  annotationsDiv.animate({
-    scrollTop: parseInt(down)
-  }, 240)
-}
 
-function findTargetAnnotation(e, allAnnotationsInThisPage, pageJQ) {
-  const coverAnnotations = allAnnotationsInThisPage.filter(annotation => _checkCoverage(annotation, e, pageJQ))
-
-  const THREDSHOLD = 9
-  var sortedCloseness = coverAnnotations.sort((a, b) => _getRight(a) > _getRight(b))
-  if (_getRight(sortedCloseness[1]) - _getRight(sortedCloseness[0]) < THREDSHOLD) {  // right side too close
-    sortedCloseness = coverAnnotations.sort((a, b) => _getLeft(a) < _getLeft(b))
-    if (_getLeft(sortedCloseness[0]) - _getLeft(sortedCloseness[1]) < THREDSHOLD) {
-      sortedCloseness = coverAnnotations.sort((a, b) => _getBottom(a) > _getBottom(b))
-      if (_getBottom(sortedCloseness[1]) - _getBottom(sortedCloseness[0]) < THREDSHOLD)
-        sortedCloseness = coverAnnotations.sort((a, b) => _getTop(a) < _getTop(b))
-    }
-  }
-  const newTarget = $(sortedCloseness[0])
-  return newTarget
-}
-
-
-export { addAnnotationRelatedListener, addAnnotationRelatedListenerWithin, scrollAnnotationDivIntoView, findTargetAnnotation }
+export { addAnnotationRelatedListener, addAnnotationRelatedListenerWithin, scrollAnnotationDivIntoView, scrollAnnotationIntoView, findTargetAnnotation }

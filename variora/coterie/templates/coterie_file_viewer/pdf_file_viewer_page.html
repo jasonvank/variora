@@ -129,6 +129,7 @@ function drawAllExistingAnnotationFrame() {
             "top": pageDiv.height() * top_percent + "px",
         });
         new_annotation.attr("annotation_id", '{{ annotation.id }}');
+        new_annotation.attr("annotation_uuid", '{{ annotation.clean_uuid }}');
         pageDiv.append(new_annotation);
     {% endfor %}
 }

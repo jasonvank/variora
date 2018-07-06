@@ -1,6 +1,6 @@
-<div class="AnnotationDiv" annotation_id="{{ annotation.id }}" page='{{ annotation.page_index }}'>
+<div class="AnnotationDiv" annotation_id="{{ annotation.id }}" annotation_uuid="{{ annotation.clean_uuid }}" page='{{ annotation.page_index }}'>
   <hr>
-  <blockquote class="AnnotationBlock" annotation_id="{{ annotation.id }}">
+  <blockquote class="AnnotationBlock" annotation_id="{{ annotation.id }}" annotation_uuid="{{ annotation.clean_uuid }}">
     <!-- annotation -->
     <div class="annotation-content"> {{ annotation.content|safe|linebreaks }} </div>
     <footer>

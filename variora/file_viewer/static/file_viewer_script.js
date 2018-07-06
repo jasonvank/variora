@@ -1,12 +1,14 @@
-import { addAnnotationRelatedListener, addAnnotationRelatedListenerWithin, scrollAnnotationDivIntoView, findTargetAnnotation } from './annotations_script.js'
+import {
+  addAnnotationRelatedListener, addAnnotationRelatedListenerWithin,
+  scrollAnnotationDivIntoView, findTargetAnnotation, scrollAnnotationIntoView
+} from './annotations_script.js'
 import { addCommentRelatedListener, enablePostCommentButton, enableRefreshCommentButton } from './comments_script.js'
-import { getCookie, hexToRgb, imgLoad } from 'util.js'
+import { getCookie, hexToRgb, imgLoad, getValFromUrlParam } from 'util.js'
 
 import { prepareNavbarFunction } from './navbar_subpage_script.js'
 import { tinymceInit } from './tinymce_script'
 
 var numPages = 0
-var new_annotation_id
 var scaleFactor = 1.08
 var pdfDoc
 var currentScale = 1
@@ -215,6 +217,7 @@ function startListeningSelectionBoxCreation() {
                 tinymceInit()
 
                 new_annotation.attr("annotation_id", data.new_annotation_id)
+                new_annotation.attr('annotation_uuid', data.new_annotation_uuid)
 
                 // after uploading the annotation, close the window
                 layer.close(annotationWindow)
@@ -333,6 +336,26 @@ function animateOnce() {
   })
   $("#navbar").animateOnce("fadeInDown")
   $("#annotation_update_div").find("blockquote").animateOnce("fadeInRight")
+}
+
+
+function scrollToTargetAnnotationIfInUrl() {
+  var annotation_uuid = getValFromUrlParam('annotation')
+  if (annotation_uuid != null) {
+    annotation_uuid = annotation_uuid.replace(/-/g, '')
+    const annotationDiv = $('.AnnotationDiv[annotation_uuid="' + annotation_uuid + '"]')
+    const annotation = $(".Annotation[annotation_uuid='" + annotation_uuid + "']")
+    scrollAnnotationDivIntoView(annotationDiv)
+    scrollAnnotationIntoView(annotation)
+    
+    annotationDiv.find('.AnnotationBlock').prepend($('<span class="badge" style="background-color: #1BA39C; margin-bottom: 6px">highlighted annotation</span>'))
+    setTimeout(function() {
+      annotationDiv.css('background-color', '#bdede5')
+      annotationDiv.animate({
+        backgroundColor: 'white'
+      }, 1800)
+    }, 380)
+  }
 }
 
 
@@ -526,6 +549,8 @@ function prepareAndRenderAll(url) {
       taskList.push([Math.min(numPages, 5), "PENDING", null])
       renderTaskList(taskList, finishList, currentScale)
       startListeningScroll()
+
+      scrollToTargetAnnotationIfInUrl()
     })
   })
 }

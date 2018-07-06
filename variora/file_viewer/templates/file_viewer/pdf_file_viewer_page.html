@@ -114,14 +114,14 @@ var is_authenticated = {{ request.user.is_authenticated|yesno:"true,false" }};  
 
 function drawAllExistingAnnotationFrame() {
   {% for annotation in annotations %}
-    var new_annotation = $("<div class='Annotation animated zoomIn'></div>");
-    var top_percent = parseFloat("{{ annotation.top_percent }}");
-    var left_percent = parseFloat("{{ annotation.left_percent }}");
-    var height_percent = parseFloat("{{ annotation.height_percent }}");
-    var width_percent = parseFloat("{{ annotation.width_percent }}");
-    var pageIndex = "{{ annotation.page_index }}";
-    var frame_color = "{{ annotation.frame_color }}";
-    var pageDiv = $("#page_div_" + pageIndex);
+    var new_annotation = $("<div class='Annotation animated zoomIn'></div>")
+    var top_percent = parseFloat("{{ annotation.top_percent }}")
+    var left_percent = parseFloat("{{ annotation.left_percent }}")
+    var height_percent = parseFloat("{{ annotation.height_percent }}")
+    var width_percent = parseFloat("{{ annotation.width_percent }}")
+    var pageIndex = "{{ annotation.page_index }}"
+    var frame_color = "{{ annotation.frame_color }}"
+    var pageDiv = $("#page_div_" + pageIndex)
     new_annotation.css({
       "background": frame_color,
       "position": "absolute",
@@ -130,8 +130,9 @@ function drawAllExistingAnnotationFrame() {
       "left": pageDiv.width() * left_percent + "px",
       "top": pageDiv.height() * top_percent + "px",
     });
-    new_annotation.attr("annotation_id", '{{ annotation.id }}');
-    pageDiv.append(new_annotation);
+    new_annotation.attr("annotation_id", '{{ annotation.id }}')
+    new_annotation.attr('annotation_uuid', '{{ annotation.clean_uuid }}')
+    pageDiv.append(new_annotation)
   {% endfor %}
 }
 </script>

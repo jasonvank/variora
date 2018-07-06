@@ -9,7 +9,7 @@ import {
   BrowserRouter as Router,
   Switch
 } from 'react-router-dom'
-import { getCookie, getUrlFormat } from 'util.js'
+import { getCookie, getUrlFormat, getValFromUrlParam } from 'util.js'
 
 import { DocumentTab } from './components/document_tab.jsx'
 import { GroupTab } from './components/group_tab.jsx'
@@ -156,7 +156,7 @@ class App extends React.Component {
                 placeholder="input search text"
                 style={{ width: '60%' }}
                 onSearch={this.handleSearch}
-                defaultValue={window.location.pathname == '/search' ? new URL(window.location.href).searchParams.get("key") : '' }
+                defaultValue={window.location.pathname == '/search' ? getValFromUrlParam('key') : '' }
               />
             </Col>
             <Col span={10} style={{ textAlign: 'right' }}>
