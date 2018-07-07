@@ -128,14 +128,15 @@ def jason_test(request):
 
 
 def handle_image_upload(request):
-    user = get_user(request)
-    if isinstance(user, AnonymousUser):
-        return HttpResponse(status=403)
-    file_uploaded = request.FILES["file_upload"]
-    if file_uploaded.size > 1024 * 500:  # 500 KB
-        return HttpResponse(status=403)
-    uploaded_image = UploadedImage(image_field=file_uploaded, uploader=user)
-    uploaded_image.save()
-    return JsonResponse({
-        'url': uploaded_image.image_field.url
-    })
+    return HttpResponse(status=404)
+    # user = get_user(request)
+    # if isinstance(user, AnonymousUser):
+    #     return HttpResponse(status=403)
+    # file_uploaded = request.FILES["file_upload"]
+    # if file_uploaded.size > 1024 * 500:  # 500 KB
+    #     return HttpResponse(status=403)
+    # uploaded_image = UploadedImage(image_field=file_uploaded, uploader=user)
+    # uploaded_image.save()
+    # return JsonResponse({
+    #     'url': uploaded_image.image_field.url
+    # })
