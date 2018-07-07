@@ -221,8 +221,9 @@ function startListeningSelectionBoxCreation() {
 
                 scrollAnnotationDivIntoView(newAnnotationDiv)
                 setTimeout(function() {
-                  newAnnotationDiv.css('background-color', '#bdede5')
-                  newAnnotationDiv.animate({
+                  let contentBlock = newAnnotationDiv.find('.AnnotationBlock')
+                  contentBlock.css('background-color', '#bdede5')
+                  contentBlock.animate({
                     backgroundColor: 'white'
                   }, 1800)
                 }, 180)
@@ -238,17 +239,15 @@ function startListeningSelectionBoxCreation() {
             layer.msg('You need to <a href="/sign-in" style="color: #ECECEC; text-decoration: underline">log in</a> first')
         })
 
-        $(".PageImg, .PageCanvas, .Annotation").off("mousemove")
-        $("body").off("mouseup")
+        $('.PageImg, .PageCanvas, .Annotation').off('mousemove')
+        $('body').off('mouseup')
         // 重新启用上传annotation的按钮
-        annotationWindowJqueryObject.find(".post_annotation_button").attr("disabled", false)
-      }
-      // if mouse is released outside of PageImg or PageCanvas, it is invalid
-      else {
+        annotationWindowJqueryObject.find('.post_annotation_button').attr('disabled', false)
+      } else {  // if mouse is released outside of PageImg or PageCanvas, it is invalid
         new_annotation.remove()
 
-        $(".PageImg, .PageCanvas, .Annotation").off("mousemove")
-        $("body").off("mouseup")
+        $('.PageImg, .PageCanvas, .Annotation').off('mousemove')
+        $('body').off('mouseup')
       }
       e.stopPropagation()
     })
@@ -261,11 +260,11 @@ function startListeningSelectionBoxCreation() {
  * @param scaleFactor
  */
 function resizeAnnotations(scaleFactor) {
-  $(".Annotation").each(function() {
-    $(this).css("top", parseFloat($(this).css("top")) * scaleFactor + "px")
-    $(this).css("left", parseFloat($(this).css("left")) * scaleFactor + "px")
-    $(this).css("width", parseFloat($(this).css("width")) * scaleFactor + "px")
-    $(this).css("height", parseFloat($(this).css("height")) * scaleFactor + "px")
+  $('.Annotation').each(function() {
+    $(this).css('top', parseFloat($(this).css('top')) * scaleFactor + 'px')
+    $(this).css('left', parseFloat($(this).css('left')) * scaleFactor + 'px')
+    $(this).css('width', parseFloat($(this).css('width')) * scaleFactor + 'px')
+    $(this).css('height', parseFloat($(this).css('height')) * scaleFactor + 'px')
   })
 }
 
@@ -275,8 +274,8 @@ function resizeAnnotations(scaleFactor) {
  * @return {undefined}
  */
 function scrollPageDivIntoView(pageDiv) {
-  var fileViewer = $("#file_viewer")
-  // "down" is the number of pixels to scroll the visible part down from the top of fileViewer
+  var fileViewer = $('#file_viewer')
+  // 'down' is the number of pixels to scroll the visible part down from the top of fileViewer
   var down = pageDiv.offset().top - fileViewer.offset().top + fileViewer.scrollTop()
   // animatedly scroll, 240 means the scrolling process take 240ms long
   fileViewer.animate({
@@ -286,47 +285,46 @@ function scrollPageDivIntoView(pageDiv) {
 
 
 function prepareScrollPageIntoView() {
-  var input = $("#scroll_page_into_view_div").children("input")
-  var button = $("#scroll_page_into_view_div").children("button")
-  input.attr("min", "1")
-  input.attr("max", numPages.toString())
-  button.on("click", function() {
+  var input = $('#scroll_page_into_view_div').children('input')
+  var button = $('#scroll_page_into_view_div').children('button')
+  input.attr('min', '1')
+  input.attr('max', numPages.toString())
+  button.on('click', function() {
     var pageIndex = input.val()
     if (pageIndex < 1 || pageIndex > numPages) {
       layer.msg('Input page index out of bounds')
       return false
     }
-    var pageDivId = "page_div_" + pageIndex
-    var pageDiv = $("#" + pageDivId)
+    var pageDivId = 'page_div_' + pageIndex
+    var pageDiv = $('#' + pageDivId)
     scrollPageDivIntoView(pageDiv)
   })
 }
 
 
-
 function setupFileViewerSize() {
-  var wrapper = $("#wrapper")
-  var fileViewer = $("#file_viewer")
+  var wrapper = $('#wrapper')
+  var fileViewer = $('#file_viewer')
   // 设置wrapper的高度
-  wrapper.css("height", document.body.clientHeight - 28 + "px"); //jquery的css方法既可以设置css内容又可以获取css内容
-  wrapper.css("width", document.body.clientWidth)
+  wrapper.css('height', document.body.clientHeight - 28 + 'px'); //jquery的css方法既可以设置css内容又可以获取css内容
+  wrapper.css('width', document.body.clientWidth)
   // 设置fileViewer的高度和宽度
-  fileViewer.css("height", wrapper.height() + "px")
-  fileViewer.css("width", parseInt(wrapper.css("width")) * 0.6 + "px"); //jquery的css方法获得的是字符串，用js的parseInt获取数值
+  fileViewer.css('height', wrapper.height() + 'px')
+  fileViewer.css('width', parseInt(wrapper.css('width')) * 0.6 + 'px'); //jquery的css方法获得的是字符串，用js的parseInt获取数值
   // 设置annotation_update_div的高度和宽度
-  $("#annotation_update_div").css("height", wrapper.height() + "px")
-  $("#annotation_update_div").css("width", wrapper.width() - 3.8 - fileViewer.width() + "px")
+  $('#annotation_update_div').css('height', wrapper.height() + 'px')
+  $('#annotation_update_div').css('width', wrapper.width() - 3.8 - fileViewer.width() + 'px')
 
-  $("#horizontal_draggable").css("height", wrapper.height() + "px")
+  $('#horizontal_draggable').css('height', wrapper.height() + 'px')
 
   // 设置文档的大小
-  $(".PageImg").css("width", fileViewer.width() - 24 + "px")
-  $(".PageDiv").each(function() {
+  $('.PageImg').css('width', fileViewer.width() - 24 + 'px')
+  $('.PageDiv').each(function() {
     var div = $(this)
-    var img = div.children(".PageImg")
+    var img = div.children('.PageImg')
     imgLoad(img[0], function() {
-      div.css("width", img.width() + "px")
-      div.css("height", img.height() + "px")
+      div.css('width', img.width() + 'px')
+      div.css('height', img.height() + 'px')
     })
   })
 }
@@ -358,8 +356,9 @@ function scrollToTargetAnnotationIfInUrl() {
 
     annotationDiv.find('.AnnotationBlock').prepend($('<span class="badge" style="background-color: #1BA39C; margin-bottom: 6px">highlighted annotation</span>'))
     setTimeout(function() {
-      annotationDiv.css('background-color', '#bdede5')
-      annotationDiv.animate({
+      let contentBlock = annotationDiv.find('.AnnotationBlock')
+      contentBlock.css('background-color', '#bdede5')
+      contentBlock.animate({
         backgroundColor: 'white'
       }, 1800)
     }, 380)
