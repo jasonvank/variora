@@ -21,7 +21,7 @@ function tinymceInit() {
       'save table contextmenu directionality emoticons template paste textcolor'
     ],
     toolbar: [
-      'styleselect | bold italic codesample | link image | bullist numlist outdent indent | forecolor backcolor'
+      'styleselect | bold italic codesample | link image | bullist numlist outdent indent | forecolor'
     ],
     indent: false,
     paste_as_text: true,
