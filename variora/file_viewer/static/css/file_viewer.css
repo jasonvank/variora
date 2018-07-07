@@ -173,6 +173,8 @@ input {
 .annotation-content img,
 .comment-content img {
   border-radius: 1.8px;
+  max-width: 66%;
+  height: auto;
 }
 
 .btn {
