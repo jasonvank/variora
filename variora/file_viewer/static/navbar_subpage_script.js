@@ -45,6 +45,22 @@ function prepareNavbarFunction() {
       $(this).slideUp(180)
     })
   })
+
+  $('#instruction_button').on('click', function() {
+    layer.photos({
+      photos: {
+        'data': [{
+          'src': 'https://www.dropbox.com/s/zdo640j2cugj2gi/ezgif.com-crop.gif?raw=1',
+          'alt': 'How to create an annotation',
+        }]
+      },
+      shift: 5,
+      tab: function(pic, layero){
+        $('.layui-layer-imgsee').find('em').remove()
+      }
+    })
+
+  })
 }
 
 export { prepareNavbarFunction }
