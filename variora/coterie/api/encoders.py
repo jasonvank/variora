@@ -67,7 +67,8 @@ class CoterieDocumentEncoder(DjangoJSONEncoder):
                 'delete_method': 'post',
                 'delete_url': '/coterie/api/coteriedocuments/' + str(obj.pk) + '/delete',
                 'file_on_server': obj.file_on_server,
-                'renameUrl': '/coterie/api/coteriedocuments/' + str(obj.pk) + '/rename'
+                'renameUrl': '/coterie/api/coteriedocuments/' + str(obj.pk) + '/rename',
+                'upload_time': obj.upload_time
             }
         return super(CoterieDocumentEncoder, self).default(obj)
 

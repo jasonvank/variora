@@ -49,6 +49,7 @@ class CoterieDocument(ModelWithCleanUUID):
     unique_file = models.ForeignKey(UniqueFile, blank=True, null=True)
     num_visit = models.IntegerField(default=0)
     external_url = models.CharField(max_length=2083, blank=True)
+    upload_time = models.DateTimeField(auto_now=False, auto_now_add=True)
 
     @property
     def url(self):
