@@ -219,6 +219,14 @@ function startListeningSelectionBoxCreation() {
                 new_annotation.attr("annotation_id", data.new_annotation_id)
                 new_annotation.attr('annotation_uuid', data.new_annotation_uuid)
 
+                scrollAnnotationDivIntoView(newAnnotationDiv)
+                setTimeout(function() {
+                  newAnnotationDiv.css('background-color', '#bdede5')
+                  newAnnotationDiv.animate({
+                    backgroundColor: 'white'
+                  }, 1800)
+                }, 180)
+
                 // after uploading the annotation, close the window
                 layer.close(annotationWindow)
               },
@@ -347,7 +355,7 @@ function scrollToTargetAnnotationIfInUrl() {
     const annotation = $(".Annotation[annotation_uuid='" + annotation_uuid + "']")
     scrollAnnotationDivIntoView(annotationDiv)
     scrollAnnotationIntoView(annotation)
-    
+
     annotationDiv.find('.AnnotationBlock').prepend($('<span class="badge" style="background-color: #1BA39C; margin-bottom: 6px">highlighted annotation</span>'))
     setTimeout(function() {
       annotationDiv.css('background-color', '#bdede5')
