@@ -21,7 +21,7 @@ function tinymceInit() {
       'save table contextmenu directionality emoticons template paste textcolor'
     ],
     toolbar: [
-      'styleselect | bold italic codesample | link image | bullist numlist outdent indent | forecolor'
+      'styleselect | bold italic codesample | link image | bullist numlist outdent indent | forecolor | formula'
     ],
     indent: false,
     paste_as_text: true,
@@ -65,6 +65,13 @@ function tinymceInit() {
       editor.on('change', function() {
         editor.save()
       })
+      editor.addButton('formula', {
+        text: 'Formula',
+        icon: false,
+        onclick: function() {
+          editor.insertContent('$$<b><code>write LATEX here</code></b>$$')
+        }
+      });
     }
   })
   $(document).on('focusin', function(e) {
