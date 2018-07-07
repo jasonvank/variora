@@ -69,7 +69,7 @@ function tinymceInit() {
         text: 'Formula',
         icon: false,
         onclick: function() {
-          editor.insertContent('$$<b><code>write LATEX here</code></b>$$')
+          editor.insertContent('$$ write LATEX here $$')
         }
       });
     }
