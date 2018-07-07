@@ -50,7 +50,7 @@ function prepareNavbarFunction() {
     layer.photos({
       photos: {
         'data': [{
-          'src': 'https://www.dropbox.com/s/zdo640j2cugj2gi/ezgif.com-crop.gif?raw=1',
+          'src': '/media/images/gif/how_to_create_annotation.gif',
           'alt': 'How to create an annotation',
         }]
       },
