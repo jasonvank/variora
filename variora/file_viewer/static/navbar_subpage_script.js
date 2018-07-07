@@ -41,10 +41,33 @@ function prepareNavbarFunction() {
       });
   });
   $("#hide_annotation_frame_button").on('click', function() {
+<<<<<<< HEAD
       $(".Annotation").each(function() {
           $(this).slideUp(180);
       });
   });
+=======
+    $(".Annotation").each(function() {
+      $(this).slideUp(180)
+    })
+  })
+
+  $('#instruction_button').on('click', function() {
+    layer.photos({
+      photos: {
+        'data': [{
+          'src': '/media/images/gif/how_to_create_annotation.gif',
+          'alt': 'How to create an annotation',
+        }]
+      },
+      shift: 5,
+      tab: function(pic, layero){
+        $('.layui-layer-imgsee').find('em').remove()
+      }
+    })
+
+  })
+>>>>>>> 0a4a39e176aacb1bca63e3e66725ffdabf50e613
 }
 
 export { prepareNavbarFunction }

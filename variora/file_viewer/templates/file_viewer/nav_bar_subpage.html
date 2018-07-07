@@ -3,10 +3,13 @@
   <div title="{{ document.title }}" style="text-align: center; display: inline-block; color:white; margin: 5px 0 0 8%; width: 28%; overflow: hidden; text-overflow: ellipsis;">
     {{ document.title }}
   </div>
-  <div id="scroll_page_into_view_div">
+  <!-- <div id="scroll_page_into_view_div">
     <input type="number" style="width: 60px" />
     <button class="awesome blue">Go</button>
-  </div>
+  </div> -->
+  <button class="awesome blue" id="instruction_button" style="height: 28px; width: 80px">
+    <i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp&nbspHelp
+  </button>
   <div id="resize_buttons_div">
     <button class="awesome blue" style="height: 28px;" type="button" id="buttonForLarger"><i class="fa fa-plus" aria-hidden="true"></i></button>
     <button class="awesome blue" style="height: 28px;" type="button" id="buttonForSmaller"><i class="fa fa-minus" aria-hidden="true"></i></button>
