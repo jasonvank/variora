@@ -12,23 +12,23 @@ function removeComment(id) {
 }
 
 function addCommentRelatedListener() {
-  tinymceInit();
-  $('code').addClass('prettyprint');
-  PR.prettyPrint();
+  tinymceInit()
+  $('code').addClass('prettyprint')
+  PR.prettyPrint()
 
   $(".likeCommentButton").on("click", function() {
     if (is_authenticated) {
-      var $this = $(this);
-      var new_num = parseInt($this.next().text()) + 1;
-      $this.next().text(new_num.toString());
-      $this.off("click");
-      $this.css("color", "#6495ED");
+      var $this = $(this)
+      var new_num = parseInt($this.next().text()) + 1
+      $this.next().text(new_num.toString())
+      $this.off("click")
+      $this.css("color", "#6495ED")
       $this.on("click", function() {
         layer.msg('already liked', {
           icon: 6,
           time: 800,
-        });
-      });
+        })
+      })
       $.ajax({
         type: "POST",
         url: "",
@@ -37,10 +37,10 @@ function addCommentRelatedListener() {
           operation: "like_comment",
           comment_id: $this.attr("comment_id"),
         },
-      });
+      })
     } else
       layer.msg('<span style="color: #ECECEC">You need to <a href="/sign-in" style="color: #ECECEC; text-decoration: underline">log in</a> first</span>')
-  });
+  })
   $(".delete_comment_button").on("click", function() {
     if (is_authenticated) {
       var index = layer.load(0, {
@@ -57,14 +57,14 @@ function addCommentRelatedListener() {
           document_id: $("button[name='document_id']").val(),
         },
         success: function(data) {
-          // $("#comment_update_div").html(data);
-          // addCommentRelatedListener();
+          // $("#comment_update_div").html(data)
+          // addCommentRelatedListener()
           removeComment(commentId)
-          layer.close(index);
+          layer.close(index)
         }
-      });
+      })
     }
-  });
+  })
   $(".reply_comment_button").on("click", function() {
     $(this).parents("blockquote").find(".reply_comment_form").slideToggle({
       duration: 180,
@@ -77,12 +77,12 @@ function addCommentRelatedListener() {
           //     tinyMCE.editors[editor].setContent("")
         }
       }
-    });
-  });
+    })
+  })
   $(".post_comment_reply_button").on("click", function() {
     if (is_authenticated) {
       var is_public = !this.classList.contains('anonymously_post_comment_reply_button')
-      var $thisButton = $(this);
+      var $thisButton = $(this)
       var index = layer.load(0, {
         shade: 0.18
       }); //0代表加载的风格，支持0-2
@@ -98,15 +98,15 @@ function addCommentRelatedListener() {
           is_public: is_public,
         },
         success: function(data) {
-          $("#comment_update_div").html(data);
+          $("#comment_update_div").html(data)
           // 修改html内容后，有关的事件监听会被自动删除，因此需要重新添加事件监听
-          addCommentRelatedListener();
-          layer.close(index);
+          addCommentRelatedListener()
+          layer.close(index)
         }
-      });
+      })
     } else
       layer.msg('<span style="color: #ECECEC">You need to <a href="/sign-in" style="color: #ECECEC; text-decoration: underline">log in</a> first</span>')
-  });
+  })
 }
 
 function enableRefreshCommentButton() {
@@ -120,11 +120,11 @@ function enableRefreshCommentButton() {
         document_id: $("button[name='document_id']").val(),
       },
       success: function(data) {
-        $("#comment_update_div").html(data);
-        addCommentRelatedListener();
+        $("#comment_update_div").html(data)
+        addCommentRelatedListener()
       },
-    });
-  });
+    })
+  })
 }
 
 function enablePostCommentButton() {
@@ -146,15 +146,18 @@ function enablePostCommentButton() {
           is_public: is_public,
         },
         success: function(data) {
-          $("#comment_update_div").html(data);
+          $("#comment_update_div").html(data)
           addCommentRelatedListener(); // 修改html内容后，有关的事件监听会被自动删除，因此需要重新添加事件监听
-          activeEditor.setContent("") // $("textarea[name='comment_content']").val("");
-          layer.close(index);
+          activeEditor.setContent("") // $("textarea[name='comment_content']").val("")
+          layer.close(index)
         }
-      });
+      })
     } else
       layer.msg('<span style="color: #ECECEC">You need to <a href="/sign-in" style="color: #ECECEC; text-decoration: underline">log in</a> first</span>')
-  });
+  })
+
+  if (window.hasOwnProperty("MathJax"))
+    MathJax.Hub.Queue(['Typeset', MathJax.Hub])
 }
 
 export { addCommentRelatedListener, enableRefreshCommentButton, enablePostCommentButton }

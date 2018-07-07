@@ -314,6 +314,9 @@ function addAnnotationRelatedListenerWithin(jq) {
       $(a).off('mousemove')
     }
   })
+
+  if (window.hasOwnProperty("MathJax"))
+    MathJax.Hub.Queue(['Typeset', MathJax.Hub])
 }
 
 
