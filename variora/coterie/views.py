@@ -1,4 +1,5 @@
 import re
+import urllib
 from hashlib import md5
 
 import models
@@ -10,9 +11,9 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from file_viewer import models as file_viewer_models
 from home.models import User
+from variora import utils
 
 from .models import Coterie, CoterieDocument
-from variora import utils
 
 
 def handle_create_coterie(request):
@@ -87,9 +88,12 @@ def edit_coteriedoc_title(request):
 
 def serve_coteriefile(request):
     document = models.CoterieDocument.objects.get(id=int(request.GET["document_id"]))
-    file = document.unique_file
-    file_position = file.file_field.storage.path(file.file_field)
-    content = open(file_position, 'rb')
+    if document.file_on_server:
+        file_model = document.unique_file
+        file_position = file_model.file_field.storage.path(file_model.file_field)
+        content = open(file_position, 'rb')
+    else:
+        content = urllib.urlopen(document.external_url)
     response = HttpResponse(content, content_type='application/pdf')
     response['Content-Disposition'] = "attachment; filename=%s.pdf" % document.title
     return response
