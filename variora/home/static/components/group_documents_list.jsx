@@ -153,7 +153,7 @@ class GroupDocumentsList extends React.Component {
         render: (text, coterieDocument) => (
           this.props.isAdmin ? changeDocumentName(text, coterieDocument) :
                               <a href={formatOpenCoterieDocumentUrl(coterieDocument, this.state.coteriePk)}>{text}</a>
-        ),
+        )
       }, {
       title: this.props.isAdmin ? 'Action' : 'Upload Time',
       key: 'action',
