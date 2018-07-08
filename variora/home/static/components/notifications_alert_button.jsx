@@ -141,7 +141,7 @@ class NotificationsAlertButton extends React.Component {
 
   render() {
     return (
-      <Badge dot={this.state.show} style={{ backgroundColor: '#fdbe2d' }}>
+      <Badge dot={this.state.show} style={{ backgroundColor: '#52c41a', marginTop: -5 }}>
         <Popover
           content={<NotificationsList data={this.state.data} removeBadgeCallback={this.removeBadgeCallback}/>}
           trigger='click'
