@@ -125,21 +125,21 @@ class GroupDocumentsList extends React.Component {
       />)
     )
 
-    var deleteAction = ((text, coterieDocument) => (
+    var documentDeleteAction = ((text, coterieDocument) => (
       <span>
-        <Popconfirm
-          title="Are you sure delete this document? It cannot be undone."
-          onConfirm={() => this.deleteDocument(coterieDocument)}
-          okText="Yes" cancelText="No"
-        >
-          <a>Delete</a>
-        </Popconfirm>
-      </span>
+      <Popconfirm
+        title="Are you sure delete this document? It cannot be undone."
+        onConfirm={() => this.deleteDocument(record)}
+        okText="Yes" cancelText="No"
+      >
+        <a>Delete</a>
+      </Popconfirm>
+    </span>
     ))
 
-    var uploadDocumentDate = (text, coterieDocument) => {
-        coterieDocument.upload_time.replace('T', ' ').split('.')[0]
-    }
+    var documentUploadDate = ((text, coterieDocument) => (
+      coterieDocument.upload_time.replace('T', ' ').split('.')[0]
+    ))
 
     const columns = [{
         title: '#',
@@ -155,21 +155,22 @@ class GroupDocumentsList extends React.Component {
                               <a href={formatOpenCoterieDocumentUrl(coterieDocument, this.state.coteriePk)}>{text}</a>
         )
       }, {
-        title: 'Action',
-        key: 'action',
-        width: '40%',
-        render: (text, coterieDocument) => (
-          this.props.isAdmin ? deleteAction(text, coterieDocument) : uploadDocumentDate(text, coterieDocument)
-        )
-      }]
-      return (
-        <Table
-          dataSource={this.state.data}
-          columns={columns}
-          pagination={false}
-          rowKey={record => record.pk}
-        />
-      )
+      title: this.props.isAdmin ? 'Action' : 'Upload Time',
+      key: 'action',
+      width: '40%',
+      render: (text, coterieDocument) => (
+        this.props.isAdmin ? documentDeleteAction(text, coterieDocument) :
+                            documentUploadDate(text, coterieDocument)
+      ),
+    }]
+    return (
+      <Table
+        dataSource={this.state.data}
+        columns={columns}
+        pagination={false}
+        rowKey={record => record.pk}
+      />
+    )
   }
 }
 
