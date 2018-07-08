@@ -61,14 +61,9 @@ class NotificationsList extends React.Component {
 
     this.handleReadStatus = (record, index, event) => {
       axios.get(record.mark_read_url)
-      var data = new FormData()
-      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-      axios.post('notifications/api/unread', data).then(() => {
-        var newData = this.state.data
-        newData[index].unread = false
-        this.setState({data: newData })
-        this.checkLeftUnreadNotifications(newData)
-      })
+      this.state.data[index].unread = false
+      this.forceUpdate()
+      this.checkLeftUnreadNotifications(this.state.data)
     }
 
     this.checkLeftUnreadNotifications = (currentData) => {
