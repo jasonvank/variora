@@ -10,5 +10,5 @@ sudo env/bin/python variora/manage.py collectstatic --noinput
 sudo env/bin/python variora/manage.py installtasks
 
 #sudo service memcached restart
-echo 'flush_all' | netcat localhost 11211
+python variora/manage.py invalidate_cachalot -c default
 sudo service apache2 start
