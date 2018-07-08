@@ -41,7 +41,7 @@ function _getBottom(annotationDom) { return parseFloat($(annotationDom).css('top
 function addAnnotationRelatedListener() { addAnnotationRelatedListenerWithin($(document)) }
 
 function scrollAnnotationDivIntoView(annotationDiv) {
-  var annotationsDiv = $("#annotation_update_div")
+  var annotationsDiv = $('#annotation_update_div')
   var down = annotationDiv.offset().top - annotationsDiv.offset().top + annotationsDiv.scrollTop()
   annotationsDiv.animate({
     scrollTop: parseInt(down)
@@ -49,7 +49,7 @@ function scrollAnnotationDivIntoView(annotationDiv) {
 }
 
 function scrollAnnotationIntoView(annotation) {
-  var fileViewer = $("#file_viewer")
+  var fileViewer = $('#file_viewer')
   var down = annotation.offset().top - fileViewer.offset().top + fileViewer.scrollTop() - window.innerHeight * 0.38 + annotation.height() / 2
   fileViewer.animate({
     scrollTop: parseInt(down)
@@ -140,19 +140,19 @@ function addAnnotationRelatedListenerWithin(jq) {
       layer.msg('You need to <a href="/sign-in" style="color: #ECECEC; text-decoration: underline">log in</a> first')
   })
 
-  jq.find(".DeleteAnnotationReplyButton").on("click", function() {
+  jq.find('.DeleteAnnotationReplyButton').on('click', function() {
     var index = layer.load(1, {
       shade: 0.18
     });  // 0 represent the style, can be 0-2
     var replyId = this.value
     $.ajax({
-      type: "POST",
-      url: "",
+      type: 'POST',
+      url: '',
       data: {
         csrfmiddlewaretoken: getCookie('csrftoken'),
-        operation: "delete_annotation_reply",
+        operation: 'delete_annotation_reply',
         reply_id: replyId,
-        document_id: $("button[name='document_id']").val(),
+        document_id: $('button[name="document_id"]').val(),
       },
       success: function(data) {
         removeAnnotationReply(replyId)
@@ -191,15 +191,15 @@ function addAnnotationRelatedListenerWithin(jq) {
       layer.msg('You need to <a href="/sign-in" style="color: #ECECEC; text-decoration: underline">log in</a> first')
   })
 
-  jq.find(".DeleteAnnotationButton").on("click", function() {
+  jq.find('.DeleteAnnotationButton').on('click', function() {
     var index = layer.load(1, { shade: 0.18 })  // 0 represent the style, can be 0-2
     var annotationID = this.value
     $.ajax({
-      type: "POST",
-      url: "",
+      type: 'POST',
+      url: '',
       data: {
         csrfmiddlewaretoken: getCookie('csrftoken'),
-        operation: "delete_annotation",
+        operation: 'delete_annotation',
         annotation_id: this.value,
       },
       success: function() {
@@ -209,26 +209,26 @@ function addAnnotationRelatedListenerWithin(jq) {
     })
   })
 
-  jq.find(".LikeAnnotationButton").on("click", function() {
+  jq.find('.LikeAnnotationButton').on('click', function() {
     if (is_authenticated) {
       const $this = $(this)
       var new_num = parseInt($this.find('.num_like').text()) + 1
       $this.find('.num_like').text(new_num.toString())
-      $this.off("click")
-      $this.css("color", "#6495ED")
-      $this.on("click", function() {
+      $this.off('click')
+      $this.css('color', '#6495ED')
+      $this.on('click', function() {
         layer.msg('already liked', {
           icon: 6,
           time: 800,
         })
       })
       $.ajax({
-        type: "POST",
-        url: "",
+        type: 'POST',
+        url: '',
         data: {
           csrfmiddlewaretoken: getCookie('csrftoken'),
-          operation: "like_annotation",
-          annotation_id: $this.attr("annotation_id"),
+          operation: 'like_annotation',
+          annotation_id: $this.attr('annotation_id'),
         },
       })
     } else

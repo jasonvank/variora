@@ -58,6 +58,12 @@ class CoterieDocument(ModelWithCleanUUID):
             return self.unique_file.file_field.url
 
     @property
+    def size(self):
+        if self.file_on_server:
+            return self.unique_file.size
+        return 0
+
+    @property
     def file_on_server(self):
         return self.unique_file != None
 
