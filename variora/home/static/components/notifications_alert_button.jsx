@@ -1,6 +1,6 @@
 import 'regenerator-runtime/runtime'
 
-import {Avatar, Badge, Icon, Popover, Table} from 'antd'
+import {Avatar, Badge, Button, Icon, notification, Popover, Table} from 'antd'
 import {getCookie, getUrlFormat} from 'util.js'
 
 import React from 'react'
@@ -16,8 +16,8 @@ class NotificationsAvaratWrapper extends React.Component {
 
   render() {
     var defaultAvatarUrl = '/media/default_notification_img.png'
-    var defaultAvatar = <Avatar src={defaultAvatarUrl} style={{ verticalAlign: 'middle', background: 'white' }}></Avatar>
-    var userAvatar = <Avatar src={this.state.newNotification.data.image_url} style={{ verticalAlign: 'middle', background: 'white' }}></Avatar>
+    var defaultAvatar = <Avatar src={defaultAvatarUrl} style={{verticalAlign: 'middle', background: 'white'}}></Avatar>
+    var userAvatar = <Avatar src={this.state.newNotification.data.image_url} style={{verticalAlign: 'middle', background: 'white'}}></Avatar>
     return (
       this.state.newNotification.data.image_url ? userAvatar : defaultAvatar
     )
@@ -43,7 +43,7 @@ class NotificationsDetailsWrapper extends React.Component {
 
     return (
       <div>
-        <div style={{fontWeight: 'bold'}}><a target="_blank" href={this.state.newNotification.data.redirect_url} style={{ textDecoration: 'none' }}>{title}</a></div>
+        <div style={{fontWeight: 'bold'}}><a target="_blank" href={this.state.newNotification.data.redirect_url} style={{textDecoration: 'none'}}>{title}</a></div>
         <div className="notification-alert-list-wrapper" title={description}>{description}</div>
         <div style={{color: '#91959d'}}>{time}</div>
       </div>
@@ -56,7 +56,7 @@ class NotificationsList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      data: this.props.data,
+      data: undefined
     }
 
     this.handleReadStatus = (record, index, event) => {
@@ -66,18 +66,22 @@ class NotificationsList extends React.Component {
       axios.post('notifications/api/unread', data).then(() => {
         var newData = this.state.data
         newData[index].unread = false
-        this.setState({data: newData })
-        this.checkLeftUnreadNotifications(newData)
+        this.setState({data: newData})
       })
-    }
-
-    this.checkLeftUnreadNotifications = (currentData) => {
-      var result = currentData.some(item => item.unread == true)
-      result ? null : this.props.removeBadgeCallback()
     }
   }
 
-  render(){
+  componentDidMount() {
+    const self = this
+    axios.get(getUrlFormat('/notifications/api/unread'))
+      .then(response => {
+        self.setState({
+          data: response.data
+        })
+      })
+  }
+
+  render() {
     const columns = [{
       title: 'Avatar',
       key: 'avatar',
@@ -120,44 +124,29 @@ class NotificationsAlertButton extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      visible: false,
-      length: undefined,
-      show: false,
-      data: undefined
+      visible: false
     }
     this.handleVisibleChange = (visible) => {
       this.setState({visible})
     }
-    this.removeBadgeCallback = () => {
-      this.setState({show: false})
-    }
-  }
-
-  componentDidMount() {
-    const self = this
-    axios.get(getUrlFormat('/notifications/api/unread'))
-      .then(response => {
-        self.setState({
-          data: response.data,
-          show: response.data.length > 0 ? true : false
-        })
-      })
   }
 
   render() {
     return (
-      <Badge dot={this.state.show} style={{ backgroundColor: '#fdbe2d' }}>
-        <Popover
-          content={<NotificationsList data={this.state.data} removeBadgeCallback={this.removeBadgeCallback}/>}
-          trigger='click'
-          visible={this.state.visible}
-          onVisibleChange={this.handleVisibleChange}
-        >
-          <Icon type="bell" style={{ cursor: 'pointer', fontSize: 18, marginLeft: 28, verticalAlign: 'middle', marginTop: -2 }}/>
-        </Popover>
-      </Badge>
+      <Popover
+        content={<NotificationsList data={this.state.data}/>}
+        trigger="click"
+        visible={this.state.visible}
+        onVisibleChange={this.handleVisibleChange}
+      >
+        <Icon type="bell" style={{cursor: 'pointer', fontSize: 18, marginLeft: 28, verticalAlign: 'middle', marginTop: -2}}
+        />
+      </Popover>
     )
   }
 }
 
 export { NotificationsAlertButton }
+
+
+

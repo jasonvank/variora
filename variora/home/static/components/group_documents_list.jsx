@@ -125,22 +125,6 @@ class GroupDocumentsList extends React.Component {
       />)
     )
 
-    var documentDeleteAction = ((text, coterieDocument) => (
-      <span>
-      <Popconfirm
-        title="Are you sure delete this document? It cannot be undone."
-        onConfirm={() => this.deleteDocument(record)}
-        okText="Yes" cancelText="No"
-      >
-        <a>Delete</a>
-      </Popconfirm>
-    </span>
-    ))
-
-    var documentUploadDate = ((text, coterieDocument) => (
-      coterieDocument.upload_time.replace('T', ' ').split('.')[0]
-    ))
-
     const columns = [{
         title: '#',
         dataIndex: 'id',
@@ -155,12 +139,19 @@ class GroupDocumentsList extends React.Component {
                               <a href={formatOpenCoterieDocumentUrl(coterieDocument, this.state.coteriePk)}>{text}</a>
         ),
       }, {
-      title: this.props.isAdmin ? 'Action' : 'Upload Time',
+      title: 'Action',
       key: 'action',
       width: '40%',
-      render: (text, coterieDocument) => (
-        this.props.isAdmin ? documentDeleteAction(text, coterieDocument) :
-                            documentUploadDate(text, coterieDocument)
+      render: (text, record) => (
+        <span>
+          <Popconfirm
+            title="Are you sure delete this document? It cannot be undone."
+            onConfirm={() => this.deleteDocument(record)}
+            okText="Yes" cancelText="No"
+          >
+            <a>Delete</a>
+          </Popconfirm>
+        </span>
       ),
     }]
     return (
