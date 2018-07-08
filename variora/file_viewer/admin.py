@@ -3,14 +3,14 @@ import models
 
 
 class DocumentModelAdmin(admin.ModelAdmin):
-    list_display = ["id", 'clean_uuid', "title", "owner", "num_visit", "unique_file", 'file_on_server']
+    list_display = ["id", 'clean_uuid', "title", "owner", "size", "num_visit", "unique_file", 'upload_time']
     list_filter = ["title", "unique_file", "owner"]
     search_fields = ["id", 'uuid', "title", "unique_file__file_field", "owner__nickname"]
     filter_horizontal = ['collectors']
 
 
 class UniqueFileModelAdmin(admin.ModelAdmin):
-    list_display = ["id", "file_field", "md5"]
+    list_display = ["id", "file_field", "size", "md5"]
     list_filter = ["file_field", "md5"]
     search_fields = ["id", "file_field", "md5"]
 

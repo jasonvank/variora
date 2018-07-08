@@ -20,6 +20,10 @@ class UniqueFile(models.Model):
     file_field = models.FileField(upload_to=upload_to)
     md5 = models.CharField(max_length=32)
 
+    @property
+    def size(self):  # in MB
+        return self.file_field.size / 1024.0 / 1024
+
     def __unicode__(self):
         return self.file_field.name
 
@@ -47,7 +51,6 @@ class Document(ModelWithCleanUUID):
     unique_file = models.ForeignKey(UniqueFile, blank=True, null=True)  # many Documents to one UniqueFile
     num_visit = models.IntegerField(default=0)
     external_url = models.CharField(max_length=2083, blank=True, db_index=True)
-    upload_time = models.DateTimeField(auto_now=False, auto_now_add=True)
 
     @property
     def url(self):
@@ -55,6 +58,12 @@ class Document(ModelWithCleanUUID):
             return "/proxy?origurl=" + self.external_url
         else:
             return self.unique_file.file_field.url
+
+    @property
+    def size(self):
+        if self.file_on_server:
+            return self.unique_file.size
+        return 0
 
     @property
     def file_on_server(self):

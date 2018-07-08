@@ -49,7 +49,6 @@ class CoterieDocument(ModelWithCleanUUID):
     unique_file = models.ForeignKey(UniqueFile, blank=True, null=True)
     num_visit = models.IntegerField(default=0)
     external_url = models.CharField(max_length=2083, blank=True)
-    upload_time = models.DateTimeField(auto_now=False, auto_now_add=True)
 
     @property
     def url(self):
@@ -57,6 +56,12 @@ class CoterieDocument(ModelWithCleanUUID):
             return "/proxy?origurl=" + self.external_url
         else:
             return self.unique_file.file_field.url
+
+    @property
+    def size(self):
+        if self.file_on_server:
+            return self.unique_file.size
+        return 0
 
     @property
     def file_on_server(self):
