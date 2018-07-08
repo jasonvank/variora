@@ -28,7 +28,7 @@ class CoterieApplicationAdmin(admin.ModelAdmin):
 
 
 class CoterieDocumentModelAdmin(admin.ModelAdmin):
-    list_display = ["id", "clean_uuid", "title", "unique_file", "owner", "file_on_server"]
+    list_display = ["id", "clean_uuid", "title", "unique_file", "owner", "size"]
     list_filter = ["title", "unique_file", "owner"]
     search_fields = ["id", "uuid", "title", "unique_file__pk", "owner__pk"]
 
