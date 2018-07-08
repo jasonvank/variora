@@ -63,11 +63,11 @@ class NotificationsList extends React.Component {
       axios.get(record.mark_read_url)
       this.state.data[index].unread = false
       this.forceUpdate()
-      this.checkLeftUnreadNotifications(this.state.data)
+      this.checkLeftUnreadNotifications()
     }
 
-    this.checkLeftUnreadNotifications = (currentData) => {
-      var result = currentData.some(item => item.unread == true)
+    this.checkLeftUnreadNotifications = () => {
+      var result = this.state.data.some(item => item.unread == true)
       result ? null : this.props.removeBadgeCallback()
     }
   }
