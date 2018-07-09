@@ -5,6 +5,7 @@ import kronos
 import requests
 from django.conf import settings
 from django.core.files.base import ContentFile
+from django.db.models import Count
 from pdfrw import PdfReader, PdfWriter
 from wand.image import Image
 
@@ -15,9 +16,10 @@ from file_viewer.models import Document, DocumentThumbnail
 def complain():
     DocumentThumbnail.objects.all().delete()
 
-    num_thumbnails = min(6, Document.objects.all().count())
+    num_thumbnails = min(1, Document.objects.all().count())
 
-    for document in Document.objects.all().order_by("-num_visit")[0:num_thumbnails]:
+    # for document in Document.objects.all().order_by("-num_visit")[0:num_thumbnails]:
+    for document in Document.objects.annotate(annotation_count=Count('annotation__id')).order_by("-annotation_count")[0:num_thumbnails]:
         content = None
 
         if document.file_on_server:
