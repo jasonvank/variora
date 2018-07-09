@@ -8,7 +8,7 @@ import { CollectedDocumentsList } from './collected_documents_list.jsx'
 import React from 'react'
 import { UploadedDocumentsList } from './uploaded_documents_list.jsx'
 import axios from 'axios'
-import { validateDocumentTitle } from 'home_util.js'
+import { validateDocumentTitle, validateDocumentSize } from 'home_util.js'
 
 const { SubMenu } = Menu
 const { Header, Content, Sider } = Layout
@@ -61,8 +61,12 @@ class UploadedDocuments extends React.Component {
     this.uploadedDocumentTable = undefined
     this.uploadLocalDocument = () => {
       var title = this.state.uploadedDocumentName
+
       if (!validateDocumentTitle(title))
         return false
+      if (!validateDocumentSize(this.state.uploadedDocumentFileList[0]))
+        return false
+
       var data = new FormData()
       data.append('title', title)
       data.append('file_upload', this.state.uploadedDocumentFileList[0])
@@ -79,6 +83,8 @@ class UploadedDocuments extends React.Component {
           uploadBtnLoading: false
         })
         this.uploadedDocumentTable.updateData()
+      }).catch(() => {
+        this.setState({ uploadBtnLoading: false })
       })
     }
     this.uploadOnlineDocument = () => {
