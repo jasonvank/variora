@@ -4,6 +4,9 @@ python variora/manage.py makemigrations
 # apply above migrations
 python variora/manage.py migrate
 
+python variora/manage.py installtasks
+python variora/manage.py showtasks
+
 # remove the obsolete bundle
 rm -r ./variora/bundled_static/dev/*
 

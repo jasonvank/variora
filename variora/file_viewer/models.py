@@ -15,7 +15,6 @@ def upload_to(instance, filename):
     # the file will be store at media/jpeg/name.jpeg
     return '{0}/{1}'.format(extension, filename)
 
-
 class UniqueFile(models.Model):
     file_field = models.FileField(upload_to=upload_to)
     md5 = models.CharField(max_length=32)
@@ -49,7 +48,7 @@ class Document(ModelWithCleanUUID):
     owner = models.ForeignKey(User)  # many Documents to one User
     collectors = models.ManyToManyField(User, related_name="collected_document_set", blank=True)
     unique_file = models.ForeignKey(UniqueFile, blank=True, null=True)  # many Documents to one UniqueFile
-    num_visit = models.IntegerField(default=0)
+    num_visit = models.IntegerField(default=0, db_index=True)
     external_url = models.CharField(max_length=2083, blank=True, db_index=True)
     upload_time = models.DateTimeField(auto_now=False, auto_now_add=True)
 
@@ -73,7 +72,6 @@ class Document(ModelWithCleanUUID):
     def __unicode__(self):
         return self.title
 
-
 @receiver(models.signals.post_delete, sender=Document)
 def may_delete_unique_file(sender, instance, **kwargs):
     if instance.file_on_server:
@@ -81,6 +79,19 @@ def may_delete_unique_file(sender, instance, **kwargs):
         unique_file = instance.unique_file
         if len(unique_file.document_set.all()) + len(unique_file.coteriedocument_set.all()) == 0:
             unique_file.delete()
+
+
+def thumbnail_upload_to(instance, filename):
+    return '{0}/{1}-{2}.jpg'.format('document_thumbnails', instance.document.id, instance.document.title)
+
+class DocumentThumbnail(models.Model):
+    document = models.ForeignKey(Document)
+    thumbnail_image = models.ImageField(upload_to=thumbnail_upload_to)
+
+@receiver(models.signals.pre_delete, sender=DocumentThumbnail)
+def delete_local_file(sender, instance, **kwargs):
+    if instance.thumbnail_image:
+        instance.thumbnail_image.storage.delete(instance.thumbnail_image.name)
 
 
 class Comment(ModelWithCleanUUID):

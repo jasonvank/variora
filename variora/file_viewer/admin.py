@@ -33,8 +33,13 @@ class AnnotationReplyModelAdmin(admin.ModelAdmin):
     search_fields = ["id", 'uuid', "content", "reply_to_annotation__content", "reply_to_annotation_reply__content", "replier__nickname", "num_like"]
 
 
+class DocumentThumbnailModelAdmin(admin.ModelAdmin):
+    list_display = ['id', 'document', 'thumbnail_image']
+
+
 admin.site.register(models.Document, DocumentModelAdmin)
 admin.site.register(models.UniqueFile, UniqueFileModelAdmin)
 admin.site.register(models.Comment, CommentModelAdmin)
 admin.site.register(models.Annotation, AnnotationModelAdmin)
 admin.site.register(models.AnnotationReply, AnnotationReplyModelAdmin)
+admin.site.register(models.DocumentThumbnail, DocumentThumbnailModelAdmin)
