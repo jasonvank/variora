@@ -127,14 +127,14 @@ class GroupDocumentsList extends React.Component {
 
     var documentDeleteAction = ((text, coterieDocument) => (
       <span>
-      <Popconfirm
-        title="Are you sure delete this document? It cannot be undone."
-        onConfirm={() => this.deleteDocument(record)}
-        okText="Yes" cancelText="No"
-      >
-        <a>Delete</a>
-      </Popconfirm>
-    </span>
+        <Popconfirm
+          title="Are you sure delete this document? It cannot be undone."
+          onConfirm={() => this.deleteDocument(coterieDocument)}
+          okText="Yes" cancelText="No"
+        >
+          <a>Delete</a>
+        </Popconfirm>
+      </span>
     ))
 
     var documentUploadDate = ((text, coterieDocument) => (
