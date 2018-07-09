@@ -148,6 +148,7 @@ class App extends React.Component {
 
   render() {
     const fields = this.state.fields
+    var footerStyle = window.location.pathname == '/explore' ? { textAlign: 'center',  backgroundColor: '#f4f4f4'} : { textAlign: 'center' }
     return (
       <Layout style={{ height: '100%', width: '100%', position: 'absolute' }}>
         <Header className="header" style={{ backgroundColor: '#fff', diplay: 'inline' }}>
@@ -237,7 +238,7 @@ class App extends React.Component {
                   <Route path="/" component={DocumentTab} />
                 </Switch>
               </Content>
-              <Footer style={{ textAlign: 'center' }}>
+              <Footer style={footerStyle}>
                   © 2018 Variora. Reach us via <a style={{ color: '#37b' }} href='mailto:variora@outlook.com'>variora@outlook.com</a>
               </Footer>
             </Layout>

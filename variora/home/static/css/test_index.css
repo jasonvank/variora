@@ -54,30 +54,33 @@ td:hover .editable-cell-icon {
 
 
 
-/*.logo {*/
-  /*width: 120px;*/
-  /*height: 31px;*/
-  /*background: #FFF;*/
-  /*border-radius: 6px;*/
-  /*margin: 16px 28px 16px 0;*/
-  /*float: left;*/
-  /*text-align: center;*/
-/*}*/
 
-.editable-cell-text-wrapper{
-  overflow: hidden!important;
-  text-overflow: ellipsis!important;
-  display: -webkit-box!important;
-  -webkit-line-clamp: 1!important;
+.editable-cell-text-wrapper {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 1 !important;
   -webkit-box-orient: vertical!important
 }
 
-.notification-alert-list-wrapper{
-  overflow: hidden!important;
-  text-overflow: ellipsis!important;
-  display: -webkit-box!important;
-  margin-top: 4px!important;
-  margin-bottom: 6px!important;
-  -webkit-line-clamp: 2!important;
-  -webkit-box-orient: vertical!important;
+.notification-alert-list-wrapper {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  display: -webkit-box !important;
+  margin-top: 4px !important;
+  margin-bottom: 6px !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
 }
+
+
+
+
+
+
+
+
+
+
+
+
