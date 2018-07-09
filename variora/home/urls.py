@@ -24,4 +24,5 @@ urlpatterns = [  # obsolete UI pages
     url(r'^collected', views.display_index),
     url(r'^groups', views.display_index),
     url(r'^search', views.display_index),
+    url(r'^explore', views.display_index),
 ]

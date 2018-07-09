@@ -13,6 +13,7 @@ import { getCookie, getUrlFormat, getValFromUrlParam } from 'util.js'
 
 import { DocumentTab } from './components/document_tab.jsx'
 import { GroupTab } from './components/group_tab.jsx'
+import { ExploreTab } from './components/explore_tab.jsx'
 import { NotificationsToggleButton } from './components/notifications_toggle_button.jsx'
 import { NotificationsAlertButton } from './components/notifications_alert_button.jsx'
 
@@ -82,6 +83,8 @@ class App extends React.Component {
       else if (pathname.includes('/groups/')) {
         var pageElement = pathname.split('/')
         return [pageElement[1] + pageElement[2]]
+      } else if (pathname == '/explore') {
+        return ['explore']
       } else
         return ['documents']
     }
@@ -186,7 +189,7 @@ class App extends React.Component {
                 defaultSelectedKeys={this.getHighlightedMenuItems()}
               >
                 <Menu.Item key="explore">
-                  <Link to="/"><span><Icon type="compass" />explore</span></Link>
+                  <Link to="/explore"><span><Icon type="compass" />explore</span></Link>
                 </Menu.Item>
                 <Menu.Item key="documents" disabled={!this.state.user.is_authenticated}>
                   <Link to="/"><span><Icon type='file' />documents</span></Link>
@@ -228,7 +231,7 @@ class App extends React.Component {
             <Layout style={{ marginLeft: 200, padding: 0 }}>
               <Content>
                 <Switch>
-                  <Route exact path="/explore" component={GroupTab} />
+                  <Route exact path="/explore" component={ExploreTab} />
                   <Route path="/search" component={SearchResultTab} />
                   <Route path="/groups/:coteriePk" render={ ({match, location}) => this.renderGroupTab(match, location) } />
                   <Route path="/" component={DocumentTab} />
