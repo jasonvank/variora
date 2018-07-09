@@ -13,7 +13,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import axios from 'axios'
 import enUS from 'antd/lib/locale-provider/en_US'
-import { validateDocumentTitle } from 'home_util.js'
+import { validateDocumentTitle, validateDocumentSize } from 'home_util.js'
 
 const { SubMenu } = Menu
 const { Header, Content, Sider } = Layout
@@ -33,8 +33,12 @@ class GroupDocumentsSubtab extends React.Component {
     this.uploadedDocumentTable = undefined
     this.uploadLocalDocument = () => {
       var title = this.state.uploadedDocumentName
+
       if (!validateDocumentTitle(title))
         return false
+      if (!validateDocumentSize(this.state.uploadedDocumentFileList[0]))
+        return false
+
       var data = new FormData()
       data.append('title', title)
       data.append('file_upload', this.state.uploadedDocumentFileList[0])
@@ -51,6 +55,8 @@ class GroupDocumentsSubtab extends React.Component {
         this.setState({ uploadedDocumentName: '' })
         this.setState({ uploadBtnLoading: false })
         this.uploadedDocumentTable.updateData()
+      }).catch(() => {
+        this.setState({ uploadBtnLoading: false })
       })
     }
     this.uploadOnlineDocument = () => {

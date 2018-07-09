@@ -153,6 +153,7 @@ CRON_CLASSES = []
 ############ Django Notifications ##########
 NOTIFICATIONS_USE_JSONFIELD = True
 
+MAX_DOCUMENT_UPLOAD_SIZE = 3 * 1024 * 1024  # 3 MB
 
 
 

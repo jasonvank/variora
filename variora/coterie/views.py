@@ -265,6 +265,10 @@ def handle_coteriefile_upload(request):
             document.save()
         else:
             file_upload = request.FILES["file_upload"]  # this is an UploadedFile object
+
+            if file_upload.size > settings.MAX_DOCUMENT_UPLOAD_SIZE:
+                return HttpResponse(status=403)
+
             this_file_md5 = md5(file_upload.read()).hexdigest()
 
             try:
@@ -277,7 +281,7 @@ def handle_coteriefile_upload(request):
             document.save()  # save this document to the database
 
     url_request_from = request.POST["current_url"]
-    return redirect(to=url_request_from)
+    return HttpResponse(status=200)  # redirect(to=url_request_from)
 
 
 def handle_coteriefile_delete(request):

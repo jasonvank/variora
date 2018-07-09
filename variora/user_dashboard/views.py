@@ -9,7 +9,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
-import variora.settings as settings
+from django.conf import settings
 from coterie.models import Coterie
 from file_viewer.models import Document, UniqueFile
 from home.models import User
@@ -41,6 +41,10 @@ def handle_file_upload(request):
         document.save()
     else:
         file_upload = request.FILES["file_upload"]  # this is an UploadedFile object
+
+        if file_upload.size > settings.MAX_DOCUMENT_UPLOAD_SIZE:
+            return HttpResponse(status=403)
+
         this_file_md5 = md5(file_upload.read()).hexdigest()
         try:
             unique_file = UniqueFile.objects.get(md5=this_file_md5)
@@ -50,7 +54,7 @@ def handle_file_upload(request):
 
         document = Document(owner=user, unique_file=unique_file, title=request.POST["title"])
         document.save()
-    return redirect("user_dashboard")
+    return HttpResponse(status=200)
 
 
 def handle_uncollect(request):
