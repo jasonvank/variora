@@ -116,11 +116,13 @@ def handle_search(request):
 
 
 def display_index(request):
+    if isinstance(get_user(request), AnonymousUser):
+        return redirect('/explore')
     return render(request, 'home/test.html', {})
 
 
-def redirect_to_index(request):
-    return redirect('/index/')
+def display_index_explore(request):
+    return render(request, 'home/test.html', {})
 
 
 def jason_test(request):
