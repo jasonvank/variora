@@ -10,6 +10,7 @@ from django.db.models import Count
 from django.core.management import call_command
 from pdfrw import PdfReader, PdfWriter
 from wand.image import Image
+from wand.color import Color
 
 from file_viewer.models import Document, DocumentThumbnail
 
@@ -34,9 +35,11 @@ def _generate_thumbnail_image_content_file(document):
         writer.addpage(page)
         writer.write(temp_pdf_path)
 
-    images = Image(filename=temp_pdf_path, resolution=80)
+    images = Image(filename=temp_pdf_path, resolution=180)
+    images.background_color = Color('white')
+    images.alpha_channel = 'flatten'
     os.remove(temp_pdf_path)
-    return ContentFile(images.make_blob('jpeg'))
+    return ContentFile(images.make_blob('jpg'))
 
 
 class UpdateTopDocumentsThread(Thread):
