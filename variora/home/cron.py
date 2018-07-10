@@ -27,19 +27,24 @@ def _generate_thumbnail_image_content_file(document):
     temp_pdf_path = os.path.join(settings.MEDIA_ROOT, 'temp.pdf')
     with open(temp_pdf_path, 'w+') as f:
         f.write(content)
-    reader = PdfReader(temp_pdf_path)
 
-    if len(reader.pages) > 1:
-        page = reader.pages[0]
-        writer = PdfWriter()
-        writer.addpage(page)
-        writer.write(temp_pdf_path)
+    try:
+        reader = PdfReader(temp_pdf_path)
 
-    images = Image(filename=temp_pdf_path, resolution=180)
-    images.background_color = Color('white')
-    images.alpha_channel = 'flatten'
-    os.remove(temp_pdf_path)
-    return ContentFile(images.make_blob('jpg'))
+        if len(reader.pages) > 1:
+            page = reader.pages[0]
+            writer = PdfWriter()
+            writer.addpage(page)
+            writer.write(temp_pdf_path)
+
+        images = Image(filename=temp_pdf_path, resolution=180)
+        images.background_color = Color('white')
+        images.alpha_channel = 'flatten'
+        os.remove(temp_pdf_path)
+        return ContentFile(images.make_blob('jpg'))
+    except Exception as e:
+        os.remove(temp_pdf_path)
+        raise e
 
 
 class UpdateTopDocumentsThread(Thread):
@@ -49,28 +54,37 @@ class UpdateTopDocumentsThread(Thread):
         num_thumbnails = min(8, Document.objects.all().count())
 
         for document in Document.objects.all().order_by("-num_visit")[0:num_thumbnails]:
-            thumbnail = DocumentThumbnail(document=document, description='most_views')
-            if DocumentThumbnail.objects.filter(document=document).exists():
-                thumbnail.thumbnail_image = DocumentThumbnail.objects.filter(document=document)[0].thumbnail_image
-            else:
-                thumbnail.thumbnail_image.save('temp_name.jpg', _generate_thumbnail_image_content_file(document))
-            thumbnail.save()
+            try:
+                thumbnail = DocumentThumbnail(document=document, description='most_views')
+                if DocumentThumbnail.objects.filter(document=document).exists():
+                    thumbnail.thumbnail_image = DocumentThumbnail.objects.filter(document=document)[0].thumbnail_image
+                else:
+                    thumbnail.thumbnail_image.save('temp_name.jpg', _generate_thumbnail_image_content_file(document))
+                thumbnail.save()
+            except Exception:
+                pass
 
         for document in Document.objects.annotate(annotation_count=Count('annotation__id')).order_by("-annotation_count")[0:num_thumbnails]:
-            thumbnail = DocumentThumbnail(document=document, description='most_annotations')
-            if DocumentThumbnail.objects.filter(document=document).exists():
-                thumbnail.thumbnail_image = DocumentThumbnail.objects.filter(document=document)[0].thumbnail_image
-            else:
-                thumbnail.thumbnail_image.save('temp_name.jpg', _generate_thumbnail_image_content_file(document))
-            thumbnail.save()
+            try:
+                thumbnail = DocumentThumbnail(document=document, description='most_annotations')
+                if DocumentThumbnail.objects.filter(document=document).exists():
+                    thumbnail.thumbnail_image = DocumentThumbnail.objects.filter(document=document)[0].thumbnail_image
+                else:
+                    thumbnail.thumbnail_image.save('temp_name.jpg', _generate_thumbnail_image_content_file(document))
+                thumbnail.save()
+            except Exception:
+                pass
 
         for document in Document.objects.annotate(collectors_count=Count('collectors')).order_by("-collectors_count")[0:num_thumbnails]:
-            thumbnail = DocumentThumbnail(document=document, description='most_collectors')
-            if DocumentThumbnail.objects.filter(document=document).exists():
-                thumbnail.thumbnail_image = DocumentThumbnail.objects.filter(document=document)[0].thumbnail_image
-            else:
-                thumbnail.thumbnail_image.save('temp_name.jpg', _generate_thumbnail_image_content_file(document))
-            thumbnail.save()
+            try:
+                thumbnail = DocumentThumbnail(document=document, description='most_collectors')
+                if DocumentThumbnail.objects.filter(document=document).exists():
+                    thumbnail.thumbnail_image = DocumentThumbnail.objects.filter(document=document)[0].thumbnail_image
+                else:
+                    thumbnail.thumbnail_image.save('temp_name.jpg', _generate_thumbnail_image_content_file(document))
+                thumbnail.save()
+            except Exception:
+                pass
 
 
 @kronos.register('2 0 * * *')
