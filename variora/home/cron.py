@@ -1,18 +1,20 @@
 import os
 import random
+from threading import Thread
 
 import kronos
 import requests
 from django.conf import settings
 from django.core.files.base import ContentFile
 from django.db.models import Count
+from django.core.management import call_command
 from pdfrw import PdfReader, PdfWriter
 from wand.image import Image
 
 from file_viewer.models import Document, DocumentThumbnail
 
 
-def generate_thumbnail_image_content_file(document):
+def _generate_thumbnail_image_content_file(document):
     content = None
 
     if document.file_on_server:
@@ -37,23 +39,32 @@ def generate_thumbnail_image_content_file(document):
     return ContentFile(images.make_blob('jpeg'))
 
 
+class UpdateTopDocumentsThread(Thread):
+    def run(self):
+        DocumentThumbnail.objects.all().delete()
+
+        num_thumbnails = min(3, Document.objects.all().count())
+
+        for document in Document.objects.all().order_by("-num_visit")[0:num_thumbnails]:
+            thumbnail = DocumentThumbnail(document=document, description='most_views')
+            thumbnail.thumbnail_image.save('temp_name.jpg', _generate_thumbnail_image_content_file(document))
+            thumbnail.save()
+
+        for document in Document.objects.annotate(annotation_count=Count('annotation__id')).order_by("-annotation_count")[0:num_thumbnails]:
+            thumbnail = DocumentThumbnail(document=document, description='most_annotations')
+            thumbnail.thumbnail_image.save('temp_name.jpg', _generate_thumbnail_image_content_file(document))
+            thumbnail.save()
+
+        for document in Document.objects.annotate(collectors_count=Count('collectors')).order_by("-collectors_count")[0:num_thumbnails]:
+            thumbnail = DocumentThumbnail(document=document, description='most_collectors')
+            thumbnail.thumbnail_image.save('temp_name.jpg', _generate_thumbnail_image_content_file(document))
+            thumbnail.save()
+
+
+@kronos.register('2 0 * * *')
+def update_top_documents_kronjob():
+    UpdateTopDocumentsThread().start()
+
 @kronos.register('0 0 * * *')
-def complain():
-    DocumentThumbnail.objects.all().delete()
-
-    num_thumbnails = min(2, Document.objects.all().count())
-
-    for document in Document.objects.all().order_by("-num_visit")[0:num_thumbnails]:
-        thumbnail = DocumentThumbnail(document=document, description='most_views')
-        thumbnail.thumbnail_image.save('temp_name.jpg', generate_thumbnail_image_content_file(document))
-        thumbnail.save()
-
-    for document in Document.objects.annotate(annotation_count=Count('annotation__id')).order_by("-annotation_count")[0:num_thumbnails]:
-        thumbnail = DocumentThumbnail(document=document, description='most_annotations')
-        thumbnail.thumbnail_image.save('temp_name.jpg', generate_thumbnail_image_content_file(document))
-        thumbnail.save()
-
-    for document in Document.objects.annotate(collectors_count=Count('collectors')).order_by("-collectors_count")[0:num_thumbnails]:
-        thumbnail = DocumentThumbnail(document=document, description='most_collectors')
-        thumbnail.thumbnail_image.save('temp_name.jpg', generate_thumbnail_image_content_file(document))
-        thumbnail.save()
+def clear_expired_sessions():
+    call_command('clearsessions', interactive=True)
