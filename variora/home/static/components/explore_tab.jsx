@@ -50,16 +50,16 @@ class DocumentListWrapper extends React.Component {
   render() {
     return (
       this.state.data == undefined ? [] :
-        this.state.data.map(item => <div key = {item.open_url} className="gutter-example" style={{ textAlign: 'center', margin: 40 }} >
+        this.state.data.map(item => <div key = {item.open_url} className='gutter-example' style={{ textAlign: 'center', margin: 40 }} >
           <Col>
             <Card style={{ width: 200 }} className='custome-card-cover' bodyStyle={{ padding: 0 }}>
-              <div className="custom-image">
+              <div className='custom-image'>
                 <a target='_blank' href={item.open_url} >
-                  <img width="100%" height="240" src={item.image} />
+                  <img width='100%' height='240' src={item.image} />
                 </a>
               </div>
-              <div className="custom-card">
-                <h3 className="card-title-wrapper" title={item.title} >{item.title}</h3>
+              <div className='custom-card'>
+                <h3 className='card-title-wrapper' title={item.title} >{item.title}</h3>
                 <p>www.instagram.com</p>
               </div>
             </Card>
@@ -88,7 +88,7 @@ class DisplayDocuments extends React.Component {
 
   render() {
     return (
-      <Row type="flex" justify="start"><DocumentListWrapper data = {this.state.data}/> </Row>
+      <Row type='flex' justify='start'><DocumentListWrapper data = {this.state.data}/> </Row>
     )
   }
 }
@@ -124,23 +124,23 @@ class ExploreTab extends React.Component {
   render() {
     return (
       <div style={{ paddingLeft: 18, paddingRight: 18, paddingTop: 16, paddingBottom: 60, minHeight: 280 }}>
-        <div className="card" style={{ overflow: 'auto', color: 'white' }}>
-          <div class="card-header pubIndex-recommendationsHeader">
-            <div class="card-headerText" style={{ color: 'black' }}>Most Views</div>
+        <div className='card' style={{ overflow: 'auto', color: 'white' }}>
+          <div class='card-header pubIndex-recommendationsHeader'>
+            <div class='card-headerText' style={{ color: 'black' }}>Most Views</div>
           </div>
           {<DisplayDocuments data={this.state.mostViewsDocuments} />}
         </div>
 
-        <div className="card" style={{ overflow: 'auto', color: 'white', marginTop: 18 }}>
-          <div class="card-header pubIndex-recommendationsHeader">
-            <div class="card-headerText" style={{ color: 'black' }}>Most Stars</div>
+        <div className='card' style={{ overflow: 'auto', color: 'white', marginTop: 18 }}>
+          <div class='card-header pubIndex-recommendationsHeader'>
+            <div class='card-headerText' style={{ color: 'black' }}>Most Stars</div>
           </div>
           {<DisplayDocuments data={this.state.mostStarsDocuments} />}
         </div>
 
-        <div className="card" style={{ overflow: 'auto', color: 'white', marginTop: 18  }}>
-          <div class="card-header pubIndex-recommendationsHeader">
-            <div class="card-headerText" style={{ color: 'black' }}>Most Annotaions</div>
+        <div className='card' style={{ overflow: 'auto', color: 'white', marginTop: 18  }}>
+          <div class='card-header pubIndex-recommendationsHeader'>
+            <div class='card-headerText' style={{ color: 'black' }}>Most Annotations</div>
           </div>
           {<DisplayDocuments data={this.state.mostAnnotationsDocuments} />}
         </div>
