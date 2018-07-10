@@ -237,7 +237,7 @@ class App extends React.Component {
                   <Route path="/" component={DocumentTab} />
                 </Switch>
               </Content>
-              <Footer style={window.location.pathname == '/explore' ? { textAlign: 'center', backgroundColor: '#f4f4f4'} : { textAlign: 'center' }}>
+              <Footer style={{ textAlign: 'center' }}>
                   © 2018 Variora. Reach us via <a style={{ color: '#37b' }} href='mailto:variora@outlook.com'>variora@outlook.com</a>
               </Footer>
             </Layout>
