@@ -141,5 +141,5 @@ class UploadedImage(models.Model):
 @receiver(models.signals.pre_delete, sender=UploadedImage)
 # "sender" and "**kwargs" are required though they are of no use here, do not delete them
 def delete_local_file(sender, instance, **kwargs):
-    file_location = instance.image_field.name
-    instance.image_field.storage.delete(file_location)
+    instance.image_field.storage.delete(instance.image_field.name)
+

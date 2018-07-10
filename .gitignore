@@ -136,7 +136,7 @@ db.sqlite3
 **/media/images/*
 **/media/pdf/*
 **/media/portrait/*/*
-
+**/media/document_thumbnails/*
 
 
 

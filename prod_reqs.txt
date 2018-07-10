@@ -10,6 +10,8 @@ pillow
 django-cachalot
 django-memcache-status
 django-notifications-hq
+pdfrw
+Wand
 
 ###### development ######
 selenium  # write browser-side tests
