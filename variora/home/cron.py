@@ -43,21 +43,30 @@ class UpdateTopDocumentsThread(Thread):
     def run(self):
         DocumentThumbnail.objects.all().delete()
 
-        num_thumbnails = min(3, Document.objects.all().count())
+        num_thumbnails = min(8, Document.objects.all().count())
 
         for document in Document.objects.all().order_by("-num_visit")[0:num_thumbnails]:
             thumbnail = DocumentThumbnail(document=document, description='most_views')
-            thumbnail.thumbnail_image.save('temp_name.jpg', _generate_thumbnail_image_content_file(document))
+            if DocumentThumbnail.objects.filter(document=document).exists():
+                thumbnail.thumbnail_image = DocumentThumbnail.objects.filter(document=document)[0].thumbnail_image
+            else:
+                thumbnail.thumbnail_image.save('temp_name.jpg', _generate_thumbnail_image_content_file(document))
             thumbnail.save()
 
         for document in Document.objects.annotate(annotation_count=Count('annotation__id')).order_by("-annotation_count")[0:num_thumbnails]:
             thumbnail = DocumentThumbnail(document=document, description='most_annotations')
-            thumbnail.thumbnail_image.save('temp_name.jpg', _generate_thumbnail_image_content_file(document))
+            if DocumentThumbnail.objects.filter(document=document).exists():
+                thumbnail.thumbnail_image = DocumentThumbnail.objects.filter(document=document)[0].thumbnail_image
+            else:
+                thumbnail.thumbnail_image.save('temp_name.jpg', _generate_thumbnail_image_content_file(document))
             thumbnail.save()
 
         for document in Document.objects.annotate(collectors_count=Count('collectors')).order_by("-collectors_count")[0:num_thumbnails]:
             thumbnail = DocumentThumbnail(document=document, description='most_collectors')
-            thumbnail.thumbnail_image.save('temp_name.jpg', _generate_thumbnail_image_content_file(document))
+            if DocumentThumbnail.objects.filter(document=document).exists():
+                thumbnail.thumbnail_image = DocumentThumbnail.objects.filter(document=document)[0].thumbnail_image
+            else:
+                thumbnail.thumbnail_image.save('temp_name.jpg', _generate_thumbnail_image_content_file(document))
             thumbnail.save()
 
 
