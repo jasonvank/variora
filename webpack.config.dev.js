@@ -16,5 +16,9 @@ devConfig.output.path = path.resolve('./variora/bundled_static/dev/bundle');
 // set the mode to watch
 // so whenever the files get changed, the bundle will be updated accordingly immediately
 devConfig.watch = true
+devConfig.watchOptions = {
+  ignored: /node_modules/,
+  poll: 1000
+}
 
 module.exports = devConfig
