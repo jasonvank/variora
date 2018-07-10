@@ -52,8 +52,30 @@ td:hover .editable-cell-icon {
   color: #37b
 }
 
+.custom-image img {
+  display: block;
+}
+.custom-card {
+  padding: 10px 16px;
+  background-color: #f7f7f7;
+}
+.custom-card p {
+  color: #999;
+}
+.custome-card-cover {
+  box-shadow: 0px 1px 3px rgba(26, 26, 26, .1);
+}
 
-
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    padding: 0 20px;
+    border-bottom: 1px solid #f6f6f6;
+    box-sizing: border-box;
+    /* box-shadow: !important; */
+}
 
 .editable-cell-text-wrapper {
   overflow: hidden !important;
@@ -73,7 +95,20 @@ td:hover .editable-cell-icon {
   -webkit-box-orient: vertical !important;
 }
 
+.card-title-wrapper {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 1 !important;
+  -webkit-box-orient: vertical!important
+}
 
+.pubIndex-recommendationsHeader
+.card-headerText {
+    display: flex;
+    width: 100%;
+    font-size: 16px;
+}
 
 
 

@@ -35,168 +35,60 @@ class DocumentListWrapper extends React.Component {
       data: this.props.data,
     }
     this.handleClick = () => {
-      this.setState({ loading: !this.state.loading });
+      this.setState({ loading: !this.state.loading })
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      data: nextProps.data
+    })
+    this.forceUpdate()
+  }
+
+
   render() {
     return (
-      this.state.data.map(item => <div key = {item.key} className="gutter-example" style={{ textAlign: 'center'}} >
-        <Col>
-          <a target='_blank' href={item.open_url} >
-            <img alt="example" src={item.image} style={{ display: 'inline-block', margin: 28, marginBottom: 5, width: 135, height: 180, borderRadius: 4, boxShadow: '0px 1px 3px rgba(26, 26, 26, .1)' }} />
-          </a>
-          <figcaption style={{ textAlign: 'center' }}>{item.title}</figcaption>
-        </Col>
-      </div>
-      )
+      this.state.data == undefined ? [] :
+        this.state.data.map(item => <div key = {item.open_url} className="gutter-example" style={{ textAlign: 'center', margin: 40 }} >
+          <Col>
+            <Card style={{ width: 200 }} className='custome-card-cover' bodyStyle={{ padding: 0 }}>
+              <div className="custom-image">
+                <a target='_blank' href={item.open_url} >
+                  <img width="100%" height="240" src={item.image} />
+                </a>
+              </div>
+              <div className="custom-card">
+                <h3 className="card-title-wrapper" title={item.title} >{item.title}</h3>
+                <p>www.instagram.com</p>
+              </div>
+            </Card>
+          </Col>
+        </div>
+        )
     )
   }
 }
 
 
-class MostViewsDocuments extends React.Component {
+class DisplayDocuments extends React.Component {
   constructor(props){
     super(props)
-    this.state = {}
+    this.state = {
+      data: this.props.data
+    }
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      data: nextProps.data
+    })
+    this.forceUpdate()
+  }
 
   render() {
-    const mostViewsDocumentsList = [{
-      key: '1',
-      title: 'CS50 2014',
-      open_url: 'https://www.baidu.com',
-      image: 'https://is3-ssl.mzstatic.com/image/thumb/course/CobaltPublic128/v4/9a/64/9e/9a649e5b-84e5-c503-6297-e2d5d24d7ae7/source/1200x630.png'
-    }, {
-      key: '2',
-      title: 'Prof Luo',
-      open_url: 'https://www.google.com',
-      image: 'https://media.licdn.com/dms/image/C5603AQE_rcRwZyxXvg/profile-displayphoto-shrink_200_200/0?e=1534982400&v=beta&t=kKawtobnI1aNTYbD9cEhscMTfAHssMqrNIuLeIuQ28I'
-    }, {
-      key: '3',
-      title: 'Data Structure and Algorithm',
-      open_url: 'https://www.google.com',
-      image: 'https://qph.fs.quoracdn.net/main-qimg-c107f48153cfd9bf2c2f819a668beb8a-c'
-    }, {
-      key: '4',
-      title: 'Test Document',
-      open_url: 'https://www.google.com',
-      image: 'https://www.wada-ama.org/sites/default/files/resources/thumbnails/tdssa_2017_eng_page_01.jpg'
-    }, {
-      key: '5',
-      title: 'The Economic Approach to Law',
-      open_url: 'https://www.google.com',
-      image: 'https://www.sup.org/img/covers/medium/pid_27372.jpg'
-    }, {
-      key: '6',
-      title: 'The Economic Approach to Law',
-      open_url: 'https://www.google.com',
-      image: 'https://www.wada-ama.org/sites/default/files/resources/thumbnails/tdssa_2017_eng_page_01.jpg'
-    }
-
-    ]
-
     return (
-      <Row type="flex" justify="center"><DocumentListWrapper data = {mostViewsDocumentsList}/> </Row>
-    )
-  }
-}
-
-class MostStarsDocuments extends React.Component {
-  constructor(props){
-    super(props)
-    this.state = {}
-  }
-
-
-  render() {
-    const MostStarsDocumentsList = [{
-      key: '1',
-      title: 'CS50 2014',
-      open_url: 'https://www.baidu.com',
-      image: 'https://is3-ssl.mzstatic.com/image/thumb/course/CobaltPublic128/v4/9a/64/9e/9a649e5b-84e5-c503-6297-e2d5d24d7ae7/source/1200x630.png'
-    }, {
-      key: '2',
-      title: 'Prof Luo',
-      open_url: 'https://www.google.com',
-      image: 'https://www.wada-ama.org/sites/default/files/resources/thumbnails/tdssa_2017_eng_page_01.jpg'
-    }, {
-      key: '3',
-      title: 'Data Structure and Algorithm',
-      open_url: 'https://www.google.com',
-
-      image: 'https://is3-ssl.mzstatic.com/image/thumb/course/CobaltPublic128/v4/9a/64/9e/9a649e5b-84e5-c503-6297-e2d5d24d7ae7/source/1200x630.png'
-    }, {
-      key: '4',
-      title: 'Test Document',
-      open_url: 'https://www.google.com',
-      image: 'https://www.wada-ama.org/sites/default/files/resources/thumbnails/tdssa_2017_eng_page_01.jpg'
-    }, {
-      key: '5',
-      title: 'The Economic Approach to Law',
-      open_url: 'https://www.google.com',
-      image: 'https://www.sup.org/img/covers/medium/pid_27372.jpg'
-    }, {
-      key: '6',
-      title: 'The Economic Approach to Law',
-      open_url: 'https://www.google.com',
-      image: 'https://www.wada-ama.org/sites/default/files/resources/thumbnails/tdssa_2017_eng_page_01.jpg'
-    }
-
-    ]
-
-    return (
-      <Row type="flex" justify="center"><DocumentListWrapper data = {MostStarsDocumentsList}/> </Row>
-    )
-  }
-}
-
-class MostAnnotationsDocuments extends React.Component {
-  constructor(props){
-    super(props)
-    this.state = {}
-  }
-
-
-  render() {
-    const MostAnnotationsDocumentsList = [{
-      key: '1',
-      title: 'CS50 2014',
-      open_url: 'https://www.baidu.com',
-
-      image: 'https://qph.fs.quoracdn.net/main-qimg-c107f48153cfd9bf2c2f819a668beb8a-c'
-    }, {
-      key: '2',
-      title: 'Prof Luo',
-      open_url: 'https://www.google.com',
-      image: 'https://www.wada-ama.org/sites/default/files/resources/thumbnails/tdssa_2017_eng_page_01.jpg'
-    }, {
-      key: '3',
-      title: 'Data Structure and Algorithm',
-      open_url: 'https://www.google.com',
-      image: 'https://is3-ssl.mzstatic.com/image/thumb/course/CobaltPublic128/v4/9a/64/9e/9a649e5b-84e5-c503-6297-e2d5d24d7ae7/source/1200x630.png'
-    }, {
-      key: '4',
-      title: 'Test Document',
-      open_url: 'https://www.google.com',
-      image: 'https://is3-ssl.mzstatic.com/image/thumb/course/CobaltPublic128/v4/9a/64/9e/9a649e5b-84e5-c503-6297-e2d5d24d7ae7/source/1200x630.png'
-    }, {
-      key: '5',
-      title: 'The Economic Approach to Law',
-      open_url: 'https://www.google.com',
-      image: 'https://www.sup.org/img/covers/medium/pid_27372.jpg'
-    }, {
-      key: '6',
-      title: 'The Economic Approach to Law',
-      open_url: 'https://www.google.com',
-      image: 'https://www.sup.org/img/covers/medium/pid_27372.jpg'
-    }
-
-    ]
-
-    return (
-      <Row type="flex" justify="center"><DocumentListWrapper data = {MostAnnotationsDocumentsList}/> </Row>
+      <Row type="flex" justify="start"><DocumentListWrapper data = {this.state.data}/> </Row>
     )
   }
 }
@@ -206,33 +98,51 @@ class MostAnnotationsDocuments extends React.Component {
 class ExploreTab extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {
+      mostViewsDocuments: undefined,
+      mostStarsDocuments: undefined,
+      mostAnnotationsDocuments: undefined,
+    }
   }
+
+  componentDidMount() {
+    const self = this
+    axios.get(getUrlFormat('/documents/api/documents/explore'))
+      .then(response => {
+        var mostViewsDocuments = response.data.filter(item => item.description == 'most_views')
+        var mostStarsDocuments = response.data.filter(item => item.description == 'most_collectors')
+        var mostAnnotationsDocuments = response.data.filter(item => item.description == 'most_annotations')
+        self.setState({
+          mostViewsDocuments: mostViewsDocuments,
+          mostStarsDocuments: mostStarsDocuments,
+          mostAnnotationsDocuments: mostAnnotationsDocuments,
+        })
+      })
+  }
+
 
   render() {
     return (
-      <div style={{ paddingLeft: 18, paddingRight: 18, paddingTop: 16, paddingBottom: 60, minHeight: 280, backgroundColor: '#f4f4f4'}}>
-        <div style={{ overflow: 'auto',  marginTop: 18 }}>
-          <Tabs defaultActiveKey='1' >
-            <TabPane tab={<span><Icon type="like-o" />Most Views</span>}  key="1">
-              {<MostViewsDocuments />}
-            </TabPane>
-          </Tabs>
+      <div style={{ paddingLeft: 18, paddingRight: 18, paddingTop: 16, paddingBottom: 60, minHeight: 280 }}>
+        <div className="card" style={{ overflow: 'auto', color: 'white' }}>
+          <div class="card-header pubIndex-recommendationsHeader">
+            <div class="card-headerText" style={{ color: 'black' }}>Most Views</div>
+          </div>
+          {<DisplayDocuments data={this.state.mostViewsDocuments} />}
         </div>
 
-        <div  style={{ overflow: 'auto', marginTop: 18 }}>
-          <Tabs defaultActiveKey='1' >
-            <TabPane tab={<span><Icon type="like-o" />Most Stars</span>} key="1">
-              {<MostStarsDocuments />}
-            </TabPane>
-          </Tabs>
+        <div className="card" style={{ overflow: 'auto', color: 'white', marginTop: 18 }}>
+          <div class="card-header pubIndex-recommendationsHeader">
+            <div class="card-headerText" style={{ color: 'black' }}>Most Stars</div>
+          </div>
+          {<DisplayDocuments data={this.state.mostStarsDocuments} />}
         </div>
 
-        <div style={{ overflow: 'auto',  marginTop: 18 }}>
-          <Tabs defaultActiveKey='1' >
-            <TabPane tab={<span><Icon type="like-o" />Most Annotaions</span>}  key="1">
-              {<MostAnnotationsDocuments />}
-            </TabPane>
-          </Tabs>
+        <div className="card" style={{ overflow: 'auto', color: 'white', marginTop: 18  }}>
+          <div class="card-header pubIndex-recommendationsHeader">
+            <div class="card-headerText" style={{ color: 'black' }}>Most Annotaions</div>
+          </div>
+          {<DisplayDocuments data={this.state.mostAnnotationsDocuments} />}
         </div>
       </div>
     )
