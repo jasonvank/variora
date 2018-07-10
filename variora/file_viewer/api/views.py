@@ -12,7 +12,7 @@ from django.views.generic import View
 
 from home.models import User
 
-from ..models import Annotation, AnnotationReply, Comment, Document
+from ..models import Annotation, AnnotationReply, Comment, Document, DocumentThumbnail
 from variora import utils
 
 
@@ -22,7 +22,7 @@ class DocumentEncoder(DjangoJSONEncoder):
             return {
                 'pk': obj.pk,
                 'uuid': obj.uuid,
-                'slug': utils.uuid2slug(obj.uuid),
+                'slug': obj.slug,
                 'title': obj.title,
                 'num_visit': str(obj.num_visit),
                 'url': obj.url,
@@ -127,3 +127,19 @@ class DocumentListView(View):
             encoder=DocumentEncoder,
             safe=False
         )
+
+
+class DocumentThumbnailEncoder(DjangoJSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, DocumentThumbnail):
+            return {
+                'title': obj.document.title,
+                'image': obj.thumbnail_image.url,
+                'open_url': '/documents/' + obj.document.slug + '/' + obj.document.title,
+                'description': obj.description
+            }
+        return super(DocumentThumbnailEncoder, self).default(obj)
+
+def get_top_document_thumbnails(request):
+    return JsonResponse(list(DocumentThumbnail.objects.all()), encoder=DocumentThumbnailEncoder, safe=False)
+

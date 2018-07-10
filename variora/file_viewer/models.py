@@ -66,6 +66,10 @@ class Document(ModelWithCleanUUID):
         return 0
 
     @property
+    def slug(self):
+        return utils.uuid2slug(self.uuid)
+
+    @property
     def file_on_server(self):
         return self.unique_file != None
 
@@ -87,6 +91,7 @@ def thumbnail_upload_to(instance, filename):
 class DocumentThumbnail(models.Model):
     document = models.ForeignKey(Document)
     thumbnail_image = models.ImageField(upload_to=thumbnail_upload_to)
+    description = models.CharField(max_length=128, db_index=True)
 
 @receiver(models.signals.pre_delete, sender=DocumentThumbnail)
 def delete_local_file(sender, instance, **kwargs):
@@ -133,7 +138,7 @@ class Annotation(ModelWithCleanUUID):
     @property
     def url(self):
         document = self.document_this_annotation_belongs
-        return '/documents/' + utils.uuid2slug(document.uuid) + '/' + document.title.replace(' ', '-') + \
+        return '/documents/' + document.slug + '/' + document.title.replace(' ', '-') + \
                '?annotation=' + self.clean_uuid
 
 

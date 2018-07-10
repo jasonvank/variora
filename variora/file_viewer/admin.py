@@ -34,7 +34,8 @@ class AnnotationReplyModelAdmin(admin.ModelAdmin):
 
 
 class DocumentThumbnailModelAdmin(admin.ModelAdmin):
-    list_display = ['id', 'document', 'thumbnail_image']
+    list_display = ['id', 'document', 'thumbnail_image', 'description']
+    list_filter = ['description']
 
 
 admin.site.register(models.Document, DocumentModelAdmin)
