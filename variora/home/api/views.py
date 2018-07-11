@@ -1,17 +1,19 @@
 import urllib2
 
+import facebook
 from django.contrib.auth import authenticate, get_user, login, logout
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
+from django.shortcuts import redirect, render
 from django.views.generic import View
 from google.auth.transport import requests
 from google.oauth2 import id_token
-from django.shortcuts import redirect, render
 
-from coterie.api.encoders import CoterieDocumentEncoder, CoterieEncoder, SearchResultCoterieEncoder
+from coterie.api.encoders import (CoterieDocumentEncoder, CoterieEncoder,
+                                  SearchResultCoterieEncoder)
 from coterie.models import Coterie, CoterieDocument
 from file_viewer.api.views import DocumentEncoder
 from file_viewer.models import Document
@@ -110,7 +112,35 @@ def google_sign_in(request):
         login(request, user)
         return HttpResponse(status=200)
     except Exception:
-        return HttpResponse("google login fail", status=400)
+        return HttpResponse("Google login fail", status=400)
+
+
+# https://developers.facebook.com/docs/graph-api/reference/user
+# https://facebook-sdk.readthedocs.io/en/latest/api.html
+def facebook_sign_in(request):
+    try:
+        import ast
+        auth_response = ast.literal_eval(request.POST['auth_response'])
+        graph = facebook.GraphAPI(access_token=auth_response['accessToken'], version=2.4)
+        user_response = graph.get_object(id=auth_response['userID'], fields='email,picture,name')
+        email = user_response['email']
+        name = user_response['name']
+        portrait_url = user_response['picture']['data']['url']
+        if not User.objects.filter(email_address=email).exists():
+            new_user = User()
+            new_user.set_nickname(name)
+            new_user.set_email_address(email)
+            new_user.external_portrait_url = portrait_url
+            new_user.save()
+        user = User.objects.get(email_address=email)
+        user.set_nickname(name)
+        user.external_portrait_url = portrait_url
+        user.save()
+        user.backend = 'django.contrib.auth.backends.ModelBackend'
+        login(request, user)
+        return HttpResponse(status=200)
+    except Exception:
+        return HttpResponse("Facebook login fail", status=400)
 
 
 def nus_sign_in(request):
