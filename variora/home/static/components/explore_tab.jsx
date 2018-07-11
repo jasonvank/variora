@@ -126,22 +126,22 @@ class ExploreTab extends React.Component {
     return (
       <div style={{ paddingLeft: 18, paddingRight: 18, paddingTop: 16, paddingBottom: 60, minHeight: 280 }}>
         <div className='card' style={{ overflow: 'auto', color: 'white' }}>
-          <div class='card-header pubIndex-recommendationsHeader'>
-            <div class='card-headerText' style={{ color: 'black' }}>Most Views</div>
+          <div className='card-header pubIndex-recommendationsHeader'>
+            <div className='card-headerText' style={{ color: 'black' }}>Most Views</div>
           </div>
           {<DisplayDocuments data={this.state.mostViewsDocuments} />}
         </div>
 
         <div className='card' style={{ overflow: 'auto', color: 'white', marginTop: 18 }}>
-          <div class='card-header pubIndex-recommendationsHeader'>
-            <div class='card-headerText' style={{ color: 'black' }}>Most Stars</div>
+          <div className='card-header pubIndex-recommendationsHeader'>
+            <div className='card-headerText' style={{ color: 'black' }}>Most Stars</div>
           </div>
           {<DisplayDocuments data={this.state.mostStarsDocuments} />}
         </div>
 
         <div className='card' style={{ overflow: 'auto', color: 'white', marginTop: 18  }}>
-          <div class='card-header pubIndex-recommendationsHeader'>
-            <div class='card-headerText' style={{ color: 'black' }}>Most Annotations</div>
+          <div className='card-header pubIndex-recommendationsHeader'>
+            <div className='card-headerText' style={{ color: 'black' }}>Most Annotations</div>
           </div>
           {<DisplayDocuments data={this.state.mostAnnotationsDocuments} />}
         </div>
