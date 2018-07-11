@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    
+
     {% include "home/tools_import_subpage.html" %}
-    
+
     <!--JQUERY CDN-->
-    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.3.min.js" type="text/javascript"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.3.min.js" type="text/javascript"></script>
 
     <!--BOOTSTRAP CDN-->
     <!-- Latest compiled and minified CSS -->
@@ -18,7 +18,7 @@
 	<script src="https://cdn.bootcss.com/layer/3.0.1/layer.min.js"></script>
 
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-    
+
     <style type="text/css">
 
     nav {
@@ -44,8 +44,8 @@
         cursor: pointer;
     }
     .button2 {
-        background-color: white; 
-        color: #008CB0; 
+        background-color: white;
+        color: #008CB0;
         border: 2px solid #008CBA;
     }
 
@@ -183,7 +183,7 @@
                             {% elif logged_in_user in coterie.members.all %}
                             <button type="button" class="button2" disabled="disabled" >already joined</button>
                             {% elif logged_in_user in coterie.applicants.all %}
-                            <button type="button" class="button2" disabled="disabled" >already applied</button>       
+                            <button type="button" class="button2" disabled="disabled" >already applied</button>
                             {% else %}
                             <button class="apply_coterie_button button2" type="button" name="coterie_id" value={{ coterie.id }}>apply to join</button>
                             {% endif %}
@@ -214,7 +214,7 @@
                     success: function(data) {
                         layer.msg('follow successfullly', {
                             icon: 1,
-                            skin: 'layui-layer-molv', 
+                            skin: 'layui-layer-molv',
                             shift: 1,
                             area: ['auto', 'auto'],
                             time: 800,
@@ -241,18 +241,18 @@
                     success: function(data) {
                         layer.msg('apply successfullly', {
                             icon: 1,
-                            skin: 'layui-layer-molv', 
+                            skin: 'layui-layer-molv',
                             shift: 1,
                             area: ['auto', 'auto'],
                             time: 800,
                         });
                         thisButton.attr("disabled", true);
                         thisButton.text("already applied");
-                    }    
+                    }
                 });
             }
             else
-                layer.msg('you need to log in to join groups');            
+                layer.msg('you need to log in to join groups');
         });
     });
 </script>
