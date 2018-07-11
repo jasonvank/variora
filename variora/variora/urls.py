@@ -17,8 +17,25 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.sitemaps import Sitemap
+from django.contrib.sitemaps.views import sitemap
+
 import proxy_views
+from file_viewer.models import Document
 from home.api import views_notifications
+
+
+class DocumentSitemap(Sitemap):
+    changefreq = "daily"
+
+    def items(self):
+        return Document.objects.all()[0:380]
+
+    def lastmod(self, document):
+        return document.upload_time
+
+    def location(self, document):
+        return '/documents/' + document.slug + '/' + document.title.replace(' ', '-')
 
 
 custom_notifications_urls = [
@@ -27,10 +44,11 @@ custom_notifications_urls = [
     url(r'^api/notifications/(?P<slug>\d+)/mark-read$', views_notifications.mark_notification_as_read),
 ]
 
-
 urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
     # app: admin
     url(r'^admin/', admin.site.urls),
+
+    url('sitemap.xml', sitemap, {'sitemaps': {'documents': DocumentSitemap}}, name='django.contrib.sitemaps.views.sitemap'),
 
     # app: file_viewer
     url(r'^file_viewer/', include('file_viewer.urls')),
@@ -51,5 +69,3 @@ urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
     # MUST BE THE LAST ONE
     url(r'^', include('home.urls')),
 ]
-
-

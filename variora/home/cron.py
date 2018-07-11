@@ -5,12 +5,13 @@ from threading import Thread
 import kronos
 import requests
 from django.conf import settings
+from django.contrib.sitemaps import ping_google
 from django.core.files.base import ContentFile
-from django.db.models import Count
 from django.core.management import call_command
+from django.db.models import Count
 from pdfrw import PdfReader, PdfWriter
-from wand.image import Image
 from wand.color import Color
+from wand.image import Image
 
 from file_viewer.models import Document, DocumentThumbnail
 
@@ -74,10 +75,14 @@ class UpdateTopDocumentsThread(Thread):
             thumbnail.save()
 
 
-@kronos.register('2 0 * * *')
+@kronos.register('6 0 * * *')
 def update_top_documents_kronjob():
     UpdateTopDocumentsThread().start()
 
 @kronos.register('0 0 * * *')
-def clear_expired_sessions():
+def clear_expired_sessions_kronjob():
     call_command('clearsessions', interactive=True)
+
+@kronos.register('2 0 * * *')
+def ping_google_kronjob():
+    ping_google()
