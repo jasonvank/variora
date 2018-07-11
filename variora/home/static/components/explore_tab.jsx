@@ -55,13 +55,12 @@ class DocumentListWrapper extends React.Component {
             <Card style={{ width: 200 }} className='custome-card-cover' bodyStyle={{ padding: 0 }}>
               <div className='custom-image'>
                 <a target='_blank' href={item.open_url} >
-                  <img width='100%' height='220' src={item.image} />
+                  <img width='100%' height='240' src={item.image} />
                 </a>
               </div>
               <div className='custom-card'>
                 <h3 className='custom-card-text-wrapper' title={item.title} >{item.title}</h3>
-                <p className='custom-card-text-wrapper' title={item.owner_name}>{item.owner_name}</p>
-                <p>{item.upload_time.replace('T',' ').split('.')[0]}</p>
+                <p>{item.upload_time.split('T')[0]}</p>
               </div>
             </Card>
           </Col>
