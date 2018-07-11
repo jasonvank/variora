@@ -25,18 +25,6 @@ class NormalLoginForm extends React.Component {
       fbLoginButtonLoading: true
     }
 
-    const self = this
-    window.fbAsyncInit = function() {
-      FB.init({
-        appId      : '213151942857648',
-        cookie     : true,
-        xfbml      : true,
-        version    : 'v3.0'
-      })
-      FB.AppEvents.logPageView()
-      self.setState({fbLoginButtonLoading: false})
-    }
-
     this.handleSubmit = (e) => {
       e.preventDefault()
       this.props.form.validateFields((err, values) => {
@@ -81,6 +69,26 @@ class NormalLoginForm extends React.Component {
   }
 
   componentDidMount() {
+    const self = this
+    function loadFBSdk(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0]
+      if (d.getElementById(id)) return
+      js = d.createElement(s); js.id = id
+      js.src = 'https://connect.facebook.net/en_US/sdk.js'
+      fjs.parentNode.insertBefore(js, fjs)
+    }
+    loadFBSdk(document, 'script', 'facebook-jssdk')
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '213151942857648',
+        cookie     : true,
+        xfbml      : true,
+        version    : 'v3.0'
+      })
+      FB.AppEvents.logPageView()
+      self.setState({fbLoginButtonLoading: false})
+    }
+
     var auth2 = undefined
     function attachSignin(element) {
       auth2.attachClickHandler(element, {},
