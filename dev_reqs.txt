@@ -12,6 +12,7 @@ django-memcache-status
 django-notifications-hq
 pdfrw
 Wand
+facebook-sdk
 
 ###### development ######
 selenium  # write browser-side tests
