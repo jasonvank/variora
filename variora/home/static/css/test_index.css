@@ -74,7 +74,6 @@ td:hover .editable-cell-icon {
     padding: 0 20px;
     border-bottom: 1px solid #f6f6f6;
     box-sizing: border-box;
-    /* box-shadow: !important; */
 }
 
 .editable-cell-text-wrapper {
@@ -95,7 +94,7 @@ td:hover .editable-cell-icon {
   -webkit-box-orient: vertical !important;
 }
 
-.card-title-wrapper {
+.custom-card-text-wrapper {
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   display: -webkit-box !important;
