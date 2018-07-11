@@ -34,7 +34,7 @@ class AnnotationReplyModelAdmin(admin.ModelAdmin):
 
 
 class DocumentThumbnailModelAdmin(admin.ModelAdmin):
-    list_display = ['id', 'document', 'thumbnail_image', 'description']
+    list_display = ['id', 'document', 'thumbnail_image', 'description', 'create_time']
     list_filter = ['description']
 
 

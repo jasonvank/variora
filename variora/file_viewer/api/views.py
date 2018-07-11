@@ -108,4 +108,4 @@ class DocumentListView(View):
 
 
 def get_top_document_thumbnails(request):
-    return JsonResponse(list(DocumentThumbnail.objects.all()), encoder=DocumentThumbnailEncoder, safe=False)
+    return JsonResponse(list(DocumentThumbnail.objects.all().order_by('create_time')), encoder=DocumentThumbnailEncoder, safe=False)

@@ -92,6 +92,7 @@ class DocumentThumbnail(models.Model):
     document = models.ForeignKey(Document)
     thumbnail_image = models.ImageField(upload_to=thumbnail_upload_to)
     description = models.CharField(max_length=128, db_index=True)
+    create_time = models.DateTimeField(auto_now=False, auto_now_add=True)
 
 @receiver(models.signals.pre_delete, sender=DocumentThumbnail)
 def delete_document_thumbnail(sender, instance, **kwargs):
