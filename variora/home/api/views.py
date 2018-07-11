@@ -89,7 +89,7 @@ def sign_off(request):
 def google_sign_in(request):
     try:
         # TODO: do not hardcode client ID, put it into private_settings.py and import from settings
-        userinfo = id_token.verify_oauth2_token(str(request.POST['id_token']), requests.Request(), "519848814448-89p2bv1b6bksdnd3in64r25j9vq1hgc5.apps.googleusercontent.com")
+        userinfo = id_token.verify_oauth2_token(str(request.POST['id_token']), requests.Request(), "887521980338-fj0n0r7ui5cn313f4vh6paqm411upf3o.apps.googleusercontent.com")
 
         if userinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
             raise Exception('Wrong issuer.')

@@ -46,7 +46,7 @@ class NormalLoginForm extends React.Component {
     gapi.load('auth2', function(){
       // Retrieve the singleton for the GoogleAuth library and set up the client.
       auth2 = gapi.auth2.init({
-        client_id: '519848814448-89p2bv1b6bksdnd3in64r25j9vq1hgc5.apps.googleusercontent.com',
+        client_id: '887521980338-fj0n0r7ui5cn313f4vh6paqm411upf3o.apps.googleusercontent.com',
         cookiepolicy: 'single_host_origin',
       })
       attachSignin(document.getElementById('google-login'))
