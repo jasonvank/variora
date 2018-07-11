@@ -188,7 +188,7 @@ class App extends React.Component {
                 style={{ height: '100%', borderRight: 0 }}
                 defaultSelectedKeys={this.getHighlightedMenuItems()}
               >
-                <Menu.Item key="explore">
+                <Menu.Item key="explore" >
                   <Link to="/explore"><span><Icon type="compass" />explore</span></Link>
                 </Menu.Item>
                 <Menu.Item key="documents" disabled={!this.state.user.is_authenticated}>

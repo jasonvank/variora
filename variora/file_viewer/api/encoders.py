@@ -36,6 +36,9 @@ class DocumentThumbnailEncoder(DjangoJSONEncoder):
                 'title': obj.document.title,
                 'image': obj.thumbnail_image.url,
                 'open_url': '/documents/' + obj.document.slug + '/' + obj.document.title,
-                'description': obj.description
+                'description': obj.description,
+                'upload_time': obj.document.upload_time,
+                'owner_name': obj.document.owner.nickname,
+                'owner_email': obj.document.owner.email_address
             }
         return super(DocumentThumbnailEncoder, self).default(obj)
