@@ -24,7 +24,7 @@ def _generate_thumbnail_image_content_file(document):
         with requests.request('get', document.external_url, stream=True) as response:
             content = response.content
 
-    temp_pdf_path = os.path.join(settings.MEDIA_ROOT, 'temp.pdf')
+    temp_pdf_path = os.path.join(settings.MEDIA_ROOT, 'document_thumbnails', 'temp.pdf')
     with open(temp_pdf_path, 'w+') as f:
         f.write(content)
 

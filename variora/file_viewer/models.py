@@ -94,7 +94,7 @@ class DocumentThumbnail(models.Model):
     description = models.CharField(max_length=128, db_index=True)
 
 @receiver(models.signals.pre_delete, sender=DocumentThumbnail)
-def delete_local_file(sender, instance, **kwargs):
+def delete_document_thumbnail(sender, instance, **kwargs):
     if instance.thumbnail_image:
         instance.thumbnail_image.storage.delete(instance.thumbnail_image.name)
 
