@@ -98,6 +98,7 @@ class NotificationsList extends React.Component {
 
     return (
       <Table
+        className='notification-table'
         dataSource={this.state.data}
         columns={columns}
         pagination={false}
@@ -105,6 +106,7 @@ class NotificationsList extends React.Component {
         style={{width: '300px', maxHeight: 380, overflowY: 'auto'}}
         rowKey={record => record.slug}
         onRowClick={this.handleReadStatus}
+        footer={() => null}
       />
     )
   }
