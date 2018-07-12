@@ -118,6 +118,7 @@ class Comment(ModelWithCleanUUID):
 class Annotation(ModelWithCleanUUID):
     uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
     post_time = models.DateTimeField(auto_now=False, auto_now_add=True)
+    edit_time = models.DateTimeField(null=True, blank=True)
     annotator = models.ForeignKey(User)
     document_this_annotation_belongs = models.ForeignKey(Document)
     content = models.TextField()

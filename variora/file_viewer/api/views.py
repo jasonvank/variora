@@ -8,11 +8,13 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
+from django.utils.timezone import now
 from django.views.generic import View
 
 from home.models import User
 
-from ..models import Annotation, AnnotationReply, Comment, Document, DocumentThumbnail
+from ..models import (Annotation, AnnotationReply, Comment, Document,
+                      DocumentThumbnail)
 from .encoders import DocumentEncoder, DocumentThumbnailEncoder
 
 
@@ -117,10 +119,8 @@ def get_annotation_content(request, id):
 
 def edit_annotation_content(request, id):
     user = get_user(request)
-    annotation = Annotation.objects.get(id=int(id))
-    if user.pk != annotation.annotator.pk:
+    annotation = Annotation.objects.filter(id=int(id))
+    if user.pk != annotation[0].annotator.pk:
         return HttpResponse(status=403)
-    new_content = request.POST['new_content']
-    annotation.content = new_content
-    annotation.save()
+    annotation.update(content=request.POST['new_content'], edit_time=now())
     return HttpResponse(status=200)

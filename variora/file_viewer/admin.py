@@ -22,7 +22,7 @@ class CommentModelAdmin(admin.ModelAdmin):
 
 
 class AnnotationModelAdmin(admin.ModelAdmin):
-    list_display = ["id", 'clean_uuid', "content", "document_this_annotation_belongs", "annotator", "num_like", "post_time", "is_public"]
+    list_display = ["id", 'clean_uuid', "content", "document_this_annotation_belongs", "annotator", "num_like", "post_time", "edit_time", "is_public"]
     list_filter = ["document_this_annotation_belongs", "annotator", "num_like", "is_public"]
     search_fields = ["id", 'uuid', "content", "document_this_annotation_belongs__title", "annotator__nickname", "num_like"]
 
