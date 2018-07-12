@@ -219,7 +219,7 @@ function addAnnotationRelatedListenerWithin(jq) {
       $this.on('click', function() {
         layer.msg('already liked', {
           icon: 6,
-          time: 800,
+          time: 666,
         })
       })
       $.ajax({
@@ -245,7 +245,7 @@ function addAnnotationRelatedListenerWithin(jq) {
       $this.on('click', function() {
         layer.msg('already liked', {
           icon: 6,
-          time: 800,
+          time: 666,
         })
       })
       $.ajax({
@@ -278,7 +278,7 @@ function addAnnotationRelatedListenerWithin(jq) {
   jq.find('.EditFormToggleButton').on('click', function() {
     let $this = $(this)
     $this.parents('.AnnotationDiv').find('.AnnotationBlock').css('display', 'none')
-    $this.parents('.AnnotationDiv').find('.AnnotationEditForm').fadeIn(1208)
+    $this.parents('.AnnotationDiv').find('.AnnotationEditForm').fadeIn(666)
     let tinyMCEEditor = tinyMCE.get($(this).parents('.AnnotationDiv').find('.AnnotationEditForm').find('textarea').attr('id'))
 
     $.ajax({
@@ -315,8 +315,9 @@ function addAnnotationRelatedListenerWithin(jq) {
       },
       success: function() {
         $this.parents('.AnnotationDiv').find('.annotation-content').html(new_content)
-        $this.parents('.AnnotationDiv').find('.AnnotationBlock').css('display', 'block')
         $this.parents('.AnnotationDiv').find('.AnnotationEditForm').css('display', 'none')
+        $this.parents('.AnnotationDiv').find('.AnnotationBlock').fadeIn(666)
+        $this.parents('.AnnotationDiv').find('.AnnotationBlock').css('display', 'block')
         tinyMCEEditor.setContent('')
         addAnnotationRelatedListenerWithin($this.parents('.AnnotationDiv'))
         tinymceInit()
