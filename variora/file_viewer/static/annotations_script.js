@@ -315,6 +315,7 @@ function addAnnotationRelatedListenerWithin(jq) {
       },
       success: function() {
         $this.parents('.AnnotationDiv').find('.annotation-content').html(new_content)
+        $this.parents('.AnnotationDiv').find('.annotation_time_span').text('edited')
         $this.parents('.AnnotationDiv').find('.AnnotationEditForm').css('display', 'none')
         $this.parents('.AnnotationDiv').find('.AnnotationBlock').fadeIn(666)
         $this.parents('.AnnotationDiv').find('.AnnotationBlock').css('display', 'block')
