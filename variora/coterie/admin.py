@@ -34,19 +34,19 @@ class CoterieDocumentModelAdmin(admin.ModelAdmin):
 
 
 class CoterieAnnotationModelAdmin(admin.ModelAdmin):
-    list_display = ["id", "clean_uuid", "content", "document_this_annotation_belongs", "page_index",  "annotator", "num_like", "edit_time"]
+    list_display = ["id", "clean_uuid", "document_this_annotation_belongs", "page_index",  "annotator", "num_like", "edit_time", "content"]
     list_filter = ["content", "document_this_annotation_belongs", "annotator", "num_like"]
     search_fields = ["id", "uuid", "content", "document_this_annotation_belongs__pk", "annotator__pk", "num_like"]
 
 
 class CoterieAnnotationReplyModelAdmin(admin.ModelAdmin):
-    list_display = ["id", "clean_uuid", "content", "reply_to_annotation", "reply_to_annotation_reply", "replier", "num_like"]
+    list_display = ["id", "clean_uuid", "reply_to_annotation", "reply_to_annotation_reply", "replier", "num_like", "content"]
     list_filter = ["content", "reply_to_annotation", "reply_to_annotation_reply", "replier", "num_like"]
     search_fields = ["id", "uuid", "content", "reply_to_annotation__pk", "reply_to_annotation_reply__pk", "replier__pk", "num_like"]
 
 
 class CoterieCommentModelAdmin(admin.ModelAdmin):
-    list_display = ["id", "clean_uuid", "content", "document_this_comment_belongs", "commenter", "num_like"]
+    list_display = ["id", "clean_uuid", "document_this_comment_belongs", "commenter", "num_like", "content"]
     list_filter = ["content", "document_this_comment_belongs", "commenter", "num_like"]
     search_fields = ["id", "uuid", "content", "document_this_comment_belongs__pk", "commenter__pk", "num_like"]
 
