@@ -74,6 +74,7 @@ function findTargetAnnotation(e, allAnnotationsInThisPage, pageJQ) {
 }
 
 function addAnnotationRelatedListenerWithin(jq) {
+  const appName = window.location.pathname.split('/')[1]
   jq.find('code').addClass('prettyprint')
   PR.prettyPrint()
 
@@ -283,7 +284,7 @@ function addAnnotationRelatedListenerWithin(jq) {
 
     $.ajax({
       type: 'GET',
-      url: '/file_viewer/api/annotations/' + $this.attr('annotation_id') + '/content',
+      url: '/' + appName + '/api/annotations/' + $this.attr('annotation_id') + '/content',
       data: {
         csrfmiddlewaretoken: getCookie('csrftoken'),
       },
@@ -308,7 +309,7 @@ function addAnnotationRelatedListenerWithin(jq) {
     let new_content = $this.parents('.AnnotationEditForm').find('textarea[name="annotation_edit_content"]').val()
     $.ajax({
       type: 'POST',
-      url: '/file_viewer/api/annotations/' + $this.attr('annotation_id') + '/edit',
+      url: '/' + appName + '/api/annotations/' + $this.attr('annotation_id') + '/edit',
       data: {
         csrfmiddlewaretoken: getCookie('csrftoken'),
         new_content: new_content

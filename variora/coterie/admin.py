@@ -34,7 +34,7 @@ class CoterieDocumentModelAdmin(admin.ModelAdmin):
 
 
 class CoterieAnnotationModelAdmin(admin.ModelAdmin):
-    list_display = ["id", "clean_uuid", "content", "document_this_annotation_belongs", "page_index",  "annotator", "num_like"]
+    list_display = ["id", "clean_uuid", "content", "document_this_annotation_belongs", "page_index",  "annotator", "num_like", "edit_time"]
     list_filter = ["content", "document_this_annotation_belongs", "annotator", "num_like"]
     search_fields = ["id", "uuid", "content", "document_this_annotation_belongs__pk", "annotator__pk", "num_like"]
 
