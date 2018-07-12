@@ -23,6 +23,7 @@ function tinymceInit() {
     toolbar: [
       'styleselect | bold italic codesample | link image | bullist numlist outdent indent | forecolor | formula'
     ],
+    entity_encoding: 'raw',
     indent: false,
     paste_as_text: true,
     branding: false,
