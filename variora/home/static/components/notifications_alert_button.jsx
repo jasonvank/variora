@@ -5,6 +5,7 @@ import {getCookie, getUrlFormat} from 'util.js'
 
 import React from 'react'
 import axios from 'axios'
+import TimeAgo from 'react-timeago'
 
 class NotificationsAvaratWrapper extends React.Component {
   constructor(props) {
@@ -35,8 +36,8 @@ class NotificationsDetailsWrapper extends React.Component {
   render() {
     var dateFormat = require('dateformat')
     var description = this.state.newNotification.description
-    var time = dateFormat(this.state.newNotification.timestamp, "d mmmm yyyy")
-
+    var time = dateFormat(this.state.newNotification.timestamp, "mmmm d, yyyy")
+console.log(time)
     var verb = ''
     var actionVerb = this.state.newNotification.verb
     if (actionVerb == 'reply to annotation reply') verb = 'replied'
@@ -48,6 +49,7 @@ class NotificationsDetailsWrapper extends React.Component {
         <div style={{fontWeight: 'bold'}}><a target="_blank" href={this.state.newNotification.data.redirect_url} style={{ textDecoration: 'none' }}>{title}</a></div>
         <div className="notification-alert-list-wrapper" title={description}>{description}</div>
         <div style={{color: '#91959d'}}>{time}</div>
+        {/* <TimeAgo style={{color: '#91959d'}} date={time} /> */}
       </div>
     )
   }
