@@ -278,7 +278,7 @@ function addAnnotationRelatedListenerWithin(jq) {
   jq.find('.EditFormToggleButton').on('click', function() {
     let $this = $(this)
     $this.parents('.AnnotationDiv').find('.AnnotationBlock').css('display', 'none')
-    $this.parents('.AnnotationDiv').find('.AnnotationEditForm').css('display', 'block')
+    $this.parents('.AnnotationDiv').find('.AnnotationEditForm').fadeIn(1208)
     let tinyMCEEditor = tinyMCE.get($(this).parents('.AnnotationDiv').find('.AnnotationEditForm').find('textarea').attr('id'))
 
     $.ajax({
