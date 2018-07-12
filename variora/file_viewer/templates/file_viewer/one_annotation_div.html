@@ -15,16 +15,32 @@
         <button class="AnnotationDirectButton btn" style="border: none; background: none">
           <i class="fa fa-location-arrow" aria-hidden="true"></i>&nbsplocate
         </button>
+
         <button class="ReplyAnnotationButton btn" style="border: none; background: none">
           <i class="fa fa-reply" aria-hidden="true"></i>&nbspreply
         </button>
+
         {% if annotation.annotator == request.user %}
-          <button style="border: none; background: none" class="DeleteAnnotationButton btn" value="{{ annotation.id }}"><i class="fa fa-trash-o" aria-hidden="true"></i>&nbspdelete</button>
+          <button class="EditFormToggleButton btn" annotation_id="{{ annotation.id }}" style="border: none; background: none">
+            <i class="fa fa-pencil" aria-hidden="true"></i>&nbspedit
+          </button>
         {% endif %}
+
         <div class="btn LikeAnnotationButton" annotation_id="{{ annotation.id }}">
           <span style="cursor: pointer;" class="glyphicon glyphicon-thumbs-up"></span>
           <bold class="num_like">{{ annotation.num_like }}</bold>
         </div>
+
+        {% if annotation.annotator == request.user %}
+          <div class="dropdown" style="border: none; background: none; display: inline-block;">
+            <button class="btn" data-toggle="dropdown" style="border: none; background: none">
+              <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+            </button>
+            <ul class="dropdown-menu" style="left: auto; right: 0; min-width: 108px; padding: 0; top: 38px">
+              <li><button style="border: none; background: none; width: 100%" class="DeleteAnnotationButton btn" value="{{ annotation.id }}"><i class="fa fa-trash-o" aria-hidden="true"></i>&nbspdelete</button></li>
+            </ul>
+          </div>
+        {% endif %}
       </div>
       <form style="display: none">
         <br>
@@ -41,4 +57,14 @@
       {% include "file_viewer/one_annotation_reply.html" with annotation_reply=annotation_reply ANONYMOUS_USER_PORTRAIT_URL=ANONYMOUS_USER_PORTRAIT_URL %}
     {% endfor %}
   </blockquote>
+
+  <form class="AnnotationEditForm" style="display: none; padding-bottom: 28px">
+    <textarea id="annotation_edit_form_{{ annotation.id }}}" name="annotation_edit_content" class="form-control" rows="2" style="resize: vertical"></textarea>
+    <button class="CancelAnnotationEditButton btn btn-sm" type="button" style="background-color: #636e72; margin-left: 8px">
+      cancel
+    </button>
+    <button class="PostAnnotationEditButton btn btn-sm" type="button" annotation_id="{{ annotation.id }}">
+      edit
+    </button>
+  </form>
 </div>

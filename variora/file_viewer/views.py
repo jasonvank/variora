@@ -19,6 +19,7 @@ from variora import utils
 class FileViewerView(View):
     @method_decorator(login_required(login_url='/'))
     def post(self, request, **kwargs):
+        user = get_user(request)
         if 'slug' in kwargs:
             document = Document.objects.get(uuid=utils.slug2uuid(kwargs['slug']))
         else:
@@ -26,6 +27,8 @@ class FileViewerView(View):
 
         if request.POST["operation"] == "delete_annotation":
             annotation = Annotation.objects.get(id=int(request.POST["annotation_id"]))
+            if user.pk != annotation.annotator.pk:
+                return HttpResponse(status=403)
             annotation.delete()
             return HttpResponse()
 

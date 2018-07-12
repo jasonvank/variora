@@ -109,3 +109,18 @@ class DocumentListView(View):
 
 def get_top_document_thumbnails(request):
     return JsonResponse(list(DocumentThumbnail.objects.all()), encoder=DocumentThumbnailEncoder, safe=False)
+
+
+def get_annotation_content(request, id):
+    return HttpResponse(Annotation.objects.get(id=int(id)).content)
+
+
+def edit_annotation_content(request, id):
+    user = get_user(request)
+    annotation = Annotation.objects.get(id=int(id))
+    if user.pk != annotation.annotator.pk:
+        return HttpResponse(status=403)
+    new_content = request.POST['new_content']
+    annotation.content = new_content
+    annotation.save()
+    return HttpResponse(status=200)
