@@ -48,6 +48,10 @@ class DocumentListWrapper extends React.Component {
 
 
   render() {
+    // var uploadTime = this.state.data.upload_time
+    var dateFormat = require('dateformat')
+    // console.log(dateFormat(uploadTime, "mmmm d, yyyy"))
+
     return (
       this.state.data == undefined ? [] :
         this.state.data.map(item => <div key = {item.open_url} className='gutter-example' style={{ textAlign: 'center', margin: 40 }} >
@@ -60,7 +64,7 @@ class DocumentListWrapper extends React.Component {
               </div>
               <div className='custom-card'>
                 <h3 className='custom-card-text-wrapper' title={item.title} >{item.title}</h3>
-                <p>{item.upload_time.split('T')[0]}</p>
+                <p>{dateFormat(item.upload_time, "d mmmm yyyy")}</p>
               </div>
             </Card>
           </Col>

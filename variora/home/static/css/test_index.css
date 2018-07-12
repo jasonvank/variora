@@ -99,7 +99,7 @@ td:hover .editable-cell-icon {
   text-overflow: ellipsis !important;
   display: -webkit-box !important;
   -webkit-line-clamp: 1 !important;
-  -webkit-box-orient: vertical!important
+  -webkit-box-orient: vertical !important;
 }
 
 .pubIndex-recommendationsHeader
