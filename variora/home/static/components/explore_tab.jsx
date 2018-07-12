@@ -4,6 +4,7 @@ import { getCookie, getUrlFormat } from 'util.js'
 
 import React from 'react'
 import axios from 'axios'
+import TimeAgo from 'react-timeago'
 
 const TabPane = Tabs.TabPane;
 
@@ -48,10 +49,6 @@ class DocumentListWrapper extends React.Component {
 
 
   render() {
-    // var uploadTime = this.state.data.upload_time
-    var dateFormat = require('dateformat')
-    // console.log(dateFormat(uploadTime, "mmmm d, yyyy"))
-
     return (
       this.state.data == undefined ? [] :
         this.state.data.map(item => <div key = {item.open_url} className='gutter-example' style={{ textAlign: 'center', margin: 40 }} >
@@ -64,7 +61,7 @@ class DocumentListWrapper extends React.Component {
               </div>
               <div className='custom-card'>
                 <h3 className='custom-card-text-wrapper' title={item.title} >{item.title}</h3>
-                <p>{dateFormat(item.upload_time, "d mmmm yyyy")}</p>
+                <p><TimeAgo style={{color: '#91959d'}} date={item.upload_time} /></p>
               </div>
             </Card>
           </Col>

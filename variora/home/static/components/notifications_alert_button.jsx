@@ -34,10 +34,8 @@ class NotificationsDetailsWrapper extends React.Component {
   }
 
   render() {
-    var dateFormat = require('dateformat')
+    // var dateFormat = require('dateformat')
     var description = this.state.newNotification.description
-    var time = dateFormat(this.state.newNotification.timestamp, "mmmm d, yyyy")
-console.log(time)
     var verb = ''
     var actionVerb = this.state.newNotification.verb
     if (actionVerb == 'reply to annotation reply') verb = 'replied'
@@ -48,8 +46,7 @@ console.log(time)
       <div>
         <div style={{fontWeight: 'bold'}}><a target="_blank" href={this.state.newNotification.data.redirect_url} style={{ textDecoration: 'none' }}>{title}</a></div>
         <div className="notification-alert-list-wrapper" title={description}>{description}</div>
-        <div style={{color: '#91959d'}}>{time}</div>
-        {/* <TimeAgo style={{color: '#91959d'}} date={time} /> */}
+        <TimeAgo style={{color: '#91959d'}} date={this.state.newNotification.timestamp} />
       </div>
     )
   }
