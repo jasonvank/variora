@@ -34,7 +34,6 @@ class NotificationsDetailsWrapper extends React.Component {
   }
 
   render() {
-    // var dateFormat = require('dateformat')
     var description = this.state.newNotification.description
     var verb = ''
     var actionVerb = this.state.newNotification.verb
