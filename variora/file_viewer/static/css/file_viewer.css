@@ -126,7 +126,6 @@ input {
 }
 
 @charset "UTF-8";
-
 /* button */
 
 .awesome {
@@ -146,14 +145,16 @@ input {
   color: white;
 }
 
-
 /* Colors ---------- */
 
 .blue.awesome {
   background-color: #4f4f4f;
 }
 
-.PostAnnotationReplyButton, .PostReplyReplyButton {
+.PostAnnotationReplyButton,
+.PostReplyReplyButton,
+.CancelAnnotationEditButton,
+.PostAnnotationEditButton {
   margin-top: 8px;
   float: right;
   border-radius: 0;
@@ -181,3 +182,6 @@ input {
 .btn {
   padding: 6px 8px
 }
+
+
+

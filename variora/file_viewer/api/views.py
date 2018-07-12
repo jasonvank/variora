@@ -8,11 +8,13 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
+from django.utils.timezone import now
 from django.views.generic import View
 
 from home.models import User
 
-from ..models import Annotation, AnnotationReply, Comment, Document, DocumentThumbnail
+from ..models import (Annotation, AnnotationReply, Comment, Document,
+                      DocumentThumbnail)
 from .encoders import DocumentEncoder, DocumentThumbnailEncoder
 
 
@@ -109,3 +111,18 @@ class DocumentListView(View):
 
 def get_top_document_thumbnails(request):
     return JsonResponse(list(DocumentThumbnail.objects.all().order_by('create_time')), encoder=DocumentThumbnailEncoder, safe=False)
+
+
+def get_annotation_content(request, id):
+    return HttpResponse(Annotation.objects.get(id=int(id)).content)
+
+
+def edit_annotation_content(request, id):
+    user = get_user(request)
+    annotation = Annotation.objects.filter(id=int(id))
+    if user.pk != annotation[0].annotator.pk:
+        return HttpResponse(status=403)
+    annotation.update(content=request.POST['new_content'], edit_time=now())
+    return HttpResponse(status=200)
+
+

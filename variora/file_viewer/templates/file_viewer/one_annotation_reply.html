@@ -1,35 +1,51 @@
-<blockquote class="AnnotationReplyBlock" annotation_reply_id="{{ annotation_reply.id }}" reply_to_annotation_reply="{{ annotation_reply.reply_to_annotation_reply.id }}">
+<blockquote
+  class="AnnotationReplyBlock"
+  annotation_reply_id="{{ annotation_reply.id }}"
+  reply_to_annotation_reply="{{ annotation_reply.reply_to_annotation_reply.id }}"
+  style="padding-right: 0"
+>
   {% if annotation_reply.reply_to_annotation_reply.replier %}  <!-- if reply to reply -->
   <span style="font-size: 66%; float: left;">
       <i class="fa fa-share" aria-hidden="true"></i>&nbsp&nbsp&nbspreply to <i><b>{{ annotation_reply.reply_to_annotation_reply.replier.nickname }}</b></i>:
   </span><br>
   {% endif %}
-  <div class="annotation-content"> {{ annotation_reply.content|safe|linebreaks }} </div>
+  <div class="annotation-content" style="word-break: break-all; hyphens: auto;"> {{ annotation_reply.content|safe|linebreaks }} </div>
   <footer>
-      {% if annotation_reply.is_public %}
-      <img class="img-rounded" src="{{ annotation_reply.replier.portrait_url }}" height="28" width="28">
-      {{ annotation_reply.replier.nickname }} | {{ annotation_reply.post_time.date|date:"Y. M. d" }}
-      {% else %}
-      <img class="img-rounded" src="{{ ANONYMOUS_USER_PORTRAIT_URL }}" height="28" width="28">
-      Anonymous | {{ annotation_reply.post_time.date|date:"Y. M. d" }}
-      {% endif %}
-      <div style="float: right;">
-          <button class="ReplyAnnotationButton btn" style="border: none; background: none; padding: 0 4px"><i class="fa fa-reply" aria-hidden="true"></i>&nbspreply</button>
-          {% if annotation_reply.replier == request.user %}
-              <button class="DeleteAnnotationReplyButton btn" style="border: none; background: none; padding: 0 4px" value="{{ annotation_reply.id }}"><i class="fa fa-trash-o" aria-hidden="true"></i>&nbspdelete</button>
-          {% endif %}
-          <div class="btn LikeAnnotationReplyButton" annotation_reply_id="{{ annotation_reply.id }}" style="padding: 0 4px">
-              <span style="cursor: pointer;" class="glyphicon glyphicon-thumbs-up"></span>
-              <bold class="num_like">{{ annotation_reply.num_like }}</bold>
-          </div>
+    {% if annotation_reply.is_public %}
+    <img class="img-rounded" src="{{ annotation_reply.replier.portrait_url }}" height="28" width="28">
+    {{ annotation_reply.replier.nickname }} | {{ annotation_reply.post_time.date|date:"Y. M. d" }}
+    {% else %}
+    <img class="img-rounded" src="{{ ANONYMOUS_USER_PORTRAIT_URL }}" height="28" width="28">
+    Anonymous | {{ annotation_reply.post_time.date|date:"Y. M. d" }}
+    {% endif %}
+    <div style="float: right;">
+      <button class="ReplyAnnotationButton btn" style="border: none; background: none; padding: 0 4px"><i class="fa fa-reply" aria-hidden="true"></i>&nbspreply</button>
+
+      <div class="btn LikeAnnotationReplyButton" annotation_reply_id="{{ annotation_reply.id }}" style="padding: 0 4px">
+          <span style="cursor: pointer;" class="glyphicon glyphicon-thumbs-up"></span>
+          <bold class="num_like">{{ annotation_reply.num_like }}</bold>
       </div>
-      <form style="display: none">
-          <br>
-          <textarea id="annotation_reply_reply_form_{{ annotation_reply.id }}}" name="reply_reply_content" class="form-control" rows="2" style="resize: vertical"></textarea>
-          <button type="button" class="PostReplyReplyButton AnonymouslyPostReplyReplyButton btn btn-sm" name="reply_to_annotation_reply_id" value="{{ annotation_reply.id }}" style="background-color: #636e72; margin-left: 6px">
-            <i class="fa fa-user-secret"></i> &nbsp reply anonymously
-          </button>
-          <button type="button" class="PostReplyReplyButton btn btn-sm" name="reply_to_annotation_reply_id" value="{{ annotation_reply.id }}">reply</button>
-      </form>
+
+      {% if annotation_reply.replier == request.user %}
+      <div class="dropdown" style="border: none; background: none; display: inline-block;">
+        <button class="btn" data-toggle="dropdown" style="border: none; background: none">
+          <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+        </button>
+        <ul class="dropdown-menu" style="left: auto; right: 0; min-width: 108px; top: 38px">
+          <li>
+            <button class="DeleteAnnotationReplyButton btn" style="border: none; background: none; padding: 0 4px; width: 100%" value="{{ annotation_reply.id }}"><i class="fa fa-trash-o" aria-hidden="true"></i>&nbspdelete</button>
+          </li>
+        </ul>
+      </div>
+      {% endif %}
+    </div>
+    <form style="display: none">
+      <br>
+      <textarea id="annotation_reply_reply_form_{{ annotation_reply.id }}}" name="reply_reply_content" class="form-control" rows="2" style="resize: vertical"></textarea>
+      <button type="button" class="PostReplyReplyButton AnonymouslyPostReplyReplyButton btn btn-sm" name="reply_to_annotation_reply_id" value="{{ annotation_reply.id }}" style="background-color: #636e72; margin-left: 6px">
+        <i class="fa fa-user-secret"></i> &nbsp reply anonymously
+      </button>
+      <button type="button" class="PostReplyReplyButton btn btn-sm" name="reply_to_annotation_reply_id" value="{{ annotation_reply.id }}">reply</button>
+    </form>
   </footer>
 </blockquote>

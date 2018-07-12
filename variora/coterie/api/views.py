@@ -9,14 +9,19 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.utils.decorators import method_decorator
+from django.utils.timezone import now
 from django.views.generic import View
-from home.models import User
 from validate_email import validate_email
 
-from ..models import Coterie, CoterieDocument, CoterieInvitation
-from .encoders import CoterieDocumentEncoder, CoterieEncoder, CoterieInvitationEncoder
+from home.models import User
+
+from ..models import (Coterie, CoterieAnnotation, CoterieDocument,
+                      CoterieInvitation)
+from .encoders import (CoterieDocumentEncoder, CoterieEncoder,
+                       CoterieInvitationEncoder)
+from .view_application import (ApplicationsView, ApplicationView,
+                               create_application)
 from .view_invitation import InvitationsView, InvitationView, create_invitation
-from .view_application import ApplicationsView, ApplicationView, create_application
 
 
 class CoterieListView(View):
@@ -146,3 +151,16 @@ def create_coterie(request):
     coterie.save()
     coterie.administrators.add(get_user(request))
     return JsonResponse(coterie, encoder=CoterieEncoder, safe=False)
+
+
+def get_annotation_content(request, id):
+    return HttpResponse(CoterieAnnotation.objects.get(id=int(id)).content)
+
+
+def edit_annotation_content(request, id):
+    user = get_user(request)
+    annotation = CoterieAnnotation.objects.filter(id=int(id))
+    if user.pk != annotation[0].annotator.pk:
+        return HttpResponse(status=403)
+    annotation.update(content=request.POST['new_content'], edit_time=now())
+    return HttpResponse(status=200)

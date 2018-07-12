@@ -10,6 +10,10 @@ urlpatterns = [
     url(r'^documents$', views.DocumentListView.as_view()),
 
     url(r'^documents/explore$', views.get_top_document_thumbnails),
+
+    url(r'^annotations/(?P<id>\d+)/content$', views.get_annotation_content),
+
+    url(r'^annotations/(?P<id>\d+)/edit$', views.edit_annotation_content),
 ]
 
 
