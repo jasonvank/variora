@@ -5,6 +5,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import axios from 'axios'
 import { validateDocumentTitle } from 'home_util.js'
+import TimeAgo from 'react-timeago'
 
 const { Column } = Table
 
@@ -138,7 +139,7 @@ class GroupDocumentsList extends React.Component {
     ))
 
     var documentUploadDate = ((text, coterieDocument) => (
-      coterieDocument.upload_time.replace('T', ' ').split('.')[0]
+      <TimeAgo date={coterieDocument.upload_time} />
     ))
 
     const columns = [{
