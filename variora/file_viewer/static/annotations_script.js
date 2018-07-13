@@ -6,17 +6,28 @@ function getAnnotationDivJQById(annotationID) {
   return $(selector)
 }
 
+function getPageDividerJQ(pageNum) {
+  const pageDividerHtml = ' \
+    <div class="PageDivider" page="' + pageNum + '" style="height: 9px;border-bottom: 1px solid #eeeeee;margin: 20px 40px;text-align: center;"> \
+      <span style="font-size: 14px;background-color: white;padding: 0 30px;font-weight: 400;color: grey;"> \
+    '
+        + 'Page ' + pageNum +
+    ' \
+      </spa> \
+    </div> \
+  '
+  return $(pageDividerHtml)
+}
+
 function removeAnnotation(annotationID) {
   let thisPage = $('.AnnotationDiv[annotation_id="' + annotationID + '"]').attr('page')
   getAnnotationDivJQById(annotationID).remove()
   $('.Annotation[annotation_id="' + annotationID + '"]').remove()
 
-  if ($('.AnnotationDiv[page="{0}"]'.format(thisPage)).toArray().length == 0) {
-    $('.PageDivider[page="' + thisPage + '"]').remove()
-  } else {
+  if ($('.AnnotationDiv[page="{0}"]'.format(thisPage)).toArray().length > 0) {
     let firstAnnotationDivInThisPage = $('.AnnotationDiv[page="' + thisPage + '"]').first()
     if (firstAnnotationDivInThisPage.find('hr')[0] != undefined)
-      firstAnnotationDivInThisPage.find('hr').remove()
+      firstAnnotationDivInThisPage.children('hr').replaceWith(getPageDividerJQ(thisPage))
   }
 }
 
@@ -381,4 +392,4 @@ function addAnnotationRelatedListenerWithin(jq) {
 }
 
 
-export { addAnnotationRelatedListener, addAnnotationRelatedListenerWithin, scrollAnnotationDivIntoView, scrollAnnotationIntoView, findTargetAnnotation }
+export { addAnnotationRelatedListener, addAnnotationRelatedListenerWithin, scrollAnnotationDivIntoView, scrollAnnotationIntoView, findTargetAnnotation, getPageDividerJQ }

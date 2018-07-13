@@ -1,6 +1,6 @@
 import {
   addAnnotationRelatedListener, addAnnotationRelatedListenerWithin,
-  scrollAnnotationDivIntoView, findTargetAnnotation, scrollAnnotationIntoView
+  scrollAnnotationDivIntoView, findTargetAnnotation, scrollAnnotationIntoView, getPageDividerJQ
 } from './annotations_script.js'
 import { addCommentRelatedListener, enablePostCommentButton, enableRefreshCommentButton } from './comments_script.js'
 import { getCookie, hexToRgb, imgLoad, getValFromUrlParam } from 'util.js'
@@ -212,13 +212,11 @@ function startListeningSelectionBoxCreation() {
                   $('#annotation_update_div').children('hr').before(newAnnotationDiv)
                 } else if (nextAnnotationDiv[0].getAttribute('page') == newAnnotationPage) {
                   nextAnnotationDiv.before(newAnnotationDiv)
-                  nextAnnotationDiv.prepend($('<hr>'))
+                  nextAnnotationDiv.children('.PageDivider').replaceWith('<hr>')
                 } else if (nextAnnotationDiv[0].getAttribute('page') > newAnnotationPage) {
-                  $('.PageDivider[page="' + nextAnnotationDiv[0].getAttribute('page') + '"]').before(newAnnotationDiv)
+                  nextAnnotationDiv.before(newAnnotationDiv)
                 }
-                if ($('.AnnotationDiv[page="' + newAnnotationPage + '"]').toArray().length == 1)
-                  newAnnotationDiv.before(getPageDividerJQ(newAnnotationPage))
-                newAnnotationDiv.find('hr').remove()
+                newAnnotationDiv.children('hr').replaceWith(getPageDividerJQ(newAnnotationPage))
 
                 addAnnotationRelatedListenerWithin(newAnnotationDiv)
                 addAnnotationRelatedListenerWithin(new_annotation)
@@ -424,30 +422,16 @@ $(document).ready(function() {
       $("#annotation_update_div").css("width", wrapper.width() - 3 - fileViewer.width() + "px")
     }
   })
-  insertPageDivider()
+  insertPageDividers()
 })
 
-function getPageDividerJQ(pageNum) {
-  const pageDividerHtml = ' \
-    <div class="PageDivider" page="' + pageNum + '" style="height: 9px;border-bottom: 1px solid #eeeeee;margin: 20px 40px;text-align: center;"> \
-      <span style="font-size: 14px;background-color: white;padding: 0 30px;font-weight: 400;color: grey;"> \
-    '
-        + 'Page ' + pageNum +
-    ' \
-      </spa> \
-    </div> \
-  '
-  return $(pageDividerHtml)
-}
-
-function insertPageDivider() {
+function insertPageDividers() {
   var page = '0'
   for (let annotationDiv of $('.AnnotationDiv')) {
     let annotationDivJQ = $(annotationDiv)
     if (annotationDivJQ.attr('page') != page) {
       let newPage = annotationDivJQ.attr('page')
-      annotationDivJQ.before(getPageDividerJQ(newPage))
-      annotationDivJQ.find('hr').remove()
+      annotationDivJQ.children('hr').replaceWith(getPageDividerJQ(newPage))
       page = newPage
     }
   }
@@ -456,10 +440,10 @@ function insertPageDivider() {
 function renderTaskList(taskList, finishList, scale) {
   if (taskList.length > 0) {
     rendering = true
-    $("#buttonForLarger, #buttonForSmaller").attr("disabled", true)
+    $('#buttonForLarger, #buttonForSmaller').attr('disabled', true)
     var num = taskList[0][0]
     pdfDoc.getPage(num).then(function(page) {
-      var page_canvas_id = "page_canvas_" + num
+      var page_canvas_id = 'page_canvas_' + num
       var canvas = document.getElementById(page_canvas_id)
       var context = canvas.getContext('2d')
       var viewport = page.getViewport(clearnessLevel * scale)
@@ -467,8 +451,8 @@ function renderTaskList(taskList, finishList, scale) {
       // https://stackoverflow.com/questions/2588181/canvas-is-stretched-when-using-css-but-normal-with-width-height-properties
       canvas.height = viewport.height
       canvas.width = viewport.width
-      canvas.style.height = viewport.height / clearnessLevel + "px"
-      canvas.style.width = viewport.width / clearnessLevel + "px"
+      canvas.style.height = viewport.height / clearnessLevel + 'px'
+      canvas.style.width = viewport.width / clearnessLevel + 'px'
 
       var renderContext = {
         canvasContext: context,
@@ -476,16 +460,16 @@ function renderTaskList(taskList, finishList, scale) {
       }
 
       taskList[0][2] = page.render(renderContext); // taskList[0][2] is a RenderTask object
-      taskList[0][1] = "RENDERING"
+      taskList[0][1] = 'RENDERING'
 
       taskList[0][2].promise.then(function() {
         taskList.shift()
         finishList.push(num)
         rendering = false
-        $("#buttonForLarger, #buttonForSmaller").attr("disabled", false)
+        $('#buttonForLarger, #buttonForSmaller').attr('disabled', false)
         renderTaskList(taskList, finishList, scale)
       }, function(reason) {
-        console.log("rejected because of this reason: " + reason)
+        console.log('rejected because of this reason: ' + reason)
       })
     })
   }
