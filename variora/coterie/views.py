@@ -112,7 +112,7 @@ def display_coteriefile_viewer_page(request, **kwargs):
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
 
-        if user not in coterie.administrators.all() and user not in coterie.members.all():
+        if not user.is_superuser and user not in coterie.administrators.all() and user not in coterie.members.all():
             return redirect("/")
 
         if request.POST["operation"] == "delete_annotation":
