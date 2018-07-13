@@ -17,7 +17,7 @@ var taskList = []
 var rendering = false
 var sampleWidth
 var sampleHeight
-var clearnessLevel = 1.8;  // too small then not clear, not large then rendering consumes much resource
+var clearnessLevel = 1.8  // too small then not clear, not large then rendering consumes much resource
 var colorPicker
 
 
@@ -205,12 +205,20 @@ function startListeningSelectionBoxCreation() {
               success: function(data) {
                 // after uploading the annotation, 选择框将不再可以调整大小和拖动
                 new_annotation.draggable("destroy").resizable("destroy")
-                var newAnnotationDiv = $(data.new_annotationdiv_html)
+                let newAnnotationDiv = $(data.new_annotationdiv_html)
+                let newAnnotationPage = newAnnotationDiv.attr('page')
                 var nextAnnotationDiv = $($('.AnnotationDiv').toArray().find(div => parseInt(div.getAttribute('page')) >= parseInt(newAnnotationDiv.attr('page'))))
-                if (nextAnnotationDiv[0] == undefined)
-                  $('#annotation_update_div').append(newAnnotationDiv)
-                else
-                  newAnnotationDiv.insertBefore(nextAnnotationDiv)
+                if (nextAnnotationDiv[0] == undefined) {
+                  $('#annotation_update_div').children('hr').before(newAnnotationDiv)
+                } else if (nextAnnotationDiv[0].getAttribute('page') == newAnnotationPage) {
+                  nextAnnotationDiv.before(newAnnotationDiv)
+                  nextAnnotationDiv.prepend($('<hr>'))
+                } else if (nextAnnotationDiv[0].getAttribute('page') > newAnnotationPage) {
+                  $('.PageDivider[page="' + nextAnnotationDiv[0].getAttribute('page') + '"]').before(newAnnotationDiv)
+                }
+                if ($('.AnnotationDiv[page="' + newAnnotationPage + '"]').toArray().length == 1)
+                  newAnnotationDiv.before(getPageDividerJQ(newAnnotationPage))
+                newAnnotationDiv.find('hr').remove()
 
                 addAnnotationRelatedListenerWithin(newAnnotationDiv)
                 addAnnotationRelatedListenerWithin(new_annotation)
@@ -416,8 +424,34 @@ $(document).ready(function() {
       $("#annotation_update_div").css("width", wrapper.width() - 3 - fileViewer.width() + "px")
     }
   })
+  insertPageDivider()
 })
 
+function getPageDividerJQ(pageNum) {
+  const pageDividerHtml = ' \
+    <div class="PageDivider" page="' + pageNum + '" style="height: 9px;border-bottom: 1px solid #eeeeee;margin: 20px 40px;text-align: center;"> \
+      <span style="font-size: 14px;background-color: white;padding: 0 30px;font-weight: 400;color: grey;"> \
+    '
+        + 'Page ' + pageNum +
+    ' \
+      </spa> \
+    </div> \
+  '
+  return $(pageDividerHtml)
+}
+
+function insertPageDivider() {
+  var page = '0'
+  for (let annotationDiv of $('.AnnotationDiv')) {
+    let annotationDivJQ = $(annotationDiv)
+    if (annotationDivJQ.attr('page') != page) {
+      let newPage = annotationDivJQ.attr('page')
+      annotationDivJQ.before(getPageDividerJQ(newPage))
+      annotationDivJQ.find('hr').remove()
+      page = newPage
+    }
+  }
+}
 
 function renderTaskList(taskList, finishList, scale) {
   if (taskList.length > 0) {

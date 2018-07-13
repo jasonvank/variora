@@ -7,8 +7,17 @@ function getAnnotationDivJQById(annotationID) {
 }
 
 function removeAnnotation(annotationID) {
+  let thisPage = $('.AnnotationDiv[annotation_id="' + annotationID + '"]').attr('page')
   getAnnotationDivJQById(annotationID).remove()
   $('.Annotation[annotation_id="' + annotationID + '"]').remove()
+
+  if ($('.AnnotationDiv[page="{0}"]'.format(thisPage)).toArray().length == 0) {
+    $('.PageDivider[page="' + thisPage + '"]').remove()
+  } else {
+    let firstAnnotationDivInThisPage = $('.AnnotationDiv[page="' + thisPage + '"]').first()
+    if (firstAnnotationDivInThisPage.find('hr')[0] != undefined)
+      firstAnnotationDivInThisPage.find('hr').remove()
+  }
 }
 
 function removeAnnotationReply(id) {
