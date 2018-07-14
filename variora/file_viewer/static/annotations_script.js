@@ -285,13 +285,8 @@ function addAnnotationRelatedListenerWithin(jq) {
   jq.find('.ReplyAnnotationButton').on('click', function() {
     const currentVisible = !$(this).css('display') === 'none'
     $(this).parents('footer').children('form').slideToggle({duration: 180, start: function() {
-      if (currentVisible) {
-        // tinyMCE.activeEditor.setContent('')
-      } else {
+      if (!currentVisible)
         $('.ReplyAnnotationButton').parents('footer').children('form').not($(this)).slideUp(180).css('display', 'none')
-        // for (var editor in tinyMCE.editors)
-        //   tinyMCE.editors[editor].setContent('<img src="https://i.ytimg.com/an_webp/_B8RaLCNUZw/mqdefault_6s.webp?du=3000&amp;sqp=CJjesdkF&amp;rs=AOn4CLBqPkLkYs5Q1IdMgqn99-OYSp5UuQ" alt="" width="320" height="180" />')
-      }
       tinyMCE.get($(this).find('textarea').attr('id')).focus()
     }})
   })
@@ -392,4 +387,11 @@ function addAnnotationRelatedListenerWithin(jq) {
 }
 
 
-export { addAnnotationRelatedListener, addAnnotationRelatedListenerWithin, scrollAnnotationDivIntoView, scrollAnnotationIntoView, findTargetAnnotation, getPageDividerJQ }
+export {
+  addAnnotationRelatedListener,
+  addAnnotationRelatedListenerWithin,
+  scrollAnnotationDivIntoView,
+  scrollAnnotationIntoView,
+  findTargetAnnotation,
+  getPageDividerJQ
+}
