@@ -77,7 +77,7 @@ function tinymceInit() {
   })
   $(document).on('focusin', function(e) {
     // this is to solve the issue of being unable to edit link and image link in bootstrap model
-    if ($(e.target).closest(".mce-window").length)
+    if ($(e.target).closest('.mce-window').length)
       e.stopImmediatePropagation()
   })
 }
