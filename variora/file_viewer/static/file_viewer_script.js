@@ -27,51 +27,51 @@ function pdfScale(scaleFactor) {
   if (taskList.length > 0) {
     while (taskList.length > 1)
       taskList.pop()
-    taskList.push([taskList[0][0], "PENDING", null])
+    taskList.push([taskList[0][0], 'PENDING', null])
   }
 
   for(var i = 0; i < finishList.length; i++) {
-    var id = "page_canvas_" + finishList[i]
+    var id = 'page_canvas_' + finishList[i]
     var pre = document.getElementById(id)
     pre.width = 0
     pre.height = 0
-    taskList.push([finishList[i], "PENDING", null])
+    taskList.push([finishList[i], 'PENDING', null])
   }
 
   finishList = []
   if(!rendering)
     renderTaskList(taskList, finishList, currentScale)
 
-  var oldScrollHeight = $("#file_viewer")[0].scrollHeight
+  var oldScrollHeight = $('#file_viewer')[0].scrollHeight
 
   sampleWidth *= scaleFactor
   sampleHeight *= scaleFactor
-  $(".page_div").each(function() {
+  $('.page_div').each(function() {
     var div = $(this)
-    div.css("width", sampleWidth + "px")
-    div.css("height", sampleHeight + "px")
+    div.css('width', sampleWidth + 'px')
+    div.css('height', sampleHeight + 'px')
   })
   resizeAnnotations(scaleFactor)
 
-  var factor = $("#file_viewer")[0].scrollHeight / oldScrollHeight
-  $("#file_viewer").scrollTop(parseFloat($("#file_viewer").scrollTop()) * factor)
+  var factor = $('#file_viewer')[0].scrollHeight / oldScrollHeight
+  $('#file_viewer').scrollTop(parseFloat($('#file_viewer').scrollTop()) * factor)
 }
 
 
 function startListeningSelectionBoxCreation() {
-  var annotationColor = "rgba(0,0,0,0.18)"
+  var annotationColor = 'rgba(0,0,0,0.18)'
 
   colorPicker.on('change', function(color) {
     var rgb = hexToRgb(color)
     annotationColor = 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',0.18)'
   })
 
-  $("#annotation_color_buttons_div").find(".ColorSelectorButton").on("click", function() {
-    annotationColor = $(this).css("background-color")
+  $('#annotation_color_buttons_div').find('.ColorSelectorButton').on('click', function() {
+    annotationColor = $(this).css('background-color')
   })
 
   // 可以在已经完成的annotation selection frame上新建一个selection frame
-  $(".PageDiv, .page_div").on("mousedown", function(e) {
+  $('.PageDiv, .page_div').on('mousedown', function(e) {
     // 如果是新建尚未上传的annotation，则不能在其selection frame上新建一个selection frame，
     // 因为点击这个事件要用来给这个尚未上传的annotation的frame做drag或者resize
     if ($(e.target).hasClass('ui-draggable') || $(e.target).hasClass('ui-resizable-handle'))
@@ -80,9 +80,9 @@ function startListeningSelectionBoxCreation() {
     // can create at most one annotation each time,
     // whenever atempt to create new one, close all existing annotations
     layer.closeAll()
-    $(".ui-draggable.Annotation").remove(); // detach() 会保留所有绑定的事件、附加的数据，而remove()不会
+    $('.ui-draggable.Annotation').remove(); // detach() 会保留所有绑定的事件、附加的数据，而remove()不会
 
-    var page = $(this).find(".PageImg, .PageCanvas")
+    var page = $(this).find('.PageImg, .PageCanvas')
     var mouse_absolute_x = e.pageX
     var mouse_absolute_y = e.pageY
     var page_top_left_x = page.offset().left
@@ -90,18 +90,18 @@ function startListeningSelectionBoxCreation() {
     var top_left_relative_x = mouse_absolute_x - page_top_left_x
     var top_left_relative_y = mouse_absolute_y - page_top_left_y
 
-    var new_annotation = $("<div class='Annotation'></div>")
-    page.parents(".page_div, .PageDiv").append(new_annotation)
+    var new_annotation = $('<div class="Annotation"></div>')
+    page.parents('.page_div, .PageDiv').append(new_annotation)
     new_annotation.css({
-      "background": annotationColor,
-      "position": "absolute",
-      "width": "1px",
-      "height": "1px",
-      "left": top_left_relative_x,
-      "top": top_left_relative_y,
+      'background': annotationColor,
+      'position': 'absolute',
+      'width': '1px',
+      'height': '1px',
+      'left': top_left_relative_x,
+      'top': top_left_relative_y,
     })
 
-    $(".PageImg, .PageCanvas, .Annotation").on("mousemove", function(e) {
+    $('.PageImg, .PageCanvas, .Annotation').on('mousemove', function(e) {
       var mouse_absolute_x = e.pageX
       var mouse_absolute_y = e.pageY
       var page_top_left_x = page.offset().left
@@ -110,27 +110,27 @@ function startListeningSelectionBoxCreation() {
       var bottom_right_relative_y = mouse_absolute_y - page_top_left_y
 
       new_annotation.css({
-        "width": Math.abs(bottom_right_relative_x - top_left_relative_x),
-        "height": Math.abs(bottom_right_relative_y - top_left_relative_y),
-        "left": Math.min(top_left_relative_x, bottom_right_relative_x),
-        "top": Math.min(top_left_relative_y, bottom_right_relative_y),
+        'width': Math.abs(bottom_right_relative_x - top_left_relative_x),
+        'height': Math.abs(bottom_right_relative_y - top_left_relative_y),
+        'left': Math.min(top_left_relative_x, bottom_right_relative_x),
+        'top': Math.min(top_left_relative_y, bottom_right_relative_y),
       })
       e.stopPropagation()
     })
 
-    $("body").on("mouseup", function(e) {
-      if ($(e.target).hasClass("PageImg") || $(e.target).hasClass("PageCanvas") || $(e.target).hasClass("Annotation")) {
+    $('body').on('mouseup', function(e) {
+      if ($(e.target).hasClass('PageImg') || $(e.target).hasClass('PageCanvas') || $(e.target).hasClass('Annotation')) {
         var page_height = page.height()
         var page_width = page.width()
-        var top_percent = parseFloat(new_annotation.css("top")) / page_height
-        var left_percent = parseFloat(new_annotation.css("left")) / page_width
-        var height_percent = parseFloat(new_annotation.css("height")) / page_height
-        var width_percent = parseFloat(new_annotation.css("width")) / page_width
+        var top_percent = parseFloat(new_annotation.css('top')) / page_height
+        var left_percent = parseFloat(new_annotation.css('left')) / page_width
+        var height_percent = parseFloat(new_annotation.css('height')) / page_height
+        var width_percent = parseFloat(new_annotation.css('width')) / page_width
 
         if (top_percent + height_percent > 1 || left_percent + width_percent > 1) {
           new_annotation.remove()
-          $(".PageImg, .PageCanvas, .Annotation").off("mousemove")
-          $("body").off("mouseup")
+          $('.PageImg, .PageCanvas, .Annotation').off('mousemove')
+          $('body').off('mouseup')
           e.stopPropagation()
           return
         }
@@ -142,25 +142,24 @@ function startListeningSelectionBoxCreation() {
           const allAnnotationsInThisPage = pageJQ.find('.Annotation').toArray()
           const targetAnnotation = findTargetAnnotation(e, allAnnotationsInThisPage, pageJQ)
           if (targetAnnotation[0] != undefined)
-            scrollAnnotationDivIntoView($(".AnnotationDiv[annotation_id='" + targetAnnotation.attr("annotation_id") + "']"))
-
-          $(".PageImg, .PageCanvas, .Annotation").off("mousemove")
-          $("body").off("mouseup")
+            scrollAnnotationDivIntoView($('.AnnotationDiv[annotation_id="{0}"]'.format(targetAnnotation.attr('annotation_id'))))
+          $('.PageImg, .PageCanvas, .Annotation').off('mousemove')
+          $('body').off('mouseup')
           e.stopPropagation()
           return
         }
 
         new_annotation.draggable({
-          containment: "parent"
+          containment: 'parent'
         }).resizable({
-          containment: "parent"
+          containment: 'parent'
         })
 
         // show post-annotation window
         // "annotationWindow" is a number (start from 1), which is the index of this annotation window
         var annotationWindow = layer.open({
           type: 1,
-          title: "Post Annotation",
+          title: 'Post Annotation',
           shadeClose: true,
           shade: false,
           maxmin: true, // enalbe maximize and minimize button
@@ -182,29 +181,29 @@ function startListeningSelectionBoxCreation() {
         })
 
         // annotationWindowJqueryObject will return the jquery object of the annotation window
-        var annotationWindowJqueryObject = $(".layui-layer[times=" + annotationWindow + "]")
-        annotationWindowJqueryObject.find(".post_annotation_button").on("click", function() {
+        var annotationWindowJqueryObject = $('.layui-layer[times="{0}"]'.format(annotationWindow))
+        annotationWindowJqueryObject.find('.post_annotation_button').on('click', function() {
           if (is_authenticated) {
             var is_public = !this.classList.contains('anonymously_post_annotation_button')
             $.ajax({
-              type: "POST",
-              url: "",
+              type: 'POST',
+              url: '',
               data: {
                 csrfmiddlewaretoken: getCookie('csrftoken'),
-                operation: "annotate",
-                annotation_content: annotationWindowJqueryObject.find("textarea[name='annotation_content']").val(),
-                page_id: page.attr("id"),
+                operation: 'annotate',
+                annotation_content: annotationWindowJqueryObject.find('textarea[name="annotation_content"]').val(),
+                page_id: page.attr('id'),
                 top_percent: top_percent,
                 left_percent: left_percent,
                 height_percent: height_percent,
                 width_percent: width_percent,
                 frame_color: annotationColor,
-                document_id: $("button[name='document_id']").val(),
+                document_id: $('button[name="document_id"]').val(),
                 is_public: is_public
               },
               success: function(data) {
                 // after uploading the annotation, 选择框将不再可以调整大小和拖动
-                new_annotation.draggable("destroy").resizable("destroy")
+                new_annotation.draggable('destroy').resizable('destroy')
                 let newAnnotationDiv = $(data.new_annotationdiv_html)
                 let newAnnotationPage = newAnnotationDiv.attr('page')
                 var nextAnnotationDiv = $($('.AnnotationDiv').toArray().find(div => parseInt(div.getAttribute('page')) >= parseInt(newAnnotationDiv.attr('page'))))
@@ -222,7 +221,7 @@ function startListeningSelectionBoxCreation() {
                 addAnnotationRelatedListenerWithin(new_annotation)
                 tinymceInit()
 
-                new_annotation.attr("annotation_id", data.new_annotation_id)
+                new_annotation.attr('annotation_id', data.new_annotation_id)
                 new_annotation.attr('annotation_uuid', data.new_annotation_uuid)
 
                 scrollAnnotationDivIntoView(newAnnotationDiv)
@@ -240,7 +239,7 @@ function startListeningSelectionBoxCreation() {
             })
             // 在ajax上传的过程中，禁用上传annotation的按钮
             // 以防止用户在ajax上传过程中（需要一小段时间）又重复点击了post_annotation_button
-            annotationWindowJqueryObject.find(".post_annotation_button").attr("disabled", true)
+            annotationWindowJqueryObject.find('.post_annotation_button').attr('disabled', true)
           } else
             layer.msg('You need to <a href="/sign-in" style="color: #ECECEC; text-decoration: underline">log in</a> first')
         })
@@ -346,8 +345,8 @@ function animateOnce() {
       })
     }
   })
-  $("#navbar").animateOnce("fadeInDown")
-  $("#annotation_update_div").find("blockquote").animateOnce("fadeInRight")
+  $('#navbar').animateOnce('fadeInDown')
+  $('#annotation_update_div').find('blockquote').animateOnce('fadeInRight')
 }
 
 
@@ -355,8 +354,8 @@ function scrollToTargetAnnotationIfInUrl() {
   var annotation_uuid = getValFromUrlParam('annotation')
   if (annotation_uuid != null) {
     annotation_uuid = annotation_uuid.replace(/-/g, '')
-    const annotationDiv = $('.AnnotationDiv[annotation_uuid="' + annotation_uuid + '"]')
-    const annotation = $(".Annotation[annotation_uuid='" + annotation_uuid + "']")
+    const annotationDiv = $('.AnnotationDiv[annotation_uuid="{0}"]'.format(annotation_uuid))
+    const annotation = $('.Annotation[annotation_uuid="{0}"]'.format(annotation_uuid))
     scrollAnnotationDivIntoView(annotationDiv)
     scrollAnnotationIntoView(annotation)
 
@@ -373,17 +372,17 @@ function scrollToTargetAnnotationIfInUrl() {
 
 
 function enableResizeButton() {
-  $("#buttonForLarger").on('click', function() {
+  $('#buttonForLarger').on('click', function() {
     pdfScale(scaleFactor)
   })
-  $("#buttonForSmaller").on('click', function() {
-    pdfScale(1/scaleFactor)
+  $('#buttonForSmaller').on('click', function() {
+    pdfScale(1 / scaleFactor)
   })
 }
 
 
 $(document).ready(function() {
-  prepareAndRenderAll($("#file-url").val())
+  prepareAndRenderAll($('#file-url').val())
   tinymceInit()
   // animateOnce()
 
@@ -395,8 +394,8 @@ $(document).ready(function() {
   $(window).resize(function() {
     setupFileViewerSize()
 
-    var originalWidth = parseFloat($(".PageImg").css("width"))
-    var newWidth = parseFloat($(".PageImg").css("width"))
+    var originalWidth = parseFloat($('.PageImg').css('width'))
+    var newWidth = parseFloat($('.PageImg').css('width'))
     var scaleFactor = newWidth / originalWidth
     resizeAnnotations(scaleFactor)
   })
@@ -409,17 +408,17 @@ $(document).ready(function() {
   addCommentRelatedListener()
   setupFileViewerSize()
 
-  var wrapper = $("#wrapper")
-  var fileViewer = $("#file_viewer")
-  $("#horizontal_draggable").draggable({
-    axis: "x",
-    containment: "#containment-wrapper",
+  var wrapper = $('#wrapper')
+  var fileViewer = $('#file_viewer')
+  $('#horizontal_draggable').draggable({
+    axis: 'x',
+    containment: '#containment-wrapper',
     revert: true,
     revertDuration: 0,
     stop: function(event, ui) {
-      var left = ui.offset["left"]
-      fileViewer.css("width", left + "px")
-      $("#annotation_update_div").css("width", wrapper.width() - 3 - fileViewer.width() + "px")
+      var left = ui.offset['left']
+      fileViewer.css('width', left + 'px')
+      $('#annotation_update_div').css('width', wrapper.width() - 3 - fileViewer.width() + 'px')
     }
   })
   insertPageDividers()
@@ -479,7 +478,7 @@ function renderTaskList(taskList, finishList, scale) {
 function startListeningScroll() {
   var previous = 1
 
-  $("#file_viewer").scroll(function() {
+  $('#file_viewer').scroll(function() {
     var percentage = this.scrollTop / this.scrollHeight
     var page_index = Math.ceil(percentage * numPages)
     if (page_index != previous) {
@@ -494,7 +493,7 @@ function startListeningScroll() {
           renderOrNot[finishList[index] - page_index + 1] = false
           index += 1
         } else {
-          var id = "page_canvas_" + finishList[index]
+          var id = 'page_canvas_' + finishList[index]
           var pre = document.getElementById(id)
           pre.width = 0
           pre.height = 0
@@ -512,7 +511,7 @@ function startListeningScroll() {
       // add in the new task
       for (var i = 0; i < 5; i++) {
         if (renderOrNot[i] == true)
-          taskList.push([Math.min(numPages, Math.max(1, page_index + i - 1)), "PENDING", null])
+          taskList.push([Math.min(numPages, Math.max(1, page_index + i - 1)), 'PENDING', null])
       }
 
       if (!rendering)
@@ -543,14 +542,15 @@ function prepareAndRenderAll(url) {
     pdfDoc.getPage(numPages).then(function(sample_page) {
       currentScale = ($('#file_viewer').width() * 0.66) / sample_page.getViewport(1).width
 
-      var appendPages = ""
+      var appendPages = ''
       sampleHeight = sample_page.getViewport(currentScale).height
       sampleWidth = sample_page.getViewport(currentScale).width
 
       for (var i = 1; i <= pdfDoc.numPages; i++) {
-        var new_page_div_id = "page_div_" + i
-        var new_page_canvas_id = "page_canvas_" + i
+        var new_page_div_id = 'page_div_' + i
+        var new_page_canvas_id = 'page_canvas_' + i
 
+        
         var new_page = "<div class='page_div' id=" + "'" + new_page_div_id + "'>" +
           "<canvas class='PageCanvas' id=" + "'" + new_page_canvas_id + "'" + "></canvas>" +
           "</div>" +
@@ -558,20 +558,20 @@ function prepareAndRenderAll(url) {
         appendPages = appendPages + new_page
       }
 
-      $("#file_viewer").append(appendPages)
+      $('#file_viewer').append(appendPages)
 
-      $(".page_div").css("height", sampleHeight + "px")
-      $(".page_div").css("width", sampleWidth + "px")
+      $('.page_div').css('height', sampleHeight + 'px')
+      $('.page_div').css('width', sampleWidth + 'px')
 
       startListeningSelectionBoxCreation()
       drawAllExistingAnnotationFrame()
       addAnnotationRelatedListener()
 
-      taskList.push([Math.min(numPages, 1), "PENDING", null])
-      taskList.push([Math.min(numPages, 2), "PENDING", null])
-      taskList.push([Math.min(numPages, 3), "PENDING", null])
-      taskList.push([Math.min(numPages, 4), "PENDING", null])
-      taskList.push([Math.min(numPages, 5), "PENDING", null])
+      taskList.push([Math.min(numPages, 1), 'PENDING', null])
+      taskList.push([Math.min(numPages, 2), 'PENDING', null])
+      taskList.push([Math.min(numPages, 3), 'PENDING', null])
+      taskList.push([Math.min(numPages, 4), 'PENDING', null])
+      taskList.push([Math.min(numPages, 5), 'PENDING', null])
       renderTaskList(taskList, finishList, currentScale)
       startListeningScroll()
 
