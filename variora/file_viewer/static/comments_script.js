@@ -2,11 +2,11 @@ import { getCookie } from 'util.js'
 import { tinymceInit } from './tinymce_script'
 
 function removeComment(id) {
-  var queue = $(".CommentBlock[comment_id='" + id + "']").toArray()
+  var queue = $('.CommentBlock[comment_id="{0}"]'.format(id)).toArray()
   while (queue.length > 0) {
     var headCommentJquery = $(queue.shift())
     var commentId = headCommentJquery.attr('comment_id')
-    queue = queue.concat($(".CommentBlock[reply_to_comment_id='" + commentId + "']").toArray())
+    queue = queue.concat($('.CommentBlock[reply_to_comment_id="{0}"]'.format(commentId))).toArray()
     headCommentJquery.remove()
   }
 }
@@ -54,7 +54,7 @@ function addCommentRelatedListener() {
           csrfmiddlewaretoken: getCookie('csrftoken'),
           operation: 'delete_comment',
           comment_id: commentId,
-          document_id: $("button[name='document_id']").val(),
+          document_id: $('button[name="document_id"]').val(),
         },
         success: function(data) {
           // $("#comment_update_div").html(data)
@@ -110,14 +110,14 @@ function addCommentRelatedListener() {
 }
 
 function enableRefreshCommentButton() {
-  $("#refresh_comment_button").on('click', function() {
+  $('#refresh_comment_button').on('click', function() {
     $.ajax({
-      type: "POST",
-      url: "",
+      type: 'POST',
+      url: '',
       data: {
         csrfmiddlewaretoken: getCookie('csrftoken'),
-        operation: "refresh",
-        document_id: $("button[name='document_id']").val(),
+        operation: 'refresh',
+        document_id: $('button[name="document_id"]').val(),
       },
       success: function(data) {
         $('#comment_update_div').html(data)
@@ -141,8 +141,8 @@ function enablePostCommentButton() {
         data: {
           csrfmiddlewaretoken: getCookie('csrftoken'),
           operation: 'comment',
-          comment_content: $("textarea[name='comment_content']").val(),
-          document_id: $("button[name='document_id']").val(),
+          comment_content: $('textarea[name="comment_content"]').val(),
+          document_id: $('button[name="document_id"]').val(),
           is_public: is_public,
         },
         success: function(data) {
@@ -156,7 +156,7 @@ function enablePostCommentButton() {
       layer.msg('<span style="color: #ECECEC">You need to <a href="/sign-in" style="color: #ECECEC; text-decoration: underline">log in</a> first</span>')
   })
 
-  if (window.hasOwnProperty("MathJax"))
+  if (window.hasOwnProperty('MathJax'))
     MathJax.Hub.Queue(['Typeset', MathJax.Hub])
 }
 
