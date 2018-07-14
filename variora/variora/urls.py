@@ -50,6 +50,11 @@ urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
 
     url('sitemap.xml', sitemap, {'sitemaps': {'documents': DocumentSitemap}}, name='django.contrib.sitemaps.views.sitemap'),
 
+    # serve remote servers' pdf file (to fix CORS issue)
+    url(r'^proxy$', proxy_views.proxy_view),
+
+    url(r'^notifications/', include(custom_notifications_urls)),
+
     # app: file_viewer
     url(r'^file_viewer/', include('file_viewer.urls')),
     url(r'^documents/', include('file_viewer.urls')),
@@ -60,11 +65,6 @@ urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
     # app: coterie
     url(r'^coterie/', include('coterie.urls')),
     url(r'^coteries/', include('coterie.urls')),
-
-    # serve remote servers' pdf file (to fix CORS issue)
-    url(r'^proxy$', proxy_views.proxy_view),
-
-    url(r'^notifications/', include(custom_notifications_urls)),
 
     # MUST BE THE LAST ONE
     url(r'^', include('home.urls')),
