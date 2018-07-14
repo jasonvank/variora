@@ -79,6 +79,13 @@ function getValFromUrlParam(key) {
   return new URL(window.location.href).searchParams.get(key)
 }
 
+String.prototype.format = function() {
+  let a = this
+  for (let k in arguments) {
+    a = a.replace('{' + k + '}', arguments[k])
+  }
+  return a
+}
 
 export { getCookie, getUrlFormat, imgLoad, hexToRgb, formatOpenCoterieDocumentUrl, formatOpenDocumentUrl, getValFromUrlParam }
 

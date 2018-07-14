@@ -112,7 +112,7 @@ def display_coteriefile_viewer_page(request, **kwargs):
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
 
-        if user not in coterie.administrators.all() and user not in coterie.members.all():
+        if not user.is_superuser and user not in coterie.administrators.all() and user not in coterie.members.all():
             return redirect("/")
 
         if request.POST["operation"] == "delete_annotation":
@@ -240,7 +240,7 @@ def display_coteriefile_viewer_page(request, **kwargs):
             "document": document,
             "file_url": document.url,
             "comments": document.coteriecomment_set.order_by("-post_time"),
-            "annotations": document.coterieannotation_set.order_by("page_index"),
+            "annotations": document.coterieannotation_set.order_by("page_index", "-post_time"),
             'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,
             "prev_page_url": request.META['HTTP_REFERER'] if 'HTTP_REFERER' in request.META else '/'
         }
