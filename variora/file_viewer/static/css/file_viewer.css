@@ -162,7 +162,8 @@ input {
   background-color: #1BA39C
 }
 
-.annotation-content {
+.annotation-content,
+.annotation-reply-content {
   padding-bottom: 8px;
   font-size: 80%;
   font-family: Helvetica;
@@ -173,6 +174,7 @@ input {
 }
 
 .annotation-content img,
+.annotation-reply-content img,
 .comment-content img {
   border-radius: 1.8px;
   max-width: 66%;
