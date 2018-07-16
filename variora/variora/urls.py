@@ -60,7 +60,7 @@ urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
     url(r'^documents/', include('file_viewer.urls')),
 
     # app: user_dashboard
-    # url(r'^user_dashboard/', include('user_dashboard.urls')),
+    url(r'^user_dashboard/', include('user_dashboard.urls')),
 
     # app: coterie
     url(r'^coterie/', include('coterie.urls')),
