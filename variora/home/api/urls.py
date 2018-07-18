@@ -14,6 +14,8 @@ urlpatterns = [
 
     url(r'signin/facebook$', views.facebook_sign_in),
 
+    url(r'signin/microsoft$', views.microsoft_sign_in),
+
     url(r'signin/nus', views.nus_sign_in),
 
     url(r'signoff', views.sign_off),

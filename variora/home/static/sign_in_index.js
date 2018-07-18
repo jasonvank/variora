@@ -15,11 +15,51 @@ const { SubMenu } = Menu
 const { Header, Content, Sider } = Layout
 const MenuItemGroup = Menu.ItemGroup
 const Search = Input.Search
+const Msal = require('msal')
 
 
 class NormalLoginForm extends React.Component {
   constructor(props) {
     super(props)
+
+    const applicationConfig = {
+      clientID: 'c9e686e3-bae8-4a0d-bcf1-26de09761807',
+      graphScopes: ['user.read']
+    }
+    function authCallback(errorDesc, token, error, tokenType) {if (token) { console.log(token) } else { console.log(error + ':' + errorDesc) }}
+
+    const userAgentApplication = new Msal.UserAgentApplication(applicationConfig.clientID, null, authCallback, { redirectUri: window.location.href })
+
+    this.displayMicrosoftLogin = function() {
+      userAgentApplication.loginPopup(applicationConfig.graphScopes).then(function(idToken) {
+        //Login Success
+        // console.log(idToken)
+        userAgentApplication.acquireTokenSilent(applicationConfig.graphScopes).then(function(accessToken) {
+          //AcquireToken Success
+          var data = new FormData()
+          data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+          data.append('accesstoken', accessToken)
+          axios.post('/api/signin/microsoft', data).then((response) => {
+            window.location.href = '/'
+          }).catch(e => {
+            notification['warning']({
+              message: e.response == undefined ? '' : e.response.data,
+              duration: 1.8,
+            })
+          })
+        }, function(error) {
+          //AcquireToken Failure, send an interactive request.
+          userAgentApplication.acquireTokenPopup(applicationConfig.graphScopes).then(function(accessToken) {
+            updateUI()
+          }, function(error) {
+            console.log(error)
+          })
+        })
+      }, function (error) {
+        console.log(error)
+      })
+    }
+
 
     this.state = {
       fbLoginButtonLoading: true
@@ -178,6 +218,16 @@ class NormalLoginForm extends React.Component {
                 >
                   <i className='fa fa-facebook-official' aria-hidden='true'></i>
                   {'  '}Log in with Facebook
+                </Button>
+                <Button
+                  style={{ backgroundColor:'#0078D7', borderColor:'#0078D7', marginTop: 16, color: 'white' }}
+                  className='login-form-button'
+                  htmlType='button'
+                  id='microsoft-login'
+                  onClick={this.displayMicrosoftLogin}
+                >
+                  <i className='fa fa-windows' aria-hidden='true'></i>
+                  {'  '}Log in with Outlook
                 </Button>
               </div>
             </FormItem>

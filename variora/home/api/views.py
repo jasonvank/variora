@@ -1,6 +1,9 @@
+import json
 import urllib2
+import uuid
 
 import facebook
+import requests
 from django.contrib.auth import authenticate, get_user, login, logout
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
@@ -9,7 +12,7 @@ from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect
 from django.views.generic import View
-from google.auth.transport import requests
+from google.auth.transport import requests as gauth_requests
 from google.oauth2 import id_token
 
 from coterie.api.encoders import (CoterieDocumentEncoder, CoterieEncoder,
@@ -89,7 +92,7 @@ def sign_off(request):
 def google_sign_in(request):
     try:
         # TODO: do not hardcode client ID, put it into private_settings.py and import from settings
-        userinfo = id_token.verify_oauth2_token(str(request.POST['id_token']), requests.Request(), "887521980338-fj0n0r7ui5cn313f4vh6paqm411upf3o.apps.googleusercontent.com")
+        userinfo = id_token.verify_oauth2_token(str(request.POST['id_token']), gauth_requests.Request(), "887521980338-fj0n0r7ui5cn313f4vh6paqm411upf3o.apps.googleusercontent.com")
 
         if userinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
             raise Exception('Wrong issuer.')
@@ -141,6 +144,69 @@ def facebook_sign_in(request):
         return HttpResponse(status=200)
     except Exception:
         return HttpResponse("Facebook login fail", status=400)
+
+
+graph_endpoint = 'https://graph.microsoft.com/v1.0{0}'
+
+# Generic API Sending
+def make_api_call(method, url, token, payload = None, parameters = None):
+    # Send these headers with all API calls
+    headers = { 'User-Agent' : 'python_tutorial/1.0',
+                'Authorization' : 'Bearer {0}'.format(token),
+                'Accept' : 'application/json' }
+
+    # Use these headers to instrument calls. Makes it easier
+    # to correlate requests and responses in case of problems
+    # and is a recommended best practice.
+    request_id = str(uuid.uuid4())
+    instrumentation = { 'client-request-id' : request_id,
+                        'return-client-request-id' : 'true' }
+
+    headers.update(instrumentation)
+    response = requests.get(url, headers = headers, params = parameters)
+
+    return response
+
+def get_me(access_token):
+    get_me_url = graph_endpoint.format('/me')
+
+    # Use OData query parameters to control the results
+    #  - Only return the displayName and mail fields
+    query_parameters = {'$select': 'displayName,mail'}
+
+    r = make_api_call('GET', get_me_url, access_token, "", parameters = query_parameters)
+
+    if (r.status_code == requests.codes.ok):
+        return r
+    else:
+        return "{0}: {1}".format(r.status_code, r.text)
+
+# https://docs.microsoft.com/en-us/outlook/rest/python-tutorial
+def microsoft_sign_in(request):
+    try:
+        access_token = request.POST['accesstoken']
+        user_response = get_me(access_token)
+        user_dict = user_response.json()
+        print(user_dict)
+
+        email = user_dict['mail']
+        name = user_dict['displayName']
+        portrait_url = 'https://outlook.office365.com/owa/service.svc/s/GetPersonaPhoto?email={0}&size=HR240x240'.format(email)
+        if not User.objects.filter(email_address=email).exists():
+            new_user = User()
+            new_user.set_nickname(name)
+            new_user.set_email_address(email)
+            new_user.external_portrait_url = portrait_url
+            new_user.save()
+        user = User.objects.get(email_address=email)
+        user.set_nickname(name)
+        user.external_portrait_url = portrait_url
+        user.save()
+        user.backend = 'django.contrib.auth.backends.ModelBackend'
+        login(request, user)
+        return HttpResponse(status=200)
+    except Exception:
+        return HttpResponse("Microsoft login fail", status=400)
 
 
 def nus_sign_in(request):
