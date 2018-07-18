@@ -1,3 +1,4 @@
+import base64
 import json
 import urllib2
 import uuid
@@ -149,7 +150,7 @@ def facebook_sign_in(request):
 graph_endpoint = 'https://graph.microsoft.com/v1.0{0}'
 
 # Generic API Sending
-def make_api_call(method, url, token, payload = None, parameters = None):
+def make_api_call(method, url, token, payload=None, parameters=None):
     # Send these headers with all API calls
     headers = { 'User-Agent' : 'python_tutorial/1.0',
                 'Authorization' : 'Bearer {0}'.format(token),
@@ -172,14 +173,19 @@ def get_me(access_token):
 
     # Use OData query parameters to control the results
     #  - Only return the displayName and mail fields
-    query_parameters = {'$select': 'displayName,mail'}
+    query_parameters = {'$select': 'displayName,mail,userPrincipalName'}
 
-    r = make_api_call('GET', get_me_url, access_token, "", parameters = query_parameters)
+    r = make_api_call('GET', get_me_url, access_token, "", parameters=query_parameters)
 
     if (r.status_code == requests.codes.ok):
         return r
     else:
         return "{0}: {1}".format(r.status_code, r.text)
+
+def img2base64url(response):
+    url = ("data:" + response.headers['Content-Type'] + ";" + "base64," + base64.b64encode(response.content))
+    print(url)
+    return url
 
 # https://docs.microsoft.com/en-us/outlook/rest/python-tutorial
 def microsoft_sign_in(request):
@@ -188,10 +194,11 @@ def microsoft_sign_in(request):
         user_response = get_me(access_token)
         user_dict = user_response.json()
         print(user_dict)
-
-        email = user_dict['mail']
+        photo_response = make_api_call('GET', graph_endpoint.format('/me/photos/48x48/$value'), access_token)
+        print(photo_response.status_code)
+        email = user_dict['userPrincipalName']
         name = user_dict['displayName']
-        portrait_url = 'https://outlook.office365.com/owa/service.svc/s/GetPersonaPhoto?email={0}&size=HR240x240'.format(email)
+        portrait_url = img2base64url(photo_response) if photo_response.status_code == 200 else None
         if not User.objects.filter(email_address=email).exists():
             new_user = User()
             new_user.set_nickname(name)
