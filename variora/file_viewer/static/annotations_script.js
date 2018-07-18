@@ -310,11 +310,38 @@ function addAnnotationRelatedListenerWithin(jq) {
     })
   })
 
+  jq.find('.AnnotationReplyEditFormToggleButton').on('click', function() {
+    let $this = $(this)
+    $this.parents('.AnnotationReplyDiv').find('.AnnotationReplyBlock').css('display', 'none')
+    $this.parents('.AnnotationReplyDiv').find('.AnnotationReplyEditForm').fadeIn(666)
+    let tinyMCEEditor = tinyMCE.get($(this).parents('.AnnotationReplyDiv').find('.AnnotationReplyEditForm').find('textarea').attr('id'))
+
+    $.ajax({
+      type: 'GET',
+      url: '/' + appName + '/api/annotationreplies/' + $this.attr('annotation_reply_id') + '/content',
+      data: {
+        csrfmiddlewaretoken: getCookie('csrftoken'),
+      },
+      success: function(data) {
+        tinyMCEEditor.setContent(data)
+        tinyMCEEditor.focus()
+      }
+    })
+  })
+
   jq.find('.CancelAnnotationEditButton').on('click', function() {
     let $this = $(this)
     $this.parents('.AnnotationDiv').find('.AnnotationBlock').css('display', 'block')
     $this.parents('.AnnotationDiv').find('.AnnotationEditForm').css('display', 'none')
     let tinyMCEEditor = tinyMCE.get($(this).parents('.AnnotationDiv').find('.AnnotationEditForm').find('textarea').attr('id'))
+    tinyMCEEditor.setContent('')
+  })
+
+  jq.find('.CancelAnnotationReplyEditButton').on('click', function() {
+    let $this = $(this)
+    $this.parents('.AnnotationReplyDiv').find('.AnnotationReplyBlock').css('display', 'block')
+    $this.parents('.AnnotationReplyDiv').find('.AnnotationReplyEditForm').css('display', 'none')
+    let tinyMCEEditor = tinyMCE.get($(this).parents('.AnnotationReplyDiv').find('.AnnotationReplyEditForm').find('textarea').attr('id'))
     tinyMCEEditor.setContent('')
   })
 
@@ -337,6 +364,30 @@ function addAnnotationRelatedListenerWithin(jq) {
         $this.parents('.AnnotationDiv').find('.AnnotationBlock').css('display', 'block')
         tinyMCEEditor.setContent('')
         addAnnotationRelatedListenerWithin($this.parents('.AnnotationDiv'))
+        tinymceInit()
+      }
+    })
+  })
+
+  jq.find('.PostAnnotationReplyEditButton').on('click', function() {
+    let $this = $(this)
+    let tinyMCEEditor = tinyMCE.get($(this).parents('.AnnotationReplyDiv').find('.AnnotationReplyEditForm').find('textarea').attr('id'))
+    let new_content = $this.parents('.AnnotationReplyEditForm').find('textarea[name="annotation_reply_edit_content"]').val()
+    $.ajax({
+      type: 'POST',
+      url: '/' + appName + '/api/annotationreplies/' + $this.attr('annotation_reply_id') + '/edit',
+      data: {
+        csrfmiddlewaretoken: getCookie('csrftoken'),
+        new_content: new_content
+      },
+      success: function() {
+        $this.parents('.AnnotationReplyDiv').find('.annotation-reply-content').html(new_content)
+        $this.parents('.AnnotationReplyDiv').find('.annotation_reply_time_span').text('edited')
+        $this.parents('.AnnotationReplyDiv').find('.AnnotationReplyEditForm').css('display', 'none')
+        $this.parents('.AnnotationReplyDiv').find('.AnnotationReplyBlock').fadeIn(666)
+        $this.parents('.AnnotationReplyDiv').find('.AnnotationReplyBlock').css('display', 'block')
+        tinyMCEEditor.setContent('')
+        addAnnotationRelatedListenerWithin($this.parents('.AnnotationReplyDiv'))
         tinymceInit()
       }
     })

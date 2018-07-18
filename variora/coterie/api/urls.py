@@ -17,8 +17,10 @@ urlpatterns = [
     url(r'^coteriedocuments/(?P<pk>\d+)/(?P<operation>\w+)$', views.CoterieDocumentView.as_view()),
 
     url(r'^annotations/(?P<id>\d+)/content$', views.get_annotation_content),
+    url(r'^annotationreplies/(?P<id>\d+)/content$', views.get_annotation_reply_content),
 
     url(r'^annotations/(?P<id>\d+)/edit$', views.edit_annotation_content),
+    url(r'^annotationreplies/(?P<id>\d+)/edit$', views.edit_annotation_reply_content),
 ] + [
 
     url(r'^invite$', views.create_invitation),

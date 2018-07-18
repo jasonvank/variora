@@ -126,3 +126,15 @@ def edit_annotation_content(request, id):
     return HttpResponse(status=200)
 
 
+def get_annotation_reply_content(request, id):
+    return HttpResponse(AnnotationReply.objects.get(id=int(id)).content)
+
+
+def edit_annotation_reply_content(request, id):
+    user = get_user(request)
+    reply = AnnotationReply.objects.filter(id=int(id))
+    if user.pk != reply[0].replier.pk:
+        return HttpResponse(status=403)
+    reply.update(content=request.POST['new_content'], edit_time=now())
+    return HttpResponse(status=200)
+

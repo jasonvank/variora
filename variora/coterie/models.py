@@ -121,6 +121,7 @@ class CoterieAnnotation(ModelWithCleanUUID):
 class CoterieAnnotationReply(ModelWithCleanUUID):
     uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
     post_time = models.DateTimeField(auto_now=False, auto_now_add=True, db_index=True)
+    edit_time = models.DateTimeField(null=True, blank=True)
     replier = models.ForeignKey(User)
     reply_to_annotation = models.ForeignKey(CoterieAnnotation, related_name='annotationreply_set')
     reply_to_annotation_reply = models.ForeignKey("CoterieAnnotationReply",

@@ -15,7 +15,7 @@ from validate_email import validate_email
 
 from home.models import User
 
-from ..models import (Coterie, CoterieAnnotation, CoterieDocument,
+from ..models import (Coterie, CoterieAnnotation, CoterieAnnotationReply, CoterieDocument,
                       CoterieInvitation)
 from .encoders import (CoterieDocumentEncoder, CoterieEncoder,
                        CoterieInvitationEncoder)
@@ -163,4 +163,17 @@ def edit_annotation_content(request, id):
     if user.pk != annotation[0].annotator.pk:
         return HttpResponse(status=403)
     annotation.update(content=request.POST['new_content'], edit_time=now())
+    return HttpResponse(status=200)
+
+
+def get_annotation_reply_content(request, id):
+    return HttpResponse(CoterieAnnotationReply.objects.get(id=int(id)).content)
+
+
+def edit_annotation_reply_content(request, id):
+    user = get_user(request)
+    reply = CoterieAnnotationReply.objects.filter(id=int(id))
+    if user.pk != reply[0].replier.pk:
+        return HttpResponse(status=403)
+    reply.update(content=request.POST['new_content'], edit_time=now())
     return HttpResponse(status=200)

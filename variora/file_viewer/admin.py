@@ -28,7 +28,7 @@ class AnnotationModelAdmin(admin.ModelAdmin):
 
 
 class AnnotationReplyModelAdmin(admin.ModelAdmin):
-    list_display = ["id", 'clean_uuid', "reply_to_annotation", "reply_to_annotation_reply", "replier", "num_like", "post_time", "is_public", "content"]
+    list_display = ["id", 'clean_uuid', "reply_to_annotation", "reply_to_annotation_reply", "replier", "num_like", "post_time", "edit_time", "is_public", "content"]
     list_filter = ["reply_to_annotation", "reply_to_annotation_reply", "replier", "num_like", "is_public"]
     search_fields = ["id", 'uuid', "content", "reply_to_annotation__content", "reply_to_annotation_reply__content", "replier__nickname", "num_like"]
 

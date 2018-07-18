@@ -12,8 +12,10 @@ urlpatterns = [
     url(r'^documents/explore$', views.get_top_document_thumbnails),
 
     url(r'^annotations/(?P<id>\d+)/content$', views.get_annotation_content),
+    url(r'^annotationreplies/(?P<id>\d+)/content$', views.get_annotation_reply_content),
 
     url(r'^annotations/(?P<id>\d+)/edit$', views.edit_annotation_content),
+    url(r'^annotationreplies/(?P<id>\d+)/edit$', views.edit_annotation_reply_content),
 ]
 
 

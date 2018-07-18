@@ -147,6 +147,7 @@ class Annotation(ModelWithCleanUUID):
 class AnnotationReply(ModelWithCleanUUID):
     uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
     post_time = models.DateTimeField(auto_now=False, auto_now_add=True)
+    edit_time = models.DateTimeField(null=True, blank=True)
     replier = models.ForeignKey(User)  # many Comments to one User
     reply_to_annotation = models.ForeignKey(Annotation)
     reply_to_annotation_reply = models.ForeignKey("AnnotationReply",

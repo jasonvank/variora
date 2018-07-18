@@ -154,7 +154,9 @@ input {
 .PostAnnotationReplyButton,
 .PostReplyReplyButton,
 .CancelAnnotationEditButton,
-.PostAnnotationEditButton {
+.PostAnnotationEditButton,
+.CancelAnnotationReplyEditButton,
+.PostAnnotationReplyEditButton {
   margin-top: 8px;
   float: right;
   border-radius: 0;
