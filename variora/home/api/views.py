@@ -148,36 +148,24 @@ def facebook_sign_in(request):
 
 
 graph_endpoint = 'https://graph.microsoft.com/v1.0{0}'
-outlook_endpoint = 'https://outlook.office.com/api/v2.0{0}'
 
 # Generic API Sending
-def make_api_call(method, url, token, payload=None, parameters=None):
+def _make_api_call(method, url, token, payload=None, parameters=None):
     # Send these headers with all API calls
     headers = { 'User-Agent' : 'python_tutorial/1.0',
                 'Authorization' : 'Bearer {0}'.format(token),
                 'Accept' : 'application/json' }
-
-    # Use these headers to instrument calls. Makes it easier
-    # to correlate requests and responses in case of problems
-    # and is a recommended best practice.
     request_id = str(uuid.uuid4())
     instrumentation = { 'client-request-id' : request_id,
                         'return-client-request-id' : 'true' }
-
     headers.update(instrumentation)
     response = requests.get(url, headers = headers, params = parameters)
-
     return response
 
-def get_me(access_token):
+def _get_me(access_token):
     get_me_url = graph_endpoint.format('/me')
-
-    # Use OData query parameters to control the results
-    #  - Only return the displayName and mail fields
-    query_parameters = {'$select': 'displayName,mail,userPrincipalName'}
-
-    r = make_api_call('GET', get_me_url, access_token, "", parameters=query_parameters)
-
+    query_parameters = {'$select': 'displayName,userPrincipalName,mail,id'} # userPrincipalName is email address
+    r = _make_api_call('GET', get_me_url, access_token, "", parameters=query_parameters)
     if (r.status_code == requests.codes.ok):
         return r
     else:
@@ -185,29 +173,24 @@ def get_me(access_token):
 
 def img2base64url(response):
     url = ("data:" + response.headers['Content-Type'] + ";" + "base64," + base64.b64encode(response.content))
-    print(url)
     return url
 
-# https://docs.microsoft.com/en-us/outlook/rest/python-tutorial
+# https://docs.microsoft.com/en-us/outlook/rest/python-tutorial  -- graph API
+# https://github.com/jasonjoh/python_tutorial/tree/outlook-api  -- outlook API
 def microsoft_sign_in(request):
     try:
         access_token = request.POST['accesstoken']
-        user_response = get_me(access_token)
+        user_response = _get_me(access_token)
         user_dict = user_response.json()
-        print(user_dict)
 
         portrait_url = None
-        photo_response = make_api_call('GET', graph_endpoint.format('/me/photos/48x48/$value'), access_token)
-        print('g: ' + str(photo_response.status_code))
+        photo_response = _make_api_call('GET', graph_endpoint.format('/me/photos/48x48/$value'), access_token)
         if photo_response.status_code == 200:
             portrait_url = img2base64url(photo_response)
-        else:
-            photo_response = make_api_call('GET', outlook_endpoint.format('/me/photo/$value'), access_token)
-            print('o: ' + str(photo_response.status_code))
-            if photo_response.status_code == 200:
-                portrait_url = img2base64url(photo_response)
 
-        email = user_dict['userPrincipalName']
+        email = user_dict['mail']
+        if email is None or email == '' or '@outlook.com' in email:
+            return HttpResponse("Outlook login is not supported yet", status=400)
         name = user_dict['displayName']
         if not User.objects.filter(email_address=email).exists():
             new_user = User()

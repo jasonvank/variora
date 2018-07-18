@@ -44,7 +44,7 @@ class NormalLoginForm extends React.Component {
           }).catch(e => {
             notification['warning']({
               message: e.response == undefined ? '' : e.response.data,
-              duration: 1.8,
+              duration: 3.8,
             })
           })
         }, function(error) {
@@ -191,15 +191,6 @@ class NormalLoginForm extends React.Component {
               Or <a href=''>register now!</a> (coming soon)
               <div id='third-party-login' style={{ marginTop: 28 }}>
                 <Button
-                  style={{backgroundColor: 'orange', borderColor: 'orange', marginTop: 16, color: 'white'}}
-                  className='login-form-button'
-                  htmlType='button'
-                  type='primary'
-                  onClick={this.redirectToNUSSignIn}
-                >
-                  Log in with NUS ID
-                </Button>
-                <Button
                   style={{ backgroundColor:'#DD4B39', borderColor:'#DD4B39', marginTop: 16, color: 'white' }}
                   className='login-form-button'
                   htmlType='button'
@@ -227,7 +218,16 @@ class NormalLoginForm extends React.Component {
                   onClick={this.displayMicrosoftLogin}
                 >
                   <i className='fa fa-windows' aria-hidden='true'></i>
-                  {'  '}Log in with Outlook
+                  {'  '}Log in with Office365
+                </Button>
+                <Button
+                  style={{backgroundColor: 'orange', borderColor: 'orange', marginTop: 16, color: 'white'}}
+                  className='login-form-button'
+                  htmlType='button'
+                  type='primary'
+                  onClick={this.redirectToNUSSignIn}
+                >
+                  Log in with NUS ID
                 </Button>
               </div>
             </FormItem>
