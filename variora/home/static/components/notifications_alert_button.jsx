@@ -34,11 +34,11 @@ class NotificationsDetailsWrapper extends React.Component {
   }
 
   render() {
-    var description = this.state.newNotification.description
+    var description = this.state.newNotification.description ? this.state.newNotification.description.trim() : ''
     var verb = ''
     var actionVerb = this.state.newNotification.verb
-    if (actionVerb == 'reply to annotation reply') verb = 'replied'
-    else if (actionVerb == 'reply to annotation') verb = 'replied'
+    if (description == '') verb = 'replied'
+    else if (actionVerb == 'reply to annotation reply' || actionVerb == 'reply to annotation') verb = 'replied:'
     var title = this.state.newNotification.actor + ' ' + verb
 
     return (
