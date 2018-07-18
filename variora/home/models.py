@@ -62,7 +62,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     portrait = models.ImageField(upload_to=upload_to, blank=True, null=True)
 
-    external_portrait_url = models.URLField(max_length=2000, blank=True, null=True)
+    external_portrait_url = models.TextField(blank=True, null=True)
 
     @property
     def portrait_url(self):
