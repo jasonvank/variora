@@ -30,7 +30,7 @@ function pdfScale(scaleFactor) {
     taskList.push([taskList[0][0], 'PENDING', null])
   }
 
-  for(var i = 0; i < finishList.length; i++) {
+  for (var i = 0; i < finishList.length; i++) {
     var id = 'page_canvas_' + finishList[i]
     var pre = document.getElementById(id)
     pre.width = 0
@@ -39,7 +39,7 @@ function pdfScale(scaleFactor) {
   }
 
   finishList = []
-  if(!rendering)
+  if (!rendering)
     renderTaskList(taskList, finishList, currentScale)
 
   var oldScrollHeight = $('#file_viewer')[0].scrollHeight
@@ -66,7 +66,7 @@ function startListeningSelectionBoxCreation() {
     annotationColor = 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',0.18)'
   })
 
-  $('#annotation_color_buttons_div').find('.ColorSelectorButton').on('click', function() {
+  $('#annotation-color-buttons-div').find('.ColorSelectorButton').on('click', function() {
     annotationColor = $(this).css('background-color')
   })
 
