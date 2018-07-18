@@ -18,7 +18,7 @@ class NotificationEncoder(DjangoJSONEncoder):
                 'slug': slug,
                 'actor': str(obj.actor),
                 'verb': obj.verb,
-                'description': obj.description,
+                'description': obj.description or '',
                 'action_object': str(obj.action_object),
                 'target': str(obj.target),
                 'timestamp': obj.timestamp,
