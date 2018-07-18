@@ -2,13 +2,15 @@ import re
 import urllib
 from hashlib import md5
 
-import models
 from django.conf import settings
 from django.contrib.auth import get_user
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
+from notifications.signals import notify
+
+import models
 from file_viewer import models as file_viewer_models
 from home.models import User
 from variora import utils
@@ -206,9 +208,26 @@ def display_coteriefile_viewer_page(request, **kwargs):
                 annotation_reply.reply_to_annotation = annotation
                 annotation_reply.is_public = True if request.POST["is_public"] == 'true' else False
                 if "reply_to_annotation_reply_id" in request.POST:
-                    annotation_reply.reply_to_annotation_reply = models.CoterieAnnotationReply.objects.get(
-                        id=int(request.POST["reply_to_annotation_reply_id"]))
+                    annotation_reply.reply_to_annotation_reply = models.CoterieAnnotationReply.objects.get(id=int(request.POST["reply_to_annotation_reply_id"]))
+                    notify.send(
+                        sender=annotation_reply.replier,
+                        recipient=annotation_reply.reply_to_annotation_reply.replier,
+                        action_object=annotation_reply,
+                        verb='reply to annotation reply',
+                        redirect_url=annotation.url,
+                        image_url=annotation_reply.replier.portrait_url,
+                        description=h.handle(annotation_reply.content),
+                    )
                 annotation_reply.save()
+                notify.send(
+                    sender=annotation_reply.replier,
+                    recipient=annotation_reply.reply_to_annotation.annotator,
+                    action_object=annotation_reply,
+                    verb='reply to annotation',
+                    redirect_url=annotation.url,
+                    image_url=annotation_reply.replier.portrait_url,
+                    description=h.handle(annotation_reply.content),
+                )
                 context = {
                     "annotation_reply": annotation_reply,
                     'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,

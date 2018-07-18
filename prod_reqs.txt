@@ -13,6 +13,7 @@ django-notifications-hq
 pdfrw
 Wand
 facebook-sdk
+html2text
 
 ###### development ######
 selenium  # write browser-side tests

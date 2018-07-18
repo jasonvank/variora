@@ -1,3 +1,4 @@
+import html2text
 from django.conf import settings
 from django.contrib.auth import get_user
 from django.contrib.auth.decorators import login_required
@@ -8,10 +9,13 @@ from django.utils.decorators import method_decorator
 from django.views.generic import View
 from notifications.signals import notify
 
-
 from models import Annotation, AnnotationReply, Comment, Document
 from variora import utils
 
+h = html2text.HTML2Text()
+h.ignore_images = True
+h.ignore_emphasis = True
+h.ignore_links = True
 
 class FileViewerView(View):
     @method_decorator(login_required(login_url='/'))
@@ -136,6 +140,7 @@ class FileViewerView(View):
                         verb='reply to annotation reply',
                         redirect_url=annotation.url,
                         image_url=annotation_reply.replier.portrait_url,
+                        description=h.handle(annotation_reply.content),
                     )
                 annotation_reply.save()
                 notify.send(
@@ -145,6 +150,7 @@ class FileViewerView(View):
                     verb='reply to annotation',
                     redirect_url=annotation.url,
                     image_url=annotation_reply.replier.portrait_url,
+                    description=h.handle(annotation_reply.content),
                 )
                 context = {
                     "annotation_reply": annotation_reply,

@@ -106,7 +106,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     # set_password method inherited from super class
 
     def __unicode__(self):
-        return self.get_full_name()
+        return self.get_short_name()
 
 @receiver(models.signals.pre_delete, sender=User)
 # "sender" and "**kwargs" are required though they are of no use here, do not delete them
