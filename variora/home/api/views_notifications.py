@@ -36,7 +36,7 @@ def get_unread_notification_list(request):
         user_is_authenticated = request.user.is_authenticated
 
     if not user_is_authenticated:
-        return JsonResponse([])
+        return JsonResponse([], safe=False)
 
     try:
         num_to_fetch = request.GET.get('max', 10)  # If they don't specify, make it 5.

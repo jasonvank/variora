@@ -204,8 +204,8 @@ function startListeningSelectionBoxCreation() {
               success: function(data) {
                 // after uploading the annotation, 选择框将不再可以调整大小和拖动
                 new_annotation.draggable('destroy').resizable('destroy')
-                let newAnnotationDiv = $(data.new_annotationdiv_html)
-                let newAnnotationPage = newAnnotationDiv.attr('page')
+                var newAnnotationDiv = $(data.new_annotationdiv_html)
+                var newAnnotationPage = newAnnotationDiv.attr('page')
                 var nextAnnotationDiv = $($('.AnnotationDiv').toArray().find(div => parseInt(div.getAttribute('page')) >= parseInt(newAnnotationDiv.attr('page'))))
                 if (nextAnnotationDiv[0] == undefined) {
                   $('#annotation_update_div').children('hr').before(newAnnotationDiv)
@@ -226,7 +226,7 @@ function startListeningSelectionBoxCreation() {
 
                 scrollAnnotationDivIntoView(newAnnotationDiv)
                 setTimeout(function() {
-                  let contentBlock = newAnnotationDiv.find('.AnnotationBlock')
+                  var contentBlock = newAnnotationDiv.find('.AnnotationBlock')
                   contentBlock.css('background-color', '#bdede5')
                   contentBlock.animate({
                     backgroundColor: 'white'
@@ -323,32 +323,30 @@ function setupFileViewerSize() {
   $('#horizontal_draggable').css('height', wrapper.height() + 'px')
 
   // 设置文档的大小
-  $('.PageImg').css('width', fileViewer.width() - 24 + 'px')
-  $('.PageDiv').each(function() {
-    var div = $(this)
-    var img = div.children('.PageImg')
-    imgLoad(img[0], function() {
-      div.css('width', img.width() + 'px')
-      div.css('height', img.height() + 'px')
-    })
-  })
+  // $('.PageImg').css('width', fileViewer.width() - 24 + 'px')
+  // $('.PageDiv').each(function() {
+  //   var div = $(this)
+  //   var img = div.children('.PageImg')
+  //   imgLoad(img[0], function() {
+  //     div.css('width', img.width() + 'px')
+  //     div.css('height', img.height() + 'px')
+  //   })
+  // })
 }
 
-
-function animateOnce() {
-  // add animation using animate.css
-  $.fn.extend({
-    animateOnce: function(animationName) {
-      var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend'
-      this.addClass('animated ' + animationName).one(animationEnd, function() {
-        $(this).removeClass('animated ' + animationName)
-      })
-    }
-  })
-  $('#navbar').animateOnce('fadeInDown')
-  $('#annotation_update_div').find('blockquote').animateOnce('fadeInRight')
-}
-
+// function animateOnce() {
+//   // add animation using animate.css
+//   $.fn.extend({
+//     animateOnce: function(animationName) {
+//       var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend'
+//       this.addClass('animated ' + animationName).one(animationEnd, function() {
+//         $(this).removeClass('animated ' + animationName)
+//       })
+//     }
+//   })
+//   $('#navbar').animateOnce('fadeInDown')
+//   $('#annotation_update_div').find('blockquote').animateOnce('fadeInRight')
+// }
 
 function scrollToTargetAnnotationIfInUrl() {
   var annotation_uuid = getValFromUrlParam('annotation')
@@ -361,7 +359,7 @@ function scrollToTargetAnnotationIfInUrl() {
 
     annotationDiv.find('.AnnotationBlock').prepend($('<span class="badge" style="background-color: #1BA39C; margin-bottom: 6px">highlighted annotation</span>'))
     setTimeout(function() {
-      let contentBlock = annotationDiv.find('.AnnotationBlock')
+      var contentBlock = annotationDiv.find('.AnnotationBlock')
       contentBlock.css('background-color', '#bdede5')
       contentBlock.animate({
         backgroundColor: 'white'
@@ -408,8 +406,8 @@ $(document).ready(function() {
   addCommentRelatedListener()
   setupFileViewerSize()
 
-  var wrapper = $('#wrapper')
-  var fileViewer = $('#file_viewer')
+  const wrapper = $('#wrapper')
+  const fileViewer = $('#file_viewer')
   $('#horizontal_draggable').draggable({
     axis: 'x',
     containment: '#containment-wrapper',
@@ -426,10 +424,10 @@ $(document).ready(function() {
 
 function insertPageDividers() {
   var page = '0'
-  for (let annotationDiv of $('.AnnotationDiv')) {
-    let annotationDivJQ = $(annotationDiv)
+  for (const annotationDiv of $('.AnnotationDiv')) {
+    const annotationDivJQ = $(annotationDiv)
     if (annotationDivJQ.attr('page') != page) {
-      let newPage = annotationDivJQ.attr('page')
+      var newPage = annotationDivJQ.attr('page')
       annotationDivJQ.children('hr').replaceWith(getPageDividerJQ(newPage))
       page = newPage
     }
@@ -540,22 +538,20 @@ function prepareAndRenderAll(url) {
     // also
     // initialize the canvases' height and width according to the last page
     pdfDoc.getPage(numPages).then(function(sample_page) {
-      currentScale = ($('#file_viewer').width() * 0.66) / sample_page.getViewport(1).width
+      currentScale = ($('#file_viewer').width() * 0.8) / sample_page.getViewport(1).width
 
       var appendPages = ''
       sampleHeight = sample_page.getViewport(currentScale).height
       sampleWidth = sample_page.getViewport(currentScale).width
 
       for (var i = 1; i <= pdfDoc.numPages; i++) {
-        var new_page_div_id = 'page_div_' + i
-        var new_page_canvas_id = 'page_canvas_' + i
-
-        
-        var new_page = "<div class='page_div' id=" + "'" + new_page_div_id + "'>" +
+        const new_page_div_id = 'page_div_' + i
+        const new_page_canvas_id = 'page_canvas_' + i
+        const new_page = "<div class='page_div' id=" + "'" + new_page_div_id + "'>" +
           "<canvas class='PageCanvas' id=" + "'" + new_page_canvas_id + "'" + "></canvas>" +
           "</div>" +
           "<br>"
-        appendPages = appendPages + new_page
+        appendPages += new_page
       }
 
       $('#file_viewer').append(appendPages)

@@ -1,4 +1,4 @@
-import { getCookie } from 'util.js'
+import { getCookie, renderMathJax } from 'util.js'
 import { tinymceInit } from './tinymce_script'
 
 function getAnnotationDivJQById(annotationID) {
@@ -60,11 +60,6 @@ function _getBottom(annotationDom) { return parseFloat($(annotationDom).css('top
 
 function addAnnotationRelatedListener() { addAnnotationRelatedListenerWithin($(document)) }
 
-function renderMathJax() {
-  if (window.hasOwnProperty('MathJax'))
-    MathJax.Hub.Queue(['Typeset', MathJax.Hub])
-}
-
 function scrollAnnotationDivIntoView(annotationDiv) {
   var annotationsDiv = $('#annotation_update_div')
   var down = annotationDiv.offset().top - annotationsDiv.offset().top + annotationsDiv.scrollTop()
@@ -103,18 +98,19 @@ function addAnnotationRelatedListenerWithin(jq) {
   jq.find('code').addClass('prettyprint')
   PR.prettyPrint()
 
-  jq.find('.AnnotationBlock').on('mouseover', function() {
-    var annotation_id = $(this).attr('annotation_id')
-    var Annotation = $('.Annotation[annotation_id="{0}"]'.format(annotation_id))
-    $(this).css('box-shadow', '3px 3px 8px rgba(0, 0, 0, .38)')
-    Annotation.css('box-shadow', '3px 3px 8px rgba(0, 0, 0, .38)')
-  })
-
-  jq.find('.AnnotationBlock').on('mouseout', function() {
-    var annotation_id = $(this).attr('annotation_id')
-    var Annotation = $('.Annotation[annotation_id="{0}"]'.format(annotation_id))
-    $(this).css('box-shadow', 'none')
-    Annotation.css('box-shadow', 'none')
+  jq.find('.AnnotationBlock').on({
+    mouseover: function() {
+      var annotationID = $(this).attr('annotation_id')
+      var annotation = $('.Annotation[annotation_id="{0}"]'.format(annotationID))
+      $(this).css('box-shadow', '3px 3px 8px rgba(0, 0, 0, .38)')
+      annotation.css('box-shadow', '3px 3px 8px rgba(0, 0, 0, .38)')
+    },
+    mouseout: function() {
+      var annotationID = $(this).attr('annotation_id')
+      var annotation = $('.Annotation[annotation_id="{0}"]'.format(annotationID))
+      $(this).css('box-shadow', 'none')
+      annotation.css('box-shadow', 'none')
+    }
   })
 
   // jq.find(".AnnotationBlock").on("click", function(e) { // scroll to the corresponding Anotation when clicking a certain AnnotationBlock
@@ -332,7 +328,7 @@ function addAnnotationRelatedListenerWithin(jq) {
     })
   })
 
-  jq.find('.CancelAnnotationEditButton').on('click', function() {
+  jq.find('.cancel-annotation-edit-btn').on('click', function() {
     let $this = $(this)
     let annotationDivJQ = $this.parents('.AnnotationDiv')
     annotationDivJQ.find('.AnnotationBlock').css('display', 'block')
@@ -341,7 +337,7 @@ function addAnnotationRelatedListenerWithin(jq) {
     tinyMCEEditor.setContent('')
   })
 
-  jq.find('.CancelAnnotationReplyEditButton').on('click', function() {
+  jq.find('.cancel-annotation-reply-edit-btn').on('click', function() {
     let $this = $(this)
     $this.parents('.annotation-reply-div').find('.annotation-reply-block').css('display', 'block')
     $this.parents('.annotation-reply-div').find('.annotation-reply-edit-form').css('display', 'none')
