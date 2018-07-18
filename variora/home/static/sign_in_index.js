@@ -24,7 +24,7 @@ class NormalLoginForm extends React.Component {
 
     const applicationConfig = {
       clientID: 'c9e686e3-bae8-4a0d-bcf1-26de09761807',
-      graphScopes: ['user.read']
+      graphScopes: ['User.ReadBasic.All', 'User.Read']
     }
     function authCallback(errorDesc, token, error, tokenType) {if (token) { console.log(token) } else { console.log(error + ':' + errorDesc) }}
 
