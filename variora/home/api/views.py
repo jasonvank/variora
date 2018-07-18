@@ -148,6 +148,7 @@ def facebook_sign_in(request):
 
 
 graph_endpoint = 'https://graph.microsoft.com/v1.0{0}'
+outlook_endpoint = 'https://outlook.office.com/api/v2.0{0}'
 
 # Generic API Sending
 def make_api_call(method, url, token, payload=None, parameters=None):
@@ -194,11 +195,20 @@ def microsoft_sign_in(request):
         user_response = get_me(access_token)
         user_dict = user_response.json()
         print(user_dict)
+
+        portrait_url = None
         photo_response = make_api_call('GET', graph_endpoint.format('/me/photos/48x48/$value'), access_token)
-        print(photo_response.status_code)
+        print('g: ' + str(photo_response.status_code))
+        if photo_response.status_code == 200:
+            portrait_url = img2base64url(photo_response)
+        else:
+            photo_response = make_api_call('GET', outlook_endpoint.format('/me/photo/$value'), access_token)
+            print('o: ' + str(photo_response.status_code))
+            if photo_response.status_code == 200:
+                portrait_url = img2base64url(photo_response)
+
         email = user_dict['userPrincipalName']
         name = user_dict['displayName']
-        portrait_url = img2base64url(photo_response) if photo_response.status_code == 200 else None
         if not User.objects.filter(email_address=email).exists():
             new_user = User()
             new_user.set_nickname(name)
