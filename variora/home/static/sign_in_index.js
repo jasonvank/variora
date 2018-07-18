@@ -50,7 +50,7 @@ class NormalLoginForm extends React.Component {
         }, function(error) {
           //AcquireToken Failure, send an interactive request.
           userAgentApplication.acquireTokenPopup(applicationConfig.graphScopes).then(function(accessToken) {
-            updateUI()
+            // updateUI()
           }, function(error) {
             console.log(error)
           })
