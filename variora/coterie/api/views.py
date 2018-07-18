@@ -4,14 +4,10 @@ from django.contrib.auth import get_user
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import redirect, render
-from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.utils.timezone import now
 from django.views.generic import View
-from validate_email import validate_email
 
 from home.models import User
 
