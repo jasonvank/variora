@@ -376,7 +376,7 @@ function addAnnotationRelatedListenerWithin(jq) {
       success: function() {
         let annotationReplyDiv = $this.parents('.annotation-reply-div')
         annotationReplyDiv.find('.annotation-reply-content').html(new_content)
-        annotationReplyDiv.find('.annotation_reply_time_span').text('edited')
+        annotationReplyDiv.find('.annotation-reply-time-span').text('edited')
         annotationReplyDiv.find('.annotation-reply-edit-form').css('display', 'none')
         annotationReplyDiv.find('.annotation-reply-block').fadeIn(666)
         annotationReplyDiv.find('.annotation-reply-block').css('display', 'block')
