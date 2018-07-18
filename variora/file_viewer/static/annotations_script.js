@@ -135,9 +135,8 @@ function addAnnotationRelatedListenerWithin(jq) {
     if (is_authenticated) {
       var is_public = !this.classList.contains('AnonymouslyPostReplyReplyButton')
       var thisButton = $(this)
-      var index = layer.load(1, { shade: 0.18 }); //0 represent the style, can be 0-2
-      $.ajax({
-        type: 'POST',
+      var index = layer.load(1, { shade: 0.18 }) //0 represent the style, can be 0-2
+      $.post({
         url: '',
         data: {
           csrfmiddlewaretoken: getCookie('csrftoken'),
@@ -165,10 +164,9 @@ function addAnnotationRelatedListenerWithin(jq) {
   jq.find('.DeleteAnnotationReplyButton').on('click', function() {
     var index = layer.load(1, {
       shade: 0.18
-    });  // 0 represent the style, can be 0-2
+    })  // 0 represent the style, can be 0-2
     var replyId = this.value
-    $.ajax({
-      type: 'POST',
+    $.post({
       url: '',
       data: {
         csrfmiddlewaretoken: getCookie('csrftoken'),
@@ -188,8 +186,7 @@ function addAnnotationRelatedListenerWithin(jq) {
       var is_public = !this.classList.contains('AnonymouslyPostAnnotationReplyButton')
       var thisButton = $(this)
       var index = layer.load(1, {shade: 0.18}) //0 represent the style, can be 0-2
-      $.ajax({
-        type: 'POST',
+      $.post({
         url: '',
         data: {
           csrfmiddlewaretoken: getCookie('csrftoken'),
@@ -216,8 +213,7 @@ function addAnnotationRelatedListenerWithin(jq) {
   jq.find('.DeleteAnnotationButton').on('click', function() {
     var index = layer.load(1, { shade: 0.18 })  // 0 represent the style, can be 0-2
     var annotationID = this.value
-    $.ajax({
-      type: 'POST',
+    $.post({
       url: '',
       data: {
         csrfmiddlewaretoken: getCookie('csrftoken'),
@@ -296,8 +292,7 @@ function addAnnotationRelatedListenerWithin(jq) {
     $this.parents('.AnnotationDiv').find('.AnnotationEditForm').fadeIn(666)
     let tinyMCEEditor = tinyMCE.get($(this).parents('.AnnotationDiv').find('.AnnotationEditForm').find('textarea').attr('id'))
 
-    $.ajax({
-      type: 'GET',
+    $.get({
       url: '/' + appName + '/api/annotations/' + $this.attr('annotation_id') + '/content',
       data: {
         csrfmiddlewaretoken: getCookie('csrftoken'),
@@ -315,8 +310,7 @@ function addAnnotationRelatedListenerWithin(jq) {
     $this.parents('.annotation-reply-div').find('.annotation-reply-edit-form').fadeIn(666)
     let tinyMCEEditor = tinyMCE.get($(this).parents('.annotation-reply-div').find('.annotation-reply-edit-form').find('textarea').attr('id'))
 
-    $.ajax({
-      type: 'GET',
+    $.get({
       url: '/' + appName + '/api/annotationreplies/' + $this.attr('annotation_reply_id') + '/content',
       data: {
         csrfmiddlewaretoken: getCookie('csrftoken'),

@@ -9,8 +9,7 @@ function prepareNavbarFunction() {
       layer.msg('Collected')
       span.removeClass('fa-star-o')
       span.addClass('fa-star')
-      $.ajax({
-        type: 'POST',
+      $.post({
         url: '',
         data: {
           csrfmiddlewaretoken: getCookie('csrftoken'),
@@ -22,8 +21,7 @@ function prepareNavbarFunction() {
       layer.msg('Uncollected')
       span.removeClass('fa-star')
       span.addClass('fa-star-o')
-      $.ajax({
-        type: 'POST',
+      $.post({
         url: '',
         data: {
           csrfmiddlewaretoken: getCookie('csrftoken'),
