@@ -1,6 +1,6 @@
-<div class="AnnotationReplyDiv">
+<div class="annotation-reply-div">
   <blockquote
-    class="AnnotationReplyBlock"
+    class="annotation-reply-block"
     annotation_reply_id="{{ annotation_reply.id }}"
     annotation_reply_uuid="{{ annotation_reply.clean_uuid }}"
     reply_to_annotation_reply="{{ annotation_reply.reply_to_annotation_reply.id }}"
@@ -23,7 +23,7 @@
       <div style="float: right;">
         <button class="ReplyAnnotationButton btn" style="border: none; background: none; padding: 0 4px"><i class="fa fa-reply" aria-hidden="true"></i>&nbspreply</button>
 
-        <div class="btn LikeAnnotationReplyButton" annotation_reply_id="{{ annotation_reply.id }}" style="padding: 0 4px">
+        <div class="btn like-annotation-reply-btn" annotation_reply_id="{{ annotation_reply.id }}" style="padding: 0 4px">
             <span style="cursor: pointer;" class="glyphicon glyphicon-thumbs-up"></span>
             <bold class="num_like">{{ annotation_reply.num_like }}</bold>
         </div>
@@ -35,7 +35,7 @@
           </button>
           <ul class="dropdown-menu" style="left: auto; right: 0; min-width: 108px; padding: 0; top: 38px">
             <li>
-              <button class="AnnotationReplyEditFormToggleButton btn" annotation_reply_id="{{ annotation_reply.id }}" style="border: none; background: none; width: 100%">
+              <button class="annotation-reply-edit-form-toggle-btn btn" annotation_reply_id="{{ annotation_reply.id }}" style="border: none; background: none; width: 100%">
                 <i class="fa fa-pencil" aria-hidden="true"></i>&nbspedit
               </button>
             </li>
@@ -57,7 +57,7 @@
       </form>
     </footer>
   </blockquote>
-  <form class="AnnotationReplyEditForm" style="display: none; padding-bottom: 28px">
+  <form class="annotation-reply-edit-form" style="display: none; padding-bottom: 28px">
     <textarea id="annotation_reply_edit_form_{{ annotation_reply.id }}}" name="annotation_reply_edit_content" class="form-control" rows="2" style="resize: vertical"></textarea>
     <button class="CancelAnnotationReplyEditButton btn btn-sm" type="button" style="background-color: #636e72; margin-left: 8px">
       cancel
