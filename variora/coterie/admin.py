@@ -9,7 +9,7 @@ from models import CoterieApplication
 
 
 class CoterieModelAdmin(admin.ModelAdmin):
-    list_display = ["id", "clean_uuid", "name", "description"]
+    list_display = ["id", "clean_uuid", "name", 'creator', "description"]
     list_filter = ["name", "administrators", "members"]
     search_fields = ["id", "uuid", "name", "administrators__pk", "members__pk"]
     filter_horizontal = ["administrators", "members"]
