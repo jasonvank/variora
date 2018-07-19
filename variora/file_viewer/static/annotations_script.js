@@ -61,7 +61,7 @@ function _getBottom(annotationDom) { return parseFloat($(annotationDom).css('top
 function addAnnotationRelatedListener() { addAnnotationRelatedListenerWithin($(document)) }
 
 function scrollAnnotationDivIntoView(annotationDiv) {
-  var annotationsDiv = $('#annotation_update_div')
+  var annotationsDiv = $('#annotation-update-div')
   var down = annotationDiv.offset().top - annotationsDiv.offset().top + annotationsDiv.scrollTop()
   annotationsDiv.animate({
     scrollTop: parseInt(down)

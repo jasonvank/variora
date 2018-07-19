@@ -23,14 +23,14 @@ input {
   background-color: #e1e1e1;
 }
 
-#annotation_update_div {
+#annotation-update-div {
   float: left;
   border: solid 1px #bec1c4;
   border-top: none;
   overflow: auto;
 }
 
-#horizontal_draggable {
+#horizontal-draggable {
   float: left;
   width: 2px;
   cursor: col-resize;

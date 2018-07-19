@@ -21,6 +21,11 @@ var clearnessLevel = 1.8  // too small then not clear, not large then rendering 
 var colorPicker
 
 
+function pushNewPageRenderingTask(pageIndex) {
+  if (pageIndex >= 1 && pageIndex <= numPages)
+    taskList.push([pageIndex, 'PENDING', null])
+}
+
 function pdfScale(scaleFactor) {
   currentScale *= scaleFactor
 
@@ -80,7 +85,7 @@ function startListeningSelectionBoxCreation() {
     // can create at most one annotation each time,
     // whenever atempt to create new one, close all existing annotations
     layer.closeAll()
-    $('.ui-draggable.Annotation').remove(); // detach() 会保留所有绑定的事件、附加的数据，而remove()不会
+    $('.ui-draggable.Annotation').remove() // detach() 会保留所有绑定的事件、附加的数据，而remove()不会
 
     var page = $(this).find('.PageImg, .PageCanvas')
     var mouse_absolute_x = e.pageX
@@ -208,7 +213,7 @@ function startListeningSelectionBoxCreation() {
                 var newAnnotationPage = newAnnotationDiv.attr('page')
                 var nextAnnotationDiv = $($('.AnnotationDiv').toArray().find(div => parseInt(div.getAttribute('page')) >= parseInt(newAnnotationDiv.attr('page'))))
                 if (nextAnnotationDiv[0] == undefined) {
-                  $('#annotation_update_div').children('hr').before(newAnnotationDiv)
+                  $('#annotation-update-div').children('hr').before(newAnnotationDiv)
                 } else if (nextAnnotationDiv[0].getAttribute('page') == newAnnotationPage) {
                   nextAnnotationDiv.before(newAnnotationDiv)
                   nextAnnotationDiv.children('.PageDivider').replaceWith('<hr>')
@@ -308,19 +313,21 @@ function prepareScrollPageIntoView() {
 
 
 function setupFileViewerSize() {
-  var wrapper = $('#wrapper')
-  var fileViewer = $('#file_viewer')
-  // 设置wrapper的高度
-  wrapper.css('height', document.body.clientHeight - 28 + 'px'); //jquery的css方法既可以设置css内容又可以获取css内容
-  wrapper.css('width', document.body.clientWidth)
-  // 设置fileViewer的高度和宽度
-  fileViewer.css('height', wrapper.height() + 'px')
-  fileViewer.css('width', parseInt(wrapper.css('width')) * 0.6 + 'px'); //jquery的css方法获得的是字符串，用js的parseInt获取数值
-  // 设置annotation_update_div的高度和宽度
-  $('#annotation_update_div').css('height', wrapper.height() + 'px')
-  $('#annotation_update_div').css('width', wrapper.width() - 3.8 - fileViewer.width() + 'px')
+  const wrapper = $('#wrapper')
+  const fileViewer = $('#file_viewer')
+  const annotationUpdateDiv = $('#annotation-update-div')
 
-  $('#horizontal_draggable').css('height', wrapper.height() + 'px')
+  wrapper.css('height', document.body.clientHeight - 28 + 'px') //jquery的css方法既可以设置css内容又可以获取css内容
+  wrapper.css('width', document.body.clientWidth)
+
+  fileViewer.css('height', wrapper.height() + 'px')
+  fileViewer.css('width', parseInt(wrapper.css('width')) * 0.6 + 'px') //jquery的css方法获得的是字符串，用js的parseInt获取数值
+
+  annotationUpdateDiv.css('height', wrapper.height() + 'px')
+  annotationUpdateDiv.css('width', wrapper.width() - 3.8 - fileViewer.width() + 'px')
+  annotationUpdateDiv.css('display', 'block')
+
+  $('#horizontal-draggable').css('height', wrapper.height() + 'px')
 
   // 设置文档的大小
   // $('.PageImg').css('width', fileViewer.width() - 24 + 'px')
@@ -345,7 +352,7 @@ function setupFileViewerSize() {
 //     }
 //   })
 //   $('#navbar').animateOnce('fadeInDown')
-//   $('#annotation_update_div').find('blockquote').animateOnce('fadeInRight')
+//   $('#annotation-update-div').find('blockquote').animateOnce('fadeInRight')
 // }
 
 function scrollToTargetAnnotationIfInUrl() {
@@ -370,10 +377,10 @@ function scrollToTargetAnnotationIfInUrl() {
 
 
 function enableResizeButton() {
-  $('#buttonForLarger').on('click', function() {
+  $('#btn-for-larger').on('click', function() {
     pdfScale(scaleFactor)
   })
-  $('#buttonForSmaller').on('click', function() {
+  $('#btn-for-smaller').on('click', function() {
     pdfScale(1 / scaleFactor)
   })
 }
@@ -408,7 +415,7 @@ $(document).ready(function() {
 
   const wrapper = $('#wrapper')
   const fileViewer = $('#file_viewer')
-  $('#horizontal_draggable').draggable({
+  $('#horizontal-draggable').draggable({
     axis: 'x',
     containment: '#containment-wrapper',
     revert: true,
@@ -416,7 +423,7 @@ $(document).ready(function() {
     stop: function(event, ui) {
       var left = ui.offset['left']
       fileViewer.css('width', left + 'px')
-      $('#annotation_update_div').css('width', wrapper.width() - 3 - fileViewer.width() + 'px')
+      $('#annotation-update-div').css('width', wrapper.width() - 3 - fileViewer.width() + 'px')
     }
   })
   insertPageDividers()
@@ -437,7 +444,7 @@ function insertPageDividers() {
 function renderTaskList(taskList, finishList, scale) {
   if (taskList.length > 0) {
     rendering = true
-    $('#buttonForLarger, #buttonForSmaller').attr('disabled', true)
+    $('#btn-for-larger, #btn-for-smaller').attr('disabled', true)
     var num = taskList[0][0]
     pdfDoc.getPage(num).then(function(page) {
       var page_canvas_id = 'page_canvas_' + num
@@ -456,14 +463,14 @@ function renderTaskList(taskList, finishList, scale) {
         viewport: viewport,
       }
 
-      taskList[0][2] = page.render(renderContext); // taskList[0][2] is a RenderTask object
+      taskList[0][2] = page.render(renderContext) // taskList[0][2] is a RenderTask object
       taskList[0][1] = 'RENDERING'
 
       taskList[0][2].promise.then(function() {
         taskList.shift()
         finishList.push(num)
         rendering = false
-        $('#buttonForLarger, #buttonForSmaller').attr('disabled', false)
+        $('#btn-for-larger, #btn-for-smaller').attr('disabled', false)
         renderTaskList(taskList, finishList, scale)
       }, function(reason) {
         console.log('rejected because of this reason: ' + reason)
@@ -509,7 +516,7 @@ function startListeningScroll() {
       // add in the new task
       for (var i = 0; i < 5; i++) {
         if (renderOrNot[i] == true)
-          taskList.push([Math.min(numPages, Math.max(1, page_index + i - 1)), 'PENDING', null])
+          pushNewPageRenderingTask(page_index + i - 1)
       }
 
       if (!rendering)
@@ -563,11 +570,9 @@ function prepareAndRenderAll(url) {
       drawAllExistingAnnotationFrame()
       addAnnotationRelatedListener()
 
-      taskList.push([Math.min(numPages, 1), 'PENDING', null])
-      taskList.push([Math.min(numPages, 2), 'PENDING', null])
-      taskList.push([Math.min(numPages, 3), 'PENDING', null])
-      taskList.push([Math.min(numPages, 4), 'PENDING', null])
-      taskList.push([Math.min(numPages, 5), 'PENDING', null])
+      for (var i = 1; i <= 5; i++)
+        pushNewPageRenderingTask(i)
+
       renderTaskList(taskList, finishList, currentScale)
       startListeningScroll()
 

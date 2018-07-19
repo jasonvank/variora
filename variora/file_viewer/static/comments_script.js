@@ -45,7 +45,7 @@ function addCommentRelatedListener() {
     if (is_authenticated) {
       var index = layer.load(0, {
         shade: 0.18
-      }); //0 represent the style, can be 0-2
+      }) //0 represent the style, can be 0-2
       var commentId = this.value
       $.ajax({
         type: 'POST',
@@ -85,7 +85,7 @@ function addCommentRelatedListener() {
       var $thisButton = $(this)
       var index = layer.load(0, {
         shade: 0.18
-      }); //0代表加载的风格，支持0-2
+      }) //0代表加载的风格，支持0-2
       $.ajax({
         type: 'POST',
         url: '',
@@ -133,7 +133,7 @@ function enablePostCommentButton() {
       var is_public = !this.classList.contains('anonymously_post_comment_button')
       var index = layer.load(0, {
         shade: 0.18
-      }); //0代表加载的风格，支持0-2
+      }) //0代表加载的风格，支持0-2
       var activeEditor = tinyMCE.activeEditor
       $.ajax({
         type: 'POST',
