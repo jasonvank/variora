@@ -4,9 +4,12 @@ import uuid
 
 from django.db import models
 from django.dispatch import receiver
+
 from home.models import User
-from variora.utils import ModelWithCleanUUID
 from variora import utils
+from variora.utils import ModelWithCleanUUID
+
+from .managers import DocumentManager
 
 
 def upload_to(instance, filename):
@@ -51,6 +54,8 @@ class Document(ModelWithCleanUUID):
     num_visit = models.IntegerField(default=0, db_index=True)
     external_url = models.CharField(max_length=2083, blank=True, db_index=True)
     upload_time = models.DateTimeField(auto_now=False, auto_now_add=True)
+
+    objects = DocumentManager()
 
     @property
     def url(self):
@@ -159,4 +164,3 @@ class AnnotationReply(ModelWithCleanUUID):
 
     def __unicode__(self):
         return str(self.id) + ": " + self.content
-

@@ -52,7 +52,7 @@ def search_api_view(request):
             else:
                 return super(CombinedEncoder, self).default(obj)
 
-    result_documents = list(Document.objects.filter(title__icontains=key))[:100]  # case-insensitive contain
+    result_documents = list(Document.objects.filter_with_related(title__icontains=key))[:100]  # case-insensitive contain
     result_users = list(User.objects.filter(Q(nickname__icontains=key) | Q(email_address__icontains=key)))[:100]
     result_coteries = list(Coterie.objects.filter(Q(name__icontains=key) | Q(id__icontains=key)))[:100]
     return JsonResponse(

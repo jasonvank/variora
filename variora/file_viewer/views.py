@@ -182,7 +182,12 @@ class FileViewerView(View):
             "document": document,
             "file_url": document.url,
             "comments": document.comment_set.order_by("-post_time"),
-            "annotations": document.annotation_set.order_by("page_index", "-post_time"),
+            "annotations": document.annotation_set
+                .select_related('annotator')
+                .prefetch_related('annotationreply_set__replier')
+                .prefetch_related('annotationreply_set__reply_to_annotation_reply')
+                .prefetch_related('annotationreply_set__reply_to_annotation_reply__replier')
+                .order_by("page_index", "-post_time"),
             'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,
             "collected": collected,
             "prev_page_url": request.META['HTTP_REFERER'] if 'HTTP_REFERER' in request.META else '/'

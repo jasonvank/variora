@@ -6,6 +6,7 @@ from django.db import models
 from django.dispatch import receiver
 
 from file_viewer.models import UniqueFile
+from file_viewer.managers import DocumentManager
 from home.models import User
 from variora.utils import ModelWithCleanUUID
 
@@ -50,6 +51,8 @@ class CoterieDocument(ModelWithCleanUUID):
     num_visit = models.IntegerField(default=0)
     external_url = models.CharField(max_length=2083, blank=True)
     upload_time = models.DateTimeField(auto_now=False, auto_now_add=True)
+
+    objects = DocumentManager()
 
     @property
     def url(self):
