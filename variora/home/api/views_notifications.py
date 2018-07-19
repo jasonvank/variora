@@ -30,10 +30,11 @@ class NotificationEncoder(DjangoJSONEncoder):
 
 
 def get_unread_notification_list(request):
+    user = request.user
     try:
-        user_is_authenticated = request.user.is_authenticated()
+        user_is_authenticated = user.is_authenticated()
     except TypeError:  # Django >= 1.11
-        user_is_authenticated = request.user.is_authenticated
+        user_is_authenticated = user.is_authenticated
 
     if not user_is_authenticated:
         return JsonResponse([], safe=False)
@@ -46,7 +47,12 @@ def get_unread_notification_list(request):
     except ValueError:
         num_to_fetch = 10  # If casting to an int fails, just make it 5.
 
-    return JsonResponse(list(request.user.notifications.unread()[0:num_to_fetch]), encoder=NotificationEncoder, safe=False)
+    notifications = user.notifications \
+        .prefetch_related('actor') \
+        .prefetch_related('target') \
+        .prefetch_related('action_object') \
+        .unread()[0:num_to_fetch]
+    return JsonResponse(list(notifications), encoder=NotificationEncoder, safe=False)
 
 
 def mark_notification_as_read(request, slug):
