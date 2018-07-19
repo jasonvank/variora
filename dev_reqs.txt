@@ -19,3 +19,5 @@ html2text
 selenium  # write browser-side tests
 pylint  # coding style
 isort
+django-debug-toolbar
+django-debug-panel
