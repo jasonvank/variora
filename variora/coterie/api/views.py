@@ -140,12 +140,14 @@ class CoterieDocumentView(View):
 
 @login_required(login_url='/')
 def create_coterie(request):
+    user = get_user(request)
     coterie = Coterie()
     coterie.name = request.POST['coterie_name']
+    coterie.creator = user
     if 'coterie_description' in request.POST:
         coterie.description = request.POST["coterie_description"]
     coterie.save()
-    coterie.administrators.add(get_user(request))
+    coterie.administrators.add(user)
     return JsonResponse(coterie, encoder=CoterieEncoder, safe=False)
 
 

@@ -15,6 +15,7 @@ class Coterie(ModelWithCleanUUID):
     uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=256, db_index=True)
     description = models.TextField(blank=True)
+    creator = models.ForeignKey(User, related_name='created_coterie_set', null=True)
     administrators = models.ManyToManyField(User, related_name="administrated_coterie_set")
     members = models.ManyToManyField(User, related_name="joined_coterie_set", blank=True)
 
