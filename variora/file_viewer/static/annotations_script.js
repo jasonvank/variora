@@ -6,6 +6,15 @@ function getAnnotationDivJQById(annotationID) {
   return $(selector)
 }
 
+function copyToClipboard(content) {
+  const temp = $('<input style="hidden: true">')[0]
+  document.body.appendChild(temp)
+  temp.value = content
+  temp.select()
+  document.execCommand('copy')
+  document.body.removeChild(temp)
+}
+
 function getPageDividerJQ(pageNum) {
   const pageDividerHtml = ' \
     <div class="PageDivider" page="' + pageNum + '" style="height: 9px; border-bottom: 1px solid #eeeeee; margin: 20px 40px; text-align: center;"> \
@@ -210,7 +219,7 @@ function addAnnotationRelatedListenerWithin(jq) {
       layer.msg('You need to <a href="/sign-in" style="color: #ECECEC; text-decoration: underline">log in</a> first')
   })
 
-  jq.find('.DeleteAnnotationButton').on('click', function() {
+  jq.find('.delete-annotation-btn').on('click', function() {
     var index = layer.load(1, { shade: 0.18 })  // 0 represent the style, can be 0-2
     var annotationID = this.value
     $.post({
@@ -224,6 +233,18 @@ function addAnnotationRelatedListenerWithin(jq) {
         removeAnnotation(annotationID)
         layer.close(index)
       }
+    })
+  })
+
+  jq.find('.share-annotation-btn').on('click', function() {
+    const uuid = $(this).parents('.AnnotationDiv').attr('annotation_uuid')
+    const url = [location.protocol, '//', location.host, location.pathname].join('') + '?annotation=' + uuid
+    layer.confirm('<span style="color: #37b">' + url + '<span>', {
+      title: false, skin: 'layui-layer-molv', btn: ['copy URL'],
+      closeBtn: 0, shade: 0.18, shadeClose: true
+    }, function(){
+      copyToClipboard(url)
+      layer.msg('URL copied', { time: 1228 })
     })
   })
 
