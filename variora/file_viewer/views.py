@@ -162,17 +162,17 @@ class FileViewerView(View):
     def get(self, request, **kwargs):
         try:
             if 'slug' in kwargs:
-                document = Document.objects.get(uuid=utils.slug2uuid(kwargs['slug']))
+                document = Document.objects.prefetch_related('collectors').get(uuid=utils.slug2uuid(kwargs['slug']))
                 if 'title' not in kwargs or document.title.replace(' ', '-') != kwargs['title']:
                     return redirect('/documents/' + document.slug + '/' + document.title.replace(' ', '-'))
             else:
-                document = Document.objects.get(id=int(request.GET["document_id"]))
+                document = Document.objects.prefetch_related('collectors').get(id=int(request.GET["document_id"]))
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
 
         user = get_user(request)
         collected = False
-        if user.is_authenticated() and document in user.collected_document_set.all():
+        if user.is_authenticated() and user in document.collectors.all():
             collected = True
 
         document.num_visit += 1
