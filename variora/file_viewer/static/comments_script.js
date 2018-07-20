@@ -6,7 +6,7 @@ function removeComment(id) {
   while (queue.length > 0) {
     var headCommentJquery = $(queue.shift())
     var commentId = headCommentJquery.attr('comment_id')
-    queue = queue.concat($('.CommentBlock[reply_to_comment_id="{0}"]'.format(commentId))).toArray()
+    queue = queue.concat($('.CommentBlock[reply_to_comment_id="{0}"]'.format(commentId)).toArray())
     headCommentJquery.remove()
   }
 }
