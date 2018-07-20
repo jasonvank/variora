@@ -94,11 +94,10 @@ class DocumentView(View):
 
 class DocumentListView(View):
     def get(self, request):
-        user = get_user(request)
-        uploaded_documents = [] if isinstance(user, AnonymousUser) else list(user.document_set.all())
-        collected_documents = [] if isinstance(user, AnonymousUser) else list(user.collected_document_set.all())
-        return JsonResponse(
-            {
+        user = request.user
+        uploaded_documents = [] if isinstance(user, AnonymousUser) else list(user.document_set.select_related('unique_file').all())
+        collected_documents = [] if isinstance(user, AnonymousUser) else list(user.collected_document_set.select_related('unique_file').all())
+        return JsonResponse({
                 'uploadedDocuments': uploaded_documents,
                 'collectedDocuments': collected_documents
             },
@@ -108,7 +107,7 @@ class DocumentListView(View):
 
 
 def get_top_document_thumbnails(request):
-    return JsonResponse(list(DocumentThumbnail.objects.all().order_by('create_time')), encoder=DocumentThumbnailEncoder, safe=False)
+    return JsonResponse(list(DocumentThumbnail.objects.all_with_related().order_by('create_time')), encoder=DocumentThumbnailEncoder, safe=False)
 
 
 def get_annotation_content(request, id):

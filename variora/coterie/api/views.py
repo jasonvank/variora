@@ -4,6 +4,7 @@ from django.contrib.auth import get_user
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import prefetch_related_objects
 from django.http import HttpResponse, JsonResponse
 from django.utils.decorators import method_decorator
 from django.utils.timezone import now
@@ -11,8 +12,8 @@ from django.views.generic import View
 
 from home.models import User
 
-from ..models import (Coterie, CoterieAnnotation, CoterieAnnotationReply, CoterieDocument,
-                      CoterieInvitation)
+from ..models import (Coterie, CoterieAnnotation, CoterieAnnotationReply,
+                      CoterieDocument, CoterieInvitation)
 from .encoders import (CoterieDocumentEncoder, CoterieEncoder,
                        CoterieInvitationEncoder)
 from .view_application import (ApplicationsView, ApplicationView,
@@ -22,9 +23,16 @@ from .view_invitation import InvitationsView, InvitationView, create_invitation
 
 class CoterieListView(View):
     def get(self, request):
-        user = get_user(request)
-        administrated_coteries = [] if isinstance(user, AnonymousUser) else list(user.administrated_coterie_set.all())
-        joined_coteries = [] if isinstance(user, AnonymousUser) else list(user.joined_coterie_set.all())
+        user = request.user
+        if isinstance(user, AnonymousUser):
+            administrated_coteries = []
+            joined_coteries = []
+        else:
+            administrated_coteries = list(user.administrated_coterie_set.all())
+            joined_coteries = list(user.joined_coterie_set.all())
+            prefetch_related_objects(administrated_coteries + joined_coteries, 'administrators')
+            prefetch_related_objects(administrated_coteries + joined_coteries, 'members')
+            prefetch_related_objects(administrated_coteries + joined_coteries, 'coteriedocument_set')
         return JsonResponse({
                 'administratedCoteries': administrated_coteries,
                 'joinedCoteries': joined_coteries,

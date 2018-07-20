@@ -9,7 +9,7 @@ from home.models import User
 from variora import utils
 from variora.utils import ModelWithCleanUUID
 
-from .managers import DocumentManager
+from .managers import DocumentManager, DocumentThumbnailManager
 
 
 def upload_to(instance, filename):
@@ -98,6 +98,8 @@ class DocumentThumbnail(models.Model):
     thumbnail_image = models.ImageField(upload_to=thumbnail_upload_to)
     description = models.CharField(max_length=128, db_index=True)
     create_time = models.DateTimeField(auto_now=False, auto_now_add=True)
+
+    objects = DocumentThumbnailManager()
 
 @receiver(models.signals.pre_delete, sender=DocumentThumbnail)
 def delete_document_thumbnail(sender, instance, **kwargs):
