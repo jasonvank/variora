@@ -4,7 +4,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 
 from home.models import User
 
-from ..models import Annotation, AnnotationReply, Comment, Document, DocumentThumbnail
+from ..models import Annotation, AnnotationReply, Comment, Document, DocumentThumbnail, Readlist
 
 
 class DocumentEncoder(DjangoJSONEncoder):
@@ -42,3 +42,12 @@ class DocumentThumbnailEncoder(DjangoJSONEncoder):
                 'owner_email': obj.document.owner.email_address
             }
         return super(DocumentThumbnailEncoder, self).default(obj)
+
+
+class ReadlistEncoder(DjangoJSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Readlist):
+            return {
+                'name': obj.name,
+            }
+        return super(ReadlistEncoder, self).default(obj)

@@ -1,6 +1,6 @@
 from django.conf.urls import url, include
 
-from . import views
+from . import views, views_readlist
 
 urlpatterns = [
     url(r'^documents/(?P<pk>\d+)$', views.DocumentView.as_view()),
@@ -16,6 +16,11 @@ urlpatterns = [
 
     url(r'^annotations/(?P<id>\d+)/edit$', views.edit_annotation_content),
     url(r'^annotationreplies/(?P<id>\d+)/edit$', views.edit_annotation_reply_content),
+
+    url(r'^readlists/create$', views_readlist.create_readlist),
+    url(r'^readlists$', views_readlist.ReadlistListView.as_view()),
+    url(r'^readlists/(?P<pk>\d+)$', views_readlist.ReadlistView.as_view()),
+    url(r'^readlists/(?P<pk>\d+)/(?P<operation>\w+)', views_readlist.ReadlistView.as_view()),
 ]
 
 

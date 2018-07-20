@@ -107,6 +107,15 @@ def delete_document_thumbnail(sender, instance, **kwargs):
         instance.thumbnail_image.storage.delete(instance.thumbnail_image.name)
 
 
+class Readlist(ModelWithCleanUUID):
+    uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=1028, db_index=True)
+    create_time = models.DateTimeField(auto_now=False, auto_now_add=True)
+    creator = models.ForeignKey(User, related_name="created_readlist_set")
+    collectors = models.ManyToManyField(User, related_name="collected_readlist_set", blank=True)
+    documents = models.ManyToManyField(Document, related_name="belonged_readlist_set", blank=True)
+
+
 class Comment(ModelWithCleanUUID):
     uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
     post_time = models.DateTimeField(auto_now=False, auto_now_add=True)

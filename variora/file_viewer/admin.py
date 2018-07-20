@@ -9,6 +9,11 @@ class DocumentModelAdmin(admin.ModelAdmin):
     filter_horizontal = ['collectors']
 
 
+class ReadlistModelAdmin(admin.ModelAdmin):
+    list_display = ["id", 'clean_uuid', 'name']
+    filter_horizontal = ['collectors', 'documents']
+
+
 class UniqueFileModelAdmin(admin.ModelAdmin):
     list_display = ["id", "file_field", "size", "md5"]
     list_filter = ["file_field", "md5"]
@@ -39,6 +44,7 @@ class DocumentThumbnailModelAdmin(admin.ModelAdmin):
 
 
 admin.site.register(models.Document, DocumentModelAdmin)
+admin.site.register(models.Readlist, ReadlistModelAdmin)
 admin.site.register(models.UniqueFile, UniqueFileModelAdmin)
 admin.site.register(models.Comment, CommentModelAdmin)
 admin.site.register(models.Annotation, AnnotationModelAdmin)
