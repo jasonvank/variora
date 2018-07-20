@@ -33,7 +33,7 @@ class DocumentTab extends React.Component {
           selectedKeys = { this.props.location.pathname == '/collected' ? ["collected-documents"] : ['uploaded-documents'] }
         >
           <Menu.Item key="uploaded-documents">
-            <Link to="/"><Icon type="mail" />Uploaded Documents</Link>
+            <Link to="/"><Icon type="file" />Uploaded Documents</Link>
           </Menu.Item>
           <Menu.Item key="collected-documents">
             <Link to="/collected"><Icon type="heart-o" />Collected Documents</Link>
