@@ -1,6 +1,5 @@
 import random
 
-from django.contrib.auth import get_user
 from django.contrib.auth.models import AnonymousUser
 from django.core.mail import EmailMessage  # for sending verification using e-mail
 from django.db.models import Q
@@ -110,13 +109,13 @@ def handle_search(request):
         "result_documents": result_documents,
         "result_users": result_users,
         "result_coteries": result_coteries,
-        "logged_in_user": get_user(request),
+        "logged_in_user": request.user,
     }
     return render(request, "home/search_result_page.html", context)
 
 
 def display_index(request):
-    if isinstance(get_user(request), AnonymousUser):
+    if isinstance(request.user, AnonymousUser):
         return redirect('/explore')
     return render(request, 'home/test.html', {})
 
@@ -131,7 +130,7 @@ def jason_test(request):
 
 def handle_image_upload(request):
     return HttpResponse(status=404)
-    # user = get_user(request)
+    # user = request.user
     # if isinstance(user, AnonymousUser):
     #     return HttpResponse(status=403)
     # file_uploaded = request.FILES["file_upload"]

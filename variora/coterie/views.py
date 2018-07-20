@@ -3,7 +3,6 @@ import urllib
 from hashlib import md5
 
 from django.conf import settings
-from django.contrib.auth import get_user
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, JsonResponse
@@ -23,13 +22,13 @@ def handle_create_coterie(request):
     coterie.name = request.POST["coterie_name"]
     coterie.description = request.POST["coterie_description"]
     coterie.save()
-    coterie.administrators.add(get_user(request))
+    coterie.administrators.add(request.user)
     return HttpResponse()
 
 
 def handle_apply_coterie(request):
     coterie = Coterie.objects.get(id=request.POST["coterie_id"])
-    applicant = get_user(request)
+    applicant = request.user
     if applicant not in coterie.members.all() and applicant not in coterie.administrators.all():
         coterie.applicants.add(applicant)
         coterie.save()
@@ -38,7 +37,7 @@ def handle_apply_coterie(request):
 
 def handle_join_coterie(request):
     coterie = Coterie.objects.get(id=request.POST["coterie_id"])
-    if get_user(request) in coterie.administrators.all():
+    if request.user in coterie.administrators.all():
         applicant = User.objects.get(id=request.POST["applicant_id"])
         coterie.applicants.remove(applicant)
         if request.POST["decision"] == "accept":
@@ -54,7 +53,7 @@ def handle_join_coterie(request):
 
 def handle_quit_coterie(request):
     coterie = Coterie.objects.get(id=request.POST["coterie_id"])
-    user = get_user(request)
+    user = request.user
     if user in coterie.members.all():
         coterie.members.remove(user)
         coterie.save()
@@ -63,15 +62,14 @@ def handle_quit_coterie(request):
 
 def handle_delete_coterie(request):
     coterie = Coterie.objects.get(id=request.POST["coterie_id"])
-    user = get_user(request)
-    if user in coterie.administrators.all():
+    if request.user in coterie.administrators.all():
         coterie.delete()
     return redirect("user_dashboard")
 
 
 def handle_remove_member(request):
     coterie = Coterie.objects.get(id=request.POST["coterie_id"])
-    user = get_user(request)
+    user = request.user
     member = User.objects.get(id=request.POST["user_id"])
     if user in coterie.administrators.all() and member not in coterie.administrators.all():
         coterie.members.remove(member)
@@ -103,7 +101,7 @@ def serve_coteriefile(request):
 
 def display_coteriefile_viewer_page(request, **kwargs):
     if request.method == "POST":
-        user = get_user(request)
+        user = request.user
         try:
             if 'document_slug' in kwargs:
                 coterie = Coterie.objects.get(id=kwargs['coterie_id'])
@@ -161,7 +159,7 @@ def display_coteriefile_viewer_page(request, **kwargs):
             if request.POST["comment_content"] != "":
                 comment = models.CoterieComment()
                 comment.content = request.POST["comment_content"]
-                comment.commenter = get_user(request)
+                comment.commenter = user
                 comment.document_this_comment_belongs = document
                 comment.is_public = comment.is_public = True if request.POST["is_public"] == 'true' else False
                 if "reply_to_comment_id" in request.POST:
@@ -177,7 +175,7 @@ def display_coteriefile_viewer_page(request, **kwargs):
         elif request.POST["operation"] == "annotate":
             annotation = models.CoterieAnnotation()
             annotation.content = request.POST["annotation_content"]
-            annotation.annotator = get_user(request)
+            annotation.annotator = user
             annotation.document_this_annotation_belongs = document
             annotation.page_index = request.POST["page_id"].split("_")[2]
             annotation.height_percent = request.POST["height_percent"]
@@ -204,7 +202,7 @@ def display_coteriefile_viewer_page(request, **kwargs):
                 annotation_reply = models.CoterieAnnotationReply()
                 annotation = models.CoterieAnnotation.objects.get(id=int(request.POST["reply_to_annotation_id"]))
                 annotation_reply.content = request.POST["annotation_reply_content"]
-                annotation_reply.replier = get_user(request)
+                annotation_reply.replier = user
                 annotation_reply.reply_to_annotation = annotation
                 annotation_reply.is_public = True if request.POST["is_public"] == 'true' else False
                 if "reply_to_annotation_reply_id" in request.POST:
@@ -235,7 +233,7 @@ def display_coteriefile_viewer_page(request, **kwargs):
                 return render(request, "file_viewer/one_annotation_reply.html", context)
             return HttpResponse(status=200)
     else:
-        user = get_user(request)
+        user = request.user
 
         try:
             if 'document_slug' in kwargs:
@@ -280,7 +278,7 @@ def _handle_dropbox_link(link):
 def handle_coteriefile_upload(request):
     coterie = Coterie.objects.get(id=request.POST["coterie_id"])
 
-    if get_user(request) in coterie.administrators.all():
+    if request.user in coterie.administrators.all():
         if 'external_url' in request.POST and request.POST['external_url'] != '':
             external_url = request.POST['external_url']
             if external_url.startswith('https://www.dropbox.com'):
@@ -313,7 +311,7 @@ def handle_coteriefile_delete(request):
         document = models.CoterieDocument.objects.get(id=int(request.POST["document_id"]))
         coterie = Coterie.objects.get(id=request.POST["coterie_id"])
 
-        if document.owner == coterie and get_user(request) in coterie.administrators.all():
+        if document.owner == coterie and request.user in coterie.administrators.all():
             document.delete()
 
         url_request_from = request.POST["current_url"]

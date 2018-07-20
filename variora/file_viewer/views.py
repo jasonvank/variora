@@ -1,6 +1,5 @@
 import html2text
 from django.conf import settings
-from django.contrib.auth import get_user
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, JsonResponse
@@ -20,7 +19,7 @@ h.ignore_links = True
 class FileViewerView(View):
     @method_decorator(login_required(login_url='/'))
     def post(self, request, **kwargs):
-        user = get_user(request)
+        user = request.user
         if 'slug' in kwargs:
             document = Document.objects.get(uuid=utils.slug2uuid(kwargs['slug']))
         else:
@@ -62,13 +61,11 @@ class FileViewerView(View):
             return HttpResponse()
 
         elif request.POST["operation"] == "collect":
-            user = get_user(request)
             document.collectors.add(user)
             document.save()
             return HttpResponse()
 
         elif request.POST["operation"] == "uncollect":
-            user = get_user(request)
             document.collectors.remove(user)
             document.save()
             return HttpResponse()
@@ -85,7 +82,7 @@ class FileViewerView(View):
             if request.POST["comment_content"] != "":
                 comment = Comment()
                 comment.content = request.POST["comment_content"]
-                comment.commenter = get_user(request)
+                comment.commenter = user
                 comment.document_this_comment_belongs = document
                 comment.is_public = True if request.POST["is_public"] == 'true' else False
                 if "reply_to_comment_id" in request.POST:
@@ -101,7 +98,7 @@ class FileViewerView(View):
         elif request.POST["operation"] == "annotate":
             annotation = Annotation()
             annotation.content = request.POST["annotation_content"]
-            annotation.annotator = get_user(request)
+            annotation.annotator = user
             annotation.document_this_annotation_belongs = document
             annotation.page_index = request.POST["page_id"].split("_")[2]
             annotation.height_percent = request.POST["height_percent"]
@@ -128,7 +125,7 @@ class FileViewerView(View):
                 annotation_reply = AnnotationReply()
                 annotation = Annotation.objects.get(id=int(request.POST["reply_to_annotation_id"]))
                 annotation_reply.content = request.POST["annotation_reply_content"]
-                annotation_reply.replier = get_user(request)
+                annotation_reply.replier = user
                 annotation_reply.reply_to_annotation = annotation
                 annotation_reply.is_public = True if request.POST["is_public"] == 'true' else False
                 if request.POST.has_key("reply_to_annotation_reply_id"):
@@ -171,7 +168,7 @@ class FileViewerView(View):
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
 
-        user = get_user(request)
+        user = request.user
         collected = False
         if user.is_authenticated() and user in document.collectors.all():
             collected = True
