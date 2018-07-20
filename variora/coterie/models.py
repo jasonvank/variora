@@ -5,9 +5,10 @@ import uuid
 from django.db import models
 from django.dispatch import receiver
 
-from file_viewer.models import UniqueFile
 from file_viewer.managers import DocumentManager
+from file_viewer.models import UniqueFile
 from home.models import User
+from variora import utils
 from variora.utils import ModelWithCleanUUID
 
 
@@ -69,6 +70,10 @@ class CoterieDocument(ModelWithCleanUUID):
         return 0
 
     @property
+    def slug(self):
+        return utils.uuid2slug(self.uuid)
+
+    @property
     def file_on_server(self):
         return self.unique_file != None
 
@@ -117,6 +122,12 @@ class CoterieAnnotation(ModelWithCleanUUID):
     frame_color = models.CharField(max_length=18)
 
     num_like = models.IntegerField(default=0)
+
+    @property
+    def url(self):
+        document = self.document_this_annotation_belongs
+        return '/coteries/' + str(self.document_this_annotation_belongs.owner.id) + '/documents/' + document.slug + '/' + document.title.replace(' ', '-') + \
+               '?annotation=' + self.clean_uuid
 
     def __unicode__(self):
         return str(self.id) + ": " + self.content

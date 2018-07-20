@@ -165,10 +165,13 @@ input {
 }
 
 .annotation-content,
-.annotation-reply-content {
+.annotation-reply-content,
+.comment-content {
   padding-bottom: 8px;
   font-size: 80%;
   font-family: Helvetica;
+  word-break: break-all;
+  hyphens: auto;
 }
 
 .AnnotationBlock {

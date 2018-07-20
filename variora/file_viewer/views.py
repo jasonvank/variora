@@ -11,10 +11,12 @@ from notifications.signals import notify
 from models import Annotation, AnnotationReply, Comment, Document
 from variora import utils
 
+
 h = html2text.HTML2Text()
 h.ignore_images = True
 h.ignore_emphasis = True
 h.ignore_links = True
+
 
 class FileViewerView(View):
     @method_decorator(login_required(login_url='/'))

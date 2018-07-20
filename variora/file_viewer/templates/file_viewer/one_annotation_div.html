@@ -2,7 +2,7 @@
   <hr>
   <blockquote class="AnnotationBlock" annotation_id="{{ annotation.id }}" annotation_uuid="{{ annotation.clean_uuid }}">
     <!-- annotation -->
-    <div class="annotation-content" style="word-break: break-all; hyphens: auto;"> {{ annotation.content|safe|linebreaks }} </div>
+    <div class="annotation-content"> {{ annotation.content|safe|linebreaks }} </div>
     <footer>
       {% if annotation.is_public %}
         <img class="img-rounded" src="{{ annotation.annotator.portrait_url }}" height="38" width="38">

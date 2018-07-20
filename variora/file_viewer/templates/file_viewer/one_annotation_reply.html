@@ -11,7 +11,7 @@
         <i class="fa fa-share" aria-hidden="true"></i>&nbsp&nbsp&nbspreply to <i><b>{{ annotation_reply.reply_to_annotation_reply.replier.nickname }}</b></i>:
     </span><br>
     {% endif %}
-    <div class="annotation-reply-content" style="word-break: break-all; hyphens: auto;"> {{ annotation_reply.content|safe|linebreaks }} </div>
+    <div class="annotation-reply-content"> {{ annotation_reply.content|safe|linebreaks }} </div>
     <footer>
       {% if annotation_reply.is_public %}
         <img class="img-rounded" src="{{ annotation_reply.replier.portrait_url }}" height="28" width="28">
