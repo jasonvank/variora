@@ -24,7 +24,7 @@ from .view_invitation import InvitationsView, InvitationView, create_invitation
 class CoterieListView(View):
     def get(self, request):
         user = request.user
-        if isinstance(user, AnonymousUser):
+        if not user.is_authenticated:
             administrated_coteries = []
             joined_coteries = []
         else:

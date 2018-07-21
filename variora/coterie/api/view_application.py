@@ -19,7 +19,7 @@ from .encoders import (CoterieApplicationEncoder, CoterieDocumentEncoder,
 def create_application(request):
     POST = request.POST
     user = get_user(request)
-    if isinstance(user, AnonymousUser):
+    if not user.is_authenticated:
         return HttpResponse(status=403)
     if 'coterie_id' not in POST or 'application_message' not in POST:
         return HttpResponse(status=403)
@@ -40,7 +40,7 @@ class ApplicationsView(View):
     def get(self, request, **kwargs):
         GET = request.GET
         user = get_user(request)
-        if isinstance(user, AnonymousUser):
+        if not user.is_authenticated:
             return JsonResponse([], encoder=CoterieApplicationEncoder, safe=False)
         try:
             applications = CoterieApplication.objects.filter(acceptance__isnull=True)

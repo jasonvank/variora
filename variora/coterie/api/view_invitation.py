@@ -52,7 +52,7 @@ class InvitationsView(View):
     def get(self, request, **kwargs):
         GET = request.GET
         user = get_user(request)
-        if isinstance(user, AnonymousUser):
+        if not user.is_authenticated:
             return JsonResponse([], encoder=CoterieInvitationEncoder, safe=False)
         try:
             invitations = CoterieInvitation.objects.filter(acceptance__isnull=True) \

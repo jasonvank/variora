@@ -51,4 +51,8 @@ class ReadlistListView(View):
 
 def create_readlist(request, id):
     user = request.user
+    if not user.is_authenticated or 'name' not in request.POST:
+        return HttpResponse(status=403)
+    readlist = Readlist(name=request.POST['name'], creator=user)
+    readlist.save()
     return HttpResponse(status=200)

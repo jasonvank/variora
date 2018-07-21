@@ -131,7 +131,7 @@ def jason_test(request):
 def handle_image_upload(request):
     return HttpResponse(status=404)
     # user = request.user
-    # if isinstance(user, AnonymousUser):
+    # if not user.is_authenticated:
     #     return HttpResponse(status=403)
     # file_uploaded = request.FILES["file_upload"]
     # if file_uploaded.size > 1024 * 500:  # 500 KB

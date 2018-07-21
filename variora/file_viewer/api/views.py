@@ -24,7 +24,7 @@ def _delete_document(document, user):
         return HttpResponse(status=403)  # user has no permission
 
 def _uncollect_document(document, user):
-    if isinstance(user, AnonymousUser):
+    if not user.is_authenticated:
         return HttpResponse(status=403)
     elif user not in document.collectors.all():
         return HttpResponse(status=403)
@@ -95,8 +95,8 @@ class DocumentView(View):
 class DocumentListView(View):
     def get(self, request):
         user = request.user
-        uploaded_documents = [] if isinstance(user, AnonymousUser) else list(user.document_set.select_related('unique_file').all())
-        collected_documents = [] if isinstance(user, AnonymousUser) else list(user.collected_document_set.select_related('unique_file').all())
+        uploaded_documents = [] if not user.is_authenticated else list(user.document_set.select_related('unique_file').all())
+        collected_documents = [] if not user.is_authenticated else list(user.collected_document_set.select_related('unique_file').all())
         return JsonResponse({
                 'uploadedDocuments': uploaded_documents,
                 'collectedDocuments': collected_documents
