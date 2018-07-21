@@ -46,7 +46,12 @@ class ReadlistView(View):
 class ReadlistListView(View):
     def get(self, request):
         user = request.user
-        return JsonResponse([], encoder=DocumentEncoder, safe=False)
+        created_readlist = list(user.created_readlist_set.select_related('creator').all()) if user.is_authenticated else []
+        collected_readlist = list(user.collected_readlist_set.select_related('creator').all()) if user.is_authenticated else []
+        return JsonResponse({
+            'created_readlist': created_readlist,
+            'collected_readlist': collected_readlist
+        }, encoder=ReadlistEncoder, safe=False)
 
 
 def create_readlist(request, id):
