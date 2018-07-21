@@ -31,6 +31,9 @@
     {% csrf_token %}
     <button type="submit" class="awesome blue" style="height: 28px"><i class="fa fa-cloud-download" aria-hidden="true"></i>&nbspdownload</button>
   </form>
+  <button class="awesome blue" style="height: 28px; padding: 3px 6px 9px 9px" type="button" id="readlist_button">
+    <i class="material-icons">playlist_add</i>
+  </button>
   {% if request.user.is_authenticated %}
     {% if collected %}
       <button class="awesome blue" style="height: 28px;" type="button" id="collect_button"><i class="fa fa-star" aria-hidden="true"></i></button>
@@ -42,4 +45,33 @@
   <b id="num_collect" style="float: right; color: white; padding-top: 4px;">collect: {{ document.collectors.all|length }}</b> -->
 </div>
 
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css">
+<style>
+  .p-icon {
+    margin: 16px;
+    display: block;
+  }
+  .pretty input:checked~.state.p-primary label:after {
+    background-color: #888 !important;
+  }
+</style>
+<div id="readlist" style="display: none">
+  <form>
+    <div class="pretty p-icon p-smooth p-curve p-thick">
+      <input type="checkbox" checked/>
+      <div class="state p-primary">
+        <i class="icon fa fa-check"></i>
+        <label style="margin-left: 8px">List1</label>
+      </div>
+    </div>
+    <div class="pretty p-icon p-smooth p-curve p-thick">
+      <input type="checkbox" />
+      <div class="state p-primary">
+        <i class="icon fa fa-check"></i>
+        <label style="margin-left: 8px">List2</label>
+      </div>
+    </div>
+  </form>
+</div>
 

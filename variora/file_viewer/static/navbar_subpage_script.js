@@ -56,7 +56,15 @@ function prepareNavbarFunction() {
         $('.layui-layer-imgsee').find('em').remove()
       }
     })
+  })
 
+  $('#readlist_button').on('click', function() {
+    layer.open({
+      title: 'Add to ...',
+      type: 1,
+      shadeClose: true,
+      content: $('#readlist')
+    })
   })
 }
 
