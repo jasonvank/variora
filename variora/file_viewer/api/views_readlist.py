@@ -24,6 +24,12 @@ def _collect_readlist(readlist, user):
 def _uncollect_readlist(readlist, user):
     return HttpResponse(status=200)
 
+def _rename_readlist(readlist, user, new_name):
+    if user.pk != readlist.creator.pk:
+        return HttpResponse(status=403)
+    readlist.update(name=new_name)
+    return HttpResponse(status=200)
+
 class ReadlistView(View):
     def get(self, request, pk, **kwargs):
         return HttpResponse(status=404)
@@ -32,9 +38,13 @@ class ReadlistView(View):
     def post(self, request, pk, operation):
         try:
             user = request.user
+            if not user.is_authenticated:
+                return HttpResponse(status=403)
             readlist = None
             if operation == 'delete':
                 return _delete_readlist(readlist, user)
+            if operation == 'rename':
+                return _rename_readlist(readlist, user, request.POST['new_name'])
             elif operation == 'collect':
                 return _collect_readlist(readlist, user)
             elif operation == 'uncollect':
