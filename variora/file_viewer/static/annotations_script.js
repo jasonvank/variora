@@ -17,7 +17,7 @@ function copyToClipboard(content) {
 
 function getPageDividerJQ(pageNum) {
   const pageDividerHtml = ' \
-    <div class="PageDivider" page="' + pageNum + '" style="height: 9px; border-bottom: 1px solid #eeeeee; margin: 20px 40px; text-align: center;"> \
+    <div class="PageDivider" page="' + pageNum + '" style="height: 9px; border-bottom: 1px solid #eeeeee; margin: 18px 36px; text-align: center;"> \
       <span style="font-size: 14px; background-color: white; padding: 0 30px; font-weight: 400; color: grey;"> \
     '
         + 'Page ' + pageNum +
