@@ -1,9 +1,10 @@
-var path = require('path')
+const path = require('path')
+const webpack = require('webpack')
 
 
 /***** import webpack.config.js as the base configuration *****/
-var prodConfig = require('./webpack.config.js')
-devConfig = prodConfig
+const prodConfig = require('./webpack.config.js')
+var devConfig = prodConfig
 
 
 /**************** modify the following settings: **************/
@@ -20,5 +21,9 @@ devConfig.watchOptions = {
   ignored: /node_modules/,
   poll: 3800  // every 3.8 seconds, webpack checks file update
 }
+
+devConfig.plugins = [
+  new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+]
 
 module.exports = devConfig
