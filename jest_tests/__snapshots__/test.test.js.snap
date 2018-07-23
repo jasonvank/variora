@@ -39,7 +39,7 @@ exports[`test react 1`] = `
         onClick={[Function]}
       >
         <i
-          className="anticon anticon-mail"
+          className="anticon anticon-file"
         />
         Uploaded Documents
       </a>
