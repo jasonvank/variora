@@ -179,6 +179,7 @@ class FileViewerView(View):
         document.save()
 
         context = {
+            "DEBUG": settings.DEBUG,
             "document": document,
             "file_url": document.url,
             "comments": document.comment_set.order_by("-post_time"),
