@@ -30,9 +30,10 @@ class CoterieListView(View):
         else:
             administrated_coteries = list(user.administrated_coterie_set.all())
             joined_coteries = list(user.joined_coterie_set.all())
-            prefetch_related_objects(administrated_coteries + joined_coteries, 'administrators')
-            prefetch_related_objects(administrated_coteries + joined_coteries, 'members')
-            prefetch_related_objects(administrated_coteries + joined_coteries, 'coteriedocument_set')
+            combined = administrated_coteries + joined_coteries
+            prefetch_related_objects(combined, 'administrators')
+            prefetch_related_objects(combined, 'members')
+            prefetch_related_objects(combined, 'coteriedocument_set__unique_file')
         return JsonResponse({
                 'administratedCoteries': administrated_coteries,
                 'joinedCoteries': joined_coteries,
@@ -72,7 +73,9 @@ def _remove_member(request, coterie, user):
 class CoterieView(View):
     def get(self, request, pk, **kwargs):
         try:
-            coterie = Coterie.objects.get(pk=pk)
+            coterie = Coterie.objects \
+                .prefetch_related('administrators').prefetch_related('members') \
+                .prefetch_related('coteriedocument_set__unique_file').get(pk=pk)
             return JsonResponse(coterie, encoder=CoterieEncoder, safe=False)
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
@@ -80,7 +83,7 @@ class CoterieView(View):
     def post(self, request, pk, operation):
         try:
             coterie = Coterie.objects.get(pk=pk)
-            user = get_user(request)
+            user = request.user
             if operation == 'delete':
                 return _delete_coterie(coterie, user)
             elif operation == 'exit':
