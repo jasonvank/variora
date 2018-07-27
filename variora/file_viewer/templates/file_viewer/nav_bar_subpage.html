@@ -56,20 +56,26 @@
     background-color: #888 !important;
   }
 </style>
-<div id="readlist" style="display: none">
+<div id="readlist" style="display: none; font-size: 16px">
+  <div style="font-size: 16px; padding: 16px">Add to ...
+      <i class="material-icons" id="close-readlist-icon" style="cursor: pointer; margin-top: 2px; float: right; font-size: 18px; color: #9f9f9f">close</i>
+  </div>
+  <hr style="margin-top: 0px; margin-bottom: 16px">
   <form>
-    <div class="pretty p-icon p-smooth p-curve p-thick">
+    <div class="pretty p-icon p-smooth p-curve p-thick" style="margin: 24px 16px">
       <input type="checkbox" checked/>
       <div class="state p-primary">
-        <i class="icon fa fa-check"></i>
-        <label style="margin-left: 8px">List1</label>
+        <i class="icon material-icons">done</i>
+        <label style="margin-left: 8px">Favorate</label>
+        <i class="fa fa-globe" style="float: right; color: #989898; font-size: 18px" aria-hidden="true"></i>
       </div>
     </div>
-    <div class="pretty p-icon p-smooth p-curve p-thick">
+    <div class="pretty p-icon p-smooth p-curve p-thick" style="margin: 24px 16px">
       <input type="checkbox" />
       <div class="state p-primary">
-        <i class="icon fa fa-check"></i>
-        <label style="margin-left: 8px">List2</label>
+        <i class="icon material-icons">done</i>
+        <label style="margin-left: 8px">CS2100</label>
+        <i class="fa fa-globe" style="float: right; color: #989898; font-size: 18px" aria-hidden="true"></i>
       </div>
     </div>
   </form>

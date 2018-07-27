@@ -59,11 +59,19 @@ function prepareNavbarFunction() {
   })
 
   $('#readlist_button').on('click', function() {
-    layer.open({
-      title: 'Add to ...',
+    const popup = layer.open({
+      title: false,
       type: 1,
+      offset: '28%',
+      shade: 0.18,
       shadeClose: true,
-      content: $('#readlist')
+      content: $('#readlist'),
+      area: '240px',
+      closeBtn: false,
+    })
+    $('#close-readlist-icon').on('click', function() {
+      layer.close(popup)
+      $(this).off('click')
     })
   })
 }
