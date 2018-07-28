@@ -114,6 +114,7 @@ class Readlist(ModelWithCleanUUID):
     creator = models.ForeignKey(User, related_name="created_readlist_set")
     collectors = models.ManyToManyField(User, related_name="collected_readlist_set", blank=True)
     documents = models.ManyToManyField(Document, related_name="belonged_readlist_set", blank=True)
+    is_public = models.BooleanField(default=True)
 
 
 class Comment(ModelWithCleanUUID):
