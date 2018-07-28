@@ -49,5 +49,9 @@ class ReadlistEncoder(DjangoJSONEncoder):
         if isinstance(obj, Readlist):
             return {
                 'name': obj.name,
+                'documents': list(obj.documents.all()),
             }
-        return super(ReadlistEncoder, self).default(obj)
+        elif isinstance(obj, Document):
+            return DocumentEncoder().default(obj)
+        else:
+            return super(ReadlistEncoder, self).default(obj)
