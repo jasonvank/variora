@@ -134,7 +134,7 @@ class GroupMembersList extends React.Component {
     }, {
       title: 'Email Address',
       dataIndex: 'email_address',
-      width: '20%',
+      width: this.state.isAdmin ? '20%' : '40%',
     }, {
       title: 'Action',
       key: 'action',
