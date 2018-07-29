@@ -25,6 +25,8 @@ class DocumentEncoder(DjangoJSONEncoder):
                 'renameUrl': '/file_viewer/api/documents/' + str(obj.pk) + '/rename',
                 'uncollectUrl': '/file_viewer/api/documents/' + str(obj.pk) + '/uncollect',
                 'upload_time': obj.upload_time,
+                'uploader_name': obj.owner.nickname,
+                'uploader_portrait_url': obj.owner.portrait_url,
             }
         return super(DocumentEncoder, self).default(obj)
 
