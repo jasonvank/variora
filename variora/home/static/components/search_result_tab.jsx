@@ -107,7 +107,7 @@ class DocumentResult extends React.Component {
       dataIndex: 'uploader_name',
       width: "30%",
     }, {
-      title: 'Uploaded time',
+      title: 'Upload time',
       width: "30%",
       render: (text, record) => <TimeAgo date={record.upload_time} />
     }]
