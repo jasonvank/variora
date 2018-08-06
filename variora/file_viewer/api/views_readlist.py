@@ -26,31 +26,64 @@ def _collect_readlist(readlist, user):
 def _uncollect_readlist(readlist, user):
     return HttpResponse(status=200)
 
-def _rename_readlist(readlist, user, new_name):
+def _rename_readlist(readlist, user, request):
+    new_name = request.POST['new_name']
     if user.pk != readlist.creator.pk:
         return HttpResponse(status=403)
     readlist.update(name=new_name)
     return HttpResponse(status=200)
 
-class ReadlistView(View):
-    def get(self, request, pk, **kwargs):
+def _add_document_to_readlist(readlist, user, request):
+    documents = Document.objects.filter(uuid=request.POST['document_uuid'])
+    if documents.exists():
+        readlist.documents.add(documents.first())
+        return HttpResponse(status=200)
+    else:
         return HttpResponse(status=404)
 
+def _remove_document_from_readlist(readlist, user, request):
+    documents = Document.objects.filter(uuid=request.POST['document_uuid'])
+    if documents.exists():
+        readlist.documents.remove(documents.first())
+        return HttpResponse(status=200)
+    else:
+        return HttpResponse(status=404)
+
+class ReadlistView(View):
+    def get(self, request, uuid, **kwargs):
+        user = request.user
+        if not user.is_authenticated:
+            return HttpResponse(status=403)
+        readlists = Readlist.objects.filter(uuid=request.POST['uuid'])
+        if not readlists.exists():
+            return HttpResponse(status=404)
+        readlist = readlists.first()
+        return HttpResponse(readlist, encoder=ReadlistEncoder)
+
     @method_decorator(login_required(login_url='/'))
-    def post(self, request, pk, operation):
+    def post(self, request, uuid, operation):
         try:
             user = request.user
             if not user.is_authenticated:
                 return HttpResponse(status=403)
-            readlist = None
+            readlists = Readlist.objects.filter(uuid=request.POST['uuid'])
+            if not readlists.exists():
+                return HttpResponse(status=404)
+            readlist = readlists.first()
+            if user.pk != readlist.creator.pk:
+                return HttpResponse(status=403)
             if operation == 'delete':
                 return _delete_readlist(readlist, user)
             if operation == 'rename':
-                return _rename_readlist(readlist, user, request.POST['new_name'])
+                return _rename_readlist(readlist, user, request)
             elif operation == 'collect':
                 return _collect_readlist(readlist, user)
             elif operation == 'uncollect':
                 return _uncollect_readlist(readlist, user)
+            elif operation == 'add_document':
+                return _add_document_to_readlist(readlist, user, request)
+            elif operation == 'remove_document':
+                return _remove_document_from_readlist(readlist, user, request)
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
 
