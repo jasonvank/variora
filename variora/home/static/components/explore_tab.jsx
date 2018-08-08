@@ -1,33 +1,12 @@
-import { Button, Col, Card, Icon, Input, Layout, Menu, Modal, Row, Tabs, Upload, notification } from 'antd'
-import { Link, Route, BrowserRouter as Router, Switch } from 'react-router-dom'
-import { getCookie, getUrlFormat } from 'util.js'
+import { Button, Card, Col, Icon, Layout, Row, Tabs, notification } from 'antd'
 
 import React from 'react'
-import axios from 'axios'
 import TimeAgo from 'react-timeago'
+import { connect } from 'react-redux'
+import {fetchExploreDocs} from '../redux/actions.js'
 
 const TabPane = Tabs.TabPane;
 
-function prepareAndRenderAll(canvas) {
-  PDFJS.workerSrc = '/static/pdfjs/pdf.worker.js'
-  PDFJS.getDocument('http://localhost:8000/proxy?origurl=http://www.orimi.com/pdf-test.pdf').then(function(pdf) {
-    let pdfDoc = pdf
-    pdfDoc.getPage(1).then(function(page) {
-      var context = canvas.getContext('2d')
-      var viewport = page.getViewport(0.38)
-      canvas.height = viewport.height
-      canvas.width = viewport.width
-      canvas.style.height = viewport.height
-      canvas.style.width = viewport.width
-
-      var renderContext = {
-        canvasContext: context,
-        viewport: viewport,
-      }
-      page.render(renderContext)
-    })
-  })
-}
 
 class DocumentListWrapper extends React.Component {
   constructor(props) {
@@ -46,7 +25,6 @@ class DocumentListWrapper extends React.Component {
     })
     this.forceUpdate()
   }
-
 
   render() {
     return (
@@ -95,32 +73,15 @@ class DisplayDocuments extends React.Component {
 }
 
 
-
-class ExploreTab extends React.Component {
+class ExploreTabBeforeConnect extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      mostViewsDocuments: undefined,
-      mostStarsDocuments: undefined,
-      mostAnnotationsDocuments: undefined,
-    }
   }
 
   componentDidMount() {
-    const self = this
-    axios.get(getUrlFormat('/documents/api/documents/explore'))
-      .then(response => {
-        var mostViewsDocuments = response.data.filter(item => item.description == 'most_views')
-        var mostStarsDocuments = response.data.filter(item => item.description == 'most_collectors')
-        var mostAnnotationsDocuments = response.data.filter(item => item.description == 'most_annotations')
-        self.setState({
-          mostViewsDocuments: mostViewsDocuments,
-          mostStarsDocuments: mostStarsDocuments,
-          mostAnnotationsDocuments: mostAnnotationsDocuments,
-        })
-      })
+    if (this.props.mostViewsDocuments == undefined)
+      this.props.fetchExploreDocs()
   }
-
 
   render() {
     return (
@@ -129,25 +90,32 @@ class ExploreTab extends React.Component {
           <div className='card-header pubIndex-recommendationsHeader'>
             <div className='card-headerText' style={{ color: 'black' }}>Most Views</div>
           </div>
-          {<DisplayDocuments data={this.state.mostViewsDocuments} />}
+          {<DisplayDocuments data={this.props.mostViewsDocuments} />}
         </div>
 
         <div className='card' style={{ overflow: 'auto', color: 'white', marginTop: 18 }}>
           <div className='card-header pubIndex-recommendationsHeader'>
             <div className='card-headerText' style={{ color: 'black' }}>Most Stars</div>
           </div>
-          {<DisplayDocuments data={this.state.mostStarsDocuments} />}
+          {<DisplayDocuments data={this.props.mostStarsDocuments} />}
         </div>
 
         <div className='card' style={{ overflow: 'auto', color: 'white', marginTop: 18  }}>
           <div className='card-header pubIndex-recommendationsHeader'>
             <div className='card-headerText' style={{ color: 'black' }}>Most Annotations</div>
           </div>
-          {<DisplayDocuments data={this.state.mostAnnotationsDocuments} />}
+          {<DisplayDocuments data={this.props.mostAnnotationsDocuments} />}
         </div>
       </div>
     )
   }
 }
 
+const mapStoreToProps = (store, ownProps) => {
+  return {
+    ...ownProps,
+    ...store
+  }
+}
+const ExploreTab = connect(mapStoreToProps, {fetchExploreDocs})(ExploreTabBeforeConnect)
 export { ExploreTab }

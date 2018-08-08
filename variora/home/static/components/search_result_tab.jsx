@@ -5,6 +5,7 @@ import { formatOpenDocumentUrl, getCookie, getUrlFormat } from 'util.js'
 
 import React from 'react'
 import axios from 'axios'
+import TimeAgo from 'react-timeago'
 
 const { SubMenu } = Menu
 const { Header, Content, Sider } = Layout
@@ -70,7 +71,6 @@ class SearchResultTab extends React.Component {
   }
 }
 
-
 class DocumentResult extends React.Component {
   constructor(props) {
     super(props)
@@ -103,13 +103,13 @@ class DocumentResult extends React.Component {
       render: (text, record) => <a href={formatOpenDocumentUrl(record)}>{text}</a>,
       sorter: (a, b) => a.title.localeCompare(b.title),
     }, {
-      title: 'Group Owner',
-      dataIndex: '',
+      title: 'Uploader',
+      dataIndex: 'uploader_name',
       width: "30%",
     }, {
-      title: 'Action',
-      key: 'action',
+      title: 'Upload time',
       width: "30%",
+      render: (text, record) => <TimeAgo date={record.upload_time} />
     }]
 
     return (
@@ -272,13 +272,14 @@ class UserResult extends React.Component {
     }, {
       title: '',
       dataIndex: 'avatar',
+      width: "20%",
       render: (text, record) => <Avatar src={ record.portrait_url } size='default' />,
     }, {
       title: 'Email Address',
       dataIndex: 'email_address',
       width: "30%",
     }, {
-      title: 'Action',
+      // title: 'action',
       key: 'action',
       width: "30%",
     }]

@@ -261,6 +261,7 @@ def display_coteriefile_viewer_page(request, **kwargs):
         document.save()
 
         context = {
+            "DEBUG": settings.DEBUG,
             "document": document,
             "file_url": document.url,
             "comments": document.coteriecomment_set.order_by("-post_time"),

@@ -55,7 +55,11 @@
       })
     </script>
 
-    <script src="/static/bundle/file_viewer/file_viewer_script.js"></script>
+    {% if DEBUG %}
+      <script src="/static/bundle/file_viewer/file_viewer_script.js"></script>
+    {% else %}
+      <script src="/static/bundle/file_viewer/file_viewer_script.js"></script>
+    {% endif %}
     <link rel="stylesheet" href="/static/css/file_viewer.css">
   </head>
 

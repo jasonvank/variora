@@ -1,5 +1,6 @@
 import random
 
+from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.core.mail import EmailMessage  # for sending verification using e-mail
 from django.db.models import Q
@@ -39,7 +40,7 @@ def display_sign_up_page(request):
 
 @ensure_csrf_cookie
 def display_sign_in_page(request):
-    return render(request, "home/sign_in_page.html")
+    return render(request, "home/sign_in_page.html", {'DEBUG': settings.DEBUG})
 
 
 # temp_user_information_dic is a python dictionary
@@ -117,11 +118,11 @@ def handle_search(request):
 def display_index(request):
     if isinstance(request.user, AnonymousUser):
         return redirect('/explore')
-    return render(request, 'home/test.html', {})
+    return render(request, 'home/test.html', {'DEBUG': settings.DEBUG})
 
 
 def display_index_explore(request):
-    return render(request, 'home/test.html', {})
+    return render(request, 'home/test.html', {'DEBUG': settings.DEBUG})
 
 
 def jason_test(request):

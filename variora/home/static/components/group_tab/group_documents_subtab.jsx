@@ -1,6 +1,6 @@
 import 'regenerator-runtime/runtime'
 
-import { Avatar, Button, Col, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, Upload, notification } from 'antd'
+import { Button, Card, Col, Icon, Input, Layout, Menu, Row, Tooltip, Upload, notification } from 'antd'
 import {
   Link,
   Route,
@@ -110,8 +110,19 @@ class GroupDocumentsSubtab extends React.Component {
       fileList: this.state.uploadedDocumentFileList,
     }
 
+    const cardTitle = (
+      <span style={{fontSize: '12px'}}>
+        Upload Document
+        <Tooltip title={'Documents only visible to admins and members'} >
+          <a href="#">
+            <Icon type="info-circle-o" style={{marginLeft: 6}} />
+          </a>
+        </Tooltip>
+      </span>
+    )
+
     var uploadDocumentSection = (
-      <div className={'card'} style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, padding: 18 }}>
+      <Card title={cardTitle} className={'card'} bordered={false} style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }} noHovering>
         <Row>
           <Col span={12} style={{ textAlign: 'left' }}>
             <Upload {...uploadProps}>
@@ -150,7 +161,7 @@ class GroupDocumentsSubtab extends React.Component {
             </div>
           </Col>
         </Row>
-      </div>
+      </Card>
     )
 
     return (

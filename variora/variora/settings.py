@@ -48,6 +48,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE_CLASSES = [
+    'django.middleware.gzip.GZipMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -163,8 +164,8 @@ MAX_DOCUMENT_UPLOAD_SIZE = 3 * 1024 * 1024  # 3 MB
 # if DEBUG:
 #     INTERNAL_IPS = ('127.0.0.1', 'localhost',)
 #     MIDDLEWARE_CLASSES += (
-#         'debug_toolbar.middleware.DebugToolbarMiddleware',
-#         # 'debug_panel.middleware.DebugPanelMiddleware',
+#         # 'debug_toolbar.middleware.DebugToolbarMiddleware',
+#         'debug_panel.middleware.DebugPanelMiddleware',
 #     )
 
 #     INSTALLED_APPS += (

@@ -12,7 +12,7 @@ import {
 import { getCookie, getUrlFormat, getValFromUrlParam } from 'util.js'
 
 import { DocumentTab } from './components/document_tab.jsx'
-import { GroupTab } from './components/group_tab//group_tab.jsx'
+import { GroupTab } from './components/group_tab/group_tab.jsx'
 import { ExploreTab } from './components/explore_tab.jsx'
 import { NotificationsToggleButton } from './components/notifications_toggle_button.jsx'
 import { NotificationsAlertButton } from './components/notifications_alert_button.jsx'
