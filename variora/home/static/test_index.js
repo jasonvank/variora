@@ -12,7 +12,7 @@ import {
 import { getCookie, getUrlFormat, getValFromUrlParam } from 'util.js'
 
 import { DocumentTab } from './components/document_tab.jsx'
-import { GroupTab } from './components/group_tab.jsx'
+import { GroupTab } from './components/group_tab//group_tab.jsx'
 import { ExploreTab } from './components/explore_tab.jsx'
 import { NotificationsToggleButton } from './components/notifications_toggle_button.jsx'
 import { NotificationsAlertButton } from './components/notifications_alert_button.jsx'
@@ -183,7 +183,7 @@ class App extends React.Component {
             <Sider className='sider' width={200} style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }}>
               <Menu
                 mode="inline"
-                defaultOpenKeys={['admin_teams', 'member_teams']}
+                defaultOpenKeys={['created_readlists', 'collected_readlists']}
                 onClick={this.onClickCreateGroupMenuItem}
                 style={{ height: '100%', borderRight: 0 }}
                 defaultSelectedKeys={this.getHighlightedMenuItems()}
@@ -194,7 +194,41 @@ class App extends React.Component {
                 <Menu.Item key="documents" disabled={!this.state.user.is_authenticated}>
                   <Link to="/"><span><Icon type='file' />documents</span></Link>
                 </Menu.Item>
-                <SubMenu key="admin_teams" title={<span><Icon type="solution" />admin group</span>} disabled={!this.state.user.is_authenticated}>
+
+                <SubMenu key="created_readlists" title={<span><Icon type="solution" />created readlists</span>} disabled={!this.state.user.is_authenticated}>
+                  {
+                    this.state.administratedCoteries.map((coterie) => {
+                      return (
+                        <Menu.Item key={'groups' + coterie.pk}>
+                          <Link to={ '/groups/' + coterie.pk }><span>{ coterie.name }</span></Link>
+                        </Menu.Item>
+                      )
+                    })
+                  }
+                  <Menu.Item disabled={!this.state.user.is_authenticated} key={CREATE_NEW_GROUP_MENU_ITEM_KEY}><Icon type="plus"/></Menu.Item>
+                </SubMenu>
+                <SubMenu key="collected_readlists" title={<span><Icon type="team" />collected readlists</span>} disabled={!this.state.user.is_authenticated}>
+                  {
+                    this.state.joinedCoteries.map((coterie) => {
+                      return (
+                        <Menu.Item key={'groups' + coterie.pk}>
+                          <Link to={ '/groups/' + coterie.pk }><span>{ coterie.name }</span></Link>
+                        </Menu.Item>
+                      )
+                    })
+                  }
+                </SubMenu>
+                <Modal
+                  title="create a new readlist"
+                  wrapClassName="vertical-center-modal"
+                  visible={this.state.createGroupModelVisible}
+                  onOk={this.submitCreateCoterieForm}
+                  onCancel={() => this.setCreateGroupModelVisible(false)}
+                >
+                  <CustomizedForm {...fields} onChange={this.handleCreateCoterieFromChange} />
+                </Modal>
+
+                {/* <SubMenu key="admin_teams" title={<span><Icon type="solution" />admin group</span>} disabled={!this.state.user.is_authenticated}>
                   {
                     this.state.administratedCoteries.map((coterie) => {
                       return (
@@ -225,7 +259,7 @@ class App extends React.Component {
                   onCancel={() => this.setCreateGroupModelVisible(false)}
                 >
                   <CustomizedForm {...fields} onChange={this.handleCreateCoterieFromChange} />
-                </Modal>
+                </Modal> */}
               </Menu>
             </Sider>
             <Layout style={{ marginLeft: 200, padding: 0 }}>
