@@ -45,29 +45,36 @@ class App extends React.Component {
         coterieName: {
           value: '',
         },
+        readlistName: {
+          value: '',
+        },
       },
       createGroupModelVisible: false,
-      administratedCoteries: [],
-      joinedCoteries: [],
-      createdReadlists: [],
-      collectedReadlists: [],
       user: {
         nickname: '',
         is_authenticated: false,
         portrait_url: '/media/portrait/default_portrait.png',
       },
+      administratedCoteries: [],
+      joinedCoteries: [],
+      createdReadlists: [],
+      collectedReadlists: [],
     }
+
     this.handleSearch = (searchKey) => {
       if (searchKey != '')
         window.location.href = decodeURIComponent(URL_BASE + '/search?key=' + searchKey)
     }
+
     this.setCreateGroupModelVisible = (visibility) => {
       this.setState({ createGroupModelVisible: visibility })
     }
+
     this.onClickCreateGroupMenuItem = (menuItem) => {
       if (menuItem.key == CREATE_NEW_GROUP_MENU_ITEM_KEY)
         this.setCreateGroupModelVisible(true)
     }
+
     this.signOff = () => {
       var data = new FormData()
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
@@ -75,16 +82,18 @@ class App extends React.Component {
         window.location.reload()
       })
     }
+
     this.handleCreateCoterieFromChange = (changedFields) => {
       this.setState({
         fields: { ...this.state.fields, ...changedFields },
       })
     }
+
     this.getHighlightedMenuItems = () => {
       var pathname = window.location.pathname
       if (pathname.endsWith('/search'))
         return []
-      else if (pathname.includes('/groups/')) {
+      else if (pathname.includes('/groups/') || pathname.includes('/readlists/')) {
         var pageElement = pathname.split('/')
         return [pageElement[1] + pageElement[2]]
       } else if (pathname == '/explore') {
@@ -92,25 +101,47 @@ class App extends React.Component {
       } else
         return ['documents']
     }
-    this.submitCreateCoterieForm = () => {
-      var coterieName = this.state.fields.coterieName.value
-      if (coterieName == '')
-        message.warning('Group name cannot be empty', 1)
+
+    this.submitCreateReadlistForm = () => {
+      var readlistName = this.state.fields.readlistName.value
+      if (readlistName == '')
+        message.warning('The name of the readlist cannot be empty', 1)
       else {
         var data = new FormData()
-        data.append('coterie_name', coterieName)
+        data.append('readlist_name', readlistName)
         data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-        axios.post('/coterie/api/coteries/create', data).then((response) => {
-          var newAdministratedCoteries = this.state.administratedCoteries.slice()
-          newAdministratedCoteries.push(response.data)
+        axios.post('/file_viewer/api/readlists/create', data).then((response) => {
+          var newCreatedReadlists = this.state.createdReadlists.slice()
+          newCreatedReadlists.push(response.data)
           this.setCreateGroupModelVisible(false)
           this.setState({
-            fields: { ...this.state.fields, coterieName: { value: '' } },
-            administratedCoteries: newAdministratedCoteries
+            fields: { ...this.state.fields, readlistName: { value: '' } },
+            createdReadlists: newCreatedReadlists
           })
         })
       }
     }
+
+    // this.submitCreateCoterieForm = () => {
+    //   var coterieName = this.state.fields.coterieName.value
+    //   if (coterieName == '')
+    //     message.warning('Group name cannot be empty', 1)
+    //   else {
+    //     var data = new FormData()
+    //     data.append('coterie_name', coterieName)
+    //     data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+    //     axios.post('/coterie/api/coteries/create', data).then((response) => {
+    //       var newAdministratedCoteries = this.state.administratedCoteries.slice()
+    //       newAdministratedCoteries.push(response.data)
+    //       this.setCreateGroupModelVisible(false)
+    //       this.setState({
+    //         fields: { ...this.state.fields, coterieName: { value: '' } },
+    //         administratedCoteries: newAdministratedCoteries
+    //       })
+    //     })
+    //   }
+    // }
+
     this.removeCoterieCallback = (coteriePk) => {
       var updatedAdministratedCoteries = this.state.administratedCoteries.filter(function(coterie) {return coterie.pk != coteriePk})
       var updatedJoinedCoteries = this.state.joinedCoteries.filter(function(coterie) {return coterie.pk != coteriePk})
@@ -119,6 +150,7 @@ class App extends React.Component {
         joinedCoteries: updatedJoinedCoteries
       })
     }
+
     this.acceptInvitationCallback = (coteriePk) => {
       axios.get('/coterie/api/coteries/' + coteriePk).then((response) => {
         var joinedCoteries = this.state.joinedCoteries
@@ -129,15 +161,15 @@ class App extends React.Component {
         }
       })
     }
+
     this.renderGroupTab = (match, location) => {
       var coteriePk = parseInt(match.params.coteriePk)
       var isAdmin = this.state.administratedCoteries.map((coterie) => coterie.pk).includes(coteriePk)
       return <GroupTab removeCoterieCallback={this.removeCoterieCallback} isAdmin={isAdmin} match={match} location={location} />
     }
+
     this.renderReadlistTab = (match, location) => {
-      var coteriePk = parseInt(match.params.coteriePk)
-      var isAdmin = this.state.administratedCoteries.map((coterie) => coterie.pk).includes(coteriePk)
-      return <ReadlistTab isAdmin={isAdmin} match={match} location={location} />
+      return <ReadlistTab user={this.state.user} match={match} location={location} />
     }
   }
 
@@ -226,7 +258,7 @@ class App extends React.Component {
                   </SubMenu>
                   <SubMenu key="collected_readlists" title={<span><Icon type="team" />collected readlists</span>} disabled={!this.state.user.is_authenticated}>
                     {
-                      this.state.joinedCoteries.map((coterie) => {
+                      this.state.collectedReadlists.map((coterie) => {
                         return (
                           <Menu.Item key={'readlists' + coterie.pk}>
                             <Link to={ '/readlists/' + coterie.pk }><span>{ coterie.name }</span></Link>
@@ -239,10 +271,10 @@ class App extends React.Component {
                     title="create a new readlist"
                     wrapClassName="vertical-center-modal"
                     visible={this.state.createGroupModelVisible}
-                    onOk={this.submitCreateCoterieForm}
+                    onOk={this.submitCreateReadlistForm}
                     onCancel={() => this.setCreateGroupModelVisible(false)}
                   >
-                    <CustomizedForm {...fields} onChange={this.handleCreateCoterieFromChange} />
+                    <CreateReadlistForm {...fields} onChange={this.handleCreateCoterieFromChange} />
                   </Modal>
 
                   {/* <SubMenu key="admin_teams" title={<span><Icon type="solution" />admin group</span>} disabled={!this.state.user.is_authenticated}>
@@ -284,7 +316,7 @@ class App extends React.Component {
                   <Switch>
                     <Route exact path="/explore" component={ExploreTab} />
                     <Route path="/search" component={SearchResultTab} />
-                    <Route path="/readlists/:readlistPk" render={ ({match, location}) => this.renderReadlistTab(match, location) } />
+                    <Route path="/readlists/:readlistSlug" render={ ({match, location}) => this.renderReadlistTab(match, location) } />
                     <Route path="/groups/:coteriePk" render={ ({match, location}) => this.renderGroupTab(match, location) } />
                     <Route path="/" component={DocumentTab} />
                   </Switch>
@@ -301,15 +333,15 @@ class App extends React.Component {
   }
 }
 
-const CustomizedForm = Form.create({
+const CreateReadlistForm = Form.create({
   onFieldsChange(props, changedFields) {
     props.onChange(changedFields)
   },
   mapPropsToFields(props) {
     return {
       coterieName: {
-        ...props.coterieName,
-        value: props.coterieName.value,
+        ...props.readlistName,
+        value: props.readlistName.value,
       },
     }
   },
@@ -317,14 +349,39 @@ const CustomizedForm = Form.create({
   const { getFieldDecorator } = props.form
   return (
     <Form layout="inline">
-      <FormItem label="group name">
-        {getFieldDecorator('coterieName', {
+      <FormItem label="Name of the readlist">
+        {getFieldDecorator('readlistName', {
           rules: [{ required: true, message: 'name is required!' }],
         })(<Input />)}
       </FormItem>
     </Form>
   )
 })
+
+// const CustomizedForm = Form.create({
+//   onFieldsChange(props, changedFields) {
+//     props.onChange(changedFields)
+//   },
+//   mapPropsToFields(props) {
+//     return {
+//       coterieName: {
+//         ...props.coterieName,
+//         value: props.coterieName.value,
+//       },
+//     }
+//   },
+// })((props) => {
+//   const { getFieldDecorator } = props.form
+//   return (
+//     <Form layout="inline">
+//       <FormItem label="group name">
+//         {getFieldDecorator('coterieName', {
+//           rules: [{ required: true, message: 'name is required!' }],
+//         })(<Input />)}
+//       </FormItem>
+//     </Form>
+//   )
+// })
 
 ReactDOM.render(
   <LocaleProvider locale={enUS}>

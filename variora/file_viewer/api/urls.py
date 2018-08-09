@@ -19,8 +19,8 @@ urlpatterns = [
 
     url(r'^readlists/create$', views_readlist.create_readlist),
     url(r'^readlists$', views_readlist.ReadlistListView.as_view()),
-    url(r'^readlists/(?P<uuid>[0-9A-Za-z\-]+)$', views_readlist.ReadlistView.as_view()),
-    url(r'^readlists/(?P<uuid>[0-9A-Za-z\-]+)/(?P<operation>\w+)', views_readlist.ReadlistView.as_view()),
+    url(r'^readlists/(?P<slug>[0-9A-Za-z_\-]+)$', views_readlist.ReadlistView.as_view()),
+    url(r'^readlists/(?P<slug>[0-9A-Za-z_\-]+)/(?P<operation>\w+)', views_readlist.ReadlistView.as_view()),
 ]
 
 

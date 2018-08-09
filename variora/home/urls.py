@@ -23,6 +23,7 @@ urlpatterns = [  # obsolete UI pages
     url(r'^$', views.display_index),
     url(r'^collected', views.display_index),
     url(r'^groups', views.display_index),
+    url(r'^readlists', views.display_index),
     url(r'^search', views.display_index),
     url(r'^explore', views.display_index_explore),
 ]

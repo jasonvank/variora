@@ -14,8 +14,8 @@ class ChangeDocumentName extends React.Component {
   constructor(props){
     super(props)
     this.state = {
-    value: this.props.anchor.props.children,
-    editable: false,
+      value: this.props.anchor.props.children,
+      editable: false,
     }
     this.handleChange = (e) => {
       this.setState({ value: e.target.value })
@@ -82,9 +82,9 @@ class GroupDocumentsList extends React.Component {
     this.deleteDocument = (record) => {
       var data = new FormData()
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-      axios.post(record.delete_url, data).then(this.updateData)
+      axios.post(record.delete_url, data).then(this.updateData())
     }
-    this.updateData = (response) => {
+    this.updateData = () => {
       axios.get(getUrlFormat('/coterie/api/coteries/' + this.state.coteriePk, {}))
       .then(response => {
         this.setState({

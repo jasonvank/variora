@@ -14,15 +14,21 @@ const { Header, Content, Sider } = Layout
 const MenuItemGroup = Menu.ItemGroup
 
 
-const SUB_URL_BASE = '/groups/'
+const SUB_URL_BASE = '/readlists/'
 
-class GroupTab extends React.Component {
+class ReadlistTab extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {
+      readlistSlug: props.match.params.readlistSlug,
+      user: props.user,
+    }
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(props) {
     this.setState({
+      readlistSlug: props.match.params.readlistSlug,
+      user: props.user,
     })
   }
 
@@ -40,22 +46,22 @@ class GroupTab extends React.Component {
           }
         >
           <Menu.Item key='readlist-documents'>
-            <Link to={SUB_URL_BASE + this.state.coteriePk + '/'}><Icon type="book" />Group Documents</Link>
+            <Link to={SUB_URL_BASE + this.state.readlistSlug + '/'}><Icon type="book" />Readlist Documents</Link>
           </Menu.Item>
           <Menu.Item key='readlist-settings'>
-            <Link to={SUB_URL_BASE + this.state.coteriePk + '/settings'}><Icon type="setting" />Group Settings</Link>
+            <Link to={SUB_URL_BASE + this.state.readlistSlug + '/settings'}><Icon type="setting" />Readlist Settings</Link>
           </Menu.Item>
         </Menu>
         <Switch>
-          <Route exact path={SUB_URL_BASE + this.state.coteriePk + '/'} render={() => <ReadlistDocumentsSubtab isAdmin={this.state.isAdmin} coteriePk={this.state.coteriePk} />} />
-          <Route exact path={SUB_URL_BASE + this.state.coteriePk + '/settings'} render={() => <ReadlistSettingsSubtab isAdmin={this.state.isAdmin} coteriePk={this.state.coteriePk} removeCoterieCallback={this.props.removeCoterieCallback} />} />
+          <Route exact path={SUB_URL_BASE + this.state.readlistSlug + '/'} render={() => <ReadlistDocumentsSubtab user={this.state.user} readlistSlug={this.state.readlistSlug} />} />
+          <Route exact path={SUB_URL_BASE + this.state.readlistSlug + '/settings'} render={() => <ReadlistSettingsSubtab user={this.state.user} readlistSlug={this.state.readlistSlug} removeCoterieCallback={this.props.removeCoterieCallback} />} />
         </Switch>
       </Content>
     )
   }
 }
 
-export { GroupTab }
+export { ReadlistTab }
 
 
 

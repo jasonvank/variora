@@ -2,9 +2,11 @@ from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.serializers.json import DjangoJSONEncoder
 
+from home.api.encoders import UserEncoder
 from home.models import User
 
-from ..models import Annotation, AnnotationReply, Comment, Document, DocumentThumbnail, Readlist
+from ..models import (Annotation, AnnotationReply, Comment, Document,
+                      DocumentThumbnail, Readlist)
 
 
 class DocumentEncoder(DjangoJSONEncoder):
@@ -63,13 +65,15 @@ class ReadlistEncoder(DjangoJSONEncoder):
     def default(self, obj):
         if isinstance(obj, Readlist):
             return {
-                'id': obj.id,
                 'uuid': obj.clean_uuid,
                 'slug': obj.slug,
                 'name': obj.name,
                 'documents': list(obj.documents.all()),
+                'owner': obj.creator,
             }
         elif isinstance(obj, Document):
             return DocumentEncoder().default(obj)
+        elif isinstance(obj, User):
+            return UserEncoder().default(obj)
         else:
             return super(ReadlistEncoder, self).default(obj)

@@ -15,6 +15,7 @@ from home.models import User
 from ..models import Document, DocumentThumbnail, Readlist
 from .encoders import (DocumentEncoder, DocumentThumbnailEncoder,
                        ReadlistEncoder, ReadlistListEncoder)
+from variora import utils
 
 
 def _delete_readlist(readlist, user):
@@ -50,23 +51,23 @@ def _remove_document_from_readlist(readlist, user, request):
         return HttpResponse(status=404)
 
 class ReadlistView(View):
-    def get(self, request, uuid, **kwargs):
+    def get(self, request, slug, **kwargs):
         user = request.user
         if not user.is_authenticated:
             return HttpResponse(status=403)
-        readlists = Readlist.objects.filter(uuid=request.POST['uuid'])
+        readlists = Readlist.objects.filter(uuid=utils.slug2uuid(slug))
         if not readlists.exists():
             return HttpResponse(status=404)
         readlist = readlists.first()
-        return HttpResponse(readlist, encoder=ReadlistEncoder)
+        return JsonResponse(readlist, encoder=ReadlistEncoder, safe=False)
 
     @method_decorator(login_required(login_url='/'))
-    def post(self, request, uuid, operation):
+    def post(self, request, slug, operation):
         try:
             user = request.user
             if not user.is_authenticated:
                 return HttpResponse(status=403)
-            readlists = Readlist.objects.filter(uuid=request.POST['uuid'])
+            readlists = Readlist.objects.filter(uuid=utils.slug2uuid(slug))
             if not readlists.exists():
                 return HttpResponse(status=404)
             readlist = readlists.first()
@@ -100,10 +101,10 @@ class ReadlistListView(View):
         }, encoder=ReadlistListEncoder, safe=False)
 
 
-def create_readlist(request, id):
+def create_readlist(request):
     user = request.user
-    if not user.is_authenticated or 'name' not in request.POST:
+    if not user.is_authenticated or 'readlist_name' not in request.POST:
         return HttpResponse(status=403)
-    readlist = Readlist(name=request.POST['name'], creator=user)
+    readlist = Readlist(name=request.POST['readlist_name'], creator=user)
     readlist.save()
-    return HttpResponse(status=200)
+    return JsonResponse(readlist, encoder=ReadlistListEncoder, safe=False)
