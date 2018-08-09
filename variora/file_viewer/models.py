@@ -116,6 +116,10 @@ class Readlist(ModelWithCleanUUID):
     documents = models.ManyToManyField(Document, related_name="belonged_readlist_set", blank=True)
     is_public = models.BooleanField(default=True)
 
+    @property
+    def slug(self):
+        return utils.uuid2slug(self.uuid)
+
 
 class Comment(ModelWithCleanUUID):
     uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)

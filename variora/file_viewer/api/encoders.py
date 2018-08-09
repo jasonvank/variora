@@ -46,10 +46,26 @@ class DocumentThumbnailEncoder(DjangoJSONEncoder):
         return super(DocumentThumbnailEncoder, self).default(obj)
 
 
+class ReadlistListEncoder(DjangoJSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Readlist):
+            return {
+                'id': obj.id,
+                'uuid': obj.clean_uuid,
+                'slug': obj.slug,
+                'name': obj.name,
+            }
+        else:
+            return super(ReadlistListEncoder, self).default(obj)
+
+
 class ReadlistEncoder(DjangoJSONEncoder):
     def default(self, obj):
         if isinstance(obj, Readlist):
             return {
+                'id': obj.id,
+                'uuid': obj.clean_uuid,
+                'slug': obj.slug,
                 'name': obj.name,
                 'documents': list(obj.documents.all()),
             }

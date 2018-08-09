@@ -49,6 +49,8 @@ class App extends React.Component {
       createGroupModelVisible: false,
       administratedCoteries: [],
       joinedCoteries: [],
+      createdReadlists: [],
+      collectedReadlists: [],
       user: {
         nickname: '',
         is_authenticated: false,
@@ -135,7 +137,7 @@ class App extends React.Component {
     this.renderReadlistTab = (match, location) => {
       var coteriePk = parseInt(match.params.coteriePk)
       var isAdmin = this.state.administratedCoteries.map((coterie) => coterie.pk).includes(coteriePk)
-      return <GroupTab removeCoterieCallback={this.removeCoterieCallback} isAdmin={isAdmin} match={match} location={location} />
+      return <ReadlistTab isAdmin={isAdmin} match={match} location={location} />
     }
   }
 
@@ -145,10 +147,16 @@ class App extends React.Component {
       if (user.is_authenticated)
         this.setState({ user: response.data })
     })
+    axios.get('/file_viewer/api/readlists').then((response) => {
+      this.setState({
+        createdReadlists: response.data.created_readlists,
+        collectedReadlists: response.data.collected_readlists,
+      })
+    })
     axios.get('/coterie/api/coteries').then((response) => {
       this.setState({
         administratedCoteries: response.data.administratedCoteries,
-        joinedCoteries: response.data.joinedCoteries
+        joinedCoteries: response.data.joinedCoteries,
       })
     })
   }
@@ -206,10 +214,10 @@ class App extends React.Component {
 
                   <SubMenu key="created_readlists" title={<span><Icon type="solution" />created readlists</span>} disabled={!this.state.user.is_authenticated}>
                     {
-                      this.state.administratedCoteries.map((coterie) => {
+                      this.state.createdReadlists.map((readlist) => {
                         return (
-                          <Menu.Item key={'groups' + coterie.pk}>
-                            <Link to={ '/groups/' + coterie.pk }><span>{ coterie.name }</span></Link>
+                          <Menu.Item key={'readlists' + readlist.slug}>
+                            <Link to={ '/readlists/' + readlist.slug }><span>{ readlist.name }</span></Link>
                           </Menu.Item>
                         )
                       })
@@ -220,8 +228,8 @@ class App extends React.Component {
                     {
                       this.state.joinedCoteries.map((coterie) => {
                         return (
-                          <Menu.Item key={'groups' + coterie.pk}>
-                            <Link to={ '/groups/' + coterie.pk }><span>{ coterie.name }</span></Link>
+                          <Menu.Item key={'readlists' + coterie.pk}>
+                            <Link to={ '/readlists/' + coterie.pk }><span>{ coterie.name }</span></Link>
                           </Menu.Item>
                         )
                       })
@@ -276,7 +284,7 @@ class App extends React.Component {
                   <Switch>
                     <Route exact path="/explore" component={ExploreTab} />
                     <Route path="/search" component={SearchResultTab} />
-                    <Route path="/readlists/:coteriePk" render={ ({match, location}) => this.renderReadlistTab(match, location) } />
+                    <Route path="/readlists/:readlistPk" render={ ({match, location}) => this.renderReadlistTab(match, location) } />
                     <Route path="/groups/:coteriePk" render={ ({match, location}) => this.renderGroupTab(match, location) } />
                     <Route path="/" component={DocumentTab} />
                   </Switch>

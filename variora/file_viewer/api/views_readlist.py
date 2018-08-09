@@ -14,7 +14,7 @@ from home.models import User
 
 from ..models import Document, DocumentThumbnail, Readlist
 from .encoders import (DocumentEncoder, DocumentThumbnailEncoder,
-                       ReadlistEncoder)
+                       ReadlistEncoder, ReadlistListEncoder)
 
 
 def _delete_readlist(readlist, user):
@@ -95,9 +95,9 @@ class ReadlistListView(View):
         collected_readlist = list(user.collected_readlist_set.select_related('creator').filter(is_public=True)) if user.is_authenticated else []
         prefetch_related_objects(created_readlist + collected_readlist, 'documents')
         return JsonResponse({
-            'created_readlist': created_readlist,
-            'collected_readlist': collected_readlist
-        }, encoder=ReadlistEncoder, safe=False)
+            'created_readlists': created_readlist,
+            'collected_readlists': collected_readlist
+        }, encoder=ReadlistListEncoder, safe=False)
 
 
 def create_readlist(request, id):
