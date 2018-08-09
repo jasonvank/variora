@@ -33,7 +33,23 @@ class ReadlistDocumentsList extends React.Component {
   }
 }
 
-export { ReadlistDocumentsList }
+class ReadlistDocumentsSubtab extends React.Component {
+  constructor(props) {
+    super(props)
+  }
+
+  componentDidMount() {
+    this.updateData()
+  }
+
+  render() {
+    return (
+      null
+    )
+  }
+}
+
+export { ReadlistDocumentsSubtab }
 
 
 

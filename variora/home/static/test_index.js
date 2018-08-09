@@ -14,6 +14,7 @@ import { getCookie, getUrlFormat, getValFromUrlParam } from 'util.js'
 import { DocumentTab } from './components/document_tab.jsx'
 import { ExploreTab } from './components/explore_tab.jsx'
 import { GroupTab } from './components/group_tab/group_tab.jsx'
+import { ReadlistTab } from './components/readlist_tab/readlist_tab.jsx'
 import { NotificationsAlertButton } from './components/notifications_alert_button.jsx'
 import { NotificationsToggleButton } from './components/notifications_toggle_button.jsx'
 import { Provider } from 'react-redux'
@@ -131,6 +132,11 @@ class App extends React.Component {
       var isAdmin = this.state.administratedCoteries.map((coterie) => coterie.pk).includes(coteriePk)
       return <GroupTab removeCoterieCallback={this.removeCoterieCallback} isAdmin={isAdmin} match={match} location={location} />
     }
+    this.renderReadlistTab = (match, location) => {
+      var coteriePk = parseInt(match.params.coteriePk)
+      var isAdmin = this.state.administratedCoteries.map((coterie) => coterie.pk).includes(coteriePk)
+      return <GroupTab removeCoterieCallback={this.removeCoterieCallback} isAdmin={isAdmin} match={match} location={location} />
+    }
   }
 
   componentDidMount() {
@@ -169,6 +175,7 @@ class App extends React.Component {
               <Col span={10} style={{ textAlign: 'right' }}>
                 <NotificationsToggleButton user={ this.state.user } acceptInvitationCallback={ this.acceptInvitationCallback } />
                 <NotificationsAlertButton />
+                <Icon type="team" style={{ fontSize: 18, marginLeft: 28, verticalAlign: 'middle' }} />
                 <span style={{ marginRight: 12, marginLeft: 28, color: '#666' }}>{ this.state.user.nickname }</span>
                 { this.state.user.is_authenticated ? <a onClick={this.signOff}>sign off</a> : <a href="/sign-in">sign in</a> }
                 <Avatar
@@ -269,6 +276,7 @@ class App extends React.Component {
                   <Switch>
                     <Route exact path="/explore" component={ExploreTab} />
                     <Route path="/search" component={SearchResultTab} />
+                    <Route path="/readlists/:coteriePk" render={ ({match, location}) => this.renderReadlistTab(match, location) } />
                     <Route path="/groups/:coteriePk" render={ ({match, location}) => this.renderGroupTab(match, location) } />
                     <Route path="/" component={DocumentTab} />
                   </Switch>
