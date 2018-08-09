@@ -22,7 +22,7 @@ function getPageDividerJQ(pageNum) {
     '
         + 'Page ' + pageNum +
     ' \
-      </spa> \
+      </span> \
     </div> \
   '
   return $(pageDividerHtml)

@@ -1,4 +1,4 @@
-import { Icon, Input, Popconfirm, Table, message, notification } from 'antd'
+import { Avatar, Icon, Button, Row, Col, Popconfirm, Table, message, notification } from 'antd'
 import { formatOpenDocumentUrl, getCookie, getUrlFormat } from 'util.js'
 
 import React from 'react'
@@ -17,7 +17,11 @@ class ReadlistDocumentsSubtab extends React.Component {
     this.state = {
       user: props.user,
       readlist: {
-        documents: []
+        documents: [],
+        owner: {
+          nickname: '',
+          portrait_url: ''
+        }
       },
       isOwner: false,
       readlistSlug: props.readlistSlug,
@@ -50,7 +54,11 @@ class ReadlistDocumentsSubtab extends React.Component {
     await this.setState({
       user: props.user,
       readlist: {
-        documents: []
+        documents: [],
+        owner: {
+          nickname: '',
+          portrait_url: ''
+        }
       },
       isOwner: false,
       readlistSlug: props.readlistSlug
@@ -85,22 +93,65 @@ class ReadlistDocumentsSubtab extends React.Component {
       dataIndex: 'title',
       width: '40%',
       render: (text, record) => <a className='document-link' href={formatOpenDocumentUrl(record)}>{text}</a>,
+    }].concat(this.state.isOwner ? [{
+      title: 'Upload Time',
+      key: 'upload_time',
+      width: '20%',
+      render: (text, document) => documentUploadDate(text, document),
     }, {
-      title: this.props.isAdmin ? 'Action' : 'Upload Time',
+      title: 'Action',
       key: 'action',
+      width: '20%',
+      render: (text, document) => documentRemoveAction(text, document),
+    }] : [{
+      title: 'Upload Time',
+      key: 'upload_time',
       width: '40%',
-      render: (text, document) => (
-        this.props.isAdmin ? documentRemoveAction(text, document) : documentUploadDate(text, document)
-      ),
-    }]
+      render: (text, document) => documentUploadDate(text, document),
+    }])
+    const readlist = this.state.readlist
     return (
-      <div className={'card'} style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}>
-        <Table
-          dataSource={this.state.readlist.documents}
-          columns={columns}
-          pagination={false}
-          rowKey={record => record.pk}
-        />
+      <div>
+        {/* TODO: beautify this part */}
+        <div className={'card'} style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, padding: 18 }}>
+          <Row>
+            <Col span={19}>
+              <div>
+                  <Avatar src={readlist.owner.portrait_url} style={{ verticalAlign: 'middle', marginRight: 8}} />
+                  <span style={{ verticalAlign: 'middle' }}>{readlist.owner.nickname} created in <span style={{ color: '#999' }}>3 months ago</span></span>
+              </div> 
+              <p style={{ fontSize: 28, marginBottom: 18, marginLeft: 8 }}>{readlist.name}</p>
+              <div style={{ marginBottom: 18 }}>
+                <Button type="primary" ghost icon="share-alt" style={{ marginRight: 18 }}>Share</Button>
+                <Button type="primary" ghost icon="heart-o" style={{ marginRight: 18 }}>Collect</Button>
+                <Button type="primary" ghost icon="heart" style={{ marginRight: 18 }}>Uncollect</Button>
+              </div>
+
+              <div style={{height: 9, borderBottom: '1px solid #efefef', margin: '0 0 28px 0', textAlign: 'center'}}>
+                <span style={{fontSize: 14, padding: '0 30px', fontWeight: 400, color: 'grey'}}>
+                </span>
+              </div>
+
+              {/* icon to collect */}
+              {/* number of collectors */}
+              {/* creation time */}
+            </Col>
+          </Row>
+          <Table
+            dataSource={this.state.readlist.documents}
+            columns={columns}
+            pagination={false}
+            rowKey={record => record.pk}
+          />
+        </div>
+        {/* <div className={'card'} style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}>
+          <Table
+            dataSource={this.state.readlist.documents}
+            columns={columns}
+            pagination={false}
+            rowKey={record => record.pk}
+          />
+        </div> */}
       </div>
     )
   }
