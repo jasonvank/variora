@@ -51,7 +51,9 @@ class ReadlistDocumentsSubtab extends React.Component {
   }
 
   async componentWillReceiveProps(props) {
-    const origReadlistSlug = this.state.readlistSlug
+    if (this.state.readlistSlug == props.readlistSlug)
+      return
+
     await this.setState({
       user: props.user,
       readlist: {
@@ -64,8 +66,7 @@ class ReadlistDocumentsSubtab extends React.Component {
       isOwner: false,
       readlistSlug: props.readlistSlug
     })
-    if (origReadlistSlug != this.state.readlistSlug)
-      this.updateData()
+    this.updateData()
   }
 
   render() {
