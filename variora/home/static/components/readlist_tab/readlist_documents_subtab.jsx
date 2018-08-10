@@ -117,10 +117,10 @@ class ReadlistDocumentsSubtab extends React.Component {
         {/* TODO: beautify this part */}
         <div className={'card'} style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, padding: 18 }}>
           <Row>
-            <Col span={8}>
+            <Col span={16}>
               <div>
-                  <Avatar src={readlist.owner.portrait_url} style={{ verticalAlign: 'middle', marginRight: 8}} />
-                  <span style={{ verticalAlign: 'middle' }}>{readlist.owner.nickname} created in <span style={{ color: '#999' }}>3 months ago</span></span>
+                <Avatar src={readlist.owner.portrait_url} style={{ verticalAlign: 'middle', marginRight: 8}} />
+                <span style={{ verticalAlign: 'middle' }}>{readlist.owner.nickname} created in <span style={{ color: '#999' }}>3 months ago</span></span>
               </div> 
               <p style={{ fontSize: 28, marginBottom: 18, marginLeft: 8 }}>{readlist.name}</p>
               <div style={{ marginBottom: 18 }}>
@@ -131,22 +131,25 @@ class ReadlistDocumentsSubtab extends React.Component {
               {/* icon to collect */}
               {/* number of collectors */}
               {/* creation time */}
+
+
+              <div style={{height: 9, borderBottom: '1px solid #efefef', margin: '0 0 28px 0', textAlign: 'center'}}>
+                <span style={{fontSize: 14, padding: '0 30px', fontWeight: 400, color: 'grey'}}>
+                </span>
+              </div>
+              <Table
+                dataSource={this.state.readlist.documents}
+                columns={columns}
+                pagination={false}
+                rowKey={record => record.pk}
+              />
             </Col>
-            <Col span={16}>
+            <Col style={{ padding: 18 }} span={8}>
+              <p style={{ fontSize: 16, marginBottom: 18, marginLeft: 8 }}>Description: </p>
+              <p style={{ whiteSpace: 'pre-wrap', marginBottom: 18, marginLeft: 8 }}>{readlist.description}</p>
             </Col>
           </Row>
 
-          <div style={{height: 9, borderBottom: '1px solid #efefef', margin: '0 0 28px 0', textAlign: 'center'}}>
-            <span style={{fontSize: 14, padding: '0 30px', fontWeight: 400, color: 'grey'}}>
-            </span>
-          </div>
-
-          <Table
-            dataSource={this.state.readlist.documents}
-            columns={columns}
-            pagination={false}
-            rowKey={record => record.pk}
-          />
 
         </div>
         {/* <div className={'card'} style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}>

@@ -70,6 +70,7 @@ class ReadlistEncoder(DjangoJSONEncoder):
                 'name': obj.name,
                 'documents': list(obj.documents.all()),
                 'owner': obj.creator,
+                'description': obj.description,
             }
         elif isinstance(obj, Document):
             return DocumentEncoder().default(obj)
