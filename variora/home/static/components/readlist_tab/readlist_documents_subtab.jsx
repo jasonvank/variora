@@ -51,6 +51,7 @@ class ReadlistDocumentsSubtab extends React.Component {
   }
 
   async componentWillReceiveProps(props) {
+    const origReadlistSlug = this.state.readlistSlug
     await this.setState({
       user: props.user,
       readlist: {
@@ -63,7 +64,8 @@ class ReadlistDocumentsSubtab extends React.Component {
       isOwner: false,
       readlistSlug: props.readlistSlug
     })
-    this.updateData()
+    if (origReadlistSlug != this.state.readlistSlug)
+      this.updateData()
   }
 
   render() {
@@ -115,7 +117,7 @@ class ReadlistDocumentsSubtab extends React.Component {
         {/* TODO: beautify this part */}
         <div className={'card'} style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, padding: 18 }}>
           <Row>
-            <Col span={19}>
+            <Col span={8}>
               <div>
                   <Avatar src={readlist.owner.portrait_url} style={{ verticalAlign: 'middle', marginRight: 8}} />
                   <span style={{ verticalAlign: 'middle' }}>{readlist.owner.nickname} created in <span style={{ color: '#999' }}>3 months ago</span></span>
@@ -126,23 +128,26 @@ class ReadlistDocumentsSubtab extends React.Component {
                 <Button type="primary" ghost icon="heart-o" style={{ marginRight: 18 }}>Collect</Button>
                 <Button type="primary" ghost icon="heart" style={{ marginRight: 18 }}>Uncollect</Button>
               </div>
-
-              <div style={{height: 9, borderBottom: '1px solid #efefef', margin: '0 0 28px 0', textAlign: 'center'}}>
-                <span style={{fontSize: 14, padding: '0 30px', fontWeight: 400, color: 'grey'}}>
-                </span>
-              </div>
-
               {/* icon to collect */}
               {/* number of collectors */}
               {/* creation time */}
             </Col>
+            <Col span={16}>
+            </Col>
           </Row>
+
+          <div style={{height: 9, borderBottom: '1px solid #efefef', margin: '0 0 28px 0', textAlign: 'center'}}>
+            <span style={{fontSize: 14, padding: '0 30px', fontWeight: 400, color: 'grey'}}>
+            </span>
+          </div>
+
           <Table
             dataSource={this.state.readlist.documents}
             columns={columns}
             pagination={false}
             rowKey={record => record.pk}
           />
+
         </div>
         {/* <div className={'card'} style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}>
           <Table

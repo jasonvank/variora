@@ -24,6 +24,7 @@ import { SearchResultTab } from './components/search_result_tab.jsx'
 import axios from 'axios'
 import enUS from 'antd/lib/locale-provider/en_US'
 import { store } from './redux/store.js'
+import TextArea from '../../../node_modules/antd/lib/input/TextArea';
 
 const FormItem = Form.Item
 
@@ -46,6 +47,9 @@ class App extends React.Component {
           value: '',
         },
         readlistName: {
+          value: '',
+        },
+        readlistDesc: {
           value: '',
         },
       },
@@ -109,6 +113,7 @@ class App extends React.Component {
       else {
         var data = new FormData()
         data.append('readlist_name', readlistName)
+        data.append('description', this.state.fields.readlistDesc.value)
         data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
         axios.post('/file_viewer/api/readlists/create', data).then((response) => {
           var newCreatedReadlists = this.state.createdReadlists.slice()
@@ -258,10 +263,10 @@ class App extends React.Component {
                   </SubMenu>
                   <SubMenu key="collected_readlists" title={<span><Icon type="team" />collected readlists</span>} disabled={!this.state.user.is_authenticated}>
                     {
-                      this.state.collectedReadlists.map((coterie) => {
+                      this.state.collectedReadlists.map((readlist) => {
                         return (
-                          <Menu.Item key={'readlists' + coterie.pk}>
-                            <Link to={ '/readlists/' + coterie.pk }><span>{ coterie.name }</span></Link>
+                          <Menu.Item key={'readlists' + readlist.slug}>
+                            <Link to={ '/readlists/' + readlist.slug }><span>{ readlist.name }</span></Link>
                           </Menu.Item>
                         )
                       })
@@ -339,20 +344,27 @@ const CreateReadlistForm = Form.create({
   },
   mapPropsToFields(props) {
     return {
-      coterieName: {
+      readlistName: {
         ...props.readlistName,
         value: props.readlistName.value,
+      },
+      readlistDesc: {
+        ...props.readlistDesc,
+        value: props.readlistDesc.value,
       },
     }
   },
 })((props) => {
   const { getFieldDecorator } = props.form
   return (
-    <Form layout="inline">
+    <Form>
       <FormItem label="Name of the readlist">
         {getFieldDecorator('readlistName', {
           rules: [{ required: true, message: 'name is required!' }],
         })(<Input />)}
+      </FormItem>
+      <FormItem label="Description">
+        {getFieldDecorator('readlistDesc')(<TextArea />)}
       </FormItem>
     </Form>
   )

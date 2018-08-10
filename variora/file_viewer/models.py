@@ -115,6 +115,7 @@ class Readlist(ModelWithCleanUUID):
     collectors = models.ManyToManyField(User, related_name="collected_readlist_set", blank=True)
     documents = models.ManyToManyField(Document, related_name="belonged_readlist_set", blank=True)
     is_public = models.BooleanField(default=True)
+    description = models.TextField(blank=True)
 
     @property
     def slug(self):
