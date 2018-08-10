@@ -42,7 +42,7 @@ def handle_file_upload(request):
     else:
         file_upload = request.FILES["file_upload"]  # this is an UploadedFile object
 
-        if file_upload.size > settings.MAX_DOCUMENT_UPLOAD_SIZE:
+        if not user.is_superuser and file_upload.size > settings.MAX_DOCUMENT_UPLOAD_SIZE:
             return HttpResponse(status=403)
 
         this_file_md5 = md5(file_upload.read()).hexdigest()

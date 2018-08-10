@@ -41,8 +41,8 @@ class ReadlistDocumentsSubtab extends React.Component {
     this.removeDocument = (record) => {
       var data = new FormData()
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-      // TODO: change url and form content
-      axios.post(record.delete_url, data).then(this.updateData())
+      data.append('document_uuid', record.uuid)
+      axios.post(record.remove_document_url, data).then(this.updateData())
     }
   }
 
