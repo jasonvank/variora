@@ -44,11 +44,10 @@ def _download_document(document):
     return response
 
 def _change_readlists(document, user, request):
-    print(request.POST)
     for readlist in user.created_readlist_set.all():
-        if readlist.clean_uuid in request.POST['add_readlists[]']:
+        if readlist.clean_uuid in request.POST.getlist('add_readlists[]'):
             readlist.documents.add(document)
-        elif readlist.clean_uuid in request.POST['remove_readlists[]']:
+        elif readlist.clean_uuid in request.POST.getlist('remove_readlists[]'):
             readlist.documents.remove(document)
     return HttpResponse(status=200)
 
