@@ -1,7 +1,7 @@
 import './css/test_index.css'
 import 'regenerator-runtime/runtime'
 
-import { Avatar, Breadcrumb, Button, Col, Form, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, message } from 'antd'
+import { Avatar, notification, Button, Col, Form, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, message } from 'antd'
 import {
   Link,
   Redirect,
@@ -218,9 +218,15 @@ class App extends React.Component {
                 />
               </Col>
               <Col span={10} style={{ textAlign: 'right' }}>
-                <NotificationsToggleButton user={ this.state.user } acceptInvitationCallback={ this.acceptInvitationCallback } />
+                {/* <NotificationsToggleButton user={ this.state.user } acceptInvitationCallback={ this.acceptInvitationCallback } /> */}
                 <NotificationsAlertButton />
-                <Icon type="team" style={{ fontSize: 18, marginLeft: 28, verticalAlign: 'middle' }} />
+                <Icon type="team"
+                  onClick={() => {
+                    notification.config({ top: 60 })
+                    notification['info']({message: 'We are rewriting the group function, it will come soon.'})
+                  }}
+                  style={{ fontSize: 18, marginLeft: 28, verticalAlign: 'middle' }}
+                />
                 <span style={{ marginRight: 12, marginLeft: 28, color: '#666' }}>{ this.state.user.nickname }</span>
                 { this.state.user.is_authenticated ? <a onClick={this.signOff}>sign off</a> : <a href="/sign-in">sign in</a> }
                 <Avatar
