@@ -242,7 +242,7 @@ function addAnnotationRelatedListenerWithin(jq) {
     layer.confirm('<span style="color: #37b">' + url + '<span>', {
       title: false, skin: 'layui-layer-molv', btn: ['copy URL'],
       closeBtn: 0, shade: 0.18, shadeClose: true
-    }, function(){
+    }, function() {
       copyToClipboard(url)
       layer.msg('URL copied', { time: 1228 })
     })

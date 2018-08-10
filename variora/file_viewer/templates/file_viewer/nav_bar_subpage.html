@@ -31,8 +31,8 @@
     {% csrf_token %}
     <button type="submit" class="awesome blue" style="height: 28px"><i class="fa fa-cloud-download" aria-hidden="true"></i>&nbspdownload</button>
   </form>
-  <button class="awesome blue" style="height: 28px; padding: 3px 6px 9px 9px" type="button" id="readlist_button">
-    <i class="material-icons">playlist_add</i>
+  <button class="awesome blue" style="height: 28px; padding: 5px 6px 9px 9px" type="button" id="readlist_button">
+    <i class="material-icons" style="font-size: 20px">playlist_add</i>
   </button>
   {% if request.user.is_authenticated %}
     {% if collected %}
@@ -61,20 +61,12 @@
       <i class="material-icons" id="close-readlist-icon" style="cursor: pointer; margin-top: 2px; float: right; font-size: 18px; color: #9f9f9f">close</i>
   </div>
   <hr style="margin-top: 0px; margin-bottom: 16px">
-  <form>
-    <div class="pretty p-icon p-smooth p-curve p-thick" style="margin: 24px 16px">
-      <input type="checkbox" checked/>
-      <div class="state p-primary">
-        <i class="icon material-icons">done</i>
-        <label style="margin-left: 8px">Favorate</label>
-        <i class="fa fa-globe" style="float: right; color: #989898; font-size: 18px" aria-hidden="true"></i>
-      </div>
-    </div>
-    <div class="pretty p-icon p-smooth p-curve p-thick" style="margin: 24px 16px">
+  <form id="add_to_readlist_form">
+    <div id="checkbox_template" class="pretty p-icon p-smooth p-curve p-thick" style="margin: 24px 16px; display: none">
       <input type="checkbox" />
       <div class="state p-primary">
         <i class="icon material-icons">done</i>
-        <label style="margin-left: 8px">CS2100</label>
+        <label style="margin-left: 8px">Template</label>
         <i class="fa fa-globe" style="float: right; color: #989898; font-size: 18px" aria-hidden="true"></i>
       </div>
     </div>

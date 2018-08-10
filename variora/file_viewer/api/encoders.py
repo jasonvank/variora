@@ -56,6 +56,7 @@ class ReadlistListEncoder(DjangoJSONEncoder):
                 'uuid': obj.clean_uuid,
                 'slug': obj.slug,
                 'name': obj.name,
+                'documents_uuids': list(map(lambda document: document.clean_uuid, list(obj.documents.all()))),
             }
         else:
             return super(ReadlistListEncoder, self).default(obj)
@@ -74,7 +75,6 @@ class ReadlistEncoder(DjangoJSONEncoder):
                 'delete_url': '/file_viewer/api/readlists/' + obj.slug + '/delete',
                 'collect_url': '/file_viewer/api/readlists/' + obj.slug + '/collect',
                 'uncollect_url': '/file_viewer/api/readlists/' + obj.slug + '/uncollect',
-                'add_document_url': '/file_viewer/api/readlists/' + obj.slug + '/add_document',
                 'remove_document_url': '/file_viewer/api/readlists/' + obj.slug + '/remove_document',
             }
         elif isinstance(obj, Document):

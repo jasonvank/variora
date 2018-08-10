@@ -34,14 +34,6 @@ def _rename_readlist(readlist, user, request):
     readlist.update(name=new_name)
     return HttpResponse(status=200)
 
-def _add_document_to_readlist(readlist, user, request):
-    documents = Document.objects.filter(uuid=request.POST['document_uuid'])
-    if documents.exists():
-        readlist.documents.add(documents.first())
-        return HttpResponse(status=200)
-    else:
-        return HttpResponse(status=404)
-
 def _remove_document_from_readlist(readlist, user, request):
     documents = Document.objects.filter(uuid=request.POST['document_uuid'])
     if documents.exists():
@@ -81,8 +73,6 @@ class ReadlistView(View):
                 return _collect_readlist(readlist, user)
             elif operation == 'uncollect':
                 return _uncollect_readlist(readlist, user)
-            elif operation == 'add_document':
-                return _add_document_to_readlist(readlist, user, request)
             elif operation == 'remove_document':
                 return _remove_document_from_readlist(readlist, user, request)
         except ObjectDoesNotExist:

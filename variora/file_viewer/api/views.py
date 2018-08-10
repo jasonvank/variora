@@ -43,6 +43,15 @@ def _download_document(document):
     response['Content-Disposition'] = 'attachment; filename=%s.pdf' % document.title
     return response
 
+def _change_readlists(document, user, request):
+    print(request.POST)
+    for readlist in user.created_readlist_set.all():
+        if readlist.clean_uuid in request.POST['add_readlists[]']:
+            readlist.documents.add(document)
+        elif readlist.clean_uuid in request.POST['remove_readlists[]']:
+            readlist.documents.remove(document)
+    return HttpResponse(status=200)
+
 def _rename_document(document, user, new_title):
     if document.owner == user:
         document.title = new_title
@@ -75,6 +84,8 @@ class DocumentView(View):
                 return _delete_document(document, user)
             elif operation == 'uncollect':
                 return _uncollect_document(document, user)
+            elif operation == 'changereadlists':
+                return _change_readlists(document, user, request)
             elif operation == 'rename':
                 if 'new_title' not in request.POST:
                     return HttpResponse(status=403)
