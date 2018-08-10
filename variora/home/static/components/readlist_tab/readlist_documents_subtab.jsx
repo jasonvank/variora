@@ -1,5 +1,5 @@
 import { Avatar, Icon, Button, Row, Col, Popconfirm, Table, message, notification } from 'antd'
-import { formatOpenDocumentUrl, getCookie, getUrlFormat } from 'util.js'
+import { formatOpenDocumentUrl, getCookie, copyToClipboard } from 'util.js'
 
 import React from 'react'
 import ReactDOM from 'react-dom'
@@ -16,57 +16,28 @@ class ReadlistDocumentsSubtab extends React.Component {
 
     this.state = {
       user: props.user,
-      readlist: {
-        documents: [],
-        owner: {
-          nickname: '',
-          portrait_url: ''
-        }
-      },
-      isOwner: false,
-      readlistSlug: props.readlistSlug,
+      readlist: props.readlist,
+      isOwner: props.isOwner,
+      readlistSlug: props.readlistSlug
     }
 
-    this.updateData = () => {
-      axios.get(getUrlFormat('/file_viewer/api/readlists/' + this.state.readlistSlug, {}))
-        .then(response => {
-          this.setState({
-            readlist: response.data,
-            isOwner: this.state.user.email_address = response.data.owner.email_address
-          })
-        })
-        .catch(e => { message.warning(e.message) })
-    }
-
-    this.removeDocument = (record) => {
+    this.removeDocument = (document) => {
       var data = new FormData()
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-      data.append('document_uuid', record.uuid)
-      axios.post(record.remove_document_url, data).then(this.updateData())
+      data.append('document_uuid', document.uuid)
+      axios.post(this.state.readlist.remove_document_url, data)
+        .then(resp => props.updateData())
+    }
+
+    this.onShareClick = () => {
+      const url = [location.protocol, '//', location.host, location.pathname].join('')
+      copyToClipboard(url)
+      message.success('URL copied')
     }
   }
 
-  componentDidMount() {
-    this.updateData()
-  }
-
-  async componentWillReceiveProps(props) {
-    if (this.state.readlistSlug == props.readlistSlug)
-      return
-
-    await this.setState({
-      user: props.user,
-      readlist: {
-        documents: [],
-        owner: {
-          nickname: '',
-          portrait_url: ''
-        }
-      },
-      isOwner: false,
-      readlistSlug: props.readlistSlug
-    })
-    this.updateData()
+  componentWillReceiveProps(props) {
+    this.setState({ ...props })
   }
 
   render() {
@@ -115,7 +86,6 @@ class ReadlistDocumentsSubtab extends React.Component {
     const readlist = this.state.readlist
     return (
       <div>
-        {/* TODO: beautify this part */}
         <div className={'card'} style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, padding: 18 }}>
           <Row>
             <Col span={16}>
@@ -125,14 +95,11 @@ class ReadlistDocumentsSubtab extends React.Component {
               </div> 
               <p style={{ fontSize: 28, marginBottom: 18, marginLeft: 8 }}>{readlist.name}</p>
               <div style={{ marginBottom: 18 }}>
-                <Button type="primary" ghost icon="share-alt" style={{ marginRight: 18 }}>Share</Button>
+                <Button type="primary" ghost icon="link" onClick={this.onShareClick} style={{ marginRight: 18 }}>Share link</Button>
                 <Button type="primary" ghost icon="heart-o" style={{ marginRight: 18 }}>Collect</Button>
                 <Button type="primary" ghost icon="heart" style={{ marginRight: 18 }}>Uncollect</Button>
               </div>
-              {/* icon to collect */}
               {/* number of collectors */}
-              {/* creation time */}
-
 
               <div style={{height: 9, borderBottom: '1px solid #efefef', margin: '0 0 28px 0', textAlign: 'center'}}>
                 <span style={{fontSize: 14, padding: '0 30px', fontWeight: 400, color: 'grey'}}>

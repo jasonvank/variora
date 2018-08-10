@@ -3,7 +3,6 @@ import axios from 'axios'
 import { getUrlFormat } from 'util.js'
 
 const fetchExploreDocs = () => dispatch => {
-  console.log('axios called')
   axios.get(getUrlFormat('/documents/api/documents/explore'))
     .then(response => {
       var mostViewsDocuments = response.data.filter(item => item.description == 'most_views')

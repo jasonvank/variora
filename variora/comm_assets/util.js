@@ -79,6 +79,18 @@ function getValFromUrlParam(key) {
   return new URL(window.location.href).searchParams.get(key)
 }
 
+
+function copyToClipboard(content) {
+  const temp = document.createElement('input')
+  temp.style.hidden = true
+  document.body.appendChild(temp)
+  temp.value = content
+  temp.select()
+  document.execCommand('copy')
+  document.body.removeChild(temp)
+}
+
+
 String.prototype.format = function() {
   let a = this
   for (let k in arguments) {
@@ -94,6 +106,7 @@ function renderMathJax() {
 
 export {
   getCookie,
+  copyToClipboard,
   getUrlFormat,
   hexToRgb,
   formatOpenCoterieDocumentUrl,

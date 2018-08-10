@@ -1,18 +1,9 @@
-import { getCookie, renderMathJax } from 'util.js'
+import { getCookie, copyToClipboard, renderMathJax } from 'util.js'
 import { tinymceInit } from './tinymce_script'
 
 function getAnnotationDivJQById(annotationID) {
   var selector = '.AnnotationDiv[annotation_id="{0}"]'.format(annotationID)
   return $(selector)
-}
-
-function copyToClipboard(content) {
-  const temp = $('<input style="hidden: true">')[0]
-  document.body.appendChild(temp)
-  temp.value = content
-  temp.select()
-  document.execCommand('copy')
-  document.body.removeChild(temp)
 }
 
 function getPageDividerJQ(pageNum) {
