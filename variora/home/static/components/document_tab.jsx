@@ -2,7 +2,7 @@ import 'regenerator-runtime/runtime'
 
 import { Button, Col, Icon, Input, Layout, Menu, Modal, Row, Upload, notification } from 'antd'
 import { Link, Route, BrowserRouter as Router, Switch } from 'react-router-dom'
-import { getCookie, getUrlFormat } from 'util.js'
+import { getCookie } from 'util.js'
 
 import { CollectedDocumentsList } from './collected_documents_list.jsx'
 import React from 'react'
@@ -10,9 +10,8 @@ import { UploadedDocumentsList } from './uploaded_documents_list.jsx'
 import axios from 'axios'
 import { validateDocumentTitle, validateDocumentSize } from 'home_util.js'
 
-const { SubMenu } = Menu
-const { Header, Content, Sider } = Layout
-const MenuItemGroup = Menu.ItemGroup
+const { Content } = Layout
+import { connect } from 'react-redux'
 
 
 class DocumentTab extends React.Component {
@@ -48,7 +47,7 @@ class DocumentTab extends React.Component {
   }
 }
 
-class UploadedDocuments extends React.Component {
+class UploadedDocumentsBeforeConnect extends React.Component {
   constructor() {
     super()
     this.state = {
@@ -64,7 +63,8 @@ class UploadedDocuments extends React.Component {
 
       if (!validateDocumentTitle(title))
         return false
-      if (!validateDocumentSize(this.state.uploadedDocumentFileList[0]))
+      const user = this.props.user
+      if ((user == undefined || !user.is_superuser) && !validateDocumentSize(this.state.uploadedDocumentFileList[0]))
         return false
 
       var data = new FormData()
@@ -189,5 +189,10 @@ class CollectedDocuments extends React.Component {
     )
   }
 }
+
+const mapStoreToProps = (store, ownProps) => {
+  return {...ownProps, user: store.user}
+}
+const UploadedDocuments = connect(mapStoreToProps)(UploadedDocumentsBeforeConnect)
 
 export { DocumentTab }

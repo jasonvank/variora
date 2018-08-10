@@ -19,6 +19,7 @@ class UserEncoder(DjangoJSONEncoder):
                 'portrait_url': obj.portrait_url,
                 'date_joined': obj.date_joined,
                 'is_authenticated': obj.is_authenticated,
+                'is_superuser': obj.is_superuser,
             }
         return super(UserEncoder, self).default(obj)
 

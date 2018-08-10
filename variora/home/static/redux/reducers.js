@@ -1,11 +1,10 @@
-import { GET_EXPLORE_DOCS } from './actions.js'
-import { getUrlFormat } from 'util.js'
-import axios from 'axios'
+import { GET_EXPLORE_DOCS, GET_USER } from './actions.js'
 
 const initialStore = {
   mostViewsDocuments: undefined,
   mostStarsDocuments: undefined,
   mostAnnotationsDocuments: undefined,
+  user: undefined,
 }
 
 const rootReducer = (store = initialStore, dispatchTarget) => {
@@ -13,6 +12,11 @@ const rootReducer = (store = initialStore, dispatchTarget) => {
     return {
       ...store,
       ...dispatchTarget.payload,
+    }
+  } else if (dispatchTarget.type == GET_USER) {
+    return {
+      ...store,
+      user: dispatchTarget.user,
     }
   } else {
     return store
