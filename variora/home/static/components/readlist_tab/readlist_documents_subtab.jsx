@@ -96,8 +96,8 @@ class ReadlistDocumentsSubtab extends React.Component {
               <p style={{ fontSize: 28, marginBottom: 18, marginLeft: 8 }}>{readlist.name}</p>
               <div style={{ marginBottom: 18 }}>
                 <Button type="primary" ghost icon="link" onClick={this.onShareClick} style={{ marginRight: 18 }}>Share link</Button>
-                <Button type="primary" ghost icon="heart-o" style={{ marginRight: 18 }}>Collect</Button>
-                <Button type="primary" ghost icon="heart" style={{ marginRight: 18 }}>Uncollect</Button>
+                <Button type="primary" ghost icon="heart-o" style={{ marginRight: 18 }}>Collect 12</Button>
+                <Button type="primary" ghost icon="heart" style={{ marginRight: 18 }}>Uncollect 13</Button>
               </div>
               {/* number of collectors */}
 
