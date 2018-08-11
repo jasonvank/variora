@@ -18,7 +18,8 @@ from .encoders import (DocumentEncoder, DocumentThumbnailEncoder,
 from variora import utils
 
 
-def _delete_readlist(readlist, user):
+def _delete_readlist(readlist):
+    readlist.delete()
     return HttpResponse(status=200)
 
 def _collect_readlist(readlist, user):
@@ -61,6 +62,7 @@ class ReadlistView(View):
             user = request.user
             if not user.is_authenticated:
                 return HttpResponse(status=403)
+
             readlists = Readlist.objects.filter(uuid=utils.slug2uuid(slug))
             if not readlists.exists():
                 return HttpResponse(status=404)
@@ -73,8 +75,9 @@ class ReadlistView(View):
 
             if user.pk != readlist.creator.pk:
                 return HttpResponse(status=403)
+
             if operation == 'delete':
-                return _delete_readlist(readlist, user)
+                return _delete_readlist(readlist)
             elif operation == 'rename':
                 return _rename_readlist(readlist, user, request)
             elif operation == 'remove_document':

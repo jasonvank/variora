@@ -78,13 +78,14 @@ class ReadlistEncoder(DjangoJSONEncoder):
                 'documents': list(obj.documents.all()),
                 'owner': obj.creator,
                 'description': obj.description,
+                'num_collectors': obj.collectors.count(),
+                'create_time': obj.create_time,
+
                 'url': '/readlists/' + obj.slug,
                 'delete_url': '/file_viewer/api/readlists/' + obj.slug + '/delete',
                 'collect_url': '/file_viewer/api/readlists/' + obj.slug + '/collect',
                 'uncollect_url': '/file_viewer/api/readlists/' + obj.slug + '/uncollect',
                 'remove_document_url': '/file_viewer/api/readlists/' + obj.slug + '/remove_document',
-                'num_collectors': obj.collectors.count(),
-                'create_time': obj.create_time,
             }
         elif isinstance(obj, Document):
             return DocumentEncoder().default(obj)
