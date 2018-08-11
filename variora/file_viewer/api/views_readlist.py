@@ -31,11 +31,14 @@ def _uncollect_readlist(readlist, user):
     readlist.collectors.remove(user)
     return HttpResponse(status=200)
 
-def _rename_readlist(readlist, user, request):
+def _rename_readlist(readlist, request):
     new_name = request.POST['new_name']
-    if user.pk != readlist.creator.pk:
-        return HttpResponse(status=403)
     readlist.update(name=new_name)
+    return HttpResponse(status=200)
+
+def _change_privacy_of_readlist(readlist, request):
+    is_public = bool(request.POST['is_public'])
+    readlist.update(is_public=is_public)
     return HttpResponse(status=200)
 
 def _remove_document_from_readlist(readlist, user, request):
@@ -55,6 +58,8 @@ class ReadlistView(View):
         if not readlists.exists():
             return HttpResponse(status=404)
         readlist = readlists.first()
+        if not readlist.is_public and readlist.creator.pk != user.pk:
+            return HttpResponse(status=404)
         return JsonResponse(readlist, encoder=ReadlistEncoder, safe=False)
 
     @method_decorator(login_required(login_url='/'))
@@ -80,7 +85,9 @@ class ReadlistView(View):
             if operation == 'delete':
                 return _delete_readlist(readlist)
             elif operation == 'rename':
-                return _rename_readlist(readlist, user, request)
+                return _rename_readlist(readlist, request)
+            elif operation == 'change_privacy':
+                return _change_privacy_of_readlist(readlist, request)
             elif operation == 'remove_document':
                 return _remove_document_from_readlist(readlist, user, request)
         except ObjectDoesNotExist:
