@@ -19,8 +19,8 @@ from google.oauth2 import id_token
 from coterie.api.encoders import (CoterieDocumentEncoder, CoterieEncoder,
                                   SearchResultCoterieEncoder)
 from coterie.models import Coterie, CoterieDocument
-from file_viewer.api.views import DocumentEncoder
-from file_viewer.models import Document
+from file_viewer.api.encoders import DocumentEncoder, ReadlistListEncoder
+from file_viewer.models import Document, Readlist
 
 from ..models import User
 from .encoders import UserEncoder
@@ -47,6 +47,8 @@ def search_api_view(request):
                 return UserEncoder().default(obj)
             elif isinstance(obj, Document):
                 return DocumentEncoder().default(obj)
+            elif isinstance(obj, Readlist):
+                return ReadlistListEncoder().default(obj)
             elif isinstance(obj, Coterie):
                 return SearchResultCoterieEncoder().default(obj)
             else:
@@ -55,11 +57,13 @@ def search_api_view(request):
     result_documents = list(Document.objects.filter_with_related(title__icontains=key))[:100]  # case-insensitive contain
     result_users = list(User.objects.filter(Q(nickname__icontains=key) | Q(email_address__icontains=key)))[:100]
     result_coteries = list(Coterie.objects.filter(Q(name__icontains=key) | Q(id__icontains=key)))[:100]
+    result_readlists = list(Readlist.objects.filter(Q(name__icontains=key)))[:100]
     return JsonResponse(
         {
             'resultDocuments': result_documents,
             'resultUsers': result_users,
-            'resultCoteries': result_coteries
+            'resultCoteries': result_coteries,
+            'resultReadlists': result_readlists,
         },
         encoder=CombinedEncoder,
         safe=False

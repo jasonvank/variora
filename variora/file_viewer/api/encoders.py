@@ -56,8 +56,12 @@ class ReadlistListEncoder(DjangoJSONEncoder):
                 'uuid': obj.clean_uuid,
                 'slug': obj.slug,
                 'name': obj.name,
+                'owner': obj.creator,
                 'documents_uuids': list(map(lambda document: document.clean_uuid, list(obj.documents.all()))),
+                'num_collectors': obj.collectors.count(),
             }
+        elif isinstance(obj, User):
+            return UserEncoder().default(obj)
         else:
             return super(ReadlistListEncoder, self).default(obj)
 

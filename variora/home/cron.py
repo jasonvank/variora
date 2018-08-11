@@ -37,7 +37,7 @@ def _generate_thumbnail_image_content_file(document):
         writer.addpage(page)
         writer.write(temp_pdf_path)
 
-    images = Image(filename=temp_pdf_path, resolution=60)
+    images = Image(filename=temp_pdf_path, resolution=38)
     images.background_color = Color('white')
     images.alpha_channel = 'flatten'
     os.remove(temp_pdf_path)
