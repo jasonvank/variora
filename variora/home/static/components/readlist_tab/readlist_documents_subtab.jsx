@@ -1,4 +1,4 @@
-import { Avatar, Icon, Button, Row, Col, Popconfirm, Table, message, Card } from 'antd'
+import { Avatar, Icon, Button, Row, Col, notification, Popconfirm, Table, message, Card } from 'antd'
 import { formatOpenDocumentUrl, getCookie, copyToClipboard } from 'util.js'
 
 import React from 'react'
@@ -19,7 +19,9 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
       readlist: props.readlist,
       isOwner: props.isOwner,
       readlistSlug: props.readlistSlug,
-      suggestedDocuments: []
+      suggestedDocuments: [],
+      hasCollected: props.hasCollected,
+      noCollectors: props.readlist.num_collectors
     }
 
     this.removeDocument = (document) => {
@@ -34,6 +36,30 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
       const url = [location.protocol, '//', location.host, location.pathname].join('')
       copyToClipboard(url)
       message.success('URL copied')
+    }
+
+    this.onCollectList = () => {
+      if (this.state.isOwner){
+        notification['info']({message: 'You are the owner of the list!'})
+      } else if (this.state.hasCollected) {
+        var data = new FormData()
+        data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+        axios.post(this.state.readlist.uncollect_url, data)
+          .then(resp => props.updateCollectedReadlistsCallback())
+          .then(resp => this.setState({
+            hasCollected: false,
+            noCollectors: this.state.noCollectors + 1
+          }))
+      } else {
+        data = new FormData()
+        data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+        axios.post(this.state.readlist.collect_url, data)
+          .then(resp => props.updateCollectedReadlistsCallback())
+          .then(resp => this.setState({
+            hasCollected: true,
+            noCollectors: this.state.noCollectors + 1
+          }))
+      }
     }
   }
 
@@ -97,15 +123,19 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
             <Col span={16}>
               <div>
                 <Avatar src={readlist.owner.portrait_url} style={{ verticalAlign: 'middle', marginRight: 8}} />
-                <span style={{ verticalAlign: 'middle' }}>{readlist.owner.nickname} created in <span style={{ color: '#999' }}>3 months ago</span></span>
+                <span style={{ verticalAlign: 'middle' }}>{readlist.owner.nickname} created in <TimeAgo style={{color:'#999'}} date={readlist.create_time} /></span>
               </div> 
               <p style={{ fontSize: 28, marginBottom: 18, marginLeft: 8 }}>{readlist.name}</p>
               <div style={{ marginBottom: 18 }}>
                 <Button type="primary" ghost icon="link" onClick={this.onShareClick} style={{ marginRight: 18 }}>Share link</Button>
-                <Button type="primary" ghost icon="heart-o" style={{ marginRight: 18 }}>Collect 12</Button>
-                <Button type="primary" ghost icon="heart" style={{ marginRight: 18 }}>Uncollect 13</Button>
+                <Button type="primary" ghost style={{ marginRight: 18, width: 120 }} onClick={this.onCollectList}>
+                  {this.state.hasCollected ?
+                    <span><Icon type="heart" style={{ marginRight: 8 }}/>Uncollect</span> :
+                    <span><Icon type="heart-o" style={{ marginRight: 8 }}/>Collect</span> }
+                  <span style={{ marginLeft: 8 }}>{readlist.num_collectors}</span>
+                </Button>
               </div>
-              {/* number of collectors */}
+
 
               <div style={{height: 9, borderBottom: '1px solid #efefef', margin: '0 0 28px 0', textAlign: 'center'}}>
                 <span style={{fontSize: 14, padding: '0 30px', fontWeight: 400, color: 'grey'}}>
