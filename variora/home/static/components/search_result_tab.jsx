@@ -20,6 +20,7 @@ class SearchResultTab extends React.Component {
       resultDocuments: undefined,
       resultCoteries: undefined,
       resultUsers: undefined,
+      resultReadlists: undefined,
       administratedCoteries: [],
       joinedCoteries: [],
       user: undefined,
@@ -29,6 +30,7 @@ class SearchResultTab extends React.Component {
   componentDidMount() {
     var fullUrl = window.location.href
     var searchKey = fullUrl.slice(fullUrl.indexOf('=') + 1)
+    // TODO: get user from redux
     axios.get('/api/user').then((response) => {
       var user = response.data
       if (response.data.is_authenticated)
@@ -47,8 +49,9 @@ class SearchResultTab extends React.Component {
       var data = response.data
       this.setState({
         resultDocuments: data.resultDocuments,
-        resultCoteries: data.resultCoteries,
-        resultUsers: data.resultUsers
+        // resultCoteries: data.resultCoteries,
+        resultUsers: data.resultUsers,
+        resultReadlists: data.resultReadlists,
       })
     })
   }
@@ -61,8 +64,11 @@ class SearchResultTab extends React.Component {
           <DocumentResult resultDocuments={this.state.resultDocuments} />
         </div>
         <div className='card' style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}>
-          <GroupResult administratedCoteries={this.state.administratedCoteries} joinedCoteries={this.state.joinedCoteries} resultCoteries={this.state.resultCoteries} user={this.state.user} />
+          <ReadlistResult resultReadlists={this.state.resultReadlists} />
         </div>
+        {/* <div className='card' style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}>
+          <GroupResult administratedCoteries={this.state.administratedCoteries} joinedCoteries={this.state.joinedCoteries} resultCoteries={this.state.resultCoteries} user={this.state.user} />
+        </div> */}
         <div className='card' style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}>
           <UserResult resultUsers={this.state.resultUsers} />
         </div>
@@ -85,11 +91,10 @@ class DocumentResult extends React.Component {
     }
   }
 
-  async componentWillReceiveProps(nextProps) {
-    await this.setState({
+  componentWillReceiveProps(nextProps) {
+    this.setState({
       data: nextProps.resultDocuments,
     })
-    this.forceUpdate()
   }
 
   render() {
@@ -105,11 +110,65 @@ class DocumentResult extends React.Component {
     }, {
       title: 'Uploader',
       dataIndex: 'uploader_name',
+      render: (text, record) => <span><Avatar src={record.uploader_portrait_url} style={{ verticalAlign: 'middle', marginRight: 12}} />text</span>,
       width: "30%",
     }, {
       title: 'Upload time',
       width: "30%",
       render: (text, record) => <TimeAgo date={record.upload_time} />
+    }]
+
+    return (
+      <Table
+        dataSource={this.state.data}
+        columns={columns}
+        pagination={{ pageSize: 10 }}
+        rowKey={record => record.pk}
+        onChange={this.handleChange}
+      />
+    )
+  }
+}
+
+
+class ReadlistResult extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      sortedInfo: null,
+      data: props.resultReadlists,
+    }
+    this.handleChange = (sorter) => {
+      this.setState({
+        sortedInfo: sorter,
+      })
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      data: nextProps.resultReadlists,
+    })
+  }
+
+  render() {
+    let sortedInfo = this.state.sortedInfo
+    sortedInfo = sortedInfo || {}
+
+    const columns = [{
+      title: 'Readlist Name',
+      dataIndex: 'name',
+      width: "40%",
+      render: (text, record) => <a href={record.url}>{text}</a>,
+      sorter: (a, b) => a.name.localeCompare(b.name),
+    }, {
+      title: 'Creator',
+      render: (text, record) => <span><Avatar src={record.owner.portrait_url} style={{ verticalAlign: 'middle', marginRight: 12}} />{record.owner.nickname}</span>,
+      width: "30%",
+    }, {
+      title: 'Create date',
+      width: "30%",
+      render: (text, record) => <TimeAgo date={record.create_time} />
     }]
 
     return (
@@ -167,12 +226,11 @@ class GroupResult extends React.Component {
     }
   }
 
-  async componentWillReceiveProps(nextProps) {
-    await this.setState({
+  componentWillReceiveProps(nextProps) {
+    this.setState({
       data: nextProps.resultCoteries,
       user: nextProps.user,
     })
-    this.forceUpdate()
   }
 
   render() {
@@ -253,11 +311,10 @@ class UserResult extends React.Component {
     }
   }
 
-  async componentWillReceiveProps(nextProps) {
-    await this.setState({
+  componentWillReceiveProps(nextProps) {
+    this.setState({
       data: nextProps.resultUsers,
     })
-    this.forceUpdate()
   }
 
 
@@ -267,12 +324,12 @@ class UserResult extends React.Component {
     const columns = [{
       title: 'User Name',
       dataIndex: 'nickname',
-      width: "20%",
+      width: "40%",
       sorter: (a, b) => a.nickname.localeCompare(b.nickname),
     }, {
       title: '',
       dataIndex: 'avatar',
-      width: "20%",
+      width: "30%",
       render: (text, record) => <Avatar src={ record.portrait_url } size='default' />,
     }, {
       title: 'Email Address',
@@ -281,7 +338,7 @@ class UserResult extends React.Component {
     }, {
       // title: 'action',
       key: 'action',
-      width: "30%",
+      width: "0%",
     }]
 
     return (
