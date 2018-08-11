@@ -18,7 +18,8 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
       user: props.user,
       readlist: props.readlist,
       isOwner: props.isOwner,
-      readlistSlug: props.readlistSlug
+      readlistSlug: props.readlistSlug,
+      suggestedDocuments: []
     }
 
     this.removeDocument = (document) => {
@@ -39,6 +40,8 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
   componentWillReceiveProps(props) {
     if (this.props.mostViewsDocuments == undefined)
       this.props.fetchExploreDocs()
+    else
+      this.setState({suggestedDocuments: props.mostStarsDocuments})
     this.setState({ ...props })
   }
 
@@ -122,29 +125,25 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
                 (
                   <div style={{ marginTop: 38 }}>
                     <p style={{ fontSize: 16, marginBottom: 18, marginLeft: 8 }}>You might be interested: </p>
-                    <Card style={{ width: 120 }} className='custome-card-cover' bodyStyle={{ padding: 0 }}>
-                      <div className='custom-image'>
-                        <a target='_blank' href={this.props.mostViewsDocuments[0].open_url} >
-                          <img width='100%' height='160' src={this.props.mostViewsDocuments[0].image} />
-                        </a>
-                      </div>
-                    </Card>
+                    <Row type='flex' justify='start'>
+                      {this.state.suggestedDocuments.map((document) => (
+                        <Col>
+                          <Card style={{ width: 80, margin: 18 }} className='custome-card-cover' bodyStyle={{ padding: 0 }}>
+                            <div className='custom-image'>
+                              <a target='_blank' href={document.open_url} >
+                                <img width='100%' height='108' src={document.image} />
+                              </a>
+                            </div>
+                          </Card>
+                        </Col>
+                      ))}
+                    </Row>
                   </div>
                 ) : null
               }
             </Col>
           </Row>
-
-
         </div>
-        {/* <div className={'card'} style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}>
-          <Table
-            dataSource={this.state.readlist.documents}
-            columns={columns}
-            pagination={false}
-            rowKey={record => record.pk}
-          />
-        </div> */}
       </div>
     )
   }
