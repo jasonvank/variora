@@ -22,9 +22,11 @@ def _delete_readlist(readlist, user):
     return HttpResponse(status=200)
 
 def _collect_readlist(readlist, user):
+    readlist.collectors.add(user)
     return HttpResponse(status=200)
 
 def _uncollect_readlist(readlist, user):
+    readlist.collectors.remove(user)
     return HttpResponse(status=200)
 
 def _rename_readlist(readlist, user, request):
@@ -63,16 +65,18 @@ class ReadlistView(View):
             if not readlists.exists():
                 return HttpResponse(status=404)
             readlist = readlists.first()
+
+            if operation == 'collect':
+                return _collect_readlist(readlist, user)
+            elif operation == 'uncollect':
+                return _uncollect_readlist(readlist, user)
+
             if user.pk != readlist.creator.pk:
                 return HttpResponse(status=403)
             if operation == 'delete':
                 return _delete_readlist(readlist, user)
-            if operation == 'rename':
+            elif operation == 'rename':
                 return _rename_readlist(readlist, user, request)
-            elif operation == 'collect':
-                return _collect_readlist(readlist, user)
-            elif operation == 'uncollect':
-                return _uncollect_readlist(readlist, user)
             elif operation == 'remove_document':
                 return _remove_document_from_readlist(readlist, user, request)
         except ObjectDoesNotExist:
