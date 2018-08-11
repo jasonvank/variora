@@ -30,17 +30,24 @@ class ReadlistTab extends React.Component {
         }
       },
       isOwner: false,
+      isCollector: false,
     }
 
     this.updateData = () => {
-      axios.get(getUrlFormat('/file_viewer/api/readlists/' + this.state.readlistSlug, {}))
-        .then(response => {
-          this.setState({
-            readlist: response.data,
-            isOwner: this.state.user.email_address == response.data.owner.email_address
-          })
+      axios.get(getUrlFormat('/file_viewer/api/readlists/' + this.state.readlistSlug, {})).then(response => {
+        this.setState({
+          readlist: response.data,
+          isOwner: this.state.user.email_address == response.data.owner.email_address
         })
-        .catch(e => { message.warning(e.message) })
+      }).catch(e => { message.warning(e.message) })
+
+      // TODO: refactor this
+      axios.get('/file_viewer/api/readlists').then((response) => {
+        if (response.data.collected_readlists.map(readlist => readlist.slug).includes(this.state.readlistSlug))
+          this.setState({ isCollector: true })
+        else
+          this.setState({ isCollector: false })
+      })
     }
   }
 
@@ -93,14 +100,15 @@ class ReadlistTab extends React.Component {
                 readlistSlug={this.state.readlistSlug}
                 readlist={this.state.readlist}
                 isOwner={this.state.isOwner}
+                isCollector={this.state.isCollector}
                 updateData={this.updateData}
                 updateCollectedReadlistsCallback={this.props.updateCollectedReadlistsCallback}
               />}
           />
           <Route
             exact
-            path={SUB_URL_BASE + this.state.readlistSlug + '/settings'} r
-            ender={() => <ReadlistSettingsSubtab user={this.state.user} readlistSlug={this.state.readlistSlug} removeCoterieCallback={this.props.removeCoterieCallback} />}
+            path={SUB_URL_BASE + this.state.readlistSlug + '/settings'}
+            render={() => <ReadlistSettingsSubtab user={this.state.user} readlistSlug={this.state.readlistSlug} removeCoterieCallback={this.props.removeCoterieCallback} />}
           />
         </Switch>
       </Content>

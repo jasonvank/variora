@@ -20,7 +20,7 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
       isOwner: props.isOwner,
       readlistSlug: props.readlistSlug,
       suggestedDocuments: [],
-      hasCollected: props.hasCollected,
+      isCollector: props.isCollector,
       noCollectors: props.readlist.num_collectors
     }
 
@@ -41,13 +41,13 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
     this.onCollectList = () => {
       if (this.state.isOwner){
         notification['info']({message: 'You are the owner of the list!'})
-      } else if (this.state.hasCollected) {
+      } else if (this.state.isCollector) {
         var data = new FormData()
         data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
         axios.post(this.state.readlist.uncollect_url, data)
           .then(resp => props.updateCollectedReadlistsCallback())
           .then(resp => this.setState({
-            hasCollected: false,
+            isCollector: false,
             noCollectors: this.state.noCollectors + 1
           }))
       } else {
@@ -56,7 +56,7 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
         axios.post(this.state.readlist.collect_url, data)
           .then(resp => props.updateCollectedReadlistsCallback())
           .then(resp => this.setState({
-            hasCollected: true,
+            isCollector: true,
             noCollectors: this.state.noCollectors + 1
           }))
       }
@@ -68,7 +68,9 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
       this.props.fetchExploreDocs()
     else
       this.setState({suggestedDocuments: props.mostStarsDocuments.slice(0, 4)})
-    this.setState({ ...props })
+    this.setState({
+      ...props
+    })
   }
 
   render() {
@@ -129,7 +131,7 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
               <div style={{ marginBottom: 18 }}>
                 <Button type="primary" ghost icon="link" onClick={this.onShareClick} style={{ marginRight: 18 }}>Share link</Button>
                 <Button type="primary" ghost style={{ marginRight: 18, width: 120 }} onClick={this.onCollectList}>
-                  {this.state.hasCollected ?
+                  {this.state.isCollector ?
                     <span><Icon type="heart" style={{ marginRight: 8 }}/>Uncollect</span> :
                     <span><Icon type="heart-o" style={{ marginRight: 8 }}/>Collect</span> }
                   <span style={{ marginLeft: 8 }}>{readlist.num_collectors}</span>

@@ -196,12 +196,12 @@ class AppBeforeConnect extends React.Component {
         collectedReadlists: response.data.collected_readlists,
       })
     })
-    axios.get('/coterie/api/coteries').then((response) => {
-      this.setState({
-        administratedCoteries: response.data.administratedCoteries,
-        joinedCoteries: response.data.joinedCoteries,
-      })
-    })
+    // axios.get('/coterie/api/coteries').then((response) => {
+    //   this.setState({
+    //     administratedCoteries: response.data.administratedCoteries,
+    //     joinedCoteries: response.data.joinedCoteries,
+    //   })
+    // })
   }
 
   componentWillReceiveProps(props) {
