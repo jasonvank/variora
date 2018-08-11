@@ -41,7 +41,7 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
     if (this.props.mostViewsDocuments == undefined)
       this.props.fetchExploreDocs()
     else
-      this.setState({suggestedDocuments: props.mostStarsDocuments})
+      this.setState({suggestedDocuments: props.mostStarsDocuments.slice(0, 4)})
     this.setState({ ...props })
   }
 
@@ -124,17 +124,22 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
               {this.props.mostViewsDocuments != undefined ?
                 (
                   <div style={{ marginTop: 38 }}>
-                    <p style={{ fontSize: 16, marginBottom: 18, marginLeft: 8 }}>You might be interested: </p>
+                    <p style={{ fontSize: 16, marginBottom: 18, marginLeft: 8 }}>Suggested today: </p>
                     <Row type='flex' justify='start'>
                       {this.state.suggestedDocuments.map((document) => (
                         <Col>
-                          <Card style={{ width: 80, margin: 18 }} className='custome-card-cover' bodyStyle={{ padding: 0 }}>
-                            <div className='custom-image'>
-                              <a target='_blank' href={document.open_url} >
-                                <img width='100%' height='108' src={document.image} />
-                              </a>
+                          <div style={{ margin: 18 }}>
+                            <Card style={{ width: 88 }} className='custome-card-cover' bodyStyle={{ padding: 0 }}>
+                              <div className='custom-image'>
+                                <a target='_blank' href={document.open_url} >
+                                  <img width='100%' height='118' src={document.image} />
+                                </a>
+                              </div>
+                            </Card>
+                            <div style={{ textAlign: 'center', lineHeight: '1.2em', maxHeight: '2.4em', width: 80, marginTop: 12, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                              { document.title }
                             </div>
-                          </Card>
+                          </div>
                         </Col>
                       ))}
                     </Row>
