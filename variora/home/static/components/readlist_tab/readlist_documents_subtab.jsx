@@ -1,16 +1,16 @@
-import { Avatar, Icon, Button, Row, Col, Popconfirm, Table, message, notification } from 'antd'
+import { Avatar, Icon, Button, Row, Col, Popconfirm, Table, message, Card } from 'antd'
 import { formatOpenDocumentUrl, getCookie, copyToClipboard } from 'util.js'
 
 import React from 'react'
-import ReactDOM from 'react-dom'
 import axios from 'axios'
-import { validateDocumentTitle } from 'home_util.js'
+import { connect } from 'react-redux'
+import { fetchExploreDocs } from '../../redux/actions.js'
 import TimeAgo from 'react-timeago'
 
 const { Column } = Table
 
 
-class ReadlistDocumentsSubtab extends React.Component {
+class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
   constructor(props) {
     super(props)
 
@@ -37,6 +37,8 @@ class ReadlistDocumentsSubtab extends React.Component {
   }
 
   componentWillReceiveProps(props) {
+    if (this.props.mostViewsDocuments == undefined)
+      this.props.fetchExploreDocs()
     this.setState({ ...props })
   }
 
@@ -84,6 +86,7 @@ class ReadlistDocumentsSubtab extends React.Component {
       render: (text, document) => documentUploadDate(text, document),
     }])
     const readlist = this.state.readlist
+
     return (
       <div>
         <div className={'card'} style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, padding: 18 }}>
@@ -115,6 +118,20 @@ class ReadlistDocumentsSubtab extends React.Component {
             <Col style={{ padding: 18 }} span={8}>
               <p style={{ fontSize: 16, marginBottom: 18, marginLeft: 8 }}>Description: </p>
               <p style={{ whiteSpace: 'pre-wrap', marginBottom: 18, marginLeft: 8 }}>{readlist.description}</p>
+              {this.props.mostViewsDocuments != undefined ?
+                (
+                  <div style={{ marginTop: 38 }}>
+                    <p style={{ fontSize: 16, marginBottom: 18, marginLeft: 8 }}>You might be interested: </p>
+                    <Card style={{ width: 120 }} className='custome-card-cover' bodyStyle={{ padding: 0 }}>
+                      <div className='custom-image'>
+                        <a target='_blank' href={this.props.mostViewsDocuments[0].open_url} >
+                          <img width='100%' height='160' src={this.props.mostViewsDocuments[0].image} />
+                        </a>
+                      </div>
+                    </Card>
+                  </div>
+                ) : null
+              }
             </Col>
           </Row>
 
@@ -133,6 +150,13 @@ class ReadlistDocumentsSubtab extends React.Component {
   }
 }
 
+const mapStoreToProps = (store, ownProps) => {
+  return {
+    ...ownProps,
+    ...store
+  }
+}
+const ReadlistDocumentsSubtab = connect(mapStoreToProps, {fetchExploreDocs})(ReadlistDocumentsSubtabBeforeConnect)
 export { ReadlistDocumentsSubtab }
 
 

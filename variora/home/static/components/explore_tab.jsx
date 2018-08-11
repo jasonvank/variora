@@ -62,7 +62,6 @@ class DisplayDocuments extends React.Component {
     this.setState({
       data: nextProps.data
     })
-    this.forceUpdate()
   }
 
   render() {
