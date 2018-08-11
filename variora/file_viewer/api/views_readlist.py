@@ -23,7 +23,8 @@ def _delete_readlist(readlist):
     return HttpResponse(status=200)
 
 def _collect_readlist(readlist, user):
-    readlist.collectors.add(user)
+    if readlist.creator.pk != user.pk:
+        readlist.collectors.add(user)
     return HttpResponse(status=200)
 
 def _uncollect_readlist(readlist, user):
