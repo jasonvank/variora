@@ -1,7 +1,10 @@
-const GET_EXPLORE_DOCS = 'GET_EXPLORE_DOCS'
-const GET_USER = 'GET_USER'
 import axios from 'axios'
 import { getUrlFormat } from 'util.js'
+
+
+const FETCH_USEREXPLORE_DOCS = 'FETCH_USEREXPLORE_DOCS'
+const FETCH_USER = 'FETCH_USER'
+const SET_COLLECTED_READLISTS = 'SET_COLLECTED_READLISTS'
 
 const fetchExploreDocs = () => dispatch => {
   axios.get(getUrlFormat('/documents/api/documents/explore'))
@@ -15,7 +18,7 @@ const fetchExploreDocs = () => dispatch => {
         mostAnnotationsDocuments: mostAnnotationsDocuments,
       }
       dispatch({
-        type: GET_EXPLORE_DOCS,
+        type: FETCH_USEREXPLORE_DOCS,
         payload: payload
       })
     })
@@ -25,15 +28,24 @@ const fetchUser = () => dispatch => {
   axios.get('/api/user').then((response) => {
     var user = response.data
     dispatch({
-      type: GET_USER,
+      type: FETCH_USER,
       user: user,
     })
+  })
+}
+
+const setCollectedReadlists = (collectedReadlists) => dispatch => {
+  dispatch({
+    type: SET_COLLECTED_READLISTS,
+    collectedReadlists: collectedReadlists
   })
 }
 
 export {
   fetchExploreDocs,
   fetchUser,
-  GET_EXPLORE_DOCS,
-  GET_USER,
+  setCollectedReadlists,
+  FETCH_USEREXPLORE_DOCS,
+  FETCH_USER,
+  SET_COLLECTED_READLISTS,
 }

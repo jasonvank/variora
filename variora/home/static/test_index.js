@@ -23,7 +23,7 @@ import { SearchResultTab } from './components/search_result_tab.jsx'
 import axios from 'axios'
 import enUS from 'antd/lib/locale-provider/en_US'
 import { store } from './redux/store.js'
-import { fetchUser } from './redux/actions.js'
+import { fetchUser, setCollectedReadlists } from './redux/actions.js'
 import { connect } from 'react-redux'
 import TextArea from '../../../node_modules/antd/lib/input/TextArea'
 
@@ -162,6 +162,7 @@ class AppBeforeConnect extends React.Component {
         this.setState({
           collectedReadlists: response.data.collected_readlists,
         })
+        this.props.setCollectedReadlists(response.data.collected_readlists)
       })
     }
 
@@ -195,6 +196,7 @@ class AppBeforeConnect extends React.Component {
         createdReadlists: response.data.created_readlists,
         collectedReadlists: response.data.collected_readlists,
       })
+      this.props.setCollectedReadlists(response.data.collected_readlists)
     })
     // axios.get('/coterie/api/coteries').then((response) => {
     //   this.setState({
@@ -412,7 +414,7 @@ const CreateReadlistForm = Form.create({
 const mapStoreToProps = (store, ownProps) => {
   return {...ownProps, user: store.user}
 }
-const App = connect(mapStoreToProps, {fetchUser})(AppBeforeConnect)
+const App = connect(mapStoreToProps, {fetchUser, setCollectedReadlists})(AppBeforeConnect)
 
 ReactDOM.render(
   <Provider store={store}>

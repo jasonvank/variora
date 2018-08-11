@@ -8,6 +8,7 @@ import { ReadlistDocumentsSubtab } from './readlist_documents_subtab.jsx'
 import { ReadlistSettingsSubtab } from './readlist_settings_subtab.jsx'
 import React from 'react'
 import axios from 'axios'
+import { connect } from 'react-redux'
 
 const { SubMenu } = Menu
 const { Header, Content, Sider } = Layout
@@ -16,7 +17,7 @@ const MenuItemGroup = Menu.ItemGroup
 
 const SUB_URL_BASE = '/readlists/'
 
-class ReadlistTab extends React.Component {
+class ReadlistTabBeforeConnect extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -41,13 +42,10 @@ class ReadlistTab extends React.Component {
         })
       }).catch(e => { message.warning(e.message) })
 
-      // TODO: refactor this
-      axios.get('/file_viewer/api/readlists').then((response) => {
-        if (response.data.collected_readlists.map(readlist => readlist.slug).includes(this.state.readlistSlug))
-          this.setState({ isCollector: true })
-        else
-          this.setState({ isCollector: false })
-      })
+      if (this.props.collectedReadlists.map(readlist => readlist.slug).includes(this.state.readlistSlug))
+        this.setState({ isCollector: true })
+      else
+        this.setState({ isCollector: false })
     }
   }
 
@@ -116,6 +114,13 @@ class ReadlistTab extends React.Component {
   }
 }
 
+const mapStoreToProps = (store, ownProps) => {
+  return {
+    ...ownProps,
+    ...store
+  }
+}
+const ReadlistTab = connect(mapStoreToProps, {})(ReadlistTabBeforeConnect)
 export { ReadlistTab }
 
 

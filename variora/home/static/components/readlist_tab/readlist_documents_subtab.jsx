@@ -68,6 +68,7 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
       this.props.fetchExploreDocs()
     else
       this.setState({suggestedDocuments: props.mostStarsDocuments.slice(0, 4)})
+
     this.setState({
       ...props
     })
