@@ -25,7 +25,7 @@ import enUS from 'antd/lib/locale-provider/en_US'
 import { store } from './redux/store.js'
 import { fetchUser } from './redux/actions.js'
 import { connect } from 'react-redux'
-import TextArea from '../../../node_modules/antd/lib/input/TextArea';
+import TextArea from '../../../node_modules/antd/lib/input/TextArea'
 
 const FormItem = Form.Item
 
