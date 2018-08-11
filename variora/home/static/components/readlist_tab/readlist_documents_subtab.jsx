@@ -49,7 +49,7 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
     var documentRemoveAction = ((text, document) => (
       <span>
         <Popconfirm
-          title="Are you sure delete this document? It cannot be undone."
+          title="Are you sure to remove it from the readlist?"
           onConfirm={() => this.removeDocument(document)}
           okText="Yes" cancelText="No"
         >
