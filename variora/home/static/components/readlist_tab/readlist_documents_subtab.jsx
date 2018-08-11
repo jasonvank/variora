@@ -1,4 +1,4 @@
-import { Avatar, Icon, Button, Row, Col, Popconfirm, Table, message, Card } from 'antd'
+import { Avatar, Icon, Button, Row, Col, notification, Popconfirm, Table, message, Card } from 'antd'
 import { formatOpenDocumentUrl, getCookie, copyToClipboard } from 'util.js'
 
 import React from 'react'
@@ -33,6 +33,28 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
       const url = [location.protocol, '//', location.host, location.pathname].join('')
       copyToClipboard(url)
       message.success('URL copied')
+    }
+
+    this.onCollectClick = () => {
+      if (this.state.isOwner){
+        notification['info']({message: 'You are the owner of the list!'})
+      } else {
+        var data = new FormData()
+        data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+        axios.post(this.state.readlist.collect_url, data)
+          .then(resp => props.updateCollectedReadlistsCallback())
+      }
+    }
+
+    this.onUncollectClick = () => {
+      if (this.state.isOwner){
+        notification['info']({message: 'You are the owner of the list!'})
+      } else {
+        var data = new FormData()
+        data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+        axios.post(this.state.readlist.uncollect_url, data)
+          .then(resp => props.updateCollectedReadlistsCallback())
+      }
     }
   }
 
@@ -99,8 +121,8 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
               <p style={{ fontSize: 28, marginBottom: 18, marginLeft: 8 }}>{readlist.name}</p>
               <div style={{ marginBottom: 18 }}>
                 <Button type="primary" ghost icon="link" onClick={this.onShareClick} style={{ marginRight: 18 }}>Share link</Button>
-                <Button type="primary" ghost icon="heart-o" style={{ marginRight: 18 }}>Collect 12</Button>
-                <Button type="primary" ghost icon="heart" style={{ marginRight: 18 }}>Uncollect 13</Button>
+                <Button type="primary" ghost icon="heart-o" style={{ marginRight: 18 }} onClick={this.onCollectClick}>Collect 12</Button>
+                <Button type="primary" ghost icon="heart" style={{ marginRight: 18 }} onClick={this.onUncollectClick}>Uncollect 13</Button>
               </div>
               {/* number of collectors */}
 

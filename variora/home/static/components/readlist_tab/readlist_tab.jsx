@@ -94,6 +94,7 @@ class ReadlistTab extends React.Component {
                 readlist={this.state.readlist}
                 isOwner={this.state.isOwner}
                 updateData={this.updateData}
+                updateCollectedReadlistsCallback={this.props.updateCollectedReadlistsCallback}
               />}
           />
           <Route

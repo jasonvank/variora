@@ -157,6 +157,14 @@ class AppBeforeConnect extends React.Component {
       })
     }
 
+    this.updateCollectedReadlistsCallback = () => {
+      axios.get('/file_viewer/api/readlists').then((response) => {
+        this.setState({
+          collectedReadlists: response.data.collected_readlists,
+        })
+      })
+    }
+
     this.acceptInvitationCallback = (coteriePk) => {
       axios.get('/coterie/api/coteries/' + coteriePk).then((response) => {
         var joinedCoteries = this.state.joinedCoteries
@@ -175,8 +183,9 @@ class AppBeforeConnect extends React.Component {
     }
 
     this.renderReadlistTab = (match, location) => {
-      return <ReadlistTab user={this.state.user} match={match} location={location} />
+      return <ReadlistTab user={this.state.user} match={match} location={location} updateCollectedReadlistsCallback={this.updateCollectedReadlistsCallback}/>
     }
+
   }
 
   componentDidMount() {
