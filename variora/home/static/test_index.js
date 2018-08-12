@@ -204,7 +204,6 @@ class AppBeforeConnect extends React.Component {
         updateReadlistsNameCallback={this.updateReadlistsNameCallback}
       />
     }
-
   }
 
   componentDidMount() {
@@ -237,7 +236,7 @@ class AppBeforeConnect extends React.Component {
                 placeholder="input search text"
                 style={{ width: '60%' }}
                 onSearch={this.handleSearch}
-                defaultValue={window.location.pathname == '/search' ? getValFromUrlParam('key') : '' }
+                defaultValue={window.location.pathname.includes('/search') ? getValFromUrlParam('key') : '' }
               />
             </Col>
             <Col span={10} style={{ textAlign: 'right' }}>
