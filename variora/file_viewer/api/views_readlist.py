@@ -97,6 +97,8 @@ class ReadlistView(View):
                 return _change_privacy_of_readlist(readlist, request)
             elif operation == 'remove_document':
                 return _remove_document_from_readlist(readlist, user, request)
+            else:
+                return HttpResponse(status=404)
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
 
