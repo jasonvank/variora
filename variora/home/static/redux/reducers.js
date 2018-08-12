@@ -1,12 +1,5 @@
 import { FETCH_USEREXPLORE_DOCS, FETCH_USER, SET_COLLECTED_READLISTS } from './actions.js'
-
-const initialStore = {
-  mostViewsDocuments: undefined,
-  mostStarsDocuments: undefined,
-  mostAnnotationsDocuments: undefined,
-  collectedReadlists: [],
-  user: undefined,
-}
+import { initialStore } from './init_store.js'
 
 const rootReducer = (store = initialStore, dispatchTarget) => {
   if (dispatchTarget.type == FETCH_USEREXPLORE_DOCS) {

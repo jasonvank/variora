@@ -24,6 +24,7 @@ import axios from 'axios'
 import enUS from 'antd/lib/locale-provider/en_US'
 import { store } from './redux/store.js'
 import { fetchUser, setCollectedReadlists } from './redux/actions.js'
+import { initialStore } from './redux/init_store.js'
 import { connect } from 'react-redux'
 import TextArea from '../../../node_modules/antd/lib/input/TextArea'
 
@@ -55,11 +56,7 @@ class AppBeforeConnect extends React.Component {
         },
       },
       createGroupModelVisible: false,
-      user: {
-        nickname: '',
-        is_authenticated: false,
-        portrait_url: '/media/portrait/default_portrait.png',
-      },
+      user: initialStore.user,
       administratedCoteries: [],
       joinedCoteries: [],
       createdReadlists: [],
