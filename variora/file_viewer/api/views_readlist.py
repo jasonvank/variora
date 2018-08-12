@@ -1,20 +1,10 @@
-import urllib
-
-from django.contrib.auth import get_user
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import prefetch_related_objects
 from django.http import HttpResponse, JsonResponse
-from django.utils.decorators import method_decorator
-from django.utils.timezone import now
 from django.views.generic import View
 
-from home.models import User
-
-from ..models import Document, DocumentThumbnail, Readlist
-from .encoders import (DocumentEncoder, DocumentThumbnailEncoder,
-                       ReadlistEncoder, ReadlistListEncoder)
+from ..models import Document, Readlist
+from .encoders import (ReadlistEncoder, ReadlistListEncoder)
 from variora import utils
 
 

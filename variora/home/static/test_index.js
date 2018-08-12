@@ -12,7 +12,7 @@ import { getCookie, getValFromUrlParam } from 'util.js'
 
 import { DocumentTab } from './components/document_tab.jsx'
 import { ExploreTab } from './components/explore_tab.jsx'
-import { GroupTab } from './components/group_tab/group_tab.jsx'
+// import { GroupTab } from './components/group_tab/group_tab.jsx'
 import { ReadlistTab } from './components/readlist_tab/readlist_tab.jsx'
 import { NotificationsAlertButton } from './components/notifications_alert_button.jsx'
 // import { NotificationsToggleButton } from './components/notifications_toggle_button.jsx'
@@ -68,14 +68,14 @@ class AppBeforeConnect extends React.Component {
         window.location.href = decodeURIComponent(URL_BASE + '/search?key=' + searchKey)
     }
 
-    this.setCreateGroupModelVisible = (visibility) => {
-      this.setState({ createGroupModelVisible: visibility })
-    }
-
-    this.onClickCreateGroupMenuItem = (menuItem) => {
-      if (menuItem.key == CREATE_NEW_GROUP_MENU_ITEM_KEY)
-        this.setCreateGroupModelVisible(true)
-    }
+    // this.setCreateGroupModelVisible = (visibility) => {
+    //   this.setState({ createGroupModelVisible: visibility })
+    // }
+    //
+    // this.onClickCreateGroupMenuItem = (menuItem) => {
+    //   if (menuItem.key == CREATE_NEW_GROUP_MENU_ITEM_KEY)
+    //     this.setCreateGroupModelVisible(true)
+    // }
 
     this.signOff = () => {
       var data = new FormData()
@@ -85,11 +85,11 @@ class AppBeforeConnect extends React.Component {
       })
     }
 
-    this.handleCreateCoterieFromChange = (changedFields) => {
-      this.setState({
-        fields: { ...this.state.fields, ...changedFields },
-      })
-    }
+    // this.handleCreateCoterieFromChange = (changedFields) => {
+    //   this.setState({
+    //     fields: { ...this.state.fields, ...changedFields },
+    //   })
+    // }
 
     this.getHighlightedMenuItems = () => {
       var pathname = window.location.pathname
@@ -178,22 +178,22 @@ class AppBeforeConnect extends React.Component {
       this.setState({ createdReadlists: updatedCreatedReadlist })
     }
 
-    this.acceptInvitationCallback = (coteriePk) => {
-      axios.get('/coterie/api/coteries/' + coteriePk).then((response) => {
-        var joinedCoteries = this.state.joinedCoteries
-        var hasAlreadyJoined = joinedCoteries.find(group => group.pk == coteriePk) != undefined ? true : false
-        if (!hasAlreadyJoined) {
-          var updatedJoinedCoteries = this.state.joinedCoteries.concat(response.data)
-          this.setState({ joinedCoteries: updatedJoinedCoteries })
-        }
-      })
-    }
+    // this.acceptInvitationCallback = (coteriePk) => {
+    //   axios.get('/coterie/api/coteries/' + coteriePk).then((response) => {
+    //     var joinedCoteries = this.state.joinedCoteries
+    //     var hasAlreadyJoined = joinedCoteries.find(group => group.pk == coteriePk) != undefined ? true : false
+    //     if (!hasAlreadyJoined) {
+    //       var updatedJoinedCoteries = this.state.joinedCoteries.concat(response.data)
+    //       this.setState({ joinedCoteries: updatedJoinedCoteries })
+    //     }
+    //   })
+    // }
 
-    this.renderGroupTab = (match, location) => {
-      var coteriePk = parseInt(match.params.coteriePk)
-      var isAdmin = this.state.administratedCoteries.map((coterie) => coterie.pk).includes(coteriePk)
-      return <GroupTab removeCoterieCallback={this.removeCoterieCallback} isAdmin={isAdmin} match={match} location={location} />
-    }
+    // this.renderGroupTab = (match, location) => {
+    //   var coteriePk = parseInt(match.params.coteriePk)
+    //   var isAdmin = this.state.administratedCoteries.map((coterie) => coterie.pk).includes(coteriePk)
+    //   return <GroupTab removeCoterieCallback={this.removeCoterieCallback} isAdmin={isAdmin} match={match} location={location} />
+    // }
 
     this.renderReadlistTab = (match, location) => {
       return <ReadlistTab
@@ -348,11 +348,11 @@ class AppBeforeConnect extends React.Component {
             <Layout style={{ marginLeft: 200, padding: 0 }}>
               <Content>
                 <Switch>
-                  <Route exact path="/explore" component={ExploreTab} />
-                  <Route path="/search" component={SearchResultTab} />
-                  <Route path="/readlists/:readlistSlug" render={ ({match, location}) => this.renderReadlistTab(match, location) } />
-                  <Route path="/groups/:coteriePk" render={ ({match, location}) => this.renderGroupTab(match, location) } />
-                  <Route path="/" component={DocumentTab} />
+                  <Route exact path='/explore' component={ExploreTab} />
+                  <Route path='/search' component={SearchResultTab} />
+                  <Route path='/readlists/:readlistSlug' render={ ({match, location}) => this.renderReadlistTab(match, location) } />
+                  <Route path='/groups/:coteriePk' render={ ({match, location}) => this.renderGroupTab(match, location) } />
+                  <Route path='/' component={DocumentTab} />
                 </Switch>
               </Content>
               <Footer style={{ textAlign: 'center' }}>
@@ -386,12 +386,12 @@ const CreateReadlistForm = Form.create({
   const { getFieldDecorator } = props.form
   return (
     <Form>
-      <FormItem label="Name of the readlist">
+      <FormItem label='Name of the readlist'>
         {getFieldDecorator('readlistName', {
           rules: [{ required: true, message: 'name is required!' }],
         })(<Input />)}
       </FormItem>
-      <FormItem label="Description">
+      <FormItem label='Description'>
         {getFieldDecorator('readlistDesc')(<TextArea />)}
       </FormItem>
     </Form>

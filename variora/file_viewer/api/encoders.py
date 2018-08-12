@@ -1,12 +1,9 @@
-from django.contrib.auth.models import AnonymousUser
-from django.core.exceptions import ObjectDoesNotExist
 from django.core.serializers.json import DjangoJSONEncoder
 
 from home.api.encoders import UserEncoder
 from home.models import User
 
-from ..models import (Annotation, AnnotationReply, Comment, Document,
-                      DocumentThumbnail, Readlist)
+from ..models import (Document, DocumentThumbnail, Readlist)
 
 
 class DocumentEncoder(DjangoJSONEncoder):
