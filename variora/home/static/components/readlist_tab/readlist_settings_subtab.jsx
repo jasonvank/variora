@@ -99,7 +99,7 @@ class ReadlistSettingsSubtab extends React.Component {
       <div>
         {deleteReadList}
         <div className={'card'} style={{ overflow: 'auto', marginTop: 16, padding: 18 }}>
-          <Form onSubmit={this.handleSubmit}>
+          <Form style={{ marginTop: 24 }} onSubmit={this.handleSubmit}>
             <FormItem
               label="Name"
               {...formItemLayout}
@@ -110,7 +110,7 @@ class ReadlistSettingsSubtab extends React.Component {
               label="Description"
               {...formItemLayout}
             >
-              <TextArea value={this.state.readlistDescription} onChange={e => this.setState({ readlistDescription: e.target.value })}/>
+              <TextArea rows={6} value={this.state.readlistDescription} onChange={e => this.setState({ readlistDescription: e.target.value })}/>
             </FormItem>
             <FormItem {...buttonItemLayout}>
               <Button type="primary" htmlType="submit">Submit</Button>
