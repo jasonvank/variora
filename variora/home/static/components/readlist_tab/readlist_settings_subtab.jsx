@@ -31,23 +31,25 @@ class ReadlistSettingsSubtab extends React.Component {
     this.handleSubmit = (e) => {
       e.preventDefault()
       this.setState({loading: true})
-      var new_name = this.state.readlistName
+      const new_name = this.state.readlistName
       var data = new FormData()
       data.append('new_name', new_name)
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
       axios.post(this.state.readlist.rename_url, data).then(() => {
         this.props.updateReadlistsNameCallback(this.state.readlistSlug, new_name)
-      })
-      data = new FormData()
-      data.append('new_desc', this.state.readlistDescription)
-      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-      axios.post(this.state.readlist.change_desc_url, data)
-        .then(() => this.setState({loading: false}))
-        .then(() => {
-          notification['success']({
-            message: 'Readlist info updated',
+
+        const self = this
+        var data = new FormData()
+        data.append('new_desc', self.state.readlistDescription)
+        data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+        axios.post(self.state.readlist.change_desc_url, data)
+          .then(() => self.setState({loading: false}))
+          .then(() => {
+            notification['success']({
+              message: 'Readlist info updated',
+            })
           })
-        })
+      })
     }
   }
 
@@ -105,13 +107,13 @@ class ReadlistSettingsSubtab extends React.Component {
                 label="Name"
                 {...formItemLayout}
               >
-                <Input value={this.state.readlistName} onChange={e => this.setState({ readlistName: e.target.value })}/>
+                <Input value={this.state.readlistName} onChange={async (e) => this.setState({ readlistName: e.target.value })}/>
               </FormItem>
               <FormItem
                 label="Description"
                 {...formItemLayout}
               >
-                <TextArea rows={6} value={this.state.readlistDescription} onChange={e => this.setState({ readlistDescription: e.target.value })}/>
+                <TextArea rows={6} value={this.state.readlistDescription} onChange={async (e) => this.setState({ readlistDescription: e.target.value })}/>
               </FormItem>
               <FormItem {...buttonItemLayout}>
                 <Button type="primary" htmlType="submit">Submit</Button>
