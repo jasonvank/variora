@@ -283,7 +283,7 @@ class AppBeforeConnect extends React.Component {
                     this.state.createdReadlists.map((readlist) => {
                       return (
                         <Menu.Item key={'readlists' + readlist.slug}>
-                          <Link to={ '/readlists/' + readlist.slug }><span>{ readlist.name }</span></Link>
+                          <Link style={{ overflow: 'hidden', textOverflow: 'ellipsis' }} to={ '/readlists/' + readlist.slug }><span>{ readlist.name }</span></Link>
                         </Menu.Item>
                       )
                     })
@@ -295,7 +295,7 @@ class AppBeforeConnect extends React.Component {
                     this.state.collectedReadlists.map((readlist) => {
                       return (
                         <Menu.Item key={'readlists' + readlist.slug}>
-                          <Link to={ '/readlists/' + readlist.slug }><span>{ readlist.name }</span></Link>
+                          <Link style={{ overflow: 'hidden', textOverflow: 'ellipsis' }} to={ '/readlists/' + readlist.slug }><span>{ readlist.name }</span></Link>
                         </Menu.Item>
                       )
                     })
