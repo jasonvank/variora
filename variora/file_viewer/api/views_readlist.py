@@ -36,6 +36,11 @@ def _rename_readlist(readlist, request):
     readlist.update(name=new_name)
     return HttpResponse(status=200)
 
+def _change_desc_of_readlist(readlist, request):
+    new_desc = request.POST['new_desc']
+    readlist.update(description=new_desc)
+    return HttpResponse(status=200)
+
 def _change_privacy_of_readlist(readlist, request):
     is_public = bool(request.POST['is_public'])
     readlist.update(is_public=is_public)
@@ -86,6 +91,8 @@ class ReadlistView(View):
                 return _delete_readlist(readlist)
             elif operation == 'rename':
                 return _rename_readlist(readlist, request)
+            elif operation == 'change_desc':
+                return _change_desc_of_readlist(readlist, request)
             elif operation == 'change_privacy':
                 return _change_privacy_of_readlist(readlist, request)
             elif operation == 'remove_document':
