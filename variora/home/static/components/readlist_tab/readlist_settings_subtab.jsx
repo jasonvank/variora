@@ -25,6 +25,7 @@ class ReadlistSettingsSubtab extends React.Component {
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
       axios.post(this.state.readlist.delete_url, data).then(() => {
         this.props.updateReadlistsCallback(this.state.readlistSlug)
+        window.location.href = '/'
       })
     }
 
