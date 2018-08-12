@@ -105,7 +105,7 @@ class NotificationsToggleButton extends React.Component {
   }
 
   displayInvitations(invitations) {
-    notification.config({ top: 60 })
+    // notification.config({ top: 66 })
     for (var invitation of invitations) {
       notification.open({
         message: 'You have a new invitation!',

@@ -223,6 +223,8 @@ class AppBeforeConnect extends React.Component {
   }
 
   render() {
+    notification.config({ top: 66 })
+
     const fields = this.state.fields
     return (
       <Layout style={{ height: '100%', width: '100%', position: 'absolute' }}>
@@ -245,7 +247,6 @@ class AppBeforeConnect extends React.Component {
               <NotificationsAlertButton />
               <Icon type="team"
                 onClick={() => {
-                  notification.config({ top: 60 })
                   notification['info']({message: 'We are rewriting the group function, it will come soon.'})
                 }}
                 style={{ fontSize: 18, marginLeft: 28, verticalAlign: 'middle' }}

@@ -40,8 +40,8 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
 
     this.onCollectList = () => {
       if (!this.state.user.is_authenticated) {
-        notification['warning']({
-          message: 'Please sign in first',
+        notification['info']({
+          message: <span>You need to <a style={{ color: '#108ee9' }} href={'/sign-in'}>log in</a> to collect this readlist</span>,
         })
       } else if (this.state.isOwner){
         notification['info']({message: 'You are the owner of the list!'})
