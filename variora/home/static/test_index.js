@@ -19,7 +19,7 @@ import { NotificationsAlertButton } from './components/notifications_alert_butto
 import { Provider } from 'react-redux'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { SearchResultTab } from './components/search_result_tab.jsx'
+import { SearchResultTab } from './components/search_result_tab/search_result_tab.jsx'
 import axios from 'axios'
 import enUS from 'antd/lib/locale-provider/en_US'
 import { store } from './redux/store.js'
