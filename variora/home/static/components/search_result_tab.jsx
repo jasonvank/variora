@@ -110,7 +110,7 @@ class DocumentResult extends React.Component {
     }, {
       title: 'Uploader',
       dataIndex: 'uploader_name',
-      render: (text, record) => <span><Avatar src={record.uploader_portrait_url} style={{ verticalAlign: 'middle', marginRight: 12}} />text</span>,
+      render: (text, record) => <span><Avatar src={record.uploader_portrait_url} style={{ verticalAlign: 'middle', marginRight: 12}} />{text}</span>,
       width: "30%",
     }, {
       title: 'Upload time',
