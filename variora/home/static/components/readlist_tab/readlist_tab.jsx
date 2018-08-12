@@ -113,6 +113,7 @@ class ReadlistTabBeforeConnect extends React.Component {
                 readlist={this.state.readlist}
                 updateReadlistsCallback={this.props.updateReadlistsCallback}
                 updateReadlistsNameCallback={this.props.updateReadlistsNameCallback}
+                updateData={this.updateData}
               />}
           />
         </Switch>

@@ -168,7 +168,7 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
                                 </a>
                               </div>
                             </Card>
-                            <div style={{ textAlign: 'center', lineHeight: '1.2em', maxHeight: '2.4em', width: 80, marginTop: 12, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            <div style={{ textAlign: 'center', whiteSpace: 'nowrap', width: 80, marginTop: 12, overflow: 'hidden', textOverflow: 'ellipsis' }}>
                               { document.title }
                             </div>
                           </div>
