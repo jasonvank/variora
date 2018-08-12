@@ -67,7 +67,6 @@ class ReadlistTabBeforeConnect extends React.Component {
   }
 
   render() {
-    console.log('state', this.state)
     var path = this.props.location.pathname
     return (
       <Content style={{ paddingLeft: 18, paddingRight: 18, paddingTop: 16, margin: 0, minHeight: 280 }}>
@@ -112,7 +111,6 @@ class ReadlistTabBeforeConnect extends React.Component {
               <ReadlistSettingsSubtab
                 readlistSlug={this.state.readlistSlug}
                 readlist={this.state.readlist}
-                isOwner={this.state.isOwner}
                 updateReadlistsCallback={this.props.updateReadlistsCallback}
                 updateReadlistsNameCallback={this.props.updateReadlistsNameCallback}
               />}

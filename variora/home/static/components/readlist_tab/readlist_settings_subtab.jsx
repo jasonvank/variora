@@ -14,7 +14,6 @@ class ReadlistSettingsSubtab extends React.Component {
     super(props)
     this.state = {
       readlist: props.readlist,
-      isOwner: props.isOwner,
       readlistSlug: props.readlistSlug,
       readlistName: props.readlist.name,
       readlistDescription: props.readlist.description,
@@ -33,7 +32,6 @@ class ReadlistSettingsSubtab extends React.Component {
       e.preventDefault()
       this.setState({loading: true})
       var new_name = this.state.readlistName
-      console.log('new name', new_name);
       var data = new FormData()
       data.append('new_name', new_name)
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
@@ -53,10 +51,6 @@ class ReadlistSettingsSubtab extends React.Component {
     }
   }
 
-  componentDidMount() {
-
-  }
-
   componentWillReceiveProps(props) {
     this.setState({
       readlist: props.readlist,
@@ -67,9 +61,6 @@ class ReadlistSettingsSubtab extends React.Component {
   }
 
   render() {
-
-    console.log(this.state);
-
     const formItemLayout = {
       labelCol: { span: 8 },
       wrapperCol: { span: 8 },

@@ -178,15 +178,7 @@ class AppBeforeConnect extends React.Component {
           return readlist
         return Object.assign({}, readlist, {name: new_name})
       })
-      // var updatedCollectedReadlist = this.state.collectedReadlists.map(readlist => {
-      //   if (readlist.slug !== readlistSlug)
-      //     return readlist
-      //   return Object.assign({}, readlist, {name: new_name})
-      // })
-      this.setState({
-        createdReadlists: updatedCreatedReadlist,
-        // collectedReadlists: updatedCollectedReadlist
-      })
+      this.setState({ createdReadlists: updatedCreatedReadlist })
     }
 
     this.acceptInvitationCallback = (coteriePk) => {
@@ -227,12 +219,6 @@ class AppBeforeConnect extends React.Component {
       })
       this.props.setCollectedReadlists(response.data.collected_readlists)
     })
-    // axios.get('/coterie/api/coteries').then((response) => {
-    //   this.setState({
-    //     administratedCoteries: response.data.administratedCoteries,
-    //     joinedCoteries: response.data.joinedCoteries,
-    //   })
-    // })
   }
 
   componentWillReceiveProps(props) {
@@ -240,7 +226,6 @@ class AppBeforeConnect extends React.Component {
   }
 
   render() {
-    console.log('in main', this.state)
     const fields = this.state.fields
     return (
       <Layout style={{ height: '100%', width: '100%', position: 'absolute' }}>
