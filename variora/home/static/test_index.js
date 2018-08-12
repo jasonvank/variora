@@ -68,14 +68,14 @@ class AppBeforeConnect extends React.Component {
         window.location.href = decodeURIComponent(URL_BASE + '/search?key=' + searchKey)
     }
 
-    // this.setCreateGroupModelVisible = (visibility) => {
-    //   this.setState({ createGroupModelVisible: visibility })
-    // }
-    //
-    // this.onClickCreateGroupMenuItem = (menuItem) => {
-    //   if (menuItem.key == CREATE_NEW_GROUP_MENU_ITEM_KEY)
-    //     this.setCreateGroupModelVisible(true)
-    // }
+    this.setCreateGroupModelVisible = (visibility) => {
+      this.setState({ createGroupModelVisible: visibility })
+    }
+
+    this.onClickCreateGroupMenuItem = (menuItem) => {
+      if (menuItem.key == CREATE_NEW_GROUP_MENU_ITEM_KEY)
+        this.setCreateGroupModelVisible(true)
+    }
 
     this.signOff = () => {
       var data = new FormData()
@@ -85,11 +85,11 @@ class AppBeforeConnect extends React.Component {
       })
     }
 
-    // this.handleCreateCoterieFromChange = (changedFields) => {
-    //   this.setState({
-    //     fields: { ...this.state.fields, ...changedFields },
-    //   })
-    // }
+    this.handleCreateCoterieFromChange = (changedFields) => {
+      this.setState({
+        fields: { ...this.state.fields, ...changedFields },
+      })
+    }
 
     this.getHighlightedMenuItems = () => {
       var pathname = window.location.pathname
