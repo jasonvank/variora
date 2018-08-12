@@ -60,17 +60,17 @@ def _remove_document_from_readlist(readlist, user, request):
 class ReadlistView(View):
     def get(self, request, slug, **kwargs):
         user = request.user
-        if not user.is_authenticated:
-            return HttpResponse(status=403)
+
         readlists = Readlist.objects.filter(uuid=utils.slug2uuid(slug))
         if not readlists.exists():
             return HttpResponse(status=404)
-        readlist = readlists.first()
-        if not readlist.is_public and readlist.creator.pk != user.pk:
-            return HttpResponse(status=404)
-        return JsonResponse(readlist, encoder=ReadlistEncoder, safe=False)
 
-    @method_decorator(login_required(login_url='/'))
+        readlist = readlists.first()
+        if readlist.is_public or readlist.creator.pk == user.pk:
+            return JsonResponse(readlist, encoder=ReadlistEncoder, safe=False)
+        else:
+            return HttpResponse(status=404)
+
     def post(self, request, slug, operation):
         try:
             user = request.user
