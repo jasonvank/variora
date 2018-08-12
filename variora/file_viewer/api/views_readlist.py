@@ -33,17 +33,20 @@ def _uncollect_readlist(readlist, user):
 
 def _rename_readlist(readlist, request):
     new_name = request.POST['new_name']
-    readlist.update(name=new_name)
+    readlist.name = new_name
+    readlist.save()
     return HttpResponse(status=200)
 
 def _change_desc_of_readlist(readlist, request):
     new_desc = request.POST['new_desc']
-    readlist.update(description=new_desc)
+    readlist.description = new_desc
+    readlist.save()
     return HttpResponse(status=200)
 
 def _change_privacy_of_readlist(readlist, request):
     is_public = bool(request.POST['is_public'])
-    readlist.update(is_public=is_public)
+    readlist.is_public = is_public
+    readlist.save()
     return HttpResponse(status=200)
 
 def _remove_document_from_readlist(readlist, user, request):
