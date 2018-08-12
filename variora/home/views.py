@@ -116,7 +116,7 @@ def handle_search(request):
 
 
 def display_index(request):
-    if isinstance(request.user, AnonymousUser) and '/readlists/' not in request.path:
+    if isinstance(request.user, AnonymousUser) and '/readlists/' not in request.path and '/search?' not in request.path:
         return redirect('/explore')
     return render(request, 'home/test.html', {'DEBUG': settings.DEBUG})
 
