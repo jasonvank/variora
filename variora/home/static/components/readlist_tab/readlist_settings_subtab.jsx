@@ -37,17 +37,17 @@ class ReadlistSettingsSubtab extends React.Component {
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
       axios.post(this.state.readlist.rename_url, data).then(() => {
         this.props.updateReadlistsNameCallback(this.state.readlistSlug, new_name)
-        var data = new FormData()
-        data.append('new_desc', this.state.readlistDescription)
-        data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-        axios.post(this.state.readlist.change_desc_url, data)
-          .then(() => this.setState({loading: false}))
-          .then(() => {
-            notification['success']({
-              message: 'Readlist info updated',
-            })
-          })
       })
+      data = new FormData()
+      data.append('new_desc', this.state.readlistDescription)
+      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+      axios.post(this.state.readlist.change_desc_url, data)
+        .then(() => this.setState({loading: false}))
+        .then(() => {
+          notification['success']({
+            message: 'Readlist info updated',
+          })
+        })
     }
   }
 
