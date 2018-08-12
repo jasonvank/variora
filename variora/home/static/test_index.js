@@ -157,12 +157,35 @@ class AppBeforeConnect extends React.Component {
       })
     }
 
-    this.updateCollectedReadlistsCallback = () => {
+    this.updateReadlistsCallback = (readlistSlug) => {
+      // var updatedCreatedReadlist = this.state.createdReadlists.filter(function(readlist) {return readlist.slug !== readlistSlug})
+      // var updatedCollectedReadlist = this.state.collectedReadlists.filter(function(readlist) {return readlist.slug !== readlistSlug})
+      // this.setState({
+      //   createdReadlists: updatedCreatedReadlist,
+      //   collectedReadlists: updatedCollectedReadlist
+      // })
       axios.get('/file_viewer/api/readlists').then((response) => {
         this.setState({
           collectedReadlists: response.data.collected_readlists,
         })
         this.props.setCollectedReadlists(response.data.collected_readlists)
+      })
+    }
+
+    this.updateReadlistsNameCallback = (readlistSlug, new_name) => {
+      var updatedCreatedReadlist = this.state.createdReadlists.map(readlist => {
+        if (readlist.slug !== readlistSlug)
+          return readlist
+        return Object.assign({}, readlist, {name: new_name})
+      })
+      var updatedCollectedReadlist = this.state.collectedReadlists.map(readlist => {
+        if (readlist.slug !== readlistSlug)
+          return readlist
+        return Object.assign({}, readlist, {name: new_name})
+      })
+      this.setState({
+        createdReadlists: updatedCreatedReadlist,
+        collectedReadlists: updatedCollectedReadlist
       })
     }
 
@@ -184,7 +207,13 @@ class AppBeforeConnect extends React.Component {
     }
 
     this.renderReadlistTab = (match, location) => {
-      return <ReadlistTab user={this.state.user} match={match} location={location} updateCollectedReadlistsCallback={this.updateCollectedReadlistsCallback}/>
+      return <ReadlistTab
+        user={this.state.user}
+        match={match}
+        location={location}
+        updateReadlistsCallback={this.updateReadlistsCallback}
+        updateReadlistsNameCallback={this.updateReadlistsNameCallback}
+      />
     }
 
   }
@@ -211,6 +240,7 @@ class AppBeforeConnect extends React.Component {
   }
 
   render() {
+    console.log('in main', this.state)
     const fields = this.state.fields
     return (
       <Layout style={{ height: '100%', width: '100%', position: 'absolute' }}>

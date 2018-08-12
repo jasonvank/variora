@@ -2,42 +2,65 @@ import { Icon, Input, Button, Row, Form, Radio, Switch, Card, Col, Popconfirm, T
 import { formatOpenCoterieDocumentUrl, getCookie, getUrlFormat } from 'util.js'
 
 import React from 'react'
-import ReactDOM from 'react-dom'
 import axios from 'axios'
-import { validateDocumentTitle } from 'home_util.js'
-import TimeAgo from 'react-timeago'
 
-const { Column } = Table
-const { TextArea } = Input
+const { TextArea } = Input;
 const Panel = Collapse.Panel
-const FormItem = Form.Item
-const RadioButton = Radio.Button
-const RadioGroup = Radio.Group
+const FormItem = Form.Item;
+
 
 class ReadlistSettingsSubtab extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      readlistStatus: 'public',
-      readlistName: 'current name',
-      readlistDescription: 'current description',
+      readlist: props.readlist,
+      isOwner: props.isOwner,
+      readlistSlug: props.readlistSlug,
+      readlistName: props.readlist.name,
+      readlistDescription: props.readlist.description,
     }
-    this.deleteReadList = () => {
 
+    this.deleteReadList = () => {
+      var data = new FormData()
+      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+      axios.post(this.state.readlist.delete_url, data).then(() => {
+        this.props.updateReadlistsCallback(this.state.readlistSlug)
+      })
     }
-    // this.setReadListPrivate = (e) => {
-    //   console.log(`radio checked:${e.target.value}`)
-    // }
+
     this.handleSubmit = (e) => {
       e.preventDefault()
-      alert('hey')
+      var new_name = this.state.readlistName
+      var data = new FormData()
+      data.append('new_name', new_name)
+      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+      axios.post(this.state.readlist.rename_url, data).then(() => {
+        this.props.updateReadlistsNameCallback(this.state.readlistSlug, new_name)
+      })
+      data = new FormData()
+      data.append('new_desc', this.state.readlistDescription)
+      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+      axios.post(this.state.readlist.change_desc_url, data)
     }
   }
 
   componentDidMount() {
+
+  }
+
+  componentWillReceiveProps(props) {
+    this.setState({
+      readlist: props.readlist,
+      readlistSlug: props.readlistSlug,
+      readlistName: props.readlist.name,
+      readlistDescription: props.readlist.description,
+    })
   }
 
   render() {
+
+    console.log(this.state);
+
     const formItemLayout = {
       labelCol: { span: 8 },
       wrapperCol: { span: 8 },
@@ -72,35 +95,11 @@ class ReadlistSettingsSubtab extends React.Component {
       </Row>
     )
 
-    // var setReadListPrivate = (
-    //   <Row>
-    //     <Col>
-    //       <div style={{ marginTop: 18 }}>
-    //         <Collapse accordion>
-    //           <Panel header="Set readlist to private" key="1">
-    //             <span>{'Once you set the group to private, all followers will no longer have access.'}</span>
-    //             {setReadListPrivateSection}
-    //           </Panel>
-    //         </Collapse>
-    //       </div>
-    //     </Col>
-    //   </Row>
-    // )
-
     return (
       <div>
         {deleteReadList}
         <div className={'card'} style={{ overflow: 'auto', marginTop: 16, padding: 18 }}>
           <Form onSubmit={this.handleSubmit}>
-            <FormItem
-              label="Status"
-              {...formItemLayout}
-            >
-              <RadioGroup onChange={this.setReadListPrivate} defaultValue={this.state.readlistStatus}>
-                <RadioButton value="public">public</RadioButton>
-                <RadioButton value="private">private</RadioButton>
-              </RadioGroup>
-            </FormItem>
             <FormItem
               label="Name"
               {...formItemLayout}

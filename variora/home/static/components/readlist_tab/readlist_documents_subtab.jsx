@@ -45,16 +45,16 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
         var data = new FormData()
         data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
         axios.post(this.state.readlist.uncollect_url, data)
-          .then(resp => props.updateCollectedReadlistsCallback())
+          .then(resp => props.updateReadlistsCallback(this.state.readlistSlug))
           .then(resp => this.setState({
             isCollector: false,
-            noCollectors: this.state.noCollectors + 1
+            noCollectors: this.state.noCollectors - 1
           }))
       } else {
         data = new FormData()
         data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
         axios.post(this.state.readlist.collect_url, data)
-          .then(resp => props.updateCollectedReadlistsCallback())
+          .then(resp => props.updateReadlistsCallback(this.state.readlistSlug))
           .then(resp => this.setState({
             isCollector: true,
             noCollectors: this.state.noCollectors + 1
@@ -68,7 +68,6 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
       this.props.fetchExploreDocs()
     else
       this.setState({suggestedDocuments: props.mostStarsDocuments.slice(0, 4)})
-
     this.setState({
       ...props
     })

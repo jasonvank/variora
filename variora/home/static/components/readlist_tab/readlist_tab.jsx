@@ -49,6 +49,7 @@ class ReadlistTabBeforeConnect extends React.Component {
       else
         this.setState({ isCollector: false })
     }
+
   }
 
   componentDidMount() {
@@ -66,6 +67,7 @@ class ReadlistTabBeforeConnect extends React.Component {
   }
 
   render() {
+    console.log('state', this.state)
     var path = this.props.location.pathname
     return (
       <Content style={{ paddingLeft: 18, paddingRight: 18, paddingTop: 16, margin: 0, minHeight: 280 }}>
@@ -92,8 +94,7 @@ class ReadlistTabBeforeConnect extends React.Component {
         </Menu>
         <Switch>
           <Route
-            exact
-            path={SUB_URL_BASE + this.state.readlistSlug + '/'}
+            exact path={SUB_URL_BASE + this.state.readlistSlug + '/'}
             render={() =>
               <ReadlistDocumentsSubtab
                 user={this.state.user}
@@ -102,18 +103,18 @@ class ReadlistTabBeforeConnect extends React.Component {
                 isOwner={this.state.isOwner}
                 isCollector={this.state.isCollector}
                 updateData={this.updateData}
-                updateCollectedReadlistsCallback={this.props.updateCollectedReadlistsCallback}
+                updateReadlistsCallback={this.props.updateReadlistsCallback}
               />}
           />
           <Route
-            exact
-            path={SUB_URL_BASE + this.state.readlistSlug + '/settings'}
+            exact path={SUB_URL_BASE + this.state.readlistSlug + '/settings'}
             render={() =>
               <ReadlistSettingsSubtab
-                user={this.state.user}
                 readlistSlug={this.state.readlistSlug}
                 readlist={this.state.readlist}
-                removeCoterieCallback={this.props.removeCoterieCallback}
+                isOwner={this.state.isOwner}
+                updateReadlistsCallback={this.props.updateReadlistsCallback}
+                updateReadlistsNameCallback={this.props.updateReadlistsNameCallback}
               />}
           />
         </Switch>
