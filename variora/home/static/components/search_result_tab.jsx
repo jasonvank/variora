@@ -1,17 +1,19 @@
 import 'regenerator-runtime/runtime'
 
-import { Avatar, Input, Layout, Menu, Modal, Table, Tooltip, notification } from 'antd'
+import { Avatar, Input, Icon, Layout, Menu, Modal, Table, Tooltip, notification } from 'antd'
+import { Link, Route, BrowserRouter as Router, Switch } from 'react-router-dom'
 import { formatOpenDocumentUrl, getCookie, getUrlFormat } from 'util.js'
 
 import React from 'react'
 import axios from 'axios'
 import TimeAgo from 'react-timeago'
 
-const { SubMenu } = Menu
 const { Header, Content, Sider } = Layout
-const MenuItemGroup = Menu.ItemGroup
 const { TextArea } = Input
 
+const SUB_URL_BASE = '/search'
+var fullUrl = window.location.href
+var searchKey = fullUrl.slice(fullUrl.indexOf('=') + 1)
 
 class SearchResultTab extends React.Component {
   constructor(props) {
@@ -28,8 +30,6 @@ class SearchResultTab extends React.Component {
   }
 
   componentDidMount() {
-    var fullUrl = window.location.href
-    var searchKey = fullUrl.slice(fullUrl.indexOf('=') + 1)
     // TODO: get user from redux
     axios.get('/api/user').then((response) => {
       var user = response.data
@@ -58,21 +58,36 @@ class SearchResultTab extends React.Component {
 
 
   render() {
+    var path = window.location.href
     return (
-      <div style={{ paddingLeft: 18, paddingRight: 18, paddingTop: 8, margin: 0, minHeight: 280 }}>
-        <div className='card' style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}>
-          <DocumentResult resultDocuments={this.state.resultDocuments} />
-        </div>
-        <div className='card' style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}>
-          <ReadlistResult resultReadlists={this.state.resultReadlists} />
-        </div>
-        {/* <div className='card' style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}>
-          <GroupResult administratedCoteries={this.state.administratedCoteries} joinedCoteries={this.state.joinedCoteries} resultCoteries={this.state.resultCoteries} user={this.state.user} />
-        </div> */}
-        <div className='card' style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}>
-          <UserResult resultUsers={this.state.resultUsers} />
-        </div>
-      </div>
+      <Content style={{ paddingLeft: 18, paddingRight: 18, paddingTop: 16, margin: 0, minHeight: 280 }}>
+        <Menu
+          onClick={this.handleClick}
+          className={'card'}
+          mode="horizontal"
+          style={{ padding: 0 }}
+          defaultSelectedKeys={['search-documents']}
+          selectedKeys = {
+            path.includes('/users') ? ['search-users'] : path.includes('/readlists') ? ['search-readlists'] : ['search-documents']
+          }
+        >
+          <Menu.Item key="search-documents">
+            <Link to={SUB_URL_BASE + '?key=' + searchKey}><Icon type="file" />Documents</Link>
+          </Menu.Item>
+          <Menu.Item key="search-users">
+            <Link to={SUB_URL_BASE + '/users?key=' + searchKey}><Icon type="user" />Users</Link>
+          </Menu.Item>
+          <Menu.Item key="search-readlists">
+            <Link to={SUB_URL_BASE + '/readlists?key=' + searchKey}><Icon type="folder" />Readlists</Link>
+          </Menu.Item>
+        </Menu>
+
+        <Switch>
+          <Route exact path={SUB_URL_BASE} render={() => <DocumentResult resultDocuments={this.state.resultDocuments} />} />
+          <Route path={SUB_URL_BASE + '/users'} render={() => <UserResult resultUsers={this.state.resultUsers} />} />
+          <Route path={SUB_URL_BASE + '/readlists'} render={() => <ReadlistResult resultReadlists={this.state.resultReadlists} />} />
+        </Switch>
+      </Content>
     )
   }
 }
@@ -122,6 +137,8 @@ class DocumentResult extends React.Component {
       <Table
         dataSource={this.state.data}
         columns={columns}
+        className={'card'}
+        style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}
         pagination={{ pageSize: 10 }}
         rowKey={record => record.pk}
         onChange={this.handleChange}
@@ -175,6 +192,8 @@ class ReadlistResult extends React.Component {
       <Table
         dataSource={this.state.data}
         columns={columns}
+        className={'card'}
+        style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}
         pagination={{ pageSize: 10 }}
         rowKey={record => record.pk}
         onChange={this.handleChange}
@@ -276,6 +295,8 @@ class GroupResult extends React.Component {
         <Table
           dataSource={this.state.data}
           columns={columns}
+          className={'card'}
+          style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, padding: 18 }}
           pagination={{ pageSize: 10 }}
           rowKey={record => record.pk}
           onChange={this.handleChange}
@@ -335,16 +356,14 @@ class UserResult extends React.Component {
       title: 'Email Address',
       dataIndex: 'email_address',
       width: "30%",
-    }, {
-      // title: 'action',
-      key: 'action',
-      width: "0%",
     }]
 
     return (
       <Table
         dataSource={this.state.data}
         columns={columns}
+        className={'card'}
+        style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}
         pagination={{ pageSize: 10 }}
         rowKey={record => record.email_address}
         onChange={this.handleChange}
