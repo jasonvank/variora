@@ -178,14 +178,14 @@ class AppBeforeConnect extends React.Component {
           return readlist
         return Object.assign({}, readlist, {name: new_name})
       })
-      var updatedCollectedReadlist = this.state.collectedReadlists.map(readlist => {
-        if (readlist.slug !== readlistSlug)
-          return readlist
-        return Object.assign({}, readlist, {name: new_name})
-      })
+      // var updatedCollectedReadlist = this.state.collectedReadlists.map(readlist => {
+      //   if (readlist.slug !== readlistSlug)
+      //     return readlist
+      //   return Object.assign({}, readlist, {name: new_name})
+      // })
       this.setState({
         createdReadlists: updatedCreatedReadlist,
-        collectedReadlists: updatedCollectedReadlist
+        // collectedReadlists: updatedCollectedReadlist
       })
     }
 

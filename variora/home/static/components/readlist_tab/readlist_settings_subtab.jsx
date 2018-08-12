@@ -1,4 +1,4 @@
-import { Icon, Input, Button, Row, Form, Radio, Switch, Card, Col, Popconfirm, Table, Collapse, message, notification } from 'antd'
+import { Icon, Input, Button, Row, Form, Radio, Switch, Card, Col, Spin, Popconfirm, Table, Collapse, message, notification } from 'antd'
 import { formatOpenCoterieDocumentUrl, getCookie, getUrlFormat } from 'util.js'
 
 import React from 'react'
@@ -18,6 +18,7 @@ class ReadlistSettingsSubtab extends React.Component {
       readlistSlug: props.readlistSlug,
       readlistName: props.readlist.name,
       readlistDescription: props.readlist.description,
+      loading: false
     }
 
     this.deleteReadList = () => {
@@ -30,7 +31,9 @@ class ReadlistSettingsSubtab extends React.Component {
 
     this.handleSubmit = (e) => {
       e.preventDefault()
+      this.setState({loading: true})
       var new_name = this.state.readlistName
+      console.log('new name', new_name);
       var data = new FormData()
       data.append('new_name', new_name)
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
@@ -41,6 +44,12 @@ class ReadlistSettingsSubtab extends React.Component {
       data.append('new_desc', this.state.readlistDescription)
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
       axios.post(this.state.readlist.change_desc_url, data)
+        .then(() => this.setState({loading: false}))
+        .then(() => {
+          notification['info']({
+            message: 'Your readlist has been updated',
+          });
+        })
     }
   }
 
@@ -98,25 +107,27 @@ class ReadlistSettingsSubtab extends React.Component {
     return (
       <div>
         {deleteReadList}
-        <div className={'card'} style={{ overflow: 'auto', marginTop: 16, padding: 18 }}>
-          <Form style={{ marginTop: 24 }} onSubmit={this.handleSubmit}>
-            <FormItem
-              label="Name"
-              {...formItemLayout}
-            >
-              <Input value={this.state.readlistName} onChange={e => this.setState({ readlistName: e.target.value })}/>
-            </FormItem>
-            <FormItem
-              label="Description"
-              {...formItemLayout}
-            >
-              <TextArea rows={6} value={this.state.readlistDescription} onChange={e => this.setState({ readlistDescription: e.target.value })}/>
-            </FormItem>
-            <FormItem {...buttonItemLayout}>
-              <Button type="primary" htmlType="submit">Submit</Button>
-            </FormItem>
-          </Form>
-        </div>
+        <Spin spinning={this.state.loading}>
+          <div className={'card'} style={{ overflow: 'auto', marginTop: 16, padding: 18 }}>
+            <Form style={{ marginTop: 24 }} onSubmit={this.handleSubmit}>
+              <FormItem
+                label="Name"
+                {...formItemLayout}
+              >
+                <Input value={this.state.readlistName} onChange={e => this.setState({ readlistName: e.target.value })}/>
+              </FormItem>
+              <FormItem
+                label="Description"
+                {...formItemLayout}
+              >
+                <TextArea rows={6} value={this.state.readlistDescription} onChange={e => this.setState({ readlistDescription: e.target.value })}/>
+              </FormItem>
+              <FormItem {...buttonItemLayout}>
+                <Button type="primary" htmlType="submit">Submit</Button>
+              </FormItem>
+            </Form>
+          </div>
+        </Spin>
       </div>
     )
   }
