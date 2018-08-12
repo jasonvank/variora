@@ -146,8 +146,8 @@ class AppBeforeConnect extends React.Component {
     // }
 
     this.removeCoterieCallback = (coteriePk) => {
-      var updatedAdministratedCoteries = this.state.administratedCoteries.filter(function(coterie) {return coterie.pk != coteriePk})
-      var updatedJoinedCoteries = this.state.joinedCoteries.filter(function(coterie) {return coterie.pk != coteriePk})
+      const updatedAdministratedCoteries = this.state.administratedCoteries.filter(function(coterie) {return coterie.pk != coteriePk})
+      const updatedJoinedCoteries = this.state.joinedCoteries.filter(function(coterie) {return coterie.pk != coteriePk})
       this.setState({
         administratedCoteries: updatedAdministratedCoteries,
         joinedCoteries: updatedJoinedCoteries
@@ -155,12 +155,12 @@ class AppBeforeConnect extends React.Component {
     }
 
     this.updateReadlistsCallback = (readlistSlug) => {
-      // var updatedCreatedReadlist = this.state.createdReadlists.filter(function(readlist) {return readlist.slug !== readlistSlug})
-      // var updatedCollectedReadlist = this.state.collectedReadlists.filter(function(readlist) {return readlist.slug !== readlistSlug})
-      // this.setState({
-      //   createdReadlists: updatedCreatedReadlist,
-      //   collectedReadlists: updatedCollectedReadlist
-      // })
+      const updatedCreatedReadlist = this.state.createdReadlists.filter(function(readlist) {return readlist.slug !== readlistSlug})
+      const updatedCollectedReadlist = this.state.collectedReadlists.filter(function(readlist) {return readlist.slug !== readlistSlug})
+      this.setState({
+        createdReadlists: updatedCreatedReadlist,
+        collectedReadlists: updatedCollectedReadlist
+      })
       axios.get('/file_viewer/api/readlists').then((response) => {
         this.setState({
           collectedReadlists: response.data.collected_readlists,
