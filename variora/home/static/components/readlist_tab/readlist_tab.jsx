@@ -24,6 +24,8 @@ class ReadlistTabBeforeConnect extends React.Component {
       readlistSlug: props.match.params.readlistSlug,
       user: props.user,
       readlist: {
+        name: '',
+        description: '',
         documents: [],
         owner: {
           nickname: '',
@@ -106,7 +108,13 @@ class ReadlistTabBeforeConnect extends React.Component {
           <Route
             exact
             path={SUB_URL_BASE + this.state.readlistSlug + '/settings'}
-            render={() => <ReadlistSettingsSubtab user={this.state.user} readlistSlug={this.state.readlistSlug} removeCoterieCallback={this.props.removeCoterieCallback} />}
+            render={() =>
+              <ReadlistSettingsSubtab
+                user={this.state.user}
+                readlistSlug={this.state.readlistSlug}
+                readlist={this.state.readlist}
+                removeCoterieCallback={this.props.removeCoterieCallback}
+              />}
           />
         </Switch>
       </Content>

@@ -8,11 +8,11 @@ import { validateDocumentTitle } from 'home_util.js'
 import TimeAgo from 'react-timeago'
 
 const { Column } = Table
-const { TextArea } = Input;
+const { TextArea } = Input
 const Panel = Collapse.Panel
-const FormItem = Form.Item;
-const RadioButton = Radio.Button;
-const RadioGroup = Radio.Group;
+const FormItem = Form.Item
+const RadioButton = Radio.Button
+const RadioGroup = Radio.Group
 
 class ReadlistSettingsSubtab extends React.Component {
   constructor(props) {
@@ -21,15 +21,15 @@ class ReadlistSettingsSubtab extends React.Component {
       readlistStatus: 'public',
       readlistName: 'current name',
       readlistDescription: 'current description',
-    };
+    }
     this.deleteReadList = () => {
 
     }
     // this.setReadListPrivate = (e) => {
-    //   console.log(`radio checked:${e.target.value}`);
+    //   console.log(`radio checked:${e.target.value}`)
     // }
     this.handleSubmit = (e) => {
-      e.preventDefault();
+      e.preventDefault()
       alert('hey')
     }
   }
