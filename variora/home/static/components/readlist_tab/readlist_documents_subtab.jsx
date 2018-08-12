@@ -39,7 +39,11 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
     }
 
     this.onCollectList = () => {
-      if (this.state.isOwner){
+      if (!this.state.user.is_authenticated) {
+        notification['warning']({
+          message: 'Please sign in first',
+        })
+      } else if (this.state.isOwner){
         notification['info']({message: 'You are the owner of the list!'})
       } else if (this.state.isCollector) {
         var data = new FormData()
