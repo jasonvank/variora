@@ -43,6 +43,7 @@ class ReadlistSettingsSubtab extends React.Component {
       data2.append('csrfmiddlewaretoken', getCookie('csrftoken'))
 
       axios.post(this.state.readlist.rename_url, data1).then(() => {
+        // TODO: refactor this
         this.props.updateReadlistsNameCallback(this.state.readlistSlug, newName)
 
         const self = this
@@ -52,6 +53,7 @@ class ReadlistSettingsSubtab extends React.Component {
               loading: false,
             })
             notification['success']({ message: 'Readlist info updated', })
+            // TODO: refactor this
             props.updateData()
           })
       })
