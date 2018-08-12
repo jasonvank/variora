@@ -278,7 +278,7 @@ class AppBeforeConnect extends React.Component {
                   <Link to="/"><span><Icon type='file' />documents</span></Link>
                 </Menu.Item>
 
-                <SubMenu key="created_readlists" title={<span><Icon type="solution" />created readlists</span>} disabled={!this.state.user.is_authenticated}>
+                <SubMenu key="created_readlists" title={<span><Icon type="folder-open" />created readlists</span>} disabled={!this.state.user.is_authenticated}>
                   {
                     this.state.createdReadlists.map((readlist) => {
                       return (
@@ -290,7 +290,7 @@ class AppBeforeConnect extends React.Component {
                   }
                   <Menu.Item disabled={!this.state.user.is_authenticated} key={CREATE_NEW_GROUP_MENU_ITEM_KEY}><Icon type="plus"/></Menu.Item>
                 </SubMenu>
-                <SubMenu key="collected_readlists" title={<span><Icon type="team" />collected readlists</span>} disabled={!this.state.user.is_authenticated}>
+                <SubMenu key="collected_readlists" title={<span><Icon type="folder" />collected readlists</span>} disabled={!this.state.user.is_authenticated}>
                   {
                     this.state.collectedReadlists.map((readlist) => {
                       return (
