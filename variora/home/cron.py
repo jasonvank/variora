@@ -79,9 +79,11 @@ class UpdateTopDocumentsThread(Thread):
 def update_top_documents_kronjob():
     UpdateTopDocumentsThread().start()
 
+
 @kronos.register('0 0 * * *')
 def clear_expired_sessions_kronjob():
     call_command('clearsessions', interactive=True)
+
 
 @kronos.register('2 0 * * *')
 def ping_google_kronjob():
