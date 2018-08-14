@@ -11,7 +11,7 @@ class DocumentModelAdmin(admin.ModelAdmin):
 
 class ReadlistModelAdmin(admin.ModelAdmin):
     list_display = ["id", 'clean_uuid', 'name', 'is_public']
-    search_fields = ['id', 'clean_uuid', 'name']
+    search_fields = ['id', 'uuid', 'name']
     list_filter = ['is_public']
     filter_horizontal = ['collectors', 'documents']
 
