@@ -156,7 +156,7 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
             </Col>
             <Col style={{ padding: 18 }} span={8}>
               <p style={{ fontSize: 16, marginBottom: 18, marginLeft: 8 }}>Description: </p>
-              <p style={{ whiteSpace: 'pre-wrap', marginBottom: 18, marginLeft: 8 }}>{readlist.description}</p>
+              <p style={{ whiteSpace: 'pre-wrap', marginBottom: 18, marginLeft: 8, wordBreak: 'break-all', hyphens: 'auto' }}>{readlist.description}</p>
               {this.props.mostViewsDocuments != undefined ?
                 (
                   <div style={{ marginTop: 38 }}>
