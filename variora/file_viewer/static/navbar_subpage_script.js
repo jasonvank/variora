@@ -66,7 +66,7 @@ function prepareNavbarFunction() {
       shade: 0.18,
       shadeClose: true,
       content: $('#readlist'),
-      area: '240px',
+      area: '28%',
       closeBtn: false,
       skin: 'layui-layer-molv',
       btn: ['OK'],
