@@ -103,7 +103,7 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
       title: 'Title',
       dataIndex: 'title',
       width: '40%',
-      render: (text, record) => <a className='document-link' href={formatOpenDocumentUrl(record)}>{text}</a>,
+      render: (text, record) => <a className='document-link custom-card-text-wrapper' title={text} href={formatOpenDocumentUrl(record)}>{text}</a>,
     }].concat(this.state.isOwner ? [{
       title: 'Upload Time',
       key: 'upload_time',
@@ -131,7 +131,7 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
                 <Avatar src={readlist.owner.portrait_url} style={{ verticalAlign: 'middle', marginRight: 8}} />
                 <span style={{ verticalAlign: 'middle' }}>{readlist.owner.nickname} created in <TimeAgo style={{color:'#999'}} date={readlist.create_time} /></span>
               </div> 
-              <p style={{ fontSize: 28, marginBottom: 18, marginLeft: 8 }}>{readlist.name}</p>
+              <p style={{ fontSize: 28, marginBottom: 18, marginLeft: 8, wordBreak: 'break-all', hyphens: 'auto' }}>{readlist.name}</p>
               <div style={{ marginBottom: 18 }}>
                 <Button type="primary" ghost icon="link" onClick={this.onShareClick} style={{ marginRight: 18 }}>Share link</Button>
                 <Button type="primary" ghost style={{ marginRight: 18, width: 120 }} onClick={this.onCollectList}>

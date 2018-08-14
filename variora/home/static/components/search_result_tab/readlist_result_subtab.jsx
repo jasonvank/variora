@@ -31,7 +31,7 @@ class ReadlistResult extends React.Component {
       title: 'Readlist Name',
       dataIndex: 'name',
       width: '40%',
-      render: (text, record) => <a href={record.url}>{text}</a>,
+      render: (text, record) => <a className='document-link custom-card-text-wrapper' title={text} href={record.url}>{text}</a>,
       sorter: (a, b) => a.name.localeCompare(b.name),
     }, {
       title: 'Creator',
