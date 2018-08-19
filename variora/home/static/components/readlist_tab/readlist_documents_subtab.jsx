@@ -103,7 +103,6 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
       title: 'Title',
       dataIndex: 'title',
       width: '40%',
-      sorter: (a, b) => a.title.localeCompare(b.title),
       render: (text, record) => <a className='document-link custom-card-text-wrapper' title={text} href={formatOpenDocumentUrl(record)}>{text}</a>,
     }].concat(this.state.isOwner ? [{
       title: 'Upload Time',
