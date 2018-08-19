@@ -12,7 +12,6 @@ const { Column } = Table
 class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
   constructor(props) {
     super(props)
-    var index = 0
     this.state = {
       user: props.user,
       readlist: props.readlist,
@@ -21,7 +20,6 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
       suggestedDocuments: [],
       isCollector: props.isCollector,
       noCollectors: props.readlist.num_collectors,
-      isChanged: false
     }
 
     this.removeDocument = (document) => {
@@ -36,15 +34,6 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
       const url = [location.protocol, '//', location.host, location.pathname].join('')
       copyToClipboard(url)
       message.success('URL copied')
-    }
-
-    this.handleChange = (record) => {
-      return ++index
-    }
-
-    this.onChange = () => {
-      this.setState({ isChanged: true})
-      index = 0
     }
 
     this.onCollectList = () => {
@@ -107,12 +96,11 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
       title: '#',
       dataIndex: 'id',
       width: '20%',
-      render: (text, record) => this.state.isChanged ? this.handleChange(record) : this.state.readlist.documents.indexOf(record) + 1
+      render: (text, record) => this.state.readlist.documents.indexOf(record) + 1
     }, {
       title: 'Title',
       dataIndex: 'title',
       width: '40%',
-      sorter: (a, b) => a.title.localeCompare(b.title),
       render: (text, record) => <a className='document-link custom-card-text-wrapper' title={text} href={formatOpenDocumentUrl(record)}>{text}</a>,
     }].concat(this.state.isOwner ? [{
       title: 'Upload Time',
@@ -162,7 +150,6 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
                 columns={columns}
                 pagination={false}
                 rowKey={record => record.pk}
-                onChange={this.onChange}
               />
             </Col>
             <Col style={{ padding: 18 }} span={8}>
