@@ -14,11 +14,13 @@
     <div class="annotation-reply-content"> {{ annotation_reply.content|safe|linebreaks }} </div>
     <footer>
       {% if annotation_reply.is_public %}
-        <img class="img-rounded" src="{{ annotation_reply.replier.portrait_url }}" height="28" width="28">
-        {{ annotation_reply.replier.nickname }} | <span class="annotation-reply-time-span">{% if annotation_reply.edit_time %} edit on {{ annotation_reply.edit_time.date|date:"Y. M. d" }} {% else %} {{ annotation_reply.post_time.date|date:"Y. M. d" }} {% endif %}</span>
+        <img class="img-rounded" src="{{ annotation_reply.replier.portrait_url }}" height="28" width="28" style="margin-right: 2px">
+        <span style="color: #6d757a; font-weight: 500">{{ annotation_reply.replier.nickname }}</span>
+        <span class="annotation-reply-time-span">&#183{% if annotation_reply.edit_time %} edit on {{ annotation_reply.edit_time.date|date:"Y M d" }} {% else %} {{ annotation_reply.post_time.date|date:"Y M d" }} {% endif %}</span>
       {% else %}
         <img class="img-rounded" src="{{ ANONYMOUS_USER_PORTRAIT_URL }}" height="28" width="28">
-        Anonymous | <span class="annotation-reply-time-span">{% if annotation_reply.edit_time %} edit on {{ annotation_reply.edit_time.date|date:"Y. M. d" }} {% else %} {{ annotation_reply.post_time.date|date:"Y. M. d" }} {% endif %}</span>
+        <span style="color: #6d757a; font-weight: 500">Anonymous</span>
+        <span class="annotation-reply-time-span">&#183{% if annotation_reply.edit_time %} edit on {{ annotation_reply.edit_time.date|date:"Y M d" }} {% else %} {{ annotation_reply.post_time.date|date:"Y M d" }} {% endif %}</span>
       {% endif %}
       <div style="float: right;">
         <button class="ReplyAnnotationButton btn" style="border: none; background: none; padding: 0 4px"><i class="fa fa-reply" aria-hidden="true"></i>&nbspreply</button>

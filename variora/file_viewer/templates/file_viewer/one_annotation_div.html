@@ -6,10 +6,12 @@
     <footer>
       {% if annotation.is_public %}
         <img class="img-rounded" src="{{ annotation.annotator.portrait_url }}" height="38" width="38" style="margin-right: 2px">
-        {{ annotation.annotator.nickname }} | <span class="annotation-time-span">{% if annotation.edit_time %} edit on {{ annotation.edit_time.date|date:"Y. M. d" }} {% else %} {{ annotation.post_time.date|date:"Y. M. d" }} {% endif %}</span>
+        <span style="color: #6d757a; font-weight: 500">{{ annotation.annotator.nickname }}</span>
+        <span class="annotation-time-span">&#183{% if annotation.edit_time %} edit on {{ annotation.edit_time.date|date:"Y M d" }} {% else %} {{ annotation.post_time.date|date:"Y M d" }} {% endif %}</span>
       {% else %}
         <img class="img-rounded" src="{{ ANONYMOUS_USER_PORTRAIT_URL }}" height="38" width="38" style="margin-right: 2px">
-        Anonymous | <span class="annotation-time-span">{% if annotation.edit_time %} edit on {{ annotation.edit_time.date|date:"Y. M. d" }} {% else %} {{ annotation.post_time.date|date:"Y. M. d" }} {% endif %}</span>
+        <span style="color: #6d757a; font-weight: 500">Anonymous</span>
+        <span class="annotation-time-span">&#183{% if annotation.edit_time %} edit on {{ annotation.edit_time.date|date:"Y M d" }} {% else %} {{ annotation.post_time.date|date:"Y M d" }} {% endif %}</span>
       {% endif %}
       <div style="float: right;">
         <button class="AnnotationDirectButton btn" style="border: none; background: none">
