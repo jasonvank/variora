@@ -20,7 +20,8 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
       readlistSlug: props.readlistSlug,
       suggestedDocuments: [],
       isCollector: props.isCollector,
-      noCollectors: props.readlist.num_collectors
+      noCollectors: props.readlist.num_collectors,
+      isChanged: false
     }
 
     this.removeDocument = (document) => {
