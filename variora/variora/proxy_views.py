@@ -4,6 +4,7 @@ from django.http import QueryDict
 from django.views.decorators.cache import cache_page
 from file_viewer.models import Document
 from coterie.models import CoterieDocument
+from django.utils.encoding import iri_to_uri
 
 
 @cache_page(60 * 5)
@@ -20,6 +21,7 @@ def proxy_view(request, requests_args=None):
         return HttpResponse(status=403)
 
     url = request.GET['origurl']
+    url = iri_to_uri(url).replace('(', '%28').replace(')', '%29')
     if not (Document.objects.filter(external_url=url).exists() or CoterieDocument.objects.filter(external_url=url).exists()):
         return HttpResponse(status=404)
 
