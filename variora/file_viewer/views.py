@@ -188,7 +188,7 @@ class FileViewerView(View):
                 .prefetch_related('annotationreply_set__replier')
                 .prefetch_related('annotationreply_set__reply_to_annotation_reply')
                 .prefetch_related('annotationreply_set__reply_to_annotation_reply__replier')
-                .order_by("page_index", "-post_time"),
+                .order_by("page_index", "top_percent"),
             'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,
             "collected": collected,
             "prev_page_url": request.META['HTTP_REFERER'] if 'HTTP_REFERER' in request.META else '/'
