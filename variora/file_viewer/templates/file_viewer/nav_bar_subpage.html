@@ -1,5 +1,6 @@
 <div id="navbar">
   <a class="awesome blue" href="{{ prev_page_url }}" placeholder="Page" style="float: left; height: 28px;"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i></a>
+
   <div title="{{ document.title }}" style="text-align: center; display: inline-block; color:white; margin: 5px 0 0 8%; width: 28%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
     {{ document.title }}
   </div>
@@ -7,18 +8,20 @@
     <input type="number" style="width: 60px" />
     <button class="awesome blue">Go</button>
   </div> -->
+
   <button class="awesome blue" id="instruction_button" style="height: 28px; width: 118px">
     <i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp&nbspHow to use
   </button>
+
   <div id="resize_buttons_div">
     <button class="awesome blue" style="height: 28px;" type="button" id="btn-for-larger"><i class="fa fa-plus" aria-hidden="true"></i></button>
     <button class="awesome blue" style="height: 28px;" type="button" id="btn-for-smaller"><i class="fa fa-minus" aria-hidden="true"></i></button>
   </div>
 {#  <button class="awesome blue" id="show_annotation_frame_button" style="height: 28px;">Show</button>#}
 {#  <button class="awesome blue" id="hide_annotation_frame_button" style="height: 28px;">Hide</button>#}
-  <button class="awesome blue" id="comment_button" data-toggle="modal" data-target="#comment_modal" style="height: 28px;">
-    <i class="fa fa-comments" aria-hidden="true"></i>&nbspComments
-  </button>
+{#  <button class="awesome blue" id="comment_button" data-toggle="modal" data-target="#comment_modal" style="height: 28px;">#}
+{#    <i class="fa fa-comments" aria-hidden="true"></i>&nbspComments#}
+{#  </button>#}
   <div class="dropdown" id="annotation-color-buttons-div">
     <button class="awesome blue dropdown-toggle" style="height: 28px;" data-toggle="dropdown"><i class="fa fa-paint-brush" aria-hidden="true"></i>&nbspColors
       <b class="caret"></b>
@@ -31,6 +34,7 @@
     {% csrf_token %}
     <button type="submit" class="awesome blue" style="height: 28px"><i class="fa fa-cloud-download" aria-hidden="true"></i>&nbspdownload</button>
   </form>
+
   <button class="awesome blue" style="height: 28px; padding: 5px 6px 9px 9px" type="button" id="readlist_button">
     <i class="material-icons" style="font-size: 20px">playlist_add</i>
   </button>

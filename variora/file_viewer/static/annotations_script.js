@@ -1,10 +1,12 @@
 import { getCookie, copyToClipboard, renderMathJax } from 'util.js'
 import { tinymceInit } from './tinymce_script'
 
+
 function getAnnotationDivJQById(annotationID) {
   var selector = '.AnnotationDiv[annotation_id="{0}"]'.format(annotationID)
   return $(selector)
 }
+
 
 function getPageDividerJQ(pageNum) {
   const pageDividerHtml = ' \
@@ -19,6 +21,7 @@ function getPageDividerJQ(pageNum) {
   return $(pageDividerHtml)
 }
 
+
 function removeAnnotation(annotationID) {
   let thisPage = $('.AnnotationDiv[annotation_id="{0}"]'.format(annotationID)).attr('page')
   getAnnotationDivJQById(annotationID).remove()
@@ -31,6 +34,7 @@ function removeAnnotation(annotationID) {
   }
 }
 
+
 function removeAnnotationReply(id) {
   var queue = $('.annotation-reply-block[annotation_reply_id="{0}"]'.format(id)).toArray()
   while (queue.length > 0) {
@@ -41,6 +45,7 @@ function removeAnnotationReply(id) {
   }
 }
 
+
 function _checkCoverage(annotationDom, e, pageJQ) {
   var top_left_relative_x = e.pageX - pageJQ.offset().left
   var top_left_relative_y = e.pageY - pageJQ.offset().top
@@ -49,6 +54,7 @@ function _checkCoverage(annotationDom, e, pageJQ) {
         _getTop(annotationDom) <= top_left_relative_y &&
         _getBottom(annotationDom) >= top_left_relative_y
 }
+
 
 function _getLeft(annotationDom) { return parseFloat($(annotationDom).css('left')) }
 
@@ -60,6 +66,7 @@ function _getBottom(annotationDom) { return parseFloat($(annotationDom).css('top
 
 function addAnnotationRelatedListener() { addAnnotationRelatedListenerWithin($(document)) }
 
+
 function scrollAnnotationDivIntoView(annotationDiv) {
   var annotationsDiv = $('#annotation-update-div')
   var down = annotationDiv.offset().top - annotationsDiv.offset().top + annotationsDiv.scrollTop()
@@ -68,6 +75,7 @@ function scrollAnnotationDivIntoView(annotationDiv) {
   }, 240)
 }
 
+
 function scrollAnnotationIntoView(annotation) {
   var fileViewer = $('#file_viewer')
   var down = annotation.offset().top - fileViewer.offset().top + fileViewer.scrollTop() - window.innerHeight * 0.38 + annotation.height() / 2
@@ -75,6 +83,7 @@ function scrollAnnotationIntoView(annotation) {
     scrollTop: parseInt(down)
   }, 240)
 }
+
 
 function findTargetAnnotation(e, allAnnotationsInThisPage, pageJQ) {
   const coverAnnotations = allAnnotationsInThisPage.filter(annotation => _checkCoverage(annotation, e, pageJQ))
@@ -92,6 +101,7 @@ function findTargetAnnotation(e, allAnnotationsInThisPage, pageJQ) {
   const newTarget = $(sortedCloseness[0])
   return newTarget
 }
+
 
 function addAnnotationRelatedListenerWithin(jq) {
   const appName = window.location.pathname.split('/')[1]
