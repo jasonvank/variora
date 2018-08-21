@@ -231,7 +231,7 @@ class AppBeforeConnect extends React.Component {
           <Row>
             <Col span={6}>
               {/* <div className="logo" /> */}
-              <img src="/media/logo.png" height={48} style={{ verticalAlign: 'middle', marginLeft: 28 }}/>
+              <a href='/'><img src="/media/logo.png" height={48} style={{ verticalAlign: 'middle', marginLeft: 28 }}/></a>
             </Col>
             <Col span={8} style={{ textAlign: 'right' }}>
               <Search
