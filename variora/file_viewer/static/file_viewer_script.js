@@ -164,7 +164,7 @@ function startListeningSelectionBoxCreation() {
         // "annotationWindow" is a number (start from 1), which is the index of this annotation window
         var annotationWindow = layer.open({
           type: 1,
-          title: 'Post Annotation',
+          title: 'Comment on this area',
           shadeClose: true,
           shade: false,
           maxmin: true, // enalbe maximize and minimize button
