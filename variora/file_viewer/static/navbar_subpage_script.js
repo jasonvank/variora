@@ -1,4 +1,6 @@
 import { getCookie } from 'util.js'
+import {addAnnotationRelatedListenerWithin, getPageDividerJQ, scrollAnnotationDivIntoView} from './annotations_script'
+import {tinymceInit} from './tinymce_script'
 
 function prepareNavbarFunction() {
   // coterie file viewer pages do not have collect_button
@@ -91,29 +93,33 @@ function prepareNavbarFunction() {
         })
       }
     })
+
     $('#close-readlist-icon').on('click', function() {
       layer.close(popup)
       $(this).off('click')
     })
   })
 
-  fetch('/file_viewer/api/readlists').then(resp => resp.json()).then((response) => {
-    const createdReadlists = response.created_readlists
-    var form = $('#add_to_readlist_form')
-    const checkboxTemplate = form.find('#checkbox_template')
-    for (var readlist of createdReadlists) {
-      var newCheckbox = checkboxTemplate.clone()
-      newCheckbox.find('label').text(readlist.name)
-      newCheckbox.find('input').val(readlist.uuid).addClass('readlist-checkbox')
-      newCheckbox.css('display', 'block')
-      if (readlist.documents_uuids.includes($('#document-uuid').val()))
-        newCheckbox.find('input').attr('checked', 'true')
-      form.append(newCheckbox)
-    }
-    $('#add_to_readlist_form').find('.readlist-checkbox').on('change', function(e) {
-      var checkBox = $(e.target)
-      checkBox.attr('checked', !checkBox.attr('checked'))
-    })
+  $.get({
+    url: '/file_viewer/api/readlists',
+    success: function(data) {
+      const createdReadlists = data.created_readlists
+      var form = $('#add_to_readlist_form')
+      const checkboxTemplate = form.find('#checkbox_template')
+      for (var readlist of createdReadlists) {
+        var newCheckbox = checkboxTemplate.clone()
+        newCheckbox.find('label').text(readlist.name)
+        newCheckbox.find('input').val(readlist.uuid).addClass('readlist-checkbox')
+        newCheckbox.css('display', 'block')
+        if (readlist.documents_uuids.includes($('#document-uuid').val()))
+          newCheckbox.find('input').attr('checked', 'true')
+        form.append(newCheckbox)
+      }
+      $('#add_to_readlist_form').find('.readlist-checkbox').on('change', function(e) {
+        var checkBox = $(e.target)
+        checkBox.attr('checked', !checkBox.attr('checked'))
+      })
+    },
   })
 }
 

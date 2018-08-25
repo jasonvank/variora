@@ -190,8 +190,7 @@ function startListeningSelectionBoxCreation() {
         annotationWindowJqueryObject.find('.post_annotation_button').on('click', function() {
           if (is_authenticated) {
             var is_public = !this.classList.contains('anonymously_post_annotation_button')
-            $.ajax({
-              type: 'POST',
+            $.post({
               url: '',
               data: {
                 csrfmiddlewaretoken: getCookie('csrftoken'),
