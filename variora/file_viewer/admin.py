@@ -10,8 +10,8 @@ class DocumentModelAdmin(admin.ModelAdmin):
 
 
 class ReadlistModelAdmin(admin.ModelAdmin):
-    list_display = ["id", 'clean_uuid', 'name', 'is_public']
-    search_fields = ['id', 'uuid', 'name']
+    list_display = ["id", 'clean_uuid', 'name', 'is_public', 'creator']
+    search_fields = ['id', 'uuid', 'name', 'creator__nickname']
     list_filter = ['is_public']
     filter_horizontal = ['collectors', 'documents']
 
