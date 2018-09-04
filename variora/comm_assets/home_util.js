@@ -1,7 +1,7 @@
 import { notification } from 'antd'
 
 
-const MAX_DOCUMENT_UPLOAD_SIZE = 3 * 1024 * 1024
+const MAX_DOCUMENT_UPLOAD_SIZE = 5 * 1024 * 1024
 
 function validateDocumentTitle(title) {
   const INVALID_DOCUMENT_NAME_PATTERN = /[]/gm
