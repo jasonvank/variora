@@ -28,6 +28,7 @@ function tinymceInit() {
     paste_as_text: true,
     branding: false,
     width: 'calc(100% - 2px)',
+    default_link_target: "_blank",
     images_upload_handler: function(blobInfo, success, failure) {
       const n = blobInfo.filename()
       const extension = '.' + n.split('.')[n.split('.').length - 1]
@@ -72,7 +73,7 @@ function tinymceInit() {
         onclick: function() {
           editor.insertContent('$$ write LATEX here $$')
         }
-      });
+      })
     }
   })
   $(document).on('focusin', function(e) {
