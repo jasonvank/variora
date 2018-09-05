@@ -251,7 +251,7 @@ class AppBeforeConnect extends React.Component {
                 style={{ fontSize: 18, marginLeft: 28, verticalAlign: 'middle' }}
               />
               <span style={{ marginRight: 12, marginLeft: 28, color: '#666' }}>{ this.state.user.nickname }</span>
-              { this.state.user.is_authenticated ? <a onClick={this.signOff}>sign off</a> : <a href="/sign-in">sign in</a> }
+              { this.state.user.is_authenticated ? <a onClick={this.signOff}>Sign Off</a> : <a href="/sign-in">sign in</a> }
               <Avatar
                 style={{ marginLeft: 28, marginRight: 18, marginTop: -2, verticalAlign: 'middle' }}
                 size={'large'}
