@@ -139,12 +139,12 @@ class NotificationsAlertButton extends React.Component {
 
   componentDidMount() {
     const self = this
-    axios.get(getUrlFormat('/notifications/api/unread'))
+    axios.get(getUrlFormat('/notifications/api/combined'))
       .then(response => {
         self.setState({
           data: response.data,
           show: response.data.length > 0 ? true : false,
-          length: response.data.length
+          length: response.data.filter(item => item.unread == true).length,
         })
       })
   }
