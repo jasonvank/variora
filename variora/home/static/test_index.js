@@ -272,13 +272,13 @@ class AppBeforeConnect extends React.Component {
                 defaultSelectedKeys={this.getHighlightedMenuItems()}
               >
                 <Menu.Item key="explore" >
-                  <Link to="/explore"><span><Icon type="compass" />explore</span></Link>
+                  <Link to="/explore"><span><Icon type="compass" />Explore</span></Link>
                 </Menu.Item>
                 <Menu.Item key="documents" disabled={!this.state.user.is_authenticated}>
-                  <Link to="/"><span><Icon type='file' />documents</span></Link>
+                  <Link to="/"><span><Icon type='file' />Documents</span></Link>
                 </Menu.Item>
 
-                <SubMenu key="created_readlists" title={<span><Icon type="folder-open" />created readlists</span>} disabled={!this.state.user.is_authenticated}>
+                <SubMenu key="created_readlists" title={<span><Icon type="folder-open" />Created Readlists</span>} disabled={!this.state.user.is_authenticated}>
                   {
                     this.state.createdReadlists.map((readlist) => {
                       return (
@@ -290,7 +290,7 @@ class AppBeforeConnect extends React.Component {
                   }
                   <Menu.Item disabled={!this.state.user.is_authenticated} key={CREATE_NEW_GROUP_MENU_ITEM_KEY}><Icon type="plus"/></Menu.Item>
                 </SubMenu>
-                <SubMenu key="collected_readlists" title={<span><Icon type="folder" />collected readlists</span>} disabled={!this.state.user.is_authenticated}>
+                <SubMenu key="collected_readlists" title={<span><Icon type="folder" />Collected Readlists</span>} disabled={!this.state.user.is_authenticated}>
                   {
                     this.state.collectedReadlists.map((readlist) => {
                       return (
