@@ -49,15 +49,15 @@ def search_api_view(request):
                 return DocumentEncoder().default(obj)
             elif isinstance(obj, Readlist):
                 return ReadlistListEncoder().default(obj)
-            elif isinstance(obj, Coterie):
-                return SearchResultCoterieEncoder().default(obj)
+            # elif isinstance(obj, Coterie):
+            #     return SearchResultCoterieEncoder().default(obj)
             else:
                 return super(CombinedEncoder, self).default(obj)
 
     result_documents = list(Document.objects.filter_with_related(title__icontains=key))[:100]  # case-insensitive contain
     result_users = list(User.objects.filter(Q(nickname__icontains=key) | Q(email_address__icontains=key)))[:100]
     # result_coteries = list(Coterie.objects.filter(Q(name__icontains=key) | Q(id__icontains=key)))[:100]
-    result_readlists = list(Readlist.objects.filter(Q(name__icontains=key)).filter(is_public=True))[:100]
+    result_readlists = list(Readlist.objects.filter(Q(name__icontains=key) | Q(description__icontains=key)).filter(is_public=True))[:100]
     return JsonResponse(
         {
             'resultDocuments': result_documents,
