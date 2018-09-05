@@ -63,6 +63,7 @@ class NotificationsList extends React.Component {
       axios.get(record.mark_read_url)
       this.state.data[index].unread = false
       this.forceUpdate()
+      this.props.unreadNotificationsLeftCallback()
       this.checkLeftUnreadNotifications()
     }
 
@@ -72,7 +73,7 @@ class NotificationsList extends React.Component {
     }
   }
 
-  render(){
+  render() {
     const columns = [{
       title: 'Avatar',
       key: 'avatar',
@@ -128,6 +129,9 @@ class NotificationsAlertButton extends React.Component {
     this.removeBadgeCallback = () => {
       this.setState({show: false})
     }
+    this.unreadNotificationsLeftCallback = () => {
+      this.setState({length: this.state.length - 1})
+    }
   }
 
   componentDidMount() {
@@ -136,16 +140,17 @@ class NotificationsAlertButton extends React.Component {
       .then(response => {
         self.setState({
           data: response.data,
-          show: response.data.length > 0 ? true : false
+          show: response.data.length > 0 ? true : false,
+          length: response.data.length
         })
       })
   }
 
   render() {
     return (
-      <Badge dot={this.state.show} style={{ backgroundColor: '#52c41a', marginTop: -5 }}>
+      <Badge count={this.state.length} style={{ backgroundColor: '#52c41a', marginTop: -5 }}>
         <Popover
-          content={<NotificationsList data={this.state.data} removeBadgeCallback={this.removeBadgeCallback}/>}
+          content={<NotificationsList data={this.state.data} removeBadgeCallback={this.removeBadgeCallback} unreadNotificationsLeftCallback={this.unreadNotificationsLeftCallback} />}
           trigger='click'
           visible={this.state.visible}
           onVisibleChange={this.handleVisibleChange}
