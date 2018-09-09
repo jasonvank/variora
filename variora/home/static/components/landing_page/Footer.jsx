@@ -9,64 +9,27 @@ function Footer() {
         <Row>
           <Col lg={6} sm={24} xs={24}>
             <div className="footer-center">
-              <h2>Ant Design</h2>
+              <h2>Variora</h2>
               <div>
-                <a target="_blank " href="https://github.com/ant-design/ant-design">
+                <a target="_blank " href="https://github.com/R-o-y/variora">
                   GitHub
                 </a>
               </div>
               <div>
-                <a href="http://pro.ant.design">Ant Design Pro</a>
+                <a href="http://variora.ml">Variora.ml</a>
               </div>
-              <div>
-                <a href="http://mobile.ant.design">Ant Design Mobile</a>
-              </div>
-              <div>
-                <a href="http://ng.ant.design">NG-ZORRO</a>
-                <span> - </span>
-                Ant Design of Angular
-              </div>
-              <div>
-                <a target="_blank " href="https://github.com/websemantics/awesome-ant-design">
-                  Awesome Ant Design
-                </a>
-              </div>
-              <div>
-                <a target="_blank " href="http://ant-design.gitee.io/">
-                  国内镜像站点 🇨🇳
-                </a>
-              </div>
+              
             </div>
           </Col>
           <Col lg={6} sm={24} xs={24}>
             <div className="footer-center">
               <h2>资源链接</h2>
               <div>
-                <a href="http://scaffold.ant.design">Scaffolds</a>
-                <span> - </span>
-                脚手架市场
-              </div>
-              <div>
                 <a target="_blank" rel="noopener noreferrer" href="https://github.com/dvajs/dva">dva</a> - 应用框架
               </div>
               <div>
                 <a target="_blank" rel="noopener noreferrer" href="https://github.com/dvajs/dva-cli">dva-cli</a> -
                 开发工具
-              </div>
-              <div>
-                <a target="_blank" rel="noopener noreferrer" href="http://motion.ant.design">Ant Motion</a>
-                <span> - </span>
-                设计动效
-              </div>
-              <div>
-                <a target="_blank" rel="noopener noreferrer" href="http://library.ant.design/">AntD Library</a>
-                <span> - </span>
-                Axure 部件库
-              </div>
-              <div>
-                <a target="_blank" rel="noopener noreferrer" href="http://ux.ant.design">Ant UX</a>
-                <span> - </span>
-                页面逻辑素材
               </div>
             </div>
           </Col>
@@ -103,16 +66,6 @@ function Footer() {
                   讨论列表
                 </a>
               </div>
-              <div>
-                <a target="_blank" rel="noopener noreferrer" href="http://stackoverflow.com/questions/tagged/antd">
-                  StackOverflow
-                </a>
-              </div>
-              <div>
-                <a target="_blank" rel="noopener noreferrer" href="https://segmentfault.com/t/antd">
-                  SegmentFault
-                </a>
-              </div>
             </div>
           </Col>
           <Col lg={6} sm={24} xs={24}>
@@ -125,11 +78,6 @@ function Footer() {
                 <a target="_blank" rel="noopener noreferrer" href="https://antv.alipay.com/">AntV</a>
                 <span> - </span>
                 数据可视化
-              </div>
-              <div>
-                <a target="_blank" rel="noopener noreferrer" href="https://eggjs.org/">Egg</a>
-                <span> - </span>
-                企业级 Node 开发框架
               </div>
             </div>
           </Col>
@@ -160,8 +108,8 @@ function Footer() {
               权益保障承诺书
             </a>
           </span>
-          <span style={{ marginRight: 12 }}>ICP 证浙 B2-2-100257</span>
-          <span style={{ marginRight: 12 }}>Copyright © 蚂蚁金融服务集团</span>
+          <span style={{ marginRight: 12 }}>ICP B2-2-100257</span>
+          <span style={{ marginRight: 12 }}>Copyright © Variora</span>
         </Col>
       </Row>
     </footer>

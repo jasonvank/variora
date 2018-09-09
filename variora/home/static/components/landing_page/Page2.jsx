@@ -9,20 +9,21 @@ import svgBgToParallax from './util.jsx';
 const page2Data = [
   {
     img: 'https://gw.alipayobjects.com/zos/rmsportal/eYNnmGagLWdrkdMHVUuA.svg',
-    name: 'Ant Design Components',
+    name: 'Variora Components',
   }, {
     img: 'https://gw.alipayobjects.com/zos/rmsportal/EPaPtDVGnJhyqyBAUZMl.svg',
-    name: 'Ant Design Pro',
-    slogan: (<p>You deserve it</p>),
-  }, {
-    img: 'https://gw.alipayobjects.com/zos/rmsportal/GobRAKexhfTSJdLFzDFY.svg',
-    name: 'Ant Design Mobile',
-    slogan: (<p>You deserve it</p>),
-  }, {
+    name: 'Real-time Annotation',
+    slogan: (<p>Variora utilitzes the methods to add collaborative annotations in the documentations.</p>),
+  },{
     img: 'https://gw.alipayobjects.com/zos/rmsportal/slVtnOCcgeAcLEPwtewY.svg',
-    name: 'AntV',
-    slogan: (<p>You deserve it</p>),
-  },
+    name: 'Corresponding Comments',
+    slogan: (<p>The annotation comments will be listed on the righthand side. 
+      When clicking the commends, you could go to the position where the annotation is.</p>),
+  },{
+    img: 'https://gw.alipayobjects.com/zos/rmsportal/GobRAKexhfTSJdLFzDFY.svg',
+    name: 'Documentation List',
+    slogan: (<p>Saving your documentations in a list for better classification.</p>),
+  }, 
 ]
 
 const svgBgChild = [
