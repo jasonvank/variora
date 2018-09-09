@@ -3,14 +3,14 @@ import React from 'react';
 import ScrollParallax from 'rc-scroll-anim/lib/ScrollParallax';
 
 function ParallaxG(props) {
-  return <ScrollParallax component="g" {...props} />;
+  return <ScrollParallax component='g' {...props} />;
 }
 
 export default function svgBgToParallax(children, i = 0) {
   const svgChildren = React.Children.toArray(children).map((child, ii) => (
     <ParallaxG
       key={ii.toString()}
-      location="page2"
+      location='page2'
       animation={{
         y: (Math.random() * -200) - 30 - (i * 20),
         playScale: [0, Math.random() + 2],
@@ -33,7 +33,6 @@ document.body.appendChild(div);
   'https://gw.alipayobjects.com/zos/rmsportal/TOElddMOrCWlgZvWTJna.png',
   'https://gw.alipayobjects.com/zos/rmsportal/FpKOqFadwoFFIZFExjaf.png',
   'https://gw.alipayobjects.com/zos/rmsportal/IauKICnGjGnotJBEyCRK.png',
-
   'https://gw.alipayobjects.com/zos/rmsportal/URIeCOKLMAbRXaeXoNqN.svg',
   'https://gw.alipayobjects.com/zos/rmsportal/qXncdwwUTTgUFnsbCNCE.svg',
   'https://gw.alipayobjects.com/zos/rmsportal/YFXXZocxAgjReehpPNbX.svg',
@@ -50,8 +49,8 @@ document.body.appendChild(div);
   'https://gw.alipayobjects.com/zos/rmsportal/dgjVqwkJvptQEtlfctvk.svg',
   'https://gw.alipayobjects.com/zos/rmsportal/vUxYuDdsbBBcMDxSGmwc.svg',
 ].forEach((src) => {
-  const img = new Image();
-  img.src = src;
-  div.appendChild(img);
-});
+  const img = new Image()
+  img.src = src
+  div.appendChild(img)
+})
 

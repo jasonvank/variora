@@ -17,9 +17,9 @@ import {
 } from 'react-router-dom'
 import './components/landing_page/static/style';
 
-enquireScreen((b) => {
-  isMobile = b;
-});
+// enquireScreen((b) => {
+//   isMobile = b;
+// });
 
 class Home extends React.PureComponent {
   constructor(props) {
@@ -29,13 +29,13 @@ class Home extends React.PureComponent {
     };
   }
 
-  componentDidMount() {
-    enquireScreen((b) => {
-      this.setState({
-        isMobile: !!b,
-      });
-    });
-  }
+  // componentDidMount() {
+  //   enquireScreen((b) => {
+  //     this.setState({
+  //       isMobile: !!b,
+  //     });
+  //   });
+  // }
 
   onEnterChange = (mode) => {
     this.setState({

@@ -46,13 +46,13 @@ class Home extends React.PureComponent {
   render() {
     return (
       [
-        // <HeaderPage key="header" isFirstScreen={this.state.isFirstScreen} />,
-        <Banner key="banner" onEnterChange={this.onEnterChange} />,
-        <Page1 key="page1" />,
-        <Page2 key="page2" />,
-        <Page3 key="page3" />,
-        <Footer key="footer" />,
-        <DocumentTitle title="Variora" key="title" />,
+        // <HeaderPage key='header' isFirstScreen={this.state.isFirstScreen} />,
+        <Banner key='banner' onEnterChange={this.onEnterChange} />,
+        <Page1 key='page1' />,
+        <Page2 key='page2' />,
+        <Page3 key='page3' />,
+        <Footer key='footer' />,
+        <DocumentTitle title='Variora' key='title' />,
       ]
     );
   }
