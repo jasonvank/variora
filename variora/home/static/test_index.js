@@ -252,7 +252,7 @@ class AppBeforeConnect extends React.Component {
                 style={{ fontSize: 18, marginLeft: 28, verticalAlign: 'middle' }}
               />
               <span style={{ marginRight: 12, marginLeft: 28, color: '#666' }}>{ this.state.user.nickname }</span>
-              { this.state.user.is_authenticated ? <a onClick={this.signOff}>sign off</a> : <a href="/sign-in">sign in</a> }
+              { this.state.user.is_authenticated ? <a onClick={this.signOff}>Sign Off</a> : <a href="/sign-in">sign in</a> }
               <Avatar
                 style={{ marginLeft: 28, marginRight: 18, marginTop: -2, verticalAlign: 'middle' }}
                 size={'large'}
@@ -273,13 +273,13 @@ class AppBeforeConnect extends React.Component {
                 defaultSelectedKeys={this.getHighlightedMenuItems()}
               >
                 <Menu.Item key="explore" >
-                  <Link to="/explore"><span><Icon type="compass" />explore</span></Link>
+                  <Link to="/explore"><span><Icon type="compass" />Explore</span></Link>
                 </Menu.Item>
                 <Menu.Item key="documents" disabled={!this.state.user.is_authenticated}>
-                  <Link to="/"><span><Icon type='file' />documents</span></Link>
+                  <Link to="/"><span><Icon type='file' />Documents</span></Link>
                 </Menu.Item>
 
-                <SubMenu key="created_readlists" title={<span><Icon type="folder-open" />created readlists</span>} disabled={!this.state.user.is_authenticated}>
+                <SubMenu key="created_readlists" title={<span><Icon type="folder-open" />Created Readlists</span>} disabled={!this.state.user.is_authenticated}>
                   {
                     this.state.createdReadlists.map((readlist) => {
                       return (
@@ -291,7 +291,7 @@ class AppBeforeConnect extends React.Component {
                   }
                   <Menu.Item disabled={!this.state.user.is_authenticated} key={CREATE_NEW_GROUP_MENU_ITEM_KEY}><Icon type="plus"/></Menu.Item>
                 </SubMenu>
-                <SubMenu key="collected_readlists" title={<span><Icon type="folder" />collected readlists</span>} disabled={!this.state.user.is_authenticated}>
+                <SubMenu key="collected_readlists" title={<span><Icon type="folder" />Collected Readlists</span>} disabled={!this.state.user.is_authenticated}>
                   {
                     this.state.collectedReadlists.map((readlist) => {
                       return (

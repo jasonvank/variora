@@ -37,7 +37,6 @@
     "rc-scroll-anim": "^2.1.0",
     "rc-tween-one": "^1.5.5",
     "react-document-title": "^2.0.3",
-    "react-github-button": "^0.1.11",
     "compression-webpack-plugin": "^1.1.11",
     "css-loader": "^0.28.11",
     "d3-time-format": "^2.1.1",
