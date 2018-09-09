@@ -27,6 +27,7 @@ import { fetchUser, setCollectedReadlists } from './redux/actions.js'
 import { initialStore } from './redux/init_store.js'
 import { connect } from 'react-redux'
 import TextArea from '../../../node_modules/antd/lib/input/TextArea'
+// import { Home } from './components/landing_page/index.jsx'
 
 const FormItem = Form.Item
 

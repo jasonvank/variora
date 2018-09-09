@@ -2,12 +2,12 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import DocumentTitle from 'react-document-title';
 import { enquireScreen } from 'enquire-js';
-import HeaderPage from './components/landing_page/Header.jsx';
-import Banner from './components/landing_page/Banner.jsx';
-import Page1 from './components/landing_page/Page1.jsx';
-import Page2 from './components/landing_page/Page2.jsx';
-import Page3 from './components/landing_page/Page3.jsx';
-import Footer from './components/landing_page/Footer.jsx';
+// import HeaderPage from './components/landing_page/Header.jsx';
+import Banner from 'Banner.jsx';
+import Page1 from 'Page1.jsx';
+import Page2 from 'Page2.jsx';
+import Page3 from 'Page3.jsx';
+import Footer from 'Footer.jsx';
 
 import {
   Link,
@@ -17,6 +17,7 @@ import {
 } from 'react-router-dom'
 import './components/landing_page/static/style';
 
+let isMobile = false;
 enquireScreen((b) => {
   isMobile = b;
 });
@@ -45,7 +46,7 @@ class Home extends React.PureComponent {
   render() {
     return (
       [
-        <HeaderPage key="header" isFirstScreen={this.state.isFirstScreen} />,
+        // <HeaderPage key="header" isFirstScreen={this.state.isFirstScreen} />,
         <Banner key="banner" onEnterChange={this.onEnterChange} />,
         <Page1 key="page1" />,
         <Page2 key="page2" />,
@@ -57,4 +58,4 @@ class Home extends React.PureComponent {
   }
 }
 
-ReactDOM.render( <Home />, document.getElementById('main'))
+export { Home }

@@ -128,7 +128,6 @@ def display_index_explore(request):
 def jason_test(request):
     return render(request, 'home/jason_test.html', {})
 
-
 def handle_image_upload(request):
     return HttpResponse(status=404)
     # user = request.user
