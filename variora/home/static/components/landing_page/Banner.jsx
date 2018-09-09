@@ -47,9 +47,9 @@ class Banner extends React.PureComponent {
               Variora
             </h1>
             <p key="p">
-              a web-based collaborative annotation tool that facilitates
+              A web-based collaborative annotation tool that facilitates
               communication among students and their instructors,
-              centered around better understanding of course reading material.
+              centered around better understanding of course reading materials.
             </p>
           </QueueAnim>
           {(
