@@ -7,9 +7,15 @@
     style="padding-right: 0"
   >
     {% if annotation_reply.reply_to_annotation_reply.replier %}  <!-- if reply to reply -->
-    <span style="font-size: 66%; float: left;">
-        <i class="fa fa-share" aria-hidden="true"></i>&nbsp&nbsp&nbspreply to <i><b>{{ annotation_reply.reply_to_annotation_reply.replier.nickname }}</b></i>:
-    </span><br>
+      {% if annotation_reply.reply_to_annotation_reply.is_public %}
+        <span style="font-size: 66%; float: left;">
+          <i class="fa fa-share" aria-hidden="true"></i>&nbsp&nbsp&nbspreply to <i><b>{{ annotation_reply.reply_to_annotation_reply.replier.nickname }}</b></i>:
+        </span><br>
+      {% else %}
+        <span style="font-size: 66%; float: left;">
+          <i class="fa fa-share" aria-hidden="true"></i>&nbsp&nbsp&nbspreply to <i><b>Anonymous</b></i>:
+        </span><br>
+      {% endif %}
     {% endif %}
     <div class="annotation-reply-content"> {{ annotation_reply.content|safe|linebreaks }} </div>
     <footer>
