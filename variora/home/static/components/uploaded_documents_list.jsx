@@ -111,7 +111,7 @@ class UploadedDocumentsList extends React.Component {
 
   render() {
     const columns = [{
-      title: 'Id',
+      title: '#',
       dataIndex: 'id',
       width: '20%',
       render: (text, record) => this.state.data.indexOf(record) + 1
