@@ -185,6 +185,15 @@ function startListeningSelectionBoxCreation() {
           }
         })
 
+        // ESC to discard current annotation
+        $(document).on('keyup', function(e) {
+          if (e.keyCode == 27) { // escape key maps to keycode `27`
+            layer.close(annotationWindow)
+            new_annotation.remove()
+            $(document).off('keyup')
+          }
+        })
+
         // annotationWindowJqueryObject will return the jquery object of the annotation window
         var annotationWindowJqueryObject = $('.layui-layer[times="{0}"]'.format(annotationWindow))
         annotationWindowJqueryObject.find('.post_annotation_button').on('click', function() {
@@ -393,6 +402,7 @@ $(document).ready(function() {
   enablePostCommentButton()
   enableRefreshCommentButton()
   enableResizeButton()
+  enableResizeShortcut()
   prepareNavbarFunction()
 
   $(window).resize(function() {
@@ -428,6 +438,33 @@ $(document).ready(function() {
   insertPageDividers()
 })
 
+
+function enableResizeShortcut() {
+  $(document).off('keydown')
+  $(document).keydown(function(event) {
+    if ((event.ctrlKey || event.metaKey) && event.which == 187) {  // +
+      event.preventDefault()
+      pdfScale(scaleFactor)
+    } else if ((event.ctrlKey || event.metaKey) && event.which == 189) {  // -
+      event.preventDefault()
+      pdfScale(1 / scaleFactor)
+    }
+  })
+}
+
+
+function disableResizeShortcut() {
+  $(document).off('keydown')
+  $(document).keydown(function(event) {
+    if ((event.ctrlKey || event.metaKey) && event.which == 187) {  // +
+      event.preventDefault()
+    } else if ((event.ctrlKey || event.metaKey) && event.which == 189) {  // -
+      event.preventDefault()
+    }
+  })
+}
+
+
 function insertPageDividers() {
   var page = '0'
   for (const annotationDiv of $('.AnnotationDiv')) {
@@ -440,10 +477,14 @@ function insertPageDividers() {
   }
 }
 
+
 function renderTaskList(taskList, finishList, scale) {
   if (taskList.length > 0) {
     rendering = true
+
     $('#btn-for-larger, #btn-for-smaller').attr('disabled', true)
+    disableResizeShortcut()
+
     var num = taskList[0][0]
     pdfDoc.getPage(num).then(function(page) {
       var page_canvas_id = 'page_canvas_' + num
@@ -469,7 +510,10 @@ function renderTaskList(taskList, finishList, scale) {
         taskList.shift()
         finishList.push(num)
         rendering = false
+
         $('#btn-for-larger, #btn-for-smaller').attr('disabled', false)
+        enableResizeShortcut()
+
         renderTaskList(taskList, finishList, scale)
       }, function(reason) {
         console.log('rejected because of this reason: ' + reason)
