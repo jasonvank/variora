@@ -2,7 +2,7 @@ import './css/sign_in_index.css'
 import 'regenerator-runtime/runtime'
 
 import { Button, Col, Form, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, notification } from 'antd'
-import { getCookie, getUrlFormat } from 'util.js'
+import { getCookie } from 'util.js'
 
 import React from 'react'
 import ReactDOM from 'react-dom'
@@ -52,11 +52,9 @@ class NormalLoginForm extends React.Component {
           userAgentApplication.acquireTokenPopup(applicationConfig.graphScopes).then(function(accessToken) {
             // updateUI()
           }, function(error) {
-            console.log(error)
           })
         })
-      }, function (error) {
-        console.log(error)
+      }, function(error) {
       })
     }
 
@@ -161,79 +159,84 @@ class NormalLoginForm extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form
     return (
-      <Row style={{ marginTop: '8%' }}>
-        <Col span={8} offset={8}>
-          <Form onSubmit={this.handleSubmit} className='login-form' style={{ margin: 'auto' }}>
-            <FormItem
-            >
-              {getFieldDecorator('email_address', {
-                rules: [
-                  // { required: true, message: 'Please input your email!' },
-                  // { type: 'email', message: 'Please input an valid email address'}
-                ],
-                validateTrigger: 'onSubmit'
-              })(
-                <Input prefix={<Icon type='mail' style={{ fontSize: 13 }} />} placeholder='Email' />
-              )}
-            </FormItem>
-            <FormItem>
-              {getFieldDecorator('password', {
-                // rules: [{ required: true, message: 'Please input your Password!' }],
-              })(
-                <Input prefix={<Icon type='lock' style={{ fontSize: 13 }} />} type='password' placeholder='Password' />
-              )}
-            </FormItem>
-            <FormItem>
-              <a className='login-form-forgot' href=''>Forgot password</a>
-              <Button type='primary' htmlType='submit' className='login-form-button'>
-                Log in
-              </Button>
-              Or <a href=''>register now!</a> (coming soon)
-              <div id='third-party-login' style={{ marginTop: 28 }}>
-                <Button
-                  style={{ backgroundColor:'#DD4B39', borderColor:'#DD4B39', marginTop: 16, color: 'white' }}
-                  className='login-form-button'
-                  htmlType='button'
-                  id='google-login'
-                >
-                  <i className='fa fa-google' aria-hidden='true'></i>
-                  {'  '}Log in with Google
+      <div>
+        <Row style={{ textAlign: 'center', marginTop: '6%' }}>
+          <a href='/'><img src="/media/logo.png" height={66} /></a>
+        </Row>
+        <Row style={{ marginTop: '3%' }}>
+          <Col span={8} offset={8}>
+            <Form onSubmit={this.handleSubmit} className='login-form' style={{ margin: 'auto' }}>
+              <FormItem
+              >
+                {getFieldDecorator('email_address', {
+                  rules: [
+                    // { required: true, message: 'Please input your email!' },
+                    // { type: 'email', message: 'Please input an valid email address'}
+                  ],
+                  validateTrigger: 'onSubmit'
+                })(
+                  <Input prefix={<Icon type='mail' style={{ fontSize: 13 }} />} placeholder='Email' />
+                )}
+              </FormItem>
+              <FormItem>
+                {getFieldDecorator('password', {
+                  // rules: [{ required: true, message: 'Please input your Password!' }],
+                })(
+                  <Input prefix={<Icon type='lock' style={{ fontSize: 13 }} />} type='password' placeholder='Password' />
+                )}
+              </FormItem>
+              <FormItem>
+                <a className='login-form-forgot' href=''>Forgot password</a>
+                <Button type='primary' htmlType='submit' className='login-form-button'>
+                  Log in
                 </Button>
-                <Button
-                  style={{ backgroundColor:'#3b5998', borderColor:'#3b5998', marginTop: 16, color: 'white' }}
-                  className='login-form-button'
-                  htmlType='button'
-                  id='facebook-login'
-                  onClick={this.facebookLogin}
-                  loading={this.state.fbLoginButtonLoading}
-                >
-                  <i className='fa fa-facebook-official' aria-hidden='true'></i>
-                  {'  '}Log in with Facebook
-                </Button>
-                <Button
-                  style={{ backgroundColor:'#0078D7', borderColor:'#0078D7', marginTop: 16, color: 'white' }}
-                  className='login-form-button'
-                  htmlType='button'
-                  id='microsoft-login'
-                  onClick={this.displayMicrosoftLogin}
-                >
-                  <i className='fa fa-windows' aria-hidden='true'></i>
-                  {'  '}Log in with Office365
-                </Button>
-                {/*<Button*/}
-                  {/*style={{backgroundColor: 'orange', borderColor: 'orange', marginTop: 16, color: 'white'}}*/}
-                  {/*className='login-form-button'*/}
-                  {/*htmlType='button'*/}
-                  {/*type='primary'*/}
-                  {/*onClick={this.redirectToNUSSignIn}*/}
-                {/*>*/}
-                  {/*Log in with NUS ID*/}
-                {/*</Button>*/}
-              </div>
-            </FormItem>
-          </Form>
-        </Col>
-      </Row>
+                Or <a href=''>register now!</a> (coming soon)
+                <div id='third-party-login' style={{ marginTop: 28 }}>
+                  <Button
+                    style={{ backgroundColor:'#DD4B39', borderColor:'#DD4B39', marginTop: 16, color: 'white' }}
+                    className='login-form-button'
+                    htmlType='button'
+                    id='google-login'
+                  >
+                    <i className='fa fa-google' aria-hidden='true'></i>
+                    {'  '}Log in with Google
+                  </Button>
+                  <Button
+                    style={{ backgroundColor:'#3b5998', borderColor:'#3b5998', marginTop: 16, color: 'white' }}
+                    className='login-form-button'
+                    htmlType='button'
+                    id='facebook-login'
+                    onClick={this.facebookLogin}
+                    loading={this.state.fbLoginButtonLoading}
+                  >
+                    <i className='fa fa-facebook-official' aria-hidden='true'></i>
+                    {'  '}Log in with Facebook
+                  </Button>
+                  <Button
+                    style={{ backgroundColor:'#0078D7', borderColor:'#0078D7', marginTop: 16, color: 'white' }}
+                    className='login-form-button'
+                    htmlType='button'
+                    id='microsoft-login'
+                    onClick={this.displayMicrosoftLogin}
+                  >
+                    <i className='fa fa-windows' aria-hidden='true'></i>
+                    {'  '}Log in with Office365
+                  </Button>
+                  {/*<Button*/}
+                    {/*style={{backgroundColor: 'orange', borderColor: 'orange', marginTop: 16, color: 'white'}}*/}
+                    {/*className='login-form-button'*/}
+                    {/*htmlType='button'*/}
+                    {/*type='primary'*/}
+                    {/*onClick={this.redirectToNUSSignIn}*/}
+                  {/*>*/}
+                    {/*Log in with NUS ID*/}
+                  {/*</Button>*/}
+                </div>
+              </FormItem>
+            </Form>
+          </Col>
+        </Row>
+      </div>
     )
   }
 }
