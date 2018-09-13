@@ -14,7 +14,7 @@ function tinymceInit() {
   tinymce.init({
     menubar: false,
     selector: "textarea",
-    forced_root_block: false,
+    // forced_root_block: false,
     plugins: [
       'advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker',
       'searchreplace visualblocks visualchars codesample fullscreen insertdatetime media nonbreaking',
