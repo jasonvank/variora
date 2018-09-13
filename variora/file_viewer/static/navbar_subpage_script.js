@@ -109,6 +109,7 @@ function prepareNavbarFunction() {
       for (var readlist of createdReadlists) {
         var newCheckbox = checkboxTemplate.clone()
         newCheckbox.find('label').text(readlist.name)
+        newCheckbox.attr('title', readlist.name)
         newCheckbox.find('input').val(readlist.uuid).addClass('readlist-checkbox')
         newCheckbox.css('display', 'block')
         if (readlist.documents_uuids.includes($('#document-uuid').val()))
