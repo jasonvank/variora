@@ -183,7 +183,7 @@ input {
 .annotation-reply-content img,
 .comment-content img {
   border-radius: 1.8px;
-  max-width: 66%;
+  max-width: 80%;
   height: auto;
 }
 
