@@ -300,12 +300,25 @@ function addAnnotationRelatedListenerWithin(jq) {
   })
 
   jq.find('.ReplyAnnotationButton').on('click', function() {
-    const currentVisible = !$(this).css('display') === 'none'
-    $(this).parents('footer').children('form').slideToggle({duration: 180, start: function() {
-      if (!currentVisible)
-        $('.ReplyAnnotationButton').parents('footer').children('form').not($(this)).slideUp(180).css('display', 'none')
-      tinyMCE.get($(this).find('textarea').attr('id')).focus()
-    }})
+    const thisForm = $(this).parents('footer').children('form')
+    const thisFormEle = thisForm[0]
+    const currentVisible = !thisFormEle.style.display === 'none'
+
+    if (thisFormEle.style.display === 'none') {
+      thisFormEle.style.display = 'block'
+    } else
+      thisFormEle.style.display = 'none'
+
+    if (!currentVisible) {
+      tinyMCE.get(thisForm.find('textarea').attr('id')).focus()
+      $('.ReplyAnnotationButton').parents('footer').children('form').not(thisForm).css('display', 'none')
+    }
+
+    // $(this).parents('footer').children('form').slideToggle({duration: 180, start: function() {
+    //   if (!currentVisible)
+    //     $('.ReplyAnnotationButton').parents('footer').children('form').not($(this)).slideUp(180).css('display', 'none')
+    //   tinyMCE.get($(this).find('textarea').attr('id')).focus()
+    // }})
   })
 
   jq.find('.EditFormToggleButton').on('click', function() {

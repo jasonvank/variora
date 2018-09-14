@@ -9,5 +9,9 @@
 <body>
     <div id="main"></div>
 </body>
-<script src="/static/bundle/home/jason_test_index.js"></script>
+{% if DEBUG %}
+  <script src="/static/bundle/home/jason_test_index.js"></script>
+{% else %}
+  <script src="/static/bundle/home/jason_test_index.js"></script>
+{% endif %}
 </html>
