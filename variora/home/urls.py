@@ -12,7 +12,7 @@ urlpatterns = [  # obsolete UI pages
 ] + [  # new UI with react and restful APIs
     url(r'^api/', include('home.api.urls')),
 
-    url(r'^jason_test', views.jason_test),
+    # url(r'^jason_test', views.jason_test),
 
     url(r'^sign-in$', views.display_sign_in_page),
 
