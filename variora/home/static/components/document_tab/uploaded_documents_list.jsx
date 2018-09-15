@@ -85,7 +85,7 @@ class UploadedDocumentsList extends React.Component {
       }))
         .then(response => {
           this.setState({
-            data: response.data['uploadedDocuments']
+            data: response.data['uploadedDocuments'].sort((a, b) => a.title > b.title)
           })
         })
         .catch(e => { message.warning(e.message) })
@@ -144,7 +144,7 @@ class UploadedDocumentsList extends React.Component {
     }]
     return (
       <Table
-        dataSource={this.state.data.sort((a, b) => a.title > b.title)}
+        dataSource={this.state.data}
         columns={columns}
         pagination={false}
         rowKey={record => record.pk}

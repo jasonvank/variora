@@ -146,7 +146,7 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
                 </span>
               </div>
               <Table
-                dataSource={this.state.readlist.documents.sort((a, b) => a.title > b.title)}
+                dataSource={this.state.readlist.documents}
                 columns={columns}
                 pagination={false}
                 rowKey={record => record.pk}

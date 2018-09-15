@@ -39,7 +39,10 @@ class ReadlistTabBeforeConnect extends React.Component {
     this.updateData = () => {
       axios.get(getUrlFormat('/file_viewer/api/readlists/' + this.state.readlistSlug, {})).then(response => {
         this.setState({
-          readlist: response.data,
+          readlist: {
+            ...response.data,
+            documents: response.data.documents.sort((a, b) => a.title > b.title)
+          },
           isOwner: this.state.user.email_address == response.data.owner.email_address
         })
       }).catch(e => { message.warning(e.message) })
