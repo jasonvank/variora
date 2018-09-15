@@ -281,7 +281,7 @@ class AppBeforeConnect extends React.Component {
 
                 <SubMenu key="created_readlists" title={<span><Icon type="folder-open" />Created Readlists</span>} disabled={!this.state.user.is_authenticated}>
                   {
-                    this.state.createdReadlists.map((readlist) => {
+                    this.state.createdReadlists.sort((a, b) => a.name > b.name).map((readlist) => {
                       return (
                         <Menu.Item key={'readlists' + readlist.slug}>
                           <Link style={{ overflow: 'hidden', textOverflow: 'ellipsis' }} to={ '/readlists/' + readlist.slug }><span>{ readlist.name }</span></Link>
@@ -293,7 +293,7 @@ class AppBeforeConnect extends React.Component {
                 </SubMenu>
                 <SubMenu key="collected_readlists" title={<span><Icon type="folder" />Collected Readlists</span>} disabled={!this.state.user.is_authenticated}>
                   {
-                    this.state.collectedReadlists.map((readlist) => {
+                    this.state.collectedReadlists.sort((a, b) => a.name > b.name).map((readlist) => {
                       return (
                         <Menu.Item key={'readlists' + readlist.slug}>
                           <Link style={{ overflow: 'hidden', textOverflow: 'ellipsis' }} to={ '/readlists/' + readlist.slug }><span>{ readlist.name }</span></Link>

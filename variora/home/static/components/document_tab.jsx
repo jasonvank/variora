@@ -4,9 +4,9 @@ import { Button, Col, Icon, Input, Layout, Menu, Modal, Row, Upload, notificatio
 import { Link, Route, BrowserRouter as Router, Switch } from 'react-router-dom'
 import { getCookie } from 'util.js'
 
-import { CollectedDocumentsList } from './collected_documents_list.jsx'
+import { CollectedDocumentsList } from './document_tab/collected_documents_list.jsx'
 import React from 'react'
-import { UploadedDocumentsList } from './uploaded_documents_list.jsx'
+import { UploadedDocumentsList } from './document_tab/uploaded_documents_list.jsx'
 import axios from 'axios'
 import { validateDocumentTitle, validateDocumentSize } from 'home_util.js'
 

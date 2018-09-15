@@ -12,14 +12,17 @@ def _delete_readlist(readlist):
     readlist.delete()
     return HttpResponse(status=200)
 
+
 def _collect_readlist(readlist, user):
     if readlist.creator.pk != user.pk:
         readlist.collectors.add(user)
     return HttpResponse(status=200)
 
+
 def _uncollect_readlist(readlist, user):
     readlist.collectors.remove(user)
     return HttpResponse(status=200)
+
 
 def _rename_readlist(readlist, request):
     new_name = request.POST['new_name']
@@ -27,17 +30,20 @@ def _rename_readlist(readlist, request):
     readlist.save()
     return HttpResponse(status=200)
 
+
 def _change_desc_of_readlist(readlist, request):
     new_desc = request.POST['new_desc']
     readlist.description = new_desc
     readlist.save()
     return HttpResponse(status=200)
 
+
 def _change_privacy_of_readlist(readlist, request):
     is_public = bool(request.POST['is_public'])
     readlist.is_public = is_public
     readlist.save()
     return HttpResponse(status=200)
+
 
 def _remove_document_from_readlist(readlist, user, request):
     documents = Document.objects.filter(uuid=request.POST['document_uuid'])
@@ -46,6 +52,7 @@ def _remove_document_from_readlist(readlist, user, request):
         return HttpResponse(status=200)
     else:
         return HttpResponse(status=404)
+
 
 class ReadlistView(View):
     def get(self, request, slug, **kwargs):
@@ -99,12 +106,22 @@ class ReadlistView(View):
 class ReadlistListView(View):
     def get(self, request):
         user = request.user
-        created_readlist = list(user.created_readlist_set.select_related('creator').all()) if user.is_authenticated else []
-        collected_readlist = list(user.collected_readlist_set.select_related('creator').filter(is_public=True)) if user.is_authenticated else []
-        prefetch_related_objects(created_readlist + collected_readlist, 'documents')
+        if not user.is_authenticated:
+            return JsonResponse({
+                'created_readlists': [],
+                'collected_readlists': []
+            }, encoder=ReadlistListEncoder, safe=False)
+
+        created_readlist = user.created_readlist_set.select_related('creator').all()
+        collected_readlist = user.collected_readlist_set.select_related('creator').filter(is_public=True)
+
+        list_of_created_readlist = list(created_readlist)
+        list_of_collected_readlist = list(collected_readlist)
+        prefetch_related_objects(list_of_created_readlist + list_of_collected_readlist, 'documents')
+
         return JsonResponse({
-            'created_readlists': created_readlist,
-            'collected_readlists': collected_readlist
+            'created_readlists': list_of_created_readlist,
+            'collected_readlists': list_of_collected_readlist
         }, encoder=ReadlistListEncoder, safe=False)
 
 

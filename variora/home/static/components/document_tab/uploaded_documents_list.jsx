@@ -144,7 +144,7 @@ class UploadedDocumentsList extends React.Component {
     }]
     return (
       <Table
-        dataSource={this.state.data}
+        dataSource={this.state.data.sort((a, b) => a.title > b.title)}
         columns={columns}
         pagination={false}
         rowKey={record => record.pk}
