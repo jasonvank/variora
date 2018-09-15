@@ -7,6 +7,7 @@ import React from 'react'
 import axios from 'axios'
 import TimeAgo from 'react-timeago'
 
+
 class NotificationsAvaratWrapper extends React.Component {
   constructor(props) {
     super(props)
@@ -25,6 +26,7 @@ class NotificationsAvaratWrapper extends React.Component {
   }
 }
 
+
 class NotificationsDetailsWrapper extends React.Component {
   constructor(props) {
     super(props)
@@ -34,11 +36,15 @@ class NotificationsDetailsWrapper extends React.Component {
   }
 
   render() {
-    var description = this.state.newNotification.description ? this.state.newNotification.description.trim() : ''
+    const description = this.state.newNotification.description ? this.state.newNotification.description.trim() : ''
     var verb = ''
-    var actionVerb = this.state.newNotification.verb
-    if (description == '') verb = 'replied'
-    else if (actionVerb == 'reply to annotation reply' || actionVerb == 'reply to annotation') verb = 'replied:'
+    const actionVerb = this.state.newNotification.verb
+
+    if (actionVerb == 'reply to annotation reply' || actionVerb == 'reply to annotation')
+      verb = description == '' ? 'replied' : 'replied:'
+    else if (actionVerb == 'post annotation')
+      verb = description == '' ? 'posted in your document' : 'posted in your document:'
+
     var title = this.state.newNotification.actor + ' ' + verb
 
     return (

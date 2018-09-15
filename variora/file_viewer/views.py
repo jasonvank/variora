@@ -110,6 +110,15 @@ class FileViewerView(View):
             annotation.frame_color = request.POST["frame_color"]
             annotation.is_public = True if request.POST["is_public"] == 'true' else False
             annotation.save()
+            notify.send(
+                sender=annotation.annotator,
+                recipient=document.owner,
+                action_object=annotation,
+                verb='post annotation',
+                redirect_url=annotation.url,
+                image_url=annotation.annotator.portrait_url,
+                description=h.handle(annotation.content),
+            )
             context = {
                 "document": document,
                 'annotation': annotation,
