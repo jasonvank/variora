@@ -110,15 +110,14 @@ class FileViewerView(View):
             annotation.frame_color = request.POST["frame_color"]
             annotation.is_public = True if request.POST["is_public"] == 'true' else False
             annotation.save()
-            notify.send(
-                sender=annotation.annotator,
-                recipient=document.owner,
-                action_object=annotation,
-                verb='post annotation',
-                redirect_url=annotation.url,
-                image_url=annotation.annotator.portrait_url,
-                description=h.handle(annotation.content),
-            )
+            if annotation.annotator.pk != document.owner.pk:
+                notify.send(
+                    sender=annotation.annotator, recipient=document.owner,
+                    action_object=annotation, verb='post annotation',
+                    redirect_url=annotation.url,
+                    image_url=annotation.annotator.portrait_url,
+                    description=h.handle(annotation.content),
+                )
             context = {
                 "document": document,
                 'annotation': annotation,
@@ -143,20 +142,16 @@ class FileViewerView(View):
                     annotation_reply.reply_to_annotation_reply = AnnotationReply.objects.get(id=int(request.POST["reply_to_annotation_reply_id"]))
                     if annotation_reply.reply_to_annotation_reply.replier.pk != annotation_reply.reply_to_annotation.annotator.pk:
                         notify.send(
-                            sender=annotation_reply.replier,
-                            recipient=annotation_reply.reply_to_annotation_reply.replier,
-                            action_object=annotation_reply,
-                            verb='reply to annotation reply',
+                            sender=annotation_reply.replier, recipient=annotation_reply.reply_to_annotation_reply.replier,
+                            action_object=annotation_reply, verb='reply to annotation reply',
                             redirect_url=annotation.url,
                             image_url=annotation_reply.replier.portrait_url,
                             description=h.handle(annotation_reply.content),
                         )
                 annotation_reply.save()
                 notify.send(
-                    sender=annotation_reply.replier,
-                    recipient=annotation_reply.reply_to_annotation.annotator,
-                    action_object=annotation_reply,
-                    verb='reply to annotation',
+                    sender=annotation_reply.replier, recipient=annotation_reply.reply_to_annotation.annotator,
+                    action_object=annotation_reply, verb='reply to annotation',
                     redirect_url=annotation.url,
                     image_url=annotation_reply.replier.portrait_url,
                     description=h.handle(annotation_reply.content),
