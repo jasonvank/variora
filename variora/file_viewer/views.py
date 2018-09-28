@@ -27,6 +27,18 @@ class FileViewerView(View):
         else:
             document = Document.objects.get(id=int(request.GET["document_id"]))
 
+
+        ########################
+
+        # Temporary access control
+        # TODO: use group feature when it is implemented
+
+        if document.owner.email_address.endswith('@ijc.sg') and not user.email_address.endswith('@ijc.sg'):
+            return HttpResponse(status=403)
+
+        #######################
+
+
         if request.POST["operation"] == "delete_annotation":
             annotation = Annotation.objects.get(id=int(request.POST["annotation_id"]))
             if user.pk != annotation.annotator.pk:
@@ -175,6 +187,19 @@ class FileViewerView(View):
             return HttpResponse(status=404)
 
         user = request.user
+
+
+        ########################
+
+        # Temporary access control
+        # TODO: use group feature when it is implemented
+
+        if document.owner.email_address.endswith('@qq.com') and not user.email_address.endswith('@ijc.sg'):
+            return HttpResponse('<h1>Sorry, this document is only limited to certain users.</h1>')
+
+        #######################
+
+
         collected = False
         if user.is_authenticated() and user in document.collectors.all():
             collected = True
