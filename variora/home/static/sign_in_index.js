@@ -2,7 +2,7 @@ import './css/sign_in_index.css'
 import 'regenerator-runtime/runtime'
 
 import { Button, Col, Form, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, notification } from 'antd'
-import { getCookie, getValFromUrlParam } from 'util.js'
+import { getCookie } from 'util.js'
 
 import React from 'react'
 import ReactDOM from 'react-dom'
@@ -30,13 +30,6 @@ class NormalLoginForm extends React.Component {
 
     const userAgentApplication = new Msal.UserAgentApplication(applicationConfig.clientID, null, authCallback, { redirectUri: window.location.href })
 
-    this.redirect = () => {
-      if (getValFromUrlParam('redirect') != null)
-        window.location.href = getValFromUrlParam('redirect')
-      else
-        window.location.href = '/'
-    }
-
     this.displayMicrosoftLogin = function() {
       userAgentApplication.loginPopup(applicationConfig.graphScopes).then(function(idToken) {
         //Login Success
@@ -47,7 +40,7 @@ class NormalLoginForm extends React.Component {
           data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
           data.append('accesstoken', accessToken)
           axios.post('/api/signin/microsoft', data).then((response) => {
-            this.redirect()
+            window.location.href = '/'
           }).catch(e => {
             notification['warning']({
               message: e.response == undefined ? '' : e.response.data,
@@ -79,7 +72,7 @@ class NormalLoginForm extends React.Component {
             data.append(key.toString(), values[key])
           data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
           axios.post('/api/signin', data).then((response) => {
-            this.redirect()
+            window.location.href = '/'
           }).catch(e => {
             notification['warning']({
               message: e.response == undefined ? '' : e.response.data,
@@ -96,7 +89,7 @@ class NormalLoginForm extends React.Component {
         data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
         data.append('auth_response', JSON.stringify(response.authResponse))
         axios.post('/api/signin/facebook', data).then(() => {
-          this.redirect()
+          window.location.href = '/'
         }).catch(e => {
           notification['warning']({
             message: e.response == undefined ? '' : e.response.data,
@@ -142,7 +135,7 @@ class NormalLoginForm extends React.Component {
           data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
           data.append('id_token', googleUser.getAuthResponse().id_token)
           axios.post('/api/signin/google', data).then((response) => {
-            this.redirect()
+            window.location.href = '/'
           }).catch(e => {
             notification['warning']({
               message: e.response == undefined ? '' : e.response.data,
