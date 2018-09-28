@@ -1,6 +1,7 @@
 import html2text
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
@@ -10,7 +11,6 @@ from notifications.signals import notify
 
 from models import Annotation, AnnotationReply, Comment, Document
 from variora import utils
-
 
 h = html2text.HTML2Text()
 h.ignore_images = True
@@ -33,7 +33,7 @@ class FileViewerView(View):
         # Temporary access control
         # TODO: use group feature when it is implemented
 
-        if document.owner.email_address.endswith('@ijc.sg') and not user.email_address.endswith('@ijc.sg'):
+        if document.owner.email_address.endswith('@ijc.sg') and (isinstance(user, AnonymousUser) or not user.email_address.endswith('@ijc.sg')):
             return HttpResponse(status=403)
 
         #######################
@@ -194,7 +194,7 @@ class FileViewerView(View):
         # Temporary access control
         # TODO: use group feature when it is implemented
 
-        if document.owner.email_address.endswith('@ijc.sg') and not user.email_address.endswith('@ijc.sg'):
+        if document.owner.email_address.endswith('@ijc.sg') and (isinstance(user, AnonymousUser) or not user.email_address.endswith('@ijc.sg')):
             return render(request, "file_viewer/temp_no_access_page.html")
 
         #######################
