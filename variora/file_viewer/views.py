@@ -194,8 +194,8 @@ class FileViewerView(View):
         # Temporary access control
         # TODO: use group feature when it is implemented
 
-        if document.owner.email_address.endswith('@ijc.sg') and not user.email_address.endswith('@ijc.sg'):
-            return HttpResponse('<h1>Sorry, this document is only limited to certain users.</h1>')
+        if document.owner.email_address.endswith('@qq.com') and not user.email_address.endswith('@ijc.sg'):
+            return render(request, "file_viewer/temp_no_access_page.html")
 
         #######################
 
