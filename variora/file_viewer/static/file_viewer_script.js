@@ -479,47 +479,48 @@ function insertPageDividers() {
 
 
 function renderTaskList(taskList, finishList, scale) {
-  if (taskList.length > 0) {
-    rendering = true
+  if (taskList.length <= 0)
+    return
 
-    $('#btn-for-larger, #btn-for-smaller').attr('disabled', true)
-    disableResizeShortcut()
+  rendering = true
 
-    var num = taskList[0][0]
-    pdfDoc.getPage(num).then(function(page) {
-      var page_canvas_id = 'page_canvas_' + num
-      var canvas = document.getElementById(page_canvas_id)
-      var context = canvas.getContext('2d')
-      var viewport = page.getViewport(clearnessLevel * scale)
-      // refer to the following link for the difference of canvas.height and canvas.style.height
-      // https://stackoverflow.com/questions/2588181/canvas-is-stretched-when-using-css-but-normal-with-width-height-properties
-      canvas.height = viewport.height
-      canvas.width = viewport.width
-      canvas.style.height = viewport.height / clearnessLevel + 'px'
-      canvas.style.width = viewport.width / clearnessLevel + 'px'
+  $('#btn-for-larger, #btn-for-smaller').attr('disabled', true)
+  disableResizeShortcut()
 
-      var renderContext = {
-        canvasContext: context,
-        viewport: viewport,
-      }
+  var pageIndex = taskList[0][0]
+  pdfDoc.getPage(pageIndex).then(function(page) {
+    var page_canvas_id = 'page_canvas_' + pageIndex
+    var canvas = document.getElementById(page_canvas_id)
+    var context = canvas.getContext('2d')
+    var viewport = page.getViewport(clearnessLevel * scale)
+    // refer to the following link for the difference of canvas.height and canvas.style.height
+    // https://stackoverflow.com/questions/2588181/canvas-is-stretched-when-using-css-but-normal-with-width-height-properties
+    canvas.height = viewport.height
+    canvas.width = viewport.width
+    canvas.style.height = viewport.height / clearnessLevel + 'px'
+    canvas.style.width = viewport.width / clearnessLevel + 'px'
 
-      taskList[0][2] = page.render(renderContext) // taskList[0][2] is a RenderTask object
-      taskList[0][1] = 'RENDERING'
+    var renderContext = {
+      canvasContext: context,
+      viewport: viewport,
+    }
 
-      taskList[0][2].promise.then(function() {
-        taskList.shift()
-        finishList.push(num)
-        rendering = false
+    taskList[0][2] = page.render(renderContext) // taskList[0][2] is a RenderTask object
+    taskList[0][1] = 'RENDERING'
 
-        $('#btn-for-larger, #btn-for-smaller').attr('disabled', false)
-        enableResizeShortcut()
+    taskList[0][2].promise.then(function() {
+      taskList.shift()
+      finishList.push(pageIndex)
+      rendering = false
 
-        renderTaskList(taskList, finishList, scale)
-      }, function(reason) {
-        console.log('rejected because of this reason: ' + reason)
-      })
+      $('#btn-for-larger, #btn-for-smaller').attr('disabled', false)
+      enableResizeShortcut()
+
+      renderTaskList(taskList, finishList, scale)
+    }, function(reason) {
+      console.log('rejected because of this reason: ' + reason)
     })
-  }
+  })
 }
 
 

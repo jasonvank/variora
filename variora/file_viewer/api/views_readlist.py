@@ -1,11 +1,12 @@
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import prefetch_related_objects
+from django.db.models import Count, prefetch_related_objects
 from django.http import HttpResponse, JsonResponse
 from django.views.generic import View
 
-from ..models import Document, Readlist
-from .encoders import (ReadlistEncoder, ReadlistListEncoder)
 from variora import utils
+
+from ..models import Document, Readlist
+from .encoders import ReadlistEncoder, ReadlistListEncoder
 
 
 def _delete_readlist(readlist):
@@ -132,3 +133,15 @@ def create_readlist(request):
     readlist = Readlist(name=request.POST['readlist_name'], description=request.POST['description'], creator=user)
     readlist.save()
     return JsonResponse(readlist, encoder=ReadlistListEncoder, safe=False)
+
+
+def get_top_readlists(request):
+    num = min(5, Readlist.objects.all().count())
+    return JsonResponse(
+        {
+            'most_collectors_readlists': list(Readlist.objects.annotate(collectors_count=Count('collectors')).order_by("-collectors_count")[0:num]),
+            'newest_readlists': list(Readlist.objects.all().order_by("-create_time")[0:num])
+        },
+        encoder=ReadlistListEncoder,
+        safe=False
+    )

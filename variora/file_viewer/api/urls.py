@@ -4,6 +4,7 @@ from . import views, views_readlist
 
 urlpatterns = [
     url(r'^documents/(?P<pk>\d+)$', views.DocumentView.as_view()),
+    url(r'^documents/(?P<pk>\d+)/annotations$', views.get_document_annotations),
 
     url(r'^documents/(?P<pk>\d+)/(?P<operation>\w+)', views.DocumentView.as_view()),
 
@@ -17,6 +18,8 @@ urlpatterns = [
     url(r'^annotations/(?P<id>\d+)/edit$', views.edit_annotation_content),
     url(r'^annotationreplies/(?P<id>\d+)/edit$', views.edit_annotation_reply_content),
 
+    # readlist views
+    url(r'^readlists/explore$', views_readlist.get_top_readlists),
     url(r'^readlists/create$', views_readlist.create_readlist),
     url(r'^readlists$', views_readlist.ReadlistListView.as_view()),
     url(r'^readlists/(?P<slug>[0-9A-Za-z_\-]+)$', views_readlist.ReadlistView.as_view()),

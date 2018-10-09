@@ -1,9 +1,11 @@
+from django.contrib.auth.models import AnonymousUser
 from django.core.serializers.json import DjangoJSONEncoder
 
 from home.api.encoders import UserEncoder
 from home.models import User
-
-from ..models import (Document, DocumentThumbnail, Readlist)
+from django.utils.html import conditional_escape
+from ..models import (Annotation, AnnotationReply, Document, DocumentThumbnail,
+                      Readlist)
 
 
 class DocumentEncoder(DjangoJSONEncoder):
@@ -43,6 +45,48 @@ class DocumentThumbnailEncoder(DjangoJSONEncoder):
                 'owner_email': obj.document.owner.email_address
             }
         return super(DocumentThumbnailEncoder, self).default(obj)
+
+
+class AnnotationReplyEncoder(DjangoJSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, AnnotationReply):
+            return {
+                'pk': obj.pk,
+                'uuid': obj.uuid,
+                'post_time': obj.post_time,
+                'edit_time': obj.edit_time,
+                'replier': obj.replier if obj.is_public else AnonymousUser(),
+                # 'content': conditional_escape(obj.content),
+                'content': obj.content,
+            }
+        return super(AnnotationReplyEncoder, self).default(obj)
+
+
+class AnnotationEncoder(DjangoJSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Annotation):
+            return {
+                'pk': obj.pk,
+                'uuid': obj.uuid,
+                'annotator': obj.annotator if obj.is_public else AnonymousUser(),
+                'page_index': obj.page_index,
+                'height_percent': obj.height_percent,
+                'width_percent': obj.width_percent,
+                'top_percent': obj.top_percent,
+                'left_percent': obj.left_percent,
+                'num_like': obj.num_like,
+                'post_time': obj.post_time,
+                'edit_time': obj.edit_time,
+                'replies': list(obj.annotationreply_set.all()),
+                # 'content': conditional_escape(obj.content),
+                'content': obj.content,
+            }
+        elif isinstance(obj, User):
+            return UserEncoder().default(obj)
+        elif isinstance(obj, AnnotationReply):
+            return AnnotationReplyEncoder().default(obj)
+        else:
+            return super(AnnotationEncoder, self).default(obj)
 
 
 class ReadlistListEncoder(DjangoJSONEncoder):

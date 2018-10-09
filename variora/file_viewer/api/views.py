@@ -13,7 +13,7 @@ from home.models import User
 
 from ..models import (Annotation, AnnotationReply, Comment, Document,
                       DocumentThumbnail)
-from .encoders import DocumentEncoder, DocumentThumbnailEncoder
+from .encoders import DocumentEncoder, DocumentThumbnailEncoder, AnnotationEncoder
 
 
 def _delete_document(document, user):
@@ -145,3 +145,12 @@ def edit_annotation_reply_content(request, id):
     reply.update(content=request.POST['new_content'], edit_time=now())
     return HttpResponse(status=200)
 
+
+def get_document_annotations(request, pk):
+    try:
+        document = Document.objects.get(id=pk)
+        return JsonResponse(
+            list(document.annotation_set.all()),
+            encoder=AnnotationEncoder, safe=False)
+    except ObjectDoesNotExist:
+        return HttpResponse(status=404)
