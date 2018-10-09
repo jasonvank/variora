@@ -1,11 +1,15 @@
-import { Button, Card, Col, Icon, Layout, Row, Tabs, notification } from 'antd'
+import { Avatar, Button, Card, Col, Icon, Layout, Menu, Row, Tabs, Table, notification } from 'antd'
+import { Link, Route, BrowserRouter as Router, Switch } from 'react-router-dom'
 
 import React from 'react'
 import TimeAgo from 'react-timeago'
 import { connect } from 'react-redux'
-import {fetchExploreDocs} from '../redux/actions.js'
+import {fetchExploreDocs, fetchExploreReadlists} from '../redux/actions.js'
 
-const TabPane = Tabs.TabPane;
+const { Content } = Layout
+const TabPane = Tabs.TabPane
+
+const SUB_URL_BASE = '/explore'
 
 
 class DocumentListWrapper extends React.Component {
@@ -66,11 +70,157 @@ class DisplayDocuments extends React.Component {
 
   render() {
     return (
-      <Row type='flex' justify='start'><DocumentListWrapper data = {this.state.data}/> </Row>
+      <div className='card' style={{ overflow: 'auto', color: 'white' }}>
+        <Row type='flex' justify='start'><DocumentListWrapper data = {this.state.data}/> </Row>
+      </div>
     )
   }
 }
 
+
+class ReadlistTab extends React.Component {
+  constructor(props){
+    super(props)
+
+    this.state = {
+      mostCollectedReadlists: this.props.data.mostCollectedReadlists,
+      newestReadlists: this.props.data.newestReadlists
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      mostCollectedReadlists: nextProps.data.mostCollectedReadlists,
+      newestReadlists: nextProps.data.newestReadlists
+    })
+  }
+
+  render() {
+    const columns = [{
+      dataIndex: 'space',
+      width: '2%',
+    }, {
+      title: '#',
+      dataIndex: 'id',
+      width: '5%',
+      render: (text, record) => this.state.mostCollectedReadlists.indexOf(record) + 1
+    },
+    // {
+    //   dataIndex: 'trending',
+    //   width: '3%',
+    //   render: (text, record) => {
+    //     return record.rankingChange
+    //     // <Icon type="arrow-up" style={{ fontSize: 16, color: '#e67e22' }} />
+    //   }
+    // },
+    {
+      title: 'Title',
+      key: 'title',
+      width: '30%',
+      render: (text, record, index) => (
+        <a className='document-link custom-card-text-wrapper' title={record.name} href={record.url}>{record.name}</a>
+      )
+    }, {
+      title: 'Creator',
+      render: (text, record) => <span><Avatar src={record.owner.portrait_url} style={{ verticalAlign: 'middle', marginRight: 12}} />{record.owner.nickname}</span>,
+      width: '20%',
+    }, {
+      title: 'Uploaded Time',
+      key: 'uploaded_time',
+      width: '15%',
+      render: (text, record, index) => (
+        <TimeAgo date={record.create_time} />
+      )
+    }]
+
+    const columns2 = columns.slice()
+    // columns2.splice(2, 1)
+    columns2[1] = {
+      title: '#',
+      dataIndex: 'id',
+      width: '5%',
+      render: (text, record) => this.state.newestReadlists.indexOf(record) + 1
+    }
+
+    return (
+      <div style={{ paddingBottom: 60}}>
+        <div className='card' style={{ overflow: 'auto', color: 'white', marginTop: 18 }}>
+          <div className='card-header pubIndex-recommendationsHeader'>
+            <div className='card-headerText' style={{ color: 'black' }}>Trending Lists</div>
+          </div>
+          <Table
+            className='notification-table'
+            dataSource={this.state.mostCollectedReadlists}
+            columns={columns}
+            pagination={false}
+            showHeader={false}
+            style={{ overflowY: 'auto' }}
+            rowKey={record => record.slug}
+            footer={() => null}
+          />
+        </div>
+
+        <div className='card' style={{ overflow: 'auto', color: 'white', marginTop: 18 }}>
+          <div className='card-header pubIndex-recommendationsHeader'>
+            <div className='card-headerText' style={{ color: 'black' }}>Recent Lists</div>
+          </div>
+          <Table
+            className='notification-table'
+            dataSource={this.state.newestReadlists}
+            columns={columns2}
+            pagination={false}
+            showHeader={false}
+            style={{ overflowY: 'auto' }}
+            rowKey={record => record.slug}
+            footer={() => null}
+          />
+        </div>
+      </div>
+    )
+  }
+}
+
+class DocumentTab extends React.Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      data: this.props.data
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      data: nextProps.data,
+    })
+  }
+
+  render() {
+    return (
+      <div style={{ paddingBottom: 60}}>
+        <div className='card' style={{ overflow: 'auto', color: 'white', marginTop: 18 }}>
+          <div className='card-header pubIndex-recommendationsHeader'>
+            <div className='card-headerText' style={{ color: 'black' }}>Most Views</div>
+          </div>
+          {<DisplayDocuments data={this.state.data.mostViewsDocuments} />}
+        </div>
+
+        <div className='card' style={{ overflow: 'auto', color: 'white', marginTop: 18 }}>
+          <div className='card-header pubIndex-recommendationsHeader'>
+            <div className='card-headerText' style={{ color: 'black' }}>Most Stars</div>
+          </div>
+          {<DisplayDocuments data={this.state.data.mostStarsDocuments} />}
+        </div>
+
+        <div className='card' style={{ overflow: 'auto', color: 'white', marginTop: 18  }}>
+          <div className='card-header pubIndex-recommendationsHeader'>
+            <div className='card-headerText' style={{ color: 'black' }}>Most Annotations</div>
+          </div>
+          {<DisplayDocuments data={this.state.data.mostAnnotationsDocuments} />}
+        </div>
+      </div>
+    )
+  }
+}
 
 class ExploreTabBeforeConnect extends React.Component {
   constructor(props) {
@@ -80,32 +230,35 @@ class ExploreTabBeforeConnect extends React.Component {
   componentDidMount() {
     if (this.props.mostViewsDocuments == undefined)
       this.props.fetchExploreDocs()
+
+    if (this.props.mostCollectedReadlists == undefined)
+      this.props.fetchExploreReadlists()
   }
 
   render() {
+    const path = window.location.href
     return (
-      <div style={{ paddingLeft: 18, paddingRight: 18, paddingTop: 16, paddingBottom: 60, minHeight: 280 }}>
-        <div className='card' style={{ overflow: 'auto', color: 'white' }}>
-          <div className='card-header pubIndex-recommendationsHeader'>
-            <div className='card-headerText' style={{ color: 'black' }}>Most Views</div>
-          </div>
-          {<DisplayDocuments data={this.props.mostViewsDocuments} />}
-        </div>
-
-        <div className='card' style={{ overflow: 'auto', color: 'white', marginTop: 18 }}>
-          <div className='card-header pubIndex-recommendationsHeader'>
-            <div className='card-headerText' style={{ color: 'black' }}>Most Stars</div>
-          </div>
-          {<DisplayDocuments data={this.props.mostStarsDocuments} />}
-        </div>
-
-        <div className='card' style={{ overflow: 'auto', color: 'white', marginTop: 18  }}>
-          <div className='card-header pubIndex-recommendationsHeader'>
-            <div className='card-headerText' style={{ color: 'black' }}>Most Annotations</div>
-          </div>
-          {<DisplayDocuments data={this.props.mostAnnotationsDocuments} />}
-        </div>
-      </div>
+      <Content style={{ paddingLeft: 18, paddingRight: 18, paddingTop: 16, margin: 0, minHeight: 280 }}>
+        <Menu
+          onClick={this.handleClick}
+          className={'card'}
+          mode="horizontal"
+          style={{ padding: 0 }}
+          defaultSelectedKeys={['documents']}
+          selectedKeys={path.includes('readlists') ? ['readlists'] : ['documents']}
+        >
+          <Menu.Item key="documents">
+            <Link to={SUB_URL_BASE}><Icon type="file" />Documents</Link>
+          </Menu.Item>
+          <Menu.Item key="readlists">
+            <Link to={SUB_URL_BASE + '/readlists'}><Icon type="folder-open" />Readlists</Link>
+          </Menu.Item>
+        </Menu>
+        <Switch>
+          <Route exact path={SUB_URL_BASE} render={() => <DocumentTab data={this.props} />} />
+          <Route path={SUB_URL_BASE + '/readlists'} render={() => <ReadlistTab data={this.props} />} />
+        </Switch>
+      </Content>
     )
   }
 }
@@ -116,5 +269,5 @@ const mapStoreToProps = (store, ownProps) => {
     ...store
   }
 }
-const ExploreTab = connect(mapStoreToProps, {fetchExploreDocs})(ExploreTabBeforeConnect)
+const ExploreTab = connect(mapStoreToProps, {fetchExploreDocs, fetchExploreReadlists})(ExploreTabBeforeConnect)
 export { ExploreTab }

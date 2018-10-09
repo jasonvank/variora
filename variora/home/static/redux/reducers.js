@@ -1,8 +1,20 @@
-import { FETCH_USEREXPLORE_DOCS, FETCH_USER, SET_COLLECTED_READLISTS } from './actions.js'
-import { initialStore } from './init_store.js'
+import {
+  FETCH_USEREXPLORE_DOCS,
+  FETCH_USEREXPLORE_READLISTS,
+  FETCH_USER,
+  SET_COLLECTED_READLISTS,
+} from './actions.js'
+import {
+  initialStore
+} from './init_store.js'
 
 const rootReducer = (store = initialStore, dispatchTarget) => {
   if (dispatchTarget.type == FETCH_USEREXPLORE_DOCS) {
+    return {
+      ...store,
+      ...dispatchTarget.payload,
+    }
+  } else if (dispatchTarget.type == FETCH_USEREXPLORE_READLISTS) {
     return {
       ...store,
       ...dispatchTarget.payload,
@@ -22,4 +34,6 @@ const rootReducer = (store = initialStore, dispatchTarget) => {
   }
 }
 
-export { rootReducer }
+export {
+  rootReducer
+}

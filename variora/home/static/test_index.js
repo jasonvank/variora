@@ -98,7 +98,7 @@ class AppBeforeConnect extends React.Component {
       else if (pathname.includes('/groups/') || pathname.includes('/readlists/')) {
         var pageElement = pathname.split('/')
         return [pageElement[1] + pageElement[2]]
-      } else if (pathname == '/explore') {
+      } else if (pathname.includes('/explore')) {
         return ['explore']
       } else
         return ['documents']
@@ -348,7 +348,7 @@ class AppBeforeConnect extends React.Component {
             <Layout style={{ marginLeft: 200, padding: 0 }}>
               <Content>
                 <Switch>
-                  <Route exact path='/explore' component={ExploreTab} />
+                  <Route path='/explore' component={ExploreTab} />
                   <Route path='/search' component={SearchResultTab} />
                   <Route path='/readlists/:readlistSlug' render={ ({match, location}) => this.renderReadlistTab(match, location) } />
                   <Route path='/groups/:coteriePk' render={ ({match, location}) => this.renderGroupTab(match, location) } />

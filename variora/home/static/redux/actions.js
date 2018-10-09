@@ -3,6 +3,7 @@ import { getUrlFormat } from 'util.js'
 
 
 const FETCH_USEREXPLORE_DOCS = 'FETCH_USEREXPLORE_DOCS'
+const FETCH_USEREXPLORE_READLISTS = 'FETCH_USEREXPLORE_READLISTS'
 const FETCH_USER = 'FETCH_USER'
 const SET_COLLECTED_READLISTS = 'SET_COLLECTED_READLISTS'
 
@@ -19,6 +20,22 @@ const fetchExploreDocs = () => dispatch => {
       }
       dispatch({
         type: FETCH_USEREXPLORE_DOCS,
+        payload: payload
+      })
+    })
+}
+
+const fetchExploreReadlists = () => dispatch => {
+  axios.get(getUrlFormat('/documents/api/readlists/explore'))
+    .then(response => {
+      var mostCollectedReadlists = response.data.most_collectors_readlists
+      var newestReadlists = response.data.newest_readlists
+      const payload = {
+        mostCollectedReadlists: mostCollectedReadlists,
+        newestReadlists: newestReadlists,
+      }
+      dispatch({
+        type: FETCH_USEREXPLORE_READLISTS,
         payload: payload
       })
     })
@@ -43,9 +60,11 @@ const setCollectedReadlists = (collectedReadlists) => dispatch => {
 
 export {
   fetchExploreDocs,
+  fetchExploreReadlists,
   fetchUser,
   setCollectedReadlists,
   FETCH_USEREXPLORE_DOCS,
+  FETCH_USEREXPLORE_READLISTS,
   FETCH_USER,
   SET_COLLECTED_READLISTS,
 }
