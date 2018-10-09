@@ -3,7 +3,7 @@ import {
   scrollAnnotationDivIntoView, findTargetAnnotation, scrollAnnotationIntoView, getPageDividerJQ
 } from './annotations_script.js'
 import { addCommentRelatedListener, enablePostCommentButton, enableRefreshCommentButton } from './comments_script.js'
-import { getCookie, hexToRgb, imgLoad, getValFromUrlParam } from 'util.js'
+import { getCookie, hexToRgb, imgLoad, getValFromUrlParam, range } from 'util.js'
 
 import { prepareNavbarFunction } from './navbar_subpage_script.js'
 import { tinymceInit } from './tinymce_script'
@@ -533,13 +533,14 @@ function startListeningScroll() {
     if (page_index != previous) {
       previous = page_index
 
-      var renderOrNot = [true, true, true, true, true]
+      const left = 2
+      const right = 3
+      var renderOrNot = range(right + left + 1).map(i => true)
       // clear pages which are out of view
       var index = 0
-      var originalLength = finishList.length
-      for (var i = 0; i < originalLength; i++) {
-        if (finishList[index] - page_index >= -1 && finishList[index] - page_index <= 3) {
-          renderOrNot[finishList[index] - page_index + 1] = false
+      for (var i = 0; i < finishList.length; i++) {
+        if (finishList[index] - page_index >= -left && finishList[index] - page_index <= right) {
+          renderOrNot[finishList[index] - (page_index - left)] = false
           index += 1
         } else {
           var id = 'page_canvas_' + finishList[index]
@@ -553,15 +554,12 @@ function startListeningScroll() {
 
       // keep the first renderTask since it is still in RENDERING status,
       // delete the rest since they are in PENDING status
-      while (taskList.length > 1) {
-        taskList.pop()
-      }
+      taskList.splice(1)
 
       // add in the new task
-      for (var i = 0; i < 5; i++) {
-        if (renderOrNot[i] == true)
-          pushNewPageRenderingTask(page_index + i - 1)
-      }
+      for (var i = 0; i < renderOrNot.length; i++)
+        if (renderOrNot[i])
+          pushNewPageRenderingTask(page_index - left + i)
 
       if (!rendering)
         renderTaskList(taskList, finishList, currentScale)

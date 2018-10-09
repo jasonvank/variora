@@ -104,6 +104,10 @@ function renderMathJax() {
     MathJax.Hub.Queue(['Typeset', MathJax.Hub])
 }
 
+function range(end) {
+  return Array(end - 0).fill().map((_, idx) => 0 + idx)
+}
+
 export {
   getCookie,
   copyToClipboard,
@@ -112,7 +116,8 @@ export {
   formatOpenCoterieDocumentUrl,
   formatOpenDocumentUrl,
   getValFromUrlParam,
-  renderMathJax
+  renderMathJax,
+  range,
 }
 
 
