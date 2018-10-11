@@ -74,6 +74,7 @@ class AnnotationEncoder(DjangoJSONEncoder):
                 'width_percent': obj.width_percent,
                 'top_percent': obj.top_percent,
                 'left_percent': obj.left_percent,
+                'frame_color': obj.frame_color,
                 'num_like': obj.num_like,
                 'post_time': obj.post_time,
                 'edit_time': obj.edit_time,
