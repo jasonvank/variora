@@ -129,6 +129,8 @@ class FileViewerView(View):
                     redirect_url=annotation.url,
                     image_url=annotation.annotator.portrait_url,
                     description=h.handle(annotation.content),
+                    document_pk=document.pk,
+                    annotation_uuid=annotation.clean_uuid
                 )
             context = {
                 "document": document,
@@ -159,6 +161,8 @@ class FileViewerView(View):
                             redirect_url=annotation.url,
                             image_url=annotation_reply.replier.portrait_url,
                             description=h.handle(annotation_reply.content),
+                            document_pk=document.pk,
+                            annotation_uuid=annotation.clean_uuid
                         )
                 annotation_reply.save()
                 notify.send(
@@ -167,6 +171,8 @@ class FileViewerView(View):
                     redirect_url=annotation.url,
                     image_url=annotation_reply.replier.portrait_url,
                     description=h.handle(annotation_reply.content),
+                    document_pk=document.pk,
+                    annotation_uuid=annotation.clean_uuid
                 )
                 context = {
                     "annotation_reply": annotation_reply,
