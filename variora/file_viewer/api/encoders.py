@@ -50,25 +50,39 @@ class DocumentThumbnailEncoder(DjangoJSONEncoder):
 class AnnotationReplyEncoder(DjangoJSONEncoder):
     def default(self, obj):
         if isinstance(obj, AnnotationReply):
+            if obj.is_public:
+                replier = obj.replier
+            else:
+                replier = {
+                    'is_authenticated': False,
+                },
             return {
                 'pk': obj.pk,
                 'uuid': obj.uuid,
                 'post_time': obj.post_time,
                 'edit_time': obj.edit_time,
-                'replier': obj.replier if obj.is_public else AnonymousUser(),
+                'replier': replier,
                 # 'content': conditional_escape(obj.content),
                 'content': obj.content,
             }
+        elif isinstance(obj, User):
+            return UserEncoder().default(obj)
         return super(AnnotationReplyEncoder, self).default(obj)
 
 
 class AnnotationEncoder(DjangoJSONEncoder):
     def default(self, obj):
         if isinstance(obj, Annotation):
+            if obj.is_public:
+                annotator = obj.annotator
+            else:
+                annotator = {
+                    'is_authenticated': False,
+                },
             return {
                 'pk': obj.pk,
                 'uuid': obj.uuid,
-                'annotator': obj.annotator if obj.is_public else AnonymousUser(),
+                'annotator': annotator,
                 'page_index': obj.page_index,
                 'height_percent': obj.height_percent,
                 'width_percent': obj.width_percent,

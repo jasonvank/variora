@@ -10,10 +10,12 @@ from django.utils.timezone import now
 from django.views.generic import View
 
 from home.models import User
+from variora import utils
 
 from ..models import (Annotation, AnnotationReply, Comment, Document,
                       DocumentThumbnail)
-from .encoders import DocumentEncoder, DocumentThumbnailEncoder, AnnotationEncoder
+from .encoders import (AnnotationEncoder, DocumentEncoder,
+                       DocumentThumbnailEncoder)
 
 
 def _delete_document(document, user):
@@ -146,11 +148,21 @@ def edit_annotation_reply_content(request, id):
     return HttpResponse(status=200)
 
 
-def get_document_annotations(request, pk):
+def get_document_annotations_by_slug(request, **kwargs):
     try:
-        document = Document.objects.get(id=pk)
+        document = Document.objects.get(uuid=utils.slug2uuid(kwargs['slug']))
         return JsonResponse(
             list(document.annotation_set.all()),
-            encoder=AnnotationEncoder, safe=False)
+            encoder=AnnotationEncoder,
+            safe=False
+        )
+    except ObjectDoesNotExist:
+        return HttpResponse(status=404)
+
+
+def get_document_by_slug(request, **kwargs):
+    try:
+        document = Document.objects.get(uuid=utils.slug2uuid(kwargs['slug']))
+        return JsonResponse(document, encoder=DocumentEncoder, safe=False)
     except ObjectDoesNotExist:
         return HttpResponse(status=404)

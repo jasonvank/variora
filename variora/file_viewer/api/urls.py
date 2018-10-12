@@ -4,9 +4,9 @@ from . import views, views_readlist
 
 urlpatterns = [
     url(r'^documents/(?P<pk>\d+)$', views.DocumentView.as_view()),
-    url(r'^documents/(?P<pk>\d+)/annotations$', views.get_document_annotations),
-
     url(r'^documents/(?P<pk>\d+)/(?P<operation>\w+)', views.DocumentView.as_view()),
+    url(r'^documents/byslug/(?P<slug>[0-9A-Za-z_\-]+)$', views.get_document_by_slug),
+    url(r'^documents/byslug/(?P<slug>[0-9A-Za-z_\-]+)/annotations$', views.get_document_annotations_by_slug),
 
     url(r'^documents$', views.DocumentListView.as_view()),
 
