@@ -9,7 +9,7 @@ requests
 pillow
 django-cachalot
 django-memcache-status
-django-notifications-hq
+django-notifications-hq==1.4.0
 pdfrw
 Wand
 facebook-sdk
