@@ -5,7 +5,7 @@ import { Layout, Row, Col, Input, Icon, Avatar } from 'antd'
 const { Header } = Layout
 const Search = Input.Search
 
-export default class HeaderPage extends React.PureComponent {
+class HeaderPage extends React.Component {
   render() {
     return (
       <Header className='header' style={{ backgroundColor: '#fff', diplay: 'inline' }}>
@@ -39,4 +39,5 @@ export default class HeaderPage extends React.PureComponent {
   }
 }
 
+export { HeaderPage }
 

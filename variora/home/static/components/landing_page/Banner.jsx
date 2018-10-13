@@ -10,7 +10,7 @@ const loop = {
   repeat: -1,
 }
 
-class Banner extends React.PureComponent {
+class Banner extends React.Component {
   static propTypes = {
     className: PropTypes.string,
   }
@@ -62,4 +62,4 @@ class Banner extends React.PureComponent {
   }
 }
 
-export default Banner
+export { Banner }

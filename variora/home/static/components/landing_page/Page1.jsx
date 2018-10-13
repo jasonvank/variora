@@ -122,7 +122,7 @@ const svgToXY = page1Data.map((item) => {
 })
 
 
-export default class Page1 extends React.PureComponent {
+class Page1 extends React.Component {
   state = {
     hoverKey: null,
   }
@@ -227,3 +227,5 @@ export default class Page1 extends React.PureComponent {
     )
   }
 }
+
+export { Page1 }
