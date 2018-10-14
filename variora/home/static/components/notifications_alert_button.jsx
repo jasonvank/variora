@@ -80,6 +80,12 @@ class NotificationsList extends React.Component {
       const unreadNotification = this.state.data.filter(item => item.unread == true)
       this.props.unreadNotificationsLeftCallback(unreadNotification.length)
     }
+
+    this.handleMarkAllRead = () => {
+      this.state.data.map((record, index) => {
+        this.handleReadStatus(record, index)
+      })
+    }
   }
 
   render() {
@@ -107,17 +113,25 @@ class NotificationsList extends React.Component {
     }]
 
     return (
-      <Table
-        className='notification-table'
-        dataSource={this.state.data}
-        columns={columns}
-        pagination={false}
-        showHeader={false}
-        style={{width: '300px', maxHeight: 380, overflowY: 'auto'}}
-        rowKey={record => record.slug}
-        onRowClick={this.handleReadStatus}
-        footer={() => null}
-      />
+      <div style={{ width: '300px' }}>
+        <a
+          style={{ float: 'right', color: '#37b' }}
+          onClick={this.handleMarkAllRead}
+        >
+          Mark All as Read
+        </a>
+        <Table
+          className='notification-table'
+          dataSource={this.state.data}
+          columns={columns}
+          pagination={false}
+          showHeader={false}
+          style={{width: '300px', maxHeight: 380, overflowY: 'auto'}}
+          rowKey={record => record.slug}
+          onRowClick={this.handleReadStatus}
+          footer={() => null}
+        />
+      </div>
     )
   }
 }
