@@ -9,11 +9,15 @@ from django.contrib.sitemaps import ping_google
 from django.core.files.base import ContentFile
 from django.core.management import call_command
 from django.db.models import Count
+from django.template.loader import render_to_string
 from pdfrw import PdfReader, PdfWriter
 from wand.color import Color
 from wand.image import Image
 
 from file_viewer.models import Document, DocumentThumbnail
+from home.api.views_notifications import NotificationEncoder
+from home.models import User
+from variora.utils import EmailThread
 
 
 def _generate_thumbnail_image_content_file(document):
@@ -42,7 +46,6 @@ def _generate_thumbnail_image_content_file(document):
     images.alpha_channel = 'flatten'
     os.remove(temp_pdf_path)
     return ContentFile(images.make_blob('jpg'))
-
 
 class UpdateTopDocumentsThread(Thread):
     def run(self):
@@ -75,6 +78,35 @@ class UpdateTopDocumentsThread(Thread):
             thumbnail.save()
 
 
+
+def _get_unread_notification_list(user):
+    max_num_to_fetch = 100
+
+    unread_notifications = user.notifications \
+        .prefetch_related('actor') \
+        .prefetch_related('target') \
+        .prefetch_related('action_object') \
+        .unread()[0 : max_num_to_fetch]
+
+    context = {
+        'notification_list': [NotificationEncoder().default(notif) for notif in unread_notifications],
+        'domain': 'https://variora.ml'
+    }
+    return context
+
+def _send_email_notification():
+    threshold = 1
+    receivers = User.objects.annotate(notif_count=Count('notifications__id')).filter(notif_count__gte=threshold)
+    for user in receivers:
+        context = _get_unread_notification_list(user)
+        html_message = render_to_string('home/email_templates/email.html', context)
+        EmailThread(
+            subject = 'Variora: Unread notifications',
+            receiver_list = [user.email_address],
+            content=html_message,
+        ).start()
+
+
 @kronos.register('6 0 * * *')
 def update_top_documents_kronjob():
     UpdateTopDocumentsThread().start()
@@ -88,3 +120,7 @@ def clear_expired_sessions_kronjob():
 @kronos.register('2 0 * * *')
 def ping_google_kronjob():
     ping_google()
+
+@kronos.register('0 6 * * *')
+def send_email_notification_kronjob():
+    _send_email_notification()
