@@ -130,7 +130,7 @@ class NotificationsList extends React.Component {
     return (
       <div style={{ width: '300px' }}>
         <a
-          style={{ float: 'right', color: '#37b' }}
+          style={{ float: 'right', color: '#37b', marginRight: 12 }}
           onClick={this.handleMarkAllRead}
         >
           Mark All as Read
