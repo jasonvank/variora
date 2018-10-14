@@ -41,6 +41,8 @@ class DocumentSitemap(Sitemap):
 custom_notifications_urls = [
     url(r'^api/combined$', views_notifications.get_combined_notification_list),
 
+    url(r'^api/mark-all-as-read$', views_notifications.mark_all_as_read),
+
     url(r'^api/notifications/(?P<slug>\d+)/mark-read$', views_notifications.mark_notification_as_read),
 ]
 

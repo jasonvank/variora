@@ -70,3 +70,24 @@ def mark_notification_as_read(request, slug):
     notification.mark_as_read()
 
     return HttpResponse(status=200)
+
+
+def _safe_cast(s):
+    try:
+        return long(s)
+    except:
+        return None
+
+def mark_all_as_read(request):
+    if 'slugs_string' not in request.POST:
+        return HttpResponse(status=403)
+    slugs_string = request.POST['slugs_string']
+    splitted = slugs_string.split(',')
+    trimmed = list(map(lambda ele: ele.strip()))
+    casted = list(map(_safe_cast, trimmed))
+    filtered = list(map(lambda ele: ele is not None, casted))
+    for slug in filtered:
+        notification_id = slug2id(slug)
+        notification = Notification.objects.get(recipient=request.user, id=notification_id)
+        notification.mark_as_read()
+    return HttpResponse(status=200)
