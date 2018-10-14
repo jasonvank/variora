@@ -82,9 +82,24 @@ class NotificationsList extends React.Component {
     }
 
     this.handleMarkAllRead = () => {
-      this.state.data.map((record, index) => {
-        this.handleReadStatus(record, index)
+      const unreadNotification = this.state.data.filter(item => item.unread == true)
+      var unreadNotificationSlug = []
+      unreadNotification.map(notification => {
+        unreadNotificationSlug.push(notification.slug)
       })
+      var unreadSlug = unreadNotificationSlug.join()
+      var data = new FormData()
+      data.append('notif_slugs_to_mark_as_read', unreadSlug)
+      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+      axios.post('/notifications/api/mark-all-as-read', data)
+        .then(response => {
+          var newData = this.state.data
+          for (var notification of newData)
+            notification.unread = false
+          this.setState({data: newData})
+          this.forceUpdate()  // TODO: should avoid using forceUpdate
+          this.checkLeftUnreadNotifications()
+        })
     }
   }
 
