@@ -17,7 +17,7 @@ from wand.image import Image
 from file_viewer.models import Document, DocumentThumbnail
 from home.api.views_notifications import NotificationEncoder
 from home.models import User
-from variora.utils import EmailThread
+from variora.utils import send_email_from_noreply
 
 
 def _generate_thumbnail_image_content_file(document):
@@ -100,11 +100,15 @@ def _send_email_notification():
     for user in receivers:
         context = _get_unread_notification_list(user)
         html_message = render_to_string('home/email_templates/email.html', context)
-        EmailThread(
-            subject = 'Variora: Unread notifications',
-            receiver_list = [user.email_address],
+        send_email_from_noreply(
+            subject='Variora: Unread notifications',
+            receiver_list=[user.email_address],
             content=html_message,
-        ).start()
+        )
+
+class NotificationEmailThread(Thread):
+    def run(self):
+        _send_email_notification()
 
 
 @kronos.register('6 0 * * *')
@@ -123,4 +127,4 @@ def ping_google_kronjob():
 
 @kronos.register('0 6 * * *')
 def send_email_notification_kronjob():
-    _send_email_notification()
+    NotificationEmailThread().start()
