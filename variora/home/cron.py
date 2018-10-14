@@ -96,7 +96,7 @@ def _get_unread_notification_list(user):
 
 def _send_email_notification():
     threshold = 1
-    receivers = User.objects.annotate(notif_count=Count('notifications__id')).filter(notif_count__gte=threshold)
+    receivers = User.objects.filter(email_address__iendswith='@ijc.sg').annotate(notif_count=Count('notifications__id')).filter(notif_count__gte=threshold)
     for user in receivers:
         context = _get_unread_notification_list(user)
         html_message = render_to_string('home/email_templates/email.html', context)
