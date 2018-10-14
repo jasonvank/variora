@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+      body {
+        font-family: 'Roboto', sans-serif;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="content" style="max-width: 80vw">
+      {% block content %}
+        <p>
+          You have {{notification_list|length}} unread notifications. <br/>
+          Here is a summary of them.
+        </p>
+
+        {% for notification in notification_list %}
+          <HR SIZE=1>
+          <p>
+            <!-- <b>{{ notification.actor }}</b>  -->
+            <span style="font-size: 80%; color: grey">{{ notification.timestamp }}</span>
+          </p>
+          {% if notification.verb == 'reply to annotation reply' or notification.verb == 'reply to annotation' %}
+            <p>
+              <b>
+                {{ notification.actor }}
+              </b>
+              replied you:
+            </p>
+          {% elif notification.verb == 'post annotation' %}
+            <p>
+              <b>
+                {{ notification.actor }}
+              </b>
+              posted an annotation in your document:
+            </p>
+          {% endif %}
+          <blockquote style="font-weight:300; overflow-wrap: break-word;">{{ notification.description }} </blockquote>
+          <p>Click <a href="{{domain}}{{ notification.data.redirect_url }}&mark-read-url={{ notification.mark_read_url }}">here</a> to view.</p>
+        {% endfor %}
+
+        <HR SIZE=1>
+        <p style="color: #1BA39C;">This is a system generated email, please do not reply.</p>
+        <p>
+          Regards, <br />
+          Variora Team
+        </p>
+      {% endblock %}
+    </div>
+  </body>
+</html>

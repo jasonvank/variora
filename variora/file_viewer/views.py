@@ -18,6 +18,72 @@ h.ignore_emphasis = True
 h.ignore_links = True
 
 
+def _handle_post_annotation_request(user, document, request):
+    annotation = Annotation()
+    annotation.annotator = user
+    annotation.content = request.POST["annotation_content"]
+    annotation.document_this_annotation_belongs = document
+    annotation.page_index = request.POST["page_id"].split("_")[2]
+    annotation.height_percent = request.POST["height_percent"]
+    annotation.width_percent = request.POST["width_percent"]
+    annotation.top_percent = request.POST["top_percent"]
+    annotation.left_percent = request.POST["left_percent"]
+    annotation.frame_color = request.POST["frame_color"]
+    annotation.is_public = True if request.POST["is_public"] == 'true' else False
+    annotation.save()
+    if annotation.annotator.pk != document.owner.pk:
+        notify.send(
+            sender=annotation.annotator, recipient=document.owner,
+            action_object=annotation, verb='post annotation',
+            redirect_url=annotation.url,
+            image_url=annotation.annotator.portrait_url,
+            description=h.handle(annotation.content),
+        )
+    context = {
+        "document": document,
+        'annotation': annotation,
+        'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,
+        "new_annotation_id": annotation.id,
+    }
+    return JsonResponse({
+        'new_annotationdiv_html': render(request, "file_viewer/one_annotation_div.html", context).content,
+        'new_annotation_id': annotation.id,
+        'new_annotation_uuid': str(annotation.clean_uuid),
+    })
+
+def _handle_post_annotation_reply_request(user, document, request):
+    if request.POST["annotation_reply_content"] != "":
+        annotation_reply = AnnotationReply()
+        annotation = Annotation.objects.get(id=int(request.POST["reply_to_annotation_id"]))
+        annotation_reply.content = request.POST["annotation_reply_content"]
+        annotation_reply.replier = user
+        annotation_reply.reply_to_annotation = annotation
+        annotation_reply.is_public = True if request.POST["is_public"] == 'true' else False
+        if request.POST.has_key("reply_to_annotation_reply_id"):
+            annotation_reply.reply_to_annotation_reply = AnnotationReply.objects.get(id=int(request.POST["reply_to_annotation_reply_id"]))
+            if annotation_reply.reply_to_annotation_reply.replier.pk != annotation_reply.reply_to_annotation.annotator.pk:
+                notify.send(
+                    sender=annotation_reply.replier, recipient=annotation_reply.reply_to_annotation_reply.replier,
+                    action_object=annotation_reply, verb='reply to annotation reply',
+                    redirect_url=annotation.url,
+                    image_url=annotation_reply.replier.portrait_url,
+                    description=h.handle(annotation_reply.content),
+                )
+        annotation_reply.save()
+        notify.send(
+            sender=annotation_reply.replier, recipient=annotation_reply.reply_to_annotation.annotator,
+            action_object=annotation_reply, verb='reply to annotation',
+            redirect_url=annotation.url,
+            image_url=annotation_reply.replier.portrait_url,
+            description=h.handle(annotation_reply.content),
+        )
+        context = {
+            "annotation_reply": annotation_reply,
+            'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,
+        }
+        return render(request, "file_viewer/one_annotation_reply.html", context)
+    return HttpResponse(status=200)
+
 class FileViewerView(View):
     @method_decorator(login_required(login_url='/'))
     def post(self, request, **kwargs):
@@ -110,76 +176,10 @@ class FileViewerView(View):
             return render(request, "file_viewer/comment_viewer_subpage.html", context)
 
         elif request.POST["operation"] == "annotate":
-            annotation = Annotation()
-            annotation.content = request.POST["annotation_content"]
-            annotation.annotator = user
-            annotation.document_this_annotation_belongs = document
-            annotation.page_index = request.POST["page_id"].split("_")[2]
-            annotation.height_percent = request.POST["height_percent"]
-            annotation.width_percent = request.POST["width_percent"]
-            annotation.top_percent = request.POST["top_percent"]
-            annotation.left_percent = request.POST["left_percent"]
-            annotation.frame_color = request.POST["frame_color"]
-            annotation.is_public = True if request.POST["is_public"] == 'true' else False
-            annotation.save()
-            if annotation.annotator.pk != document.owner.pk:
-                notify.send(
-                    sender=annotation.annotator, recipient=document.owner,
-                    action_object=annotation, verb='post annotation',
-                    redirect_url=annotation.url,
-                    image_url=annotation.annotator.portrait_url,
-                    description=h.handle(annotation.content),
-                    document_pk=document.pk,
-                    annotation_uuid=annotation.clean_uuid
-                )
-            context = {
-                "document": document,
-                'annotation': annotation,
-                'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,
-                "new_annotation_id": annotation.id,
-            }
-            return JsonResponse({
-                'new_annotationdiv_html': render(request, "file_viewer/one_annotation_div.html", context).content,
-                'new_annotation_id': annotation.id,
-                'new_annotation_uuid': str(annotation.clean_uuid),
-            })
+            return _handle_post_annotation_request(user, document, request)
 
         elif request.POST["operation"] == "reply_annotation":
-            if request.POST["annotation_reply_content"] != "":
-                annotation_reply = AnnotationReply()
-                annotation = Annotation.objects.get(id=int(request.POST["reply_to_annotation_id"]))
-                annotation_reply.content = request.POST["annotation_reply_content"]
-                annotation_reply.replier = user
-                annotation_reply.reply_to_annotation = annotation
-                annotation_reply.is_public = True if request.POST["is_public"] == 'true' else False
-                if request.POST.has_key("reply_to_annotation_reply_id"):
-                    annotation_reply.reply_to_annotation_reply = AnnotationReply.objects.get(id=int(request.POST["reply_to_annotation_reply_id"]))
-                    if annotation_reply.reply_to_annotation_reply.replier.pk != annotation_reply.reply_to_annotation.annotator.pk:
-                        notify.send(
-                            sender=annotation_reply.replier, recipient=annotation_reply.reply_to_annotation_reply.replier,
-                            action_object=annotation_reply, verb='reply to annotation reply',
-                            redirect_url=annotation.url,
-                            image_url=annotation_reply.replier.portrait_url,
-                            description=h.handle(annotation_reply.content),
-                            document_pk=document.pk,
-                            annotation_uuid=annotation.clean_uuid
-                        )
-                annotation_reply.save()
-                notify.send(
-                    sender=annotation_reply.replier, recipient=annotation_reply.reply_to_annotation.annotator,
-                    action_object=annotation_reply, verb='reply to annotation',
-                    redirect_url=annotation.url,
-                    image_url=annotation_reply.replier.portrait_url,
-                    description=h.handle(annotation_reply.content),
-                    document_pk=document.pk,
-                    annotation_uuid=annotation.clean_uuid
-                )
-                context = {
-                    "annotation_reply": annotation_reply,
-                    'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,
-                }
-                return render(request, "file_viewer/one_annotation_reply.html", context)
-            return HttpResponse(status=200)
+            return _handle_post_annotation_reply_request(user, document, request)
 
     def get(self, request, **kwargs):
         try:
@@ -200,8 +200,9 @@ class FileViewerView(View):
         # Temporary access control
         # TODO: use group feature when it is implemented
 
-        if document.owner.email_address.endswith('@ijc.sg') and (isinstance(user, AnonymousUser) or not user.email_address.endswith('@ijc.sg')):
-            return render(request, "file_viewer/temp_no_access_page.html")
+        if not user.is_superuser:
+            if document.owner.email_address.endswith('@ijc.sg') and (isinstance(user, AnonymousUser) or not user.email_address.endswith('@ijc.sg')):
+                return render(request, "file_viewer/temp_no_access_page.html")
 
         #######################
 
