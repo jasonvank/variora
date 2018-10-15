@@ -8,8 +8,9 @@ from django.conf import settings
 from django.contrib.sitemaps import ping_google
 from django.core.files.base import ContentFile
 from django.core.management import call_command
-from django.db.models import Count
+from django.db.models import Count, IntegerField, OuterRef, Subquery
 from django.template.loader import render_to_string
+from notifications.models import Notification
 from pdfrw import PdfReader, PdfWriter
 from wand.color import Color
 from wand.image import Image
@@ -78,7 +79,6 @@ class UpdateTopDocumentsThread(Thread):
             thumbnail.save()
 
 
-
 def _get_unread_notification_list(user):
     max_num_to_fetch = 100
 
@@ -96,7 +96,13 @@ def _get_unread_notification_list(user):
 
 def _send_email_notification():
     threshold = 1
-    receivers = User.objects.filter(email_address__iendswith='@ijc.sg').annotate(notif_count=Count('notifications__id')).filter(notif_count__gte=threshold)
+
+    unreads = Notification.objects.filter(unread=True)
+    this_user_unreads_count = unreads.filter(recipient=OuterRef('pk')).annotate(c=Count('*')).values('c')
+    receivers = User.objects \
+        .annotate(notif_count=Subquery(this_user_unreads_count, output_field=IntegerField())) \
+        .filter(notif_count__gte=threshold)
+
     for user in receivers:
         context = _get_unread_notification_list(user)
         html_message = render_to_string('home/email_templates/email.html', context)
