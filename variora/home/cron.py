@@ -99,7 +99,7 @@ def _send_email_notification():
 
     unreads = Notification.objects.filter(unread=True)
     this_user_unreads_count = unreads.filter(recipient=OuterRef('pk')).annotate(c=Count('*')).values('c')
-    receivers = User.objects \
+    receivers = User.objects.filter(email_address__iendswith='@ijc.sg') \
         .annotate(notif_count=Subquery(this_user_unreads_count, output_field=IntegerField())) \
         .filter(notif_count__gte=threshold)
 
