@@ -47,12 +47,7 @@ class HomeBeforeConnect extends React.Component {
           value: '',
         },
       },
-      createGroupModelVisible: false,
       user: initialStore.user,
-      administratedCoteries: [],
-      joinedCoteries: [],
-      createdReadlists: [],
-      collectedReadlists: [],
       mostViewsDocuments: [],
       mostCollectedReadlists: []
     }
@@ -98,20 +93,7 @@ class HomeBeforeConnect extends React.Component {
 
   componentDidMount() {
     this.props.fetchUser()
-    if (this.props.mostViewsDocuments == undefined) {
-      alert("hey")
-      this.props.fetchExploreDocs()
-    }
 
-    if (this.props.mostCollectedReadlists == undefined)
-      this.props.fetchExploreReadlists()
-    // axios.get('/file_viewer/api/readlists').then((response) => {
-    //   this.setState({
-    //     createdReadlists: response.data.created_readlists,
-    //     collectedReadlists: response.data.collected_readlists,
-    //   })
-    //   this.props.setCollectedReadlists(response.data.collected_readlists)
-    // })
   }
 
   componentWillReceiveProps(props) {
@@ -174,7 +156,7 @@ class HomeBeforeConnect extends React.Component {
 const mapStoreToProps = (store, ownProps) => {
   return {...ownProps, user: store.user}
 }
-const Home = connect(mapStoreToProps, {fetchUser, fetchExploreDocs, fetchExploreReadlists})(HomeBeforeConnect)
+const Home = connect(mapStoreToProps, {fetchUser})(HomeBeforeConnect)
 
 ReactDOM.render(
   <Provider store={store}>

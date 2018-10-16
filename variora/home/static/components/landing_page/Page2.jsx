@@ -1,51 +1,73 @@
 import React from 'react'
 import ScrollOverPack from 'rc-scroll-anim/lib/ScrollOverPack'
-import { Row, Col, Table } from 'antd'
+import { Row, Col, Table, Avatar } from 'antd'
 import QueueAnim from 'rc-queue-anim'
 
 import svgBgToParallax from './util.jsx'
 import possibleConstructorReturn from 'babel-runtime/helpers/possibleConstructorReturn';
 
-// import { connect } from 'react-redux'
-// import { fetchExploreDocs, fetchExploreReadlists } from '../../redux/actions.js'
+import { connect } from 'react-redux'
+import { fetchExploreDocs, fetchExploreReadlists } from '../../redux/actions.js'
 
+import TimeAgo from 'react-timeago'
 
 class RecentReadlist extends React.Component {
   constructor(props){
     super(props)
+    this.state = {
+      data: this.props.data
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      data: nextProps.data
+    })
   }
 
   render() {
-    var dataSource = [{
-      key: '1',
-      name: 'Mike',
-      age: 32,
-      address: '10 Downing Street'
+    console.log("here", this.state.data)
+    const columns = [{
+      dataIndex: 'space',
+      width: '2%',
     }, {
-      key: '2',
-      name: 'John',
-      age: 42,
-      address: '10 Downing Street'
-    }]
-
-    var columns = [{
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
+      title: '#',
+      dataIndex: 'id',
+      width: '5%',
+      render: (text, record) => this.state.data.indexOf(record) + 1
+    },
+    // {
+    //   dataIndex: 'trending',
+    //   width: '3%',
+    //   render: (text, record) => {
+    //     return record.rankingChange
+    //     // <Icon type="arrow-up" style={{ fontSize: 16, color: '#e67e22' }} />
+    //   }
+    // },
+    {
+      title: 'Title',
+      key: 'title',
+      width: '30%',
+      render: (text, record, index) => (
+        <a className='document-link custom-card-text-wrapper' title={record.name} href={record.url}>{record.name}</a>
+      )
     }, {
-      title: 'Age',
-      dataIndex: 'age',
-      key: 'age',
+      title: 'Creator',
+      render: (text, record) => <span><Avatar src={record.owner.portrait_url} style={{ verticalAlign: 'middle', marginRight: 12}} />{record.owner.nickname}</span>,
+      width: '20%',
     }, {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
+      title: 'Uploaded Time',
+      key: 'uploaded_time',
+      width: '15%',
+      render: (text, record, index) => (
+        <TimeAgo date={record.create_time} />
+      )
     }]
 
     return (
       <Table
         className='notification-table'
-        dataSource={dataSource}
+        dataSource={this.state.data}
         columns={columns}
         pagination={false}
         showHeader={false}
@@ -56,21 +78,21 @@ class RecentReadlist extends React.Component {
 }
 
 
-class Page2 extends React.Component {
-  constructor(props){
+class Page2BeforeConnect extends React.Component {
+  constructor(props) {
     super(props)
   }
 
-  // componentDidMount() {
-  //   if (this.props.mostViewsDocuments == undefined)
-  //     this.props.fetchExploreDocs()
+  componentDidMount() {
+    if (this.props.mostViewsDocuments == undefined)
+      this.props.fetchExploreDocs()
 
-  //   if (this.props.mostCollectedReadlists == undefined)
-  //     this.props.fetchExploreReadlists()
-  //
+    if (this.props.mostCollectedReadlists == undefined)
+      this.props.fetchExploreReadlists()
+  }
 
-  // console.log(this.props)
   render(){
+    console.log(this.props)
     const svgBgChild = [
       (
         <svg width='100%' height='100%' viewBox='0 0 1401 1109' stroke='none' strokeWidth='1' fill='none' fillRule='evenodd' preserveAspectRatio='xMidYMid slice' >
@@ -107,6 +129,7 @@ class Page2 extends React.Component {
       return React.cloneElement(item, { children: svgBgToParallax(props.children, i) })
     })
 
+
     return (
       <div className='home-page-wrapper page2' id='page2'>
         <div className='page' >
@@ -120,7 +143,7 @@ class Page2 extends React.Component {
               leaveReverse
             >
               <h3 key='h1'>Trending Readlists</h3>
-              {<RecentReadlist />}
+              {<RecentReadlist data={this.props.mostCollectedReadlists} />}
             </QueueAnim>
             <QueueAnim
               component={Col}
@@ -130,7 +153,7 @@ class Page2 extends React.Component {
               key='right'
             >
               <h3 key='h1' style={{color: '#1BA39C'}}>Recent Readlists</h3>
-              {<RecentReadlist />}
+              {<RecentReadlist data={this.props.newestReadlists} />}
             </QueueAnim>
           </ScrollOverPack>
         </div>
@@ -145,4 +168,12 @@ class Page2 extends React.Component {
   }
 }
 
+const mapStoreToProps = (store, ownProps) => {
+  return {
+    ...ownProps,
+    ...store
+  }
+}
+const Page2 = connect(mapStoreToProps, {fetchExploreDocs, fetchExploreReadlists})(Page2BeforeConnect)
 export { Page2 }
+
