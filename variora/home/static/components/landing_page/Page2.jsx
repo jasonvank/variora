@@ -26,7 +26,6 @@ class RecentReadlist extends React.Component {
   }
 
   render() {
-    console.log("here", this.state.data)
     const columns = [{
       dataIndex: 'space',
       width: '2%',
@@ -92,7 +91,6 @@ class Page2BeforeConnect extends React.Component {
   }
 
   render(){
-    console.log(this.props)
     const svgBgChild = [
       (
         <svg width='100%' height='100%' viewBox='0 0 1401 1109' stroke='none' strokeWidth='1' fill='none' fillRule='evenodd' preserveAspectRatio='xMidYMid slice' >

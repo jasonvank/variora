@@ -39,7 +39,7 @@ const page1Data = [
   {
     img: 'https://gw.alipayobjects.com/zos/rmsportal/qXncdwwUTTgUFnsbCNCE.svg',
     name: 'Communication',
-    nameEn: 'Real-time communication and discussion with teammembers',
+    nameEn: 'Real-time communication and discussion with team members',
     svgBg: (
       <svg width='207px' height='295px' viewBox='0 0 207 295' stroke='none' strokeWidth='1' fill='none' fillRule='evenodd'>
         <rect id='Rectangle-14' stroke='#1D39C4' opacity='0.7' x='192.5' y='62.5' width='14' height='14' rx='1' />
@@ -193,7 +193,6 @@ class Page1 extends React.Component {
           <QueueAnim
             className='page1-block'
             type='bottom'
-            // component={Link}
             componentProps={{ to: item.to }}
             onMouseEnter={() => { this.onMouseOver(item.nameEn) }}
             onMouseLeave={this.onMouseOut}
@@ -202,7 +201,7 @@ class Page1 extends React.Component {
               <img src={item.img} />
             </div>
             <h3 >{item.name}</h3>
-            <p>{item.nameEn}</p>
+            <p style={{ fontSize: 15 }}>{item.nameEn}</p>
           </QueueAnim>
         </Col>
       )
@@ -210,7 +209,7 @@ class Page1 extends React.Component {
     return (
       <div className='home-page-wrapper page1'>
         <div className='page' >
-          <h2>You Deserve It</h2>
+          <h2>Get started using Variora</h2>
           <ScrollOverPack playScale='0.3'>
             <QueueAnim
               component={Row}

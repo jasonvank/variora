@@ -54,7 +54,7 @@ class Banner extends React.Component {
           </QueueAnim>
           {(
             <div className='img-wrapper' key='image'>
-              <img src='../../../../media/sample_page.png' style={{width: 632, height: 368}}/>
+              <img src='../../../../media/sample_page.png' style={{width: 500, height: 420}}/>
             </div>)}
         </QueueAnim>
       </div>
