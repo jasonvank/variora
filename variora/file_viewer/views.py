@@ -10,6 +10,7 @@ from django.views.generic import View
 from notifications.signals import notify
 
 from models import Annotation, AnnotationReply, Comment, Document
+from utils import sanitize
 from variora import utils
 
 h = html2text.HTML2Text()
@@ -21,7 +22,7 @@ h.ignore_links = True
 def _handle_post_annotation_request(user, document, request):
     annotation = Annotation()
     annotation.annotator = user
-    annotation.content = request.POST["annotation_content"]
+    annotation.content = sanitize(request.POST['annotation_content'])
     annotation.document_this_annotation_belongs = document
     annotation.page_index = request.POST["page_id"].split("_")[2]
     annotation.height_percent = request.POST["height_percent"]
@@ -55,7 +56,7 @@ def _handle_post_annotation_reply_request(user, document, request):
     if request.POST["annotation_reply_content"] != "":
         annotation_reply = AnnotationReply()
         annotation = Annotation.objects.get(id=int(request.POST["reply_to_annotation_id"]))
-        annotation_reply.content = request.POST["annotation_reply_content"]
+        annotation_reply.content = sanitize(request.POST["annotation_reply_content"])
         annotation_reply.replier = user
         annotation_reply.reply_to_annotation = annotation
         annotation_reply.is_public = True if request.POST["is_public"] == 'true' else False

@@ -14,6 +14,7 @@ pdfrw
 Wand
 facebook-sdk
 html2text
+bleach
 
 ###### development ######
 selenium  # write browser-side tests

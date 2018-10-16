@@ -14,6 +14,7 @@ from variora import utils
 
 from ..models import (Annotation, AnnotationReply, Comment, Document,
                       DocumentThumbnail)
+from ..utils import sanitize
 from .encoders import (AnnotationEncoder, DocumentEncoder,
                        DocumentThumbnailEncoder)
 
@@ -131,7 +132,7 @@ def edit_annotation_content(request, id):
     annotation = Annotation.objects.filter(id=int(id))
     if user.pk != annotation[0].annotator.pk:
         return HttpResponse(status=403)
-    annotation.update(content=request.POST['new_content'], edit_time=now())
+    annotation.update(content=sanitize(request.POST['new_content']), edit_time=now())
     return HttpResponse(status=200)
 
 
@@ -144,7 +145,7 @@ def edit_annotation_reply_content(request, id):
     reply = AnnotationReply.objects.filter(id=int(id))
     if user.pk != reply[0].replier.pk:
         return HttpResponse(status=403)
-    reply.update(content=request.POST['new_content'], edit_time=now())
+    reply.update(content=sanitize(request.POST['new_content']), edit_time=now())
     return HttpResponse(status=200)
 
 
