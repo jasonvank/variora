@@ -187,7 +187,9 @@ class FileViewerView(View):
             if 'slug' in kwargs:
                 document = Document.objects.prefetch_related('collectors').get(uuid=utils.slug2uuid(kwargs['slug']))
                 if 'title' not in kwargs or document.title.replace(' ', '-') != kwargs['title']:
-                    return redirect('/documents/' + document.slug + '/' + document.title.replace(' ', '-'))
+                    redirect_url = '/documents/' + document.slug + '/' + document.title.replace(' ', '-')
+                    redirect_url += '?' + request.META['QUERY_STRING']
+                    return redirect(redirect_url)
             else:
                 document = Document.objects.prefetch_related('collectors').get(id=int(request.GET["document_id"]))
         except ObjectDoesNotExist:
