@@ -6,14 +6,12 @@ from . import views
 urlpatterns = [
     url(r'^coteries$', views.CoterieListView.as_view()),
 
-    url(r'coteries/(?P<pk>\d+)$', views.CoterieView.as_view()),
-
-    url(r'coteries/(?P<pk>\d+)/(?P<operation>\w+)$', views.CoterieView.as_view()),
+    url(r'^coteries/(?P<pk>\d+)$', views.CoterieView.as_view()),
+    url(r'^coteries/(?P<pk>\d+)/(?P<operation>\w+)$', views.CoterieView.as_view()),
 
     url(r'^coteries/create$', views.create_coterie),
 
     url(r'^coteriedocuments/(?P<pk>\d+)$', views.CoterieDocumentView.as_view()),
-
     url(r'^coteriedocuments/(?P<pk>\d+)/(?P<operation>\w+)$', views.CoterieDocumentView.as_view()),
 
     url(r'^annotations/(?P<id>\d+)/content$', views.get_annotation_content),
@@ -21,6 +19,10 @@ urlpatterns = [
 
     url(r'^annotations/(?P<id>\d+)/edit$', views.edit_annotation_content),
     url(r'^annotationreplies/(?P<id>\d+)/edit$', views.edit_annotation_reply_content),
+] + [
+
+    url(r'^coteries/(?P<coterie_pk>\d+)/members/me/uploaded-documents$', views.get_uploaded_documents_for_member),
+
 ] + [
 
     url(r'^invite$', views.create_invitation),
