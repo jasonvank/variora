@@ -56,6 +56,11 @@ class AnnotationReplyEncoder(DjangoJSONEncoder):
                 replier = {
                     'is_authenticated': False,
                 },
+
+            reply_to_annotation_reply_uuid = None
+            if obj.reply_to_annotation_reply is not None:
+                reply_to_annotation_reply_uuid = obj.reply_to_annotation_reply.uuid
+                
             return {
                 'pk': obj.pk,
                 'uuid': obj.uuid,
@@ -64,6 +69,7 @@ class AnnotationReplyEncoder(DjangoJSONEncoder):
                 'replier': replier,
                 # 'content': conditional_escape(obj.content),
                 'content': obj.content,
+                'reply_to_annotation_reply_uuid': reply_to_annotation_reply_uuid
             }
         elif isinstance(obj, User):
             return UserEncoder().default(obj)
