@@ -19,6 +19,7 @@ from .encoders import (CoterieDocumentEncoder, CoterieEncoder,
 from .view_application import (ApplicationsView, ApplicationView,
                                create_application)
 from .view_invitation import InvitationsView, InvitationView, create_invitation
+from .view_member import *
 
 
 class CoterieListView(View):

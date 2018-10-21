@@ -80,6 +80,27 @@ class NotificationsList extends React.Component {
       const unreadNotification = this.state.data.filter(item => item.unread == true)
       this.props.unreadNotificationsLeftCallback(unreadNotification.length)
     }
+
+    this.handleMarkAllRead = () => {
+      const unreadNotification = this.state.data.filter(item => item.unread == true)
+      var unreadNotificationSlug = []
+      unreadNotification.map(notification => {
+        unreadNotificationSlug.push(notification.slug)
+      })
+      var unreadSlug = unreadNotificationSlug.join()
+      var data = new FormData()
+      data.append('notif_slugs_to_mark_as_read', unreadSlug)
+      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+      axios.post('/notifications/api/mark-all-as-read', data)
+        .then(response => {
+          var newData = this.state.data
+          for (var notification of newData)
+            notification.unread = false
+          this.setState({data: newData})
+          this.forceUpdate()  // TODO: should avoid using forceUpdate
+          this.checkLeftUnreadNotifications()
+        })
+    }
   }
 
   render() {
@@ -107,17 +128,25 @@ class NotificationsList extends React.Component {
     }]
 
     return (
-      <Table
-        className='notification-table'
-        dataSource={this.state.data}
-        columns={columns}
-        pagination={false}
-        showHeader={false}
-        style={{width: '300px', maxHeight: 380, overflowY: 'auto'}}
-        rowKey={record => record.slug}
-        onRowClick={this.handleReadStatus}
-        footer={() => null}
-      />
+      <div style={{ width: '300px' }}>
+        <a
+          style={{ float: 'right', color: '#37b', marginRight: 12 }}
+          onClick={this.handleMarkAllRead}
+        >
+          Mark All as Read
+        </a>
+        <Table
+          className='notification-table'
+          dataSource={this.state.data}
+          columns={columns}
+          pagination={false}
+          showHeader={false}
+          style={{width: '300px', maxHeight: 380, overflowY: 'auto'}}
+          rowKey={record => record.slug}
+          onRowClick={this.handleReadStatus}
+          footer={() => null}
+        />
+      </div>
     )
   }
 }

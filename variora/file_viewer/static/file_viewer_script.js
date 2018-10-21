@@ -366,6 +366,10 @@ function setupFileViewerSize() {
 function scrollToTargetAnnotationIfInUrl() {
   var annotation_uuid = getValFromUrlParam('annotation')
   if (annotation_uuid != null) {
+    const markReadUrl = getValFromUrlParam('mark-read-url')
+    if (markReadUrl != null)
+      $.get(markReadUrl)
+
     annotation_uuid = annotation_uuid.replace(/-/g, '')
     const annotationDiv = $('.AnnotationDiv[annotation_uuid="{0}"]'.format(annotation_uuid))
     const annotation = $('.Annotation[annotation_uuid="{0}"]'.format(annotation_uuid))

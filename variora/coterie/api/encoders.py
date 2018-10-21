@@ -18,6 +18,7 @@ class CoterieEncoder(DjangoJSONEncoder):
                 'name': obj.name,
                 'description': obj.description,
                 'pk': obj.pk,
+                'uuid': obj.clean_uuid,
                 'coteriedocument_set': list(obj.coteriedocument_set.all()),
                 'administrators': list(obj.administrators.all()),
                 'members': list(obj.members.all()),

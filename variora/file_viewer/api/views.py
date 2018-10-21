@@ -1,5 +1,7 @@
 import urllib
+from hashlib import md5
 
+from django.conf import settings
 from django.contrib.auth import get_user
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
@@ -10,10 +12,13 @@ from django.utils.timezone import now
 from django.views.generic import View
 
 from home.models import User
+from variora import utils
 
 from ..models import (Annotation, AnnotationReply, Comment, Document,
-                      DocumentThumbnail)
-from .encoders import DocumentEncoder, DocumentThumbnailEncoder, AnnotationEncoder
+                      DocumentThumbnail, UniqueFile)
+from ..utils import sanitize
+from .encoders import (AnnotationEncoder, DocumentEncoder,
+                       DocumentThumbnailEncoder)
 
 
 def _delete_document(document, user):
@@ -129,7 +134,7 @@ def edit_annotation_content(request, id):
     annotation = Annotation.objects.filter(id=int(id))
     if user.pk != annotation[0].annotator.pk:
         return HttpResponse(status=403)
-    annotation.update(content=request.POST['new_content'], edit_time=now())
+    annotation.update(content=sanitize(request.POST['new_content']), edit_time=now())
     return HttpResponse(status=200)
 
 
@@ -142,15 +147,65 @@ def edit_annotation_reply_content(request, id):
     reply = AnnotationReply.objects.filter(id=int(id))
     if user.pk != reply[0].replier.pk:
         return HttpResponse(status=403)
-    reply.update(content=request.POST['new_content'], edit_time=now())
+    reply.update(content=sanitize(request.POST['new_content']), edit_time=now())
     return HttpResponse(status=200)
 
 
-def get_document_annotations(request, pk):
+def get_document_annotations_by_slug(request, **kwargs):
     try:
-        document = Document.objects.get(id=pk)
+        document = Document.objects.get(uuid=utils.slug2uuid(kwargs['slug']))
         return JsonResponse(
             list(document.annotation_set.all()),
-            encoder=AnnotationEncoder, safe=False)
+            encoder=AnnotationEncoder,
+            safe=False
+        )
     except ObjectDoesNotExist:
         return HttpResponse(status=404)
+
+
+def get_document_by_slug(request, **kwargs):
+    try:
+        document = Document.objects.get(uuid=utils.slug2uuid(kwargs['slug']))
+        return JsonResponse(document, encoder=DocumentEncoder, safe=False)
+    except ObjectDoesNotExist:
+        return HttpResponse(status=404)
+
+
+def _handle_dropbox_link(link):
+    if link.endswith('dl=0'):
+        link = link.replace('dl=0', 'raw=1')
+    return link
+
+def post_upload_document(request):
+    EXTERNAL_URL_FORM_KEY = 'external_url'
+    TITLE_FORM_KEY = 'title'
+    MAX_DOCUMENT_UPLOAD_SIZE = settings.MAX_DOCUMENT_UPLOAD_SIZE
+
+    user = get_user(request)
+    if not user.is_authenticated:
+        return HttpResponse(status=403)
+    if TITLE_FORM_KEY not in request.POST or request.POST[TITLE_FORM_KEY] == '':
+        return HttpResponse(status=403)
+
+    if EXTERNAL_URL_FORM_KEY in request.POST and request.POST[EXTERNAL_URL_FORM_KEY] != "":
+        external_url = request.POST[EXTERNAL_URL_FORM_KEY]
+        if external_url.startswith('https://www.dropbox.com'):
+            external_url = _handle_dropbox_link(external_url)
+        document = Document(owner=user, external_url=external_url, title=request.POST[TITLE_FORM_KEY])
+        document.save()
+    else:
+        file_upload = request.FILES["file_upload"]  # this is an UploadedFile object
+
+        if not user.is_superuser and file_upload.size > MAX_DOCUMENT_UPLOAD_SIZE:
+            return HttpResponse(status=403)
+
+        this_file_md5 = md5(file_upload.read()).hexdigest()
+        try:
+            unique_file = UniqueFile.objects.get(md5=this_file_md5)
+        except ObjectDoesNotExist:
+            unique_file = UniqueFile(file_field=file_upload, md5=this_file_md5)
+            unique_file.save()
+
+        document = Document(owner=user, unique_file=unique_file, title=request.POST[TITLE_FORM_KEY])
+        document.save()
+    return JsonResponse(document, encoder=DocumentEncoder, safe=False)

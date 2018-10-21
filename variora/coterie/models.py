@@ -49,6 +49,7 @@ class CoterieDocument(ModelWithCleanUUID):
     uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=1028, db_index=True)
     owner = models.ForeignKey(Coterie)
+    uploader = models.ForeignKey(User, null=True, blank=True)
     unique_file = models.ForeignKey(UniqueFile, blank=True, null=True)
     num_visit = models.IntegerField(default=0)
     external_url = models.CharField(max_length=2083, blank=True)

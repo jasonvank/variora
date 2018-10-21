@@ -9,11 +9,12 @@ requests
 pillow
 django-cachalot
 django-memcache-status
-django-notifications-hq
+django-notifications-hq==1.4.0
 pdfrw
 Wand
 facebook-sdk
 html2text
+bleach
 
 ###### development ######
 selenium  # write browser-side tests
