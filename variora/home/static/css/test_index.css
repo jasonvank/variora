@@ -48,6 +48,10 @@ td:hover .editable-cell-icon {
   color: #666 !important
 }
 
+.document-link-theme {
+  color: #444 !important
+}
+
 .ant-table-row a {
   color: #37b
 }

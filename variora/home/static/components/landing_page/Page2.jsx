@@ -48,7 +48,7 @@ class RecentReadlist extends React.Component {
       key: 'title',
       width: '30%',
       render: (text, record, index) => (
-        <a className='document-link custom-card-text-wrapper' title={record.name} href={record.url}>{record.name}</a>
+        <a className='document-link-theme custom-card-text-wrapper' title={record.name} href={record.url}>{record.name}</a>
       )
     }, {
       title: 'Creator',
