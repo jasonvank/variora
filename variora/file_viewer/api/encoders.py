@@ -60,7 +60,7 @@ class AnnotationReplyEncoder(DjangoJSONEncoder):
             reply_to_annotation_reply_uuid = None
             if obj.reply_to_annotation_reply is not None:
                 reply_to_annotation_reply_uuid = obj.reply_to_annotation_reply.uuid
-                
+
             return {
                 'pk': obj.pk,
                 'uuid': obj.uuid,
