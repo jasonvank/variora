@@ -7,10 +7,10 @@ from .encoders import (CoterieDocumentEncoder, CoterieEncoder,
                        CoterieInvitationEncoder)
 
 
-def get_uploaded_documents_for_member(request, coterie_pk):
+def get_uploaded_documents_for_member(request, coterie_uuid):
     user = request.user
     try:
-        coterie = Coterie.objects.get(pk=coterie_pk)
+        coterie = Coterie.objects.get(uuid=coterie_uuid)
         uploaded_documents = coterie.coteriedocument_set.filter(uploader=user)
         return JsonResponse(
             list(uploaded_documents),

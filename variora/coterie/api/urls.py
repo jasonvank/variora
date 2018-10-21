@@ -21,7 +21,7 @@ urlpatterns = [
     url(r'^annotationreplies/(?P<id>\d+)/edit$', views.edit_annotation_reply_content),
 ] + [
 
-    url(r'^coteries/(?P<coterie_pk>\d+)/members/me/uploaded-documents$', views.get_uploaded_documents_for_member),
+    url(r'^coteries/(?P<coterie_uuid>[0-9a-f-]+)/members/me/uploaded-documents$', views.get_uploaded_documents_for_member),
 
 ] + [
 
