@@ -10,6 +10,7 @@ from django.views.generic import View
 from notifications.signals import notify
 
 from models import Annotation, AnnotationReply, Comment, Document
+from api.encoders import AnnotationEncoder
 from utils import sanitize
 from variora import utils
 
@@ -50,7 +51,8 @@ def _handle_post_annotation_request(user, document, request):
         'new_annotationdiv_html': render(request, "file_viewer/one_annotation_div.html", context).content,
         'new_annotation_id': annotation.id,
         'new_annotation_uuid': str(annotation.clean_uuid),
-    })
+        'new_annotation_json': annotation,
+    }, encoder=AnnotationEncoder)
 
 def _handle_post_annotation_reply_request(user, document, request):
     if request.POST["annotation_reply_content"] != "":
