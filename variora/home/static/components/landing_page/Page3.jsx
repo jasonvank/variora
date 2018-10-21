@@ -86,7 +86,7 @@ class DocumentTab extends React.Component {
 
   render() {
     return (
-      <div className='card' style={{ overflow: 'auto', color: 'white', marginTop: 18 }}>
+      <div style={{ overflow: 'auto', color: 'white', marginTop: 18 }}>
         {<DisplayDocuments data={this.state.data.mostViewsDocuments} />}
       </div>
     )
