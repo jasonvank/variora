@@ -18,7 +18,15 @@ def _handle_dropbox_link(link):
     return link
 
 def post_upload_coteriedocument(request):
+    TITLE_FORM_KEY = 'title'
+    MAX_DOCUMENT_UPLOAD_SIZE = settings.MAX_DOCUMENT_UPLOAD_SIZE
+
     user = request.user
+    if not user.is_authenticated:
+        return HttpResponse(status=403)
+    if TITLE_FORM_KEY not in request.POST or request.POST[TITLE_FORM_KEY] == '':
+        return HttpResponse(status=403)
+
     try:
         coterie = Coterie.objects.get(pk=request.POST["coterie_pk"])
 
@@ -32,13 +40,13 @@ def post_upload_coteriedocument(request):
                 uploader=user,
                 owner=coterie,
                 external_url=external_url,
-                title=request.POST["title"]
+                title=request.POST[TITLE_FORM_KEY]
             )
             document.save()
         else:
             file_upload = request.FILES["file_upload"]  # this is an UploadedFile object
 
-            if file_upload.size > settings.MAX_DOCUMENT_UPLOAD_SIZE:
+            if file_upload.size > MAX_DOCUMENT_UPLOAD_SIZE:
                 return HttpResponse(status=403)
 
             this_file_md5 = md5(file_upload.read()).hexdigest()
@@ -53,7 +61,7 @@ def post_upload_coteriedocument(request):
                 uploader=user,
                 owner=coterie,
                 unique_file=unique_file,
-                title=request.POST["title"]
+                title=request.POST[TITLE_FORM_KEY]
             )
             document.save()  # save this document to the database
 
