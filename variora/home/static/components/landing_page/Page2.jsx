@@ -4,7 +4,6 @@ import { Row, Col, Table, Avatar } from 'antd'
 import QueueAnim from 'rc-queue-anim'
 
 import svgBgToParallax from './util.jsx'
-import possibleConstructorReturn from 'babel-runtime/helpers/possibleConstructorReturn';
 
 import { connect } from 'react-redux'
 import { fetchExploreDocs, fetchExploreReadlists } from '../../redux/actions.js'
@@ -138,7 +137,7 @@ class Page2BeforeConnect extends React.Component {
               componentProps={{ xs: 24, md: 12 }}
               className='page2-components'
               key='left'
-              leaveReverse
+              // leaveReverse
             >
               <h3 key='h1'>Trending Readlists</h3>
               {<RecentReadlist data={this.props.mostCollectedReadlists} />}
@@ -147,8 +146,9 @@ class Page2BeforeConnect extends React.Component {
               component={Col}
               componentProps={{ xs: 24, md: 12 }}
               className='page2-components'
-              style={{background: 'white'}}
+              style={{ background: 'white' }}
               key='right'
+              leaveReverse
             >
               <h3 key='h1' style={{color: '#1BA39C'}}>Recent Readlists</h3>
               {<RecentReadlist data={this.props.newestReadlists} />}
