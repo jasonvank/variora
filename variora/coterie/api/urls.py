@@ -14,6 +14,8 @@ urlpatterns = [
     url(r'^coteriedocuments/(?P<pk>\d+)$', views.CoterieDocumentView.as_view()),
     url(r'^coteriedocuments/(?P<pk>\d+)/(?P<operation>\w+)$', views.CoterieDocumentView.as_view()),
 
+    url(r'^documents/upload$', views.post_upload_coteriedocument),
+
     url(r'^annotations/(?P<id>\d+)/content$', views.get_annotation_content),
     url(r'^annotationreplies/(?P<id>\d+)/content$', views.get_annotation_reply_content),
 

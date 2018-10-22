@@ -48,7 +48,7 @@ class CoterieApplication(ModelWithCleanUUID):
 class CoterieDocument(ModelWithCleanUUID):
     uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=1028, db_index=True)
-    owner = models.ForeignKey(Coterie)
+    owner = models.ForeignKey(Coterie)  # the group this document belongs to. Legacy bad naming
     uploader = models.ForeignKey(User, null=True, blank=True)
     unique_file = models.ForeignKey(UniqueFile, blank=True, null=True)
     num_visit = models.IntegerField(default=0)
