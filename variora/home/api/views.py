@@ -30,8 +30,6 @@ class UserAPIView(View):
     def get(self, request, pk):
         try:
             user = User.objects.get(id=pk)
-            if user.is_authenticated and user.setting is None:
-                UserSetting.objects.create(user=user)
             return JsonResponse(user, encoder=UserEncoder, safe=False)
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
@@ -73,7 +71,25 @@ def search_api_view(request):
 
 
 def get_current_user(request):
-    return JsonResponse(get_user(request), encoder=UserEncoder, safe=False)
+    return JsonResponse(
+        get_user(request),
+        encoder=UserEncoder,
+        safe=False
+    )
+
+
+def get_current_user_setting(request):
+    user = request.user
+    if not user.is_authenticated:
+        return HttpResponse(status=403)
+
+    if not hasattr(user, 'setting'):
+        UserSetting.objects.create(user=user)
+    return JsonResponse(
+        {
+            'email_subscribe': user.setting.email_subscribe
+        }, safe=False
+    )
 
 
 def sign_in(request):
@@ -238,7 +254,7 @@ def email_unsubscribe(request):
     if not user.is_authenticated:
         return HttpResponse(status=403)
 
-    if user.setting is None:
+    if not hasattr(user, 'setting'):
         setting = UserSetting.objects.create(user=user)
     else:
         setting = user.setting
@@ -252,7 +268,7 @@ def email_subscribe(request):
     if not user.is_authenticated:
         return HttpResponse(status=403)
 
-    if user.setting is None:
+    if not hasattr(user, 'setting'):
         setting = UserSetting.objects.create(user=user)
     else:
         setting = user.setting

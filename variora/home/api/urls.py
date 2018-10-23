@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns = [
     url(r'user$', views.get_current_user),
+    url(r'user/setting$', views.get_current_user_setting),
 
     url(r'users/(?P<pk>\d+)', views.UserAPIView.as_view()),
 
