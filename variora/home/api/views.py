@@ -22,7 +22,7 @@ from coterie.models import Coterie, CoterieDocument
 from file_viewer.api.encoders import DocumentEncoder, ReadlistListEncoder
 from file_viewer.models import Document, Readlist
 
-from ..models import User
+from ..models import User, UserSetting
 from .encoders import UserEncoder
 
 
@@ -229,3 +229,31 @@ def nus_sign_in(request):
         login(request, user)
         return redirect("/")
     return HttpResponse("<h1>NUSNET ID incorrect</h1>")
+
+
+def email_unsubscribe(request):
+    user = request.user
+    if not user.is_authenticated:
+        return HttpResponse(status=403)
+    
+    if user.setting is None:
+        setting = UserSetting.objects.create(user=user)
+    else:
+        setting = user.setting
+    setting.email_subscribe = False
+    setting.save()
+    return HttpResponse(status=200)
+
+
+def email_subscribe(request):
+    user = request.user
+    if not user.is_authenticated:
+        return HttpResponse(status=403)
+
+    if user.setting is None:
+        setting = UserSetting.objects.create(user=user)
+    else:
+        setting = user.setting
+    setting.email_subscribe = True
+    setting.save()
+    return HttpResponse(status=200)

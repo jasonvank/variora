@@ -6,6 +6,9 @@ urlpatterns = [
 
     url(r'users/(?P<pk>\d+)', views.UserAPIView.as_view()),
 
+    url(r'unsubscribe-email', views.email_unsubscribe),
+    url(r'subscribe-email', views.email_subscribe),
+
     url(r'search', views.search_api_view),
 
     url(r'signin$', views.sign_in),

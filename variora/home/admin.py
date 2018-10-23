@@ -23,6 +23,11 @@ class SessionAdmin(admin.ModelAdmin):
     list_display = ['session_key', '_session_data', 'expire_date']
 
 
+class UserSettingModelAdmin(admin.ModelAdmin):
+    list_display = ['pk', "email_subscribe"]
+
+
 admin.site.register(Session, SessionAdmin)
 admin.site.register(models.User, UserModelAdmin)
 admin.site.register(models.UploadedImage, UploadedImageModelAdmin)
+admin.site.register(models.UserSetting, UserSettingModelAdmin)

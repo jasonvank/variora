@@ -48,6 +48,7 @@ def _generate_thumbnail_image_content_file(document):
     os.remove(temp_pdf_path)
     return ContentFile(images.make_blob('jpg'))
 
+
 class UpdateTopDocumentsThread(Thread):
     def run(self):
         DocumentThumbnail.objects.all().delete()
@@ -94,12 +95,17 @@ def _get_unread_notification_list(user):
     }
     return context
 
+
 def _send_email_notification():
     threshold = 1
 
+    users_with_setting = User.objects.exclude(setting=None)
+    subscribed_users = users_with_setting.filter(setting__email_subscribe=True)
+
     unreads = Notification.objects.filter(unread=True)
     this_user_unreads_count = unreads.filter(recipient=OuterRef('pk')).annotate(c=Count('*')).values('c')[:1]
-    receivers = User.objects.filter(email_address__iendswith='@ijc.sg') \
+
+    receivers = subscribed_users.filter(email_address__iendswith='@ijc.sg') \
         .annotate(notif_count=Subquery(this_user_unreads_count, output_field=IntegerField())) \
         .filter(notif_count__gte=threshold)
 
@@ -111,6 +117,7 @@ def _send_email_notification():
             receiver_list=[user.email_address],
             content=html_message,
         )
+
 
 class NotificationEmailThread(Thread):
     def run(self):
