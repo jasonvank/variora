@@ -30,6 +30,8 @@ class UserAPIView(View):
     def get(self, request, pk):
         try:
             user = User.objects.get(id=pk)
+            if user.is_authenticated and user.setting is None:
+                UserSetting.objects.create(user=user)
             return JsonResponse(user, encoder=UserEncoder, safe=False)
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
@@ -235,7 +237,7 @@ def email_unsubscribe(request):
     user = request.user
     if not user.is_authenticated:
         return HttpResponse(status=403)
-    
+
     if user.setting is None:
         setting = UserSetting.objects.create(user=user)
     else:

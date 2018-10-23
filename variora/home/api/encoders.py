@@ -20,6 +20,7 @@ class UserEncoder(DjangoJSONEncoder):
                 'date_joined': obj.date_joined,
                 'is_authenticated': obj.is_authenticated,
                 'is_superuser': obj.is_superuser,
+                'setting:': obj.setting,
             }
         return super(UserEncoder, self).default(obj)
 
