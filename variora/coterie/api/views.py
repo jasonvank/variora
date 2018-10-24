@@ -75,7 +75,9 @@ def _remove_member(request, coterie, user):
         return HttpResponse(status=403)
 
 
-def _update_coterie(coterie, request):
+def _update_coterie(coterie, request, user):
+    if user not in coterie.administrators.all():
+        return HttpResponse(status=403)
     if 'new_name' in request.POST:
         coterie.name = request.POST['new_name']
     if 'new_desc' in request.POST:
@@ -104,7 +106,7 @@ class CoterieView(View):
             elif operation == 'removemember':
                 return _remove_member(request, coterie, user)
             elif operation == 'update':
-                return _update_coterie(coterie, request)
+                return _update_coterie(coterie, request, user)
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
 
