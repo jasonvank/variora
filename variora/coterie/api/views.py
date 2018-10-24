@@ -52,12 +52,14 @@ def _delete_coterie(coterie, user):
     else:
         return HttpResponse(status=403)  # user has no permission
 
+
 def _exit_coterie(coterie, user):
     if user in coterie.administrators.all():
         return HttpResponse(status=403)
     if user in coterie.members.all():
         coterie.members.remove(user)
     return HttpResponse(status=200)
+
 
 def _remove_member(request, coterie, user):
     if 'member_email_address' not in request.POST:
@@ -71,6 +73,21 @@ def _remove_member(request, coterie, user):
         return HttpResponse(status=200)
     else:
         return HttpResponse(status=403)
+
+
+def _rename_coterie(coterie, request):
+    new_name = request.POST['new_name']
+    coterie.name = new_name
+    coterie.save()
+    return HttpResponse(status=200)
+
+
+def _change_desc_of_coterie(coterie, request):
+    new_desc = request.POST['new_desc']
+    coterie.description = new_desc
+    coterie.save()
+    return HttpResponse(status=200)
+
 
 class CoterieView(View):
     def get(self, request, pk, **kwargs):
@@ -92,6 +109,10 @@ class CoterieView(View):
                 return _exit_coterie(coterie, user)
             elif operation == 'removemember':
                 return _remove_member(request, coterie, user)
+            elif operation == 'rename':
+                return _rename_coterie(coterie, request)
+            elif operation == 'change_desc':
+                return _change_desc_of_coterie(coterie, request)
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
 
@@ -102,6 +123,7 @@ def _delete_coteriedocument(document, user):
         return HttpResponse(status=200)
     else:
         return HttpResponse(status=403)  # user has no permission
+
 
 def _download_coteriedocument(document):
     if document.file_on_server:
@@ -114,6 +136,7 @@ def _download_coteriedocument(document):
     response['Content-Disposition'] = 'attachment; filename=%s.pdf' % document.title
     return response
 
+
 def _rename_coteriedocument(document, user, new_title):
     if user in document.owner.administrators.all():
         document.title = new_title
@@ -121,6 +144,7 @@ def _rename_coteriedocument(document, user, new_title):
         return JsonResponse(document, encoder=CoterieDocumentEncoder, safe=False)
     else:
         return HttpResponse(status=403)  # user has no permission
+
 
 class CoterieDocumentView(View):
     def get(self, request, pk, **kwargs):
