@@ -75,19 +75,13 @@ def _remove_member(request, coterie, user):
         return HttpResponse(status=403)
 
 
-def _rename_coterie(coterie, request):
-    new_name = request.POST['new_name']
-    coterie.name = new_name
+def _update_coterie(coterie, request):
+    if 'new_name' in request.POST:
+        coterie.name = request.POST['new_name']
+    if 'new_desc' in request.POST:
+        coterie.description = request.POST['new_desc']
     coterie.save()
     return HttpResponse(status=200)
-
-
-def _change_desc_of_coterie(coterie, request):
-    new_desc = request.POST['new_desc']
-    coterie.description = new_desc
-    coterie.save()
-    return HttpResponse(status=200)
-
 
 class CoterieView(View):
     def get(self, request, pk, **kwargs):
@@ -109,10 +103,8 @@ class CoterieView(View):
                 return _exit_coterie(coterie, user)
             elif operation == 'removemember':
                 return _remove_member(request, coterie, user)
-            elif operation == 'rename':
-                return _rename_coterie(coterie, request)
-            elif operation == 'change_desc':
-                return _change_desc_of_coterie(coterie, request)
+            elif operation == 'update':
+                return _update_coterie(coterie, request)
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
 
