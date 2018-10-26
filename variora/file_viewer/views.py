@@ -90,7 +90,7 @@ def _handle_post_annotation_reply_request(user, document, request):
     return JsonResponse({
         'new_annotationreply_html': render(request, "file_viewer/one_annotation_reply.html", context).content,
         'new_annotationreply_json': annotation_reply,
-    }, encoder=AnnotationEncoder)
+    }, encoder=AnnotationReplyEncoder)
 
 
 class FileViewerView(View):
