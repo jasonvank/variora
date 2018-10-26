@@ -3,7 +3,7 @@ import { tinymceInit } from './tinymce_script'
 
 
 function getAnnotationDivJQById(annotationID) {
-  var selector = '.AnnotationDiv[annotation_id="{0}"]'.format(annotationID)
+  const selector = '.AnnotationDiv[annotation_id="{0}"]'.format(annotationID)
   return $(selector)
 }
 
@@ -158,7 +158,7 @@ function addAnnotationRelatedListenerWithin(jq) {
           is_public: is_public,
         },
         success: function(data) {
-          var reply = $(data)
+          const reply = $(data['new_annotationreply_html'])
           $('.AnnotationBlock[annotation_id="{0}"]'.format(thisButton.parents('.AnnotationBlock').find('.PostAnnotationReplyButton').val())).append(reply)
           $('.ReplyAnnotationButton').parents('footer').children('form').css('display', 'none')
           tinyMCE.activeEditor.setContent('')
@@ -193,9 +193,9 @@ function addAnnotationRelatedListenerWithin(jq) {
 
   jq.find('.PostAnnotationReplyButton').on('click', function() {
     if (is_authenticated) {
-      var is_public = !this.classList.contains('AnonymouslyPostAnnotationReplyButton')
-      var thisButton = $(this)
-      var index = layer.load(1, {shade: 0.18}) //0 represent the style, can be 0-2
+      const is_public = !this.classList.contains('AnonymouslyPostAnnotationReplyButton')
+      const thisButton = $(this)
+      const index = layer.load(1, {shade: 0.18}) //0 represent the style, can be 0-2
       $.post({
         url: '',
         data: {
@@ -207,7 +207,7 @@ function addAnnotationRelatedListenerWithin(jq) {
           is_public: is_public,
         },
         success: function(data) {
-          var reply = $(data)
+          const reply = $(data['new_annotationreply_html'])
           $('.AnnotationBlock[annotation_id="{0}"]'.format(thisButton.val())).append(reply)
           $('.ReplyAnnotationButton').parents('footer').children('form').css('display', 'none')
           tinyMCE.activeEditor.setContent('')

@@ -9,7 +9,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import View
 from notifications.signals import notify
 
-from api.encoders import AnnotationEncoder
+from api.encoders import AnnotationEncoder, AnnotationReplyEncoder
 from models import Annotation, AnnotationReply, Comment, Document
 from utils import sanitize
 from variora import utils
@@ -56,37 +56,41 @@ def _handle_post_annotation_request(user, document, request):
 
 
 def _handle_post_annotation_reply_request(user, document, request):
-    if request.POST["annotation_reply_content"] != "":
-        annotation_reply = AnnotationReply()
-        annotation = Annotation.objects.get(id=int(request.POST["reply_to_annotation_id"]))
-        annotation_reply.content = sanitize(request.POST["annotation_reply_content"])
-        annotation_reply.replier = user
-        annotation_reply.reply_to_annotation = annotation
-        annotation_reply.is_public = True if request.POST["is_public"] == 'true' else False
-        if request.POST.has_key("reply_to_annotation_reply_id"):
-            annotation_reply.reply_to_annotation_reply = AnnotationReply.objects.get(id=int(request.POST["reply_to_annotation_reply_id"]))
-            if annotation_reply.reply_to_annotation_reply.replier.pk != annotation_reply.reply_to_annotation.annotator.pk:
-                notify.send(
-                    sender=annotation_reply.replier, recipient=annotation_reply.reply_to_annotation_reply.replier,
-                    action_object=annotation_reply, verb='reply to annotation reply',
-                    redirect_url=annotation.url,
-                    image_url=annotation_reply.replier.portrait_url,
-                    description=h.handle(annotation_reply.content),
-                )
-        annotation_reply.save()
-        notify.send(
-            sender=annotation_reply.replier, recipient=annotation_reply.reply_to_annotation.annotator,
-            action_object=annotation_reply, verb='reply to annotation',
-            redirect_url=annotation.url,
-            image_url=annotation_reply.replier.portrait_url,
-            description=h.handle(annotation_reply.content),
-        )
-        context = {
-            "annotation_reply": annotation_reply,
-            'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,
-        }
-        return render(request, "file_viewer/one_annotation_reply.html", context)
-    return HttpResponse(status=200)
+    if request.POST["annotation_reply_content"] == "":
+        return HttpResponse(status=200)
+
+    annotation_reply = AnnotationReply()
+    annotation = Annotation.objects.get(id=int(request.POST["reply_to_annotation_id"]))
+    annotation_reply.content = sanitize(request.POST["annotation_reply_content"])
+    annotation_reply.replier = user
+    annotation_reply.reply_to_annotation = annotation
+    annotation_reply.is_public = True if request.POST["is_public"] == 'true' else False
+    if request.POST.has_key("reply_to_annotation_reply_id"):
+        annotation_reply.reply_to_annotation_reply = AnnotationReply.objects.get(id=int(request.POST["reply_to_annotation_reply_id"]))
+        if annotation_reply.reply_to_annotation_reply.replier.pk != annotation_reply.reply_to_annotation.annotator.pk:
+            notify.send(
+                sender=annotation_reply.replier, recipient=annotation_reply.reply_to_annotation_reply.replier,
+                action_object=annotation_reply, verb='reply to annotation reply',
+                redirect_url=annotation.url,
+                image_url=annotation_reply.replier.portrait_url,
+                description=h.handle(annotation_reply.content),
+            )
+    annotation_reply.save()
+    notify.send(
+        sender=annotation_reply.replier, recipient=annotation_reply.reply_to_annotation.annotator,
+        action_object=annotation_reply, verb='reply to annotation',
+        redirect_url=annotation.url,
+        image_url=annotation_reply.replier.portrait_url,
+        description=h.handle(annotation_reply.content),
+    )
+    context = {
+        "annotation_reply": annotation_reply,
+        'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,
+    }
+    return JsonResponse({
+        'new_annotationreply_html': render(request, "file_viewer/one_annotation_reply.html", context).content,
+        'new_annotationreply_json': annotation_reply,
+    }, encoder=AnnotationEncoder)
 
 
 class FileViewerView(View):
