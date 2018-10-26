@@ -38,3 +38,11 @@ def send_email_from_noreply(subject, content, receiver_list):
         recipient_list=receiver_list,
         fail_silently=False
     )
+
+
+def check_valid_document_title(title):
+    if title == '':
+        return False
+    if ';' in title or ':' in title or '/' in title or '\\' in title or '?' in title or '<' in title or '>' in title:
+        return False
+    return True

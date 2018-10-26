@@ -35,24 +35,25 @@ class UserAPIView(View):
             return HttpResponse(status=404)
 
 
+class CombinedEncoder(DjangoJSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, User):
+            return UserEncoder().default(obj)
+        elif isinstance(obj, Document):
+            return DocumentEncoder().default(obj)
+        elif isinstance(obj, Readlist):
+            return ReadlistListEncoder().default(obj)
+        # elif isinstance(obj, Coterie):
+        #     return SearchResultCoterieEncoder().default(obj)
+        else:
+            return super(CombinedEncoder, self).default(obj)
+
+
 def search_api_view(request):
     if 'key' not in request.GET or request.GET['key'] == '':
         return HttpResponse(status=403)
 
     key = request.GET['key']
-
-    class CombinedEncoder(DjangoJSONEncoder):
-        def default(self, obj):
-            if isinstance(obj, User):
-                return UserEncoder().default(obj)
-            elif isinstance(obj, Document):
-                return DocumentEncoder().default(obj)
-            elif isinstance(obj, Readlist):
-                return ReadlistListEncoder().default(obj)
-            # elif isinstance(obj, Coterie):
-            #     return SearchResultCoterieEncoder().default(obj)
-            else:
-                return super(CombinedEncoder, self).default(obj)
 
     result_documents = list(Document.objects.filter_with_related(title__icontains=key))[:100]  # case-insensitive contain
     result_users = list(User.objects.filter(Q(nickname__icontains=key) | Q(email_address__icontains=key)))[:100]

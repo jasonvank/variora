@@ -7,6 +7,7 @@ urlpatterns = [
     url(r'^coteries$', views.CoterieListView.as_view()),
 
     url(r'^coteries/(?P<pk>\d+)$', views.CoterieView.as_view()),
+    url(r'^coteries/(?P<coterie_uuid>[0-9a-f-]+)/search$', views.search_api_view),
     url(r'^coteries/(?P<pk>\d+)/(?P<operation>\w+)$', views.CoterieView.as_view()),
 
     url(r'^coteries/create$', views.create_coterie),

@@ -9,8 +9,8 @@ from django.utils.decorators import method_decorator
 from django.views.generic import View
 from notifications.signals import notify
 
-from models import Annotation, AnnotationReply, Comment, Document
 from api.encoders import AnnotationEncoder
+from models import Annotation, AnnotationReply, Comment, Document
 from utils import sanitize
 from variora import utils
 
@@ -54,6 +54,7 @@ def _handle_post_annotation_request(user, document, request):
         'new_annotation_json': annotation,
     }, encoder=AnnotationEncoder)
 
+
 def _handle_post_annotation_reply_request(user, document, request):
     if request.POST["annotation_reply_content"] != "":
         annotation_reply = AnnotationReply()
@@ -86,6 +87,7 @@ def _handle_post_annotation_reply_request(user, document, request):
         }
         return render(request, "file_viewer/one_annotation_reply.html", context)
     return HttpResponse(status=200)
+
 
 class FileViewerView(View):
     @method_decorator(login_required(login_url='/'))

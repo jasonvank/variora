@@ -118,15 +118,20 @@ def handle_sign_up(request):
 def display_index(request):
     if isinstance(request.user, AnonymousUser) and '/readlists/' not in request.path and '/search' not in request.path:
         return redirect('/explore')
+    # if request.user_agent.is_mobile:
+    #     return render(request, 'home/pwa.html')
     return render(request, 'home/test.html', {'DEBUG': settings.DEBUG})
 
 
 def display_index_explore(request):
+    # if request.user_agent.is_mobile:
+    #     return render(request, 'home/pwa.html')
     return render(request, 'home/test.html', {'DEBUG': settings.DEBUG})
 
 
 def jason_test(request):
     return render(request, 'home/jason_test.html', {})
+
 
 def handle_image_upload(request):
     return HttpResponse(status=404)

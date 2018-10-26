@@ -28,6 +28,7 @@ def _delete_document(document, user):
     else:
         return HttpResponse(status=403)  # user has no permission
 
+
 def _uncollect_document(document, user):
     if not user.is_authenticated:
         return HttpResponse(status=403)
@@ -36,6 +37,7 @@ def _uncollect_document(document, user):
     document.collectors.remove(user)
     document.save()
     return HttpResponse(status=200)
+
 
 def _download_document(document):
     if document.file_on_server:
@@ -48,6 +50,7 @@ def _download_document(document):
     response['Content-Disposition'] = 'attachment; filename=%s.pdf' % document.title
     return response
 
+
 def _change_readlists(document, user, request):
     for readlist in user.created_readlist_set.all():
         if readlist.clean_uuid in request.POST.getlist('add_readlists[]'):
@@ -56,6 +59,7 @@ def _change_readlists(document, user, request):
             readlist.documents.remove(document)
     return HttpResponse(status=200)
 
+
 def _rename_document(document, user, new_title):
     if document.owner == user:
         document.title = new_title
@@ -63,6 +67,7 @@ def _rename_document(document, user, new_title):
         return JsonResponse(document, encoder=DocumentEncoder, safe=False)
     else:
         return HttpResponse(status=403)  # user has no permission
+
 
 class DocumentView(View):
     def get(self, request, pk, **kwargs):
@@ -176,6 +181,7 @@ def _handle_dropbox_link(link):
         link = link.replace('dl=0', 'raw=1')
     return link
 
+
 def post_upload_document(request):
     EXTERNAL_URL_FORM_KEY = 'external_url'
     TITLE_FORM_KEY = 'title'
@@ -184,7 +190,7 @@ def post_upload_document(request):
     user = get_user(request)
     if not user.is_authenticated:
         return HttpResponse(status=403)
-    if TITLE_FORM_KEY not in request.POST or request.POST[TITLE_FORM_KEY] == '':
+    if TITLE_FORM_KEY not in request.POST or not utils.check_valid_document_title(request.POST[TITLE_FORM_KEY]):
         return HttpResponse(status=403)
 
     if EXTERNAL_URL_FORM_KEY in request.POST and request.POST[EXTERNAL_URL_FORM_KEY] != "":

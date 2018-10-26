@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'kronos',
     'cachalot',
     'memcache_status',
+    'django_user_agents',
 
     # django apps
     'django.contrib.admin',
@@ -58,6 +59,8 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'django_user_agents.middleware.UserAgentMiddleware',
 ]
 
 ROOT_URLCONF = 'variora.urls'

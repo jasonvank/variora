@@ -15,6 +15,10 @@ Wand
 facebook-sdk
 html2text
 bleach
+pyyaml
+ua-parser
+user-agents
+django-user-agents
 
 ###### development ######
 selenium  # write browser-side tests
