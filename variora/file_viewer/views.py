@@ -65,7 +65,7 @@ def _handle_post_annotation_reply_request(user, document, request):
     annotation_reply.replier = user
     annotation_reply.reply_to_annotation = annotation
     annotation_reply.is_public = True if request.POST["is_public"] == 'true' else False
-    if request.POST.has_key("reply_to_annotation_reply_id"):
+    if "reply_to_annotation_reply_id" in request.POST:
         annotation_reply.reply_to_annotation_reply = AnnotationReply.objects.get(id=int(request.POST["reply_to_annotation_reply_id"]))
         if annotation_reply.reply_to_annotation_reply.replier.pk != annotation_reply.reply_to_annotation.annotator.pk:
             notify.send(
