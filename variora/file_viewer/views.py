@@ -200,6 +200,9 @@ class FileViewerView(View):
             return HttpResponseNotFound()
 
     def get(self, request, **kwargs):
+        if request.user_agent.is_mobile and settings.ENABLE_PWA:
+            return render(request, 'home/pwa.html')
+
         try:
             if 'slug' in kwargs:
                 document = Document.objects.prefetch_related('collectors').get(uuid=utils.slug2uuid(kwargs['slug']))
