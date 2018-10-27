@@ -4,7 +4,7 @@ from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Q, prefetch_related_objects
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseNotFound, HttpResponseForbidden
 from django.utils.decorators import method_decorator
 from django.utils.timezone import now
 from django.views.generic import View
@@ -113,7 +113,10 @@ class CoterieView(View):
 
 @login_required(login_url='/')
 def create_coterie(request):
-    user = get_user(request)
+    user = request.user
+    if not user.is_authenticated:
+        return HttpResponseForbidden()
+
     coterie = Coterie()
     coterie.name = request.POST['coterie_name']
     coterie.creator = user
@@ -129,7 +132,10 @@ def get_annotation_content(request, id):
 
 
 def edit_annotation_content(request, id):
-    user = get_user(request)
+    user = request.user
+    if not user.is_authenticated:
+        return HttpResponseForbidden()
+
     annotation = CoterieAnnotation.objects.filter(id=int(id))
     if user.pk != annotation[0].annotator.pk:
         return HttpResponse(status=403)
