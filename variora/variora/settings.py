@@ -154,14 +154,20 @@ ANONYMOUS_USER_PORTRAIT_URL = '/media/portrait/anonymous_portrait.png'
 
 FILE_UPLOAD_PERMISSIONS = 0664
 
+
 ############ cron job related ##############
 KRONOS_MANAGE = os.path.join(BASE_DIR, 'manage.py')
 CRON_CLASSES = []
+
 
 ############ Django Notifications ##########
 NOTIFICATIONS_USE_JSONFIELD = True
 
 MAX_DOCUMENT_UPLOAD_SIZE = 5 * 1024 * 1024  # 5 MB
+
+
+############ PWA ##########
+ENABLE_PWA = False
 
 
 ############ Django Debug Toolbar ##########
