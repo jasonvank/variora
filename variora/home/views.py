@@ -40,6 +40,8 @@ def display_sign_up_page(request):
 
 @ensure_csrf_cookie
 def display_sign_in_page(request):
+    if request.user_agent.is_mobile and settings.ENABLE_PWA:
+        return render(request, 'home/pwa.html')
     return render(request, "home/sign_in_page.html", {'DEBUG': settings.DEBUG})
 
 
@@ -116,11 +118,14 @@ def handle_sign_up(request):
 
 
 def display_index(request):
-    if isinstance(request.user, AnonymousUser) and '/readlists/' not in request.path and '/search' not in request.path:
-        return redirect('/explore')
     if request.user_agent.is_mobile and settings.ENABLE_PWA:
+        if not request.user.is_authenticated:
+            return redirect('/sign-in')
         return render(request, 'home/pwa.html')
-    return render(request, 'home/test.html', {'DEBUG': settings.DEBUG})
+    else:
+        if not request.user.is_authenticated and '/readlists/' not in request.path and '/search' not in request.path:
+            return redirect('/explore')
+        return render(request, 'home/test.html', {'DEBUG': settings.DEBUG})
 
 
 def display_index_explore(request):
@@ -146,3 +151,7 @@ def handle_image_upload(request):
     # return JsonResponse({
     #     'url': uploaded_image.image_field.url
     # })
+
+
+
+
