@@ -4,7 +4,6 @@ from hashlib import md5
 from django.conf import settings
 from django.contrib.auth import get_user
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, JsonResponse
 from django.utils.decorators import method_decorator
