@@ -158,7 +158,7 @@ function addAnnotationRelatedListenerWithin(jq) {
           is_public: is_public,
         },
         success: function(data) {
-          const reply = $(data['new_annotationreply_html'])
+          const reply = $(data.new_annotationreply_html)
           $('.AnnotationBlock[annotation_id="{0}"]'.format(thisButton.parents('.AnnotationBlock').find('.PostAnnotationReplyButton').val())).append(reply)
           $('.ReplyAnnotationButton').parents('footer').children('form').css('display', 'none')
           tinyMCE.activeEditor.setContent('')
@@ -207,7 +207,7 @@ function addAnnotationRelatedListenerWithin(jq) {
           is_public: is_public,
         },
         success: function(data) {
-          const reply = $(data['new_annotationreply_html'])
+          const reply = $(data.new_annotationreply_html)
           $('.AnnotationBlock[annotation_id="{0}"]'.format(thisButton.val())).append(reply)
           $('.ReplyAnnotationButton').parents('footer').children('form').css('display', 'none')
           tinyMCE.activeEditor.setContent('')
