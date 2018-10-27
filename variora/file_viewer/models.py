@@ -14,9 +14,12 @@ from .managers import DocumentManager, DocumentThumbnailManager
 
 def upload_to(instance, filename):
     name_without_extension, extension = filename.split(".")
+    if extension != 'pdf':
+        raise Exception('Invalid file extension.')
     # if a user uploads file name.jpeg
     # the file will be store at media/jpeg/name.jpeg
     return '{0}/{1}'.format(extension, filename)
+
 
 class UniqueFile(models.Model):
     file_field = models.FileField(upload_to=upload_to)
@@ -81,6 +84,7 @@ class Document(ModelWithCleanUUID):
     def __unicode__(self):
         return self.title
 
+
 @receiver(models.signals.post_delete, sender=Document)
 def may_delete_unique_file(sender, instance, **kwargs):
     if instance.file_on_server:
@@ -93,6 +97,7 @@ def may_delete_unique_file(sender, instance, **kwargs):
 def thumbnail_upload_to(instance, filename):
     return '{0}/{1}-{2}.jpg'.format('document_thumbnails', instance.document.id, instance.document.title)
 
+
 class DocumentThumbnail(models.Model):
     document = models.ForeignKey(Document)
     thumbnail_image = models.ImageField(upload_to=thumbnail_upload_to)
@@ -100,6 +105,7 @@ class DocumentThumbnail(models.Model):
     create_time = models.DateTimeField(auto_now=False, auto_now_add=True)
 
     objects = DocumentThumbnailManager()
+
 
 @receiver(models.signals.pre_delete, sender=DocumentThumbnail)
 def delete_document_thumbnail(sender, instance, **kwargs):
