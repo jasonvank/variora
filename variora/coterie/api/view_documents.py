@@ -11,8 +11,8 @@ from file_viewer.models import UniqueFile
 from variora import utils
 
 from .. import models
-from ..models import Coterie, CoterieApplication, CoterieDocument
-from .encoders import CoterieDocumentEncoder
+from ..models import *
+from .encoders import *
 
 
 def _delete_coteriedocument(document, user):
@@ -130,3 +130,33 @@ def post_upload_coteriedocument(request):
         return JsonResponse(document, encoder=CoterieDocumentEncoder, safe=False)
     except ObjectDoesNotExist:
         return HttpResponse(status=404)
+
+
+def get_coteriedocument_by_slug(request, **kwargs):
+    try:
+        document = CoterieDocument.objects.get(uuid=utils.slug2uuid(kwargs['slug']))
+        return JsonResponse(document, encoder=CoterieDocumentEncoder, safe=False)
+    except ObjectDoesNotExist:
+        return HttpResponse(status=404)
+
+
+def get_coteriedocument_annotations_by_slug(request, **kwargs):
+    try:
+        document = CoterieDocument.objects.get(uuid=utils.slug2uuid(kwargs['slug']))
+        return JsonResponse(
+            list(document.coterieannotation_set.all()),
+            encoder=CoterieAnnotationEncoder,
+            safe=False
+        )
+    except ObjectDoesNotExist:
+        return HttpResponse(status=404)
+
+
+
+
+
+
+
+
+
+

@@ -90,6 +90,7 @@ def may_delete_unique_file(sender, instance, **kwargs):
         if len(unique_file.document_set.all()) + len(unique_file.coteriedocument_set.all()) == 0:
             unique_file.delete()
 
+
 class CoterieComment(ModelWithCleanUUID):
     uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
     post_time = models.DateTimeField(auto_now=False, auto_now_add=True)

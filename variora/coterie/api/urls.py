@@ -14,6 +14,8 @@ urlpatterns = [
 
     url(r'^coteriedocuments/(?P<pk>\d+)$', views.CoterieDocumentView.as_view()),
     url(r'^coteriedocuments/(?P<pk>\d+)/(?P<operation>\w+)$', views.CoterieDocumentView.as_view()),
+    url(r'^coteriedocuments/byslug/(?P<slug>[0-9A-Za-z_\-]+)$', views.get_coteriedocument_by_slug),
+    url(r'^coteriedocuments/byslug/(?P<slug>[0-9A-Za-z_\-]+)/annotations$', views.get_coteriedocument_annotations_by_slug),
 
     url(r'^coteriedocuments/upload$', views.post_upload_coteriedocument),
 

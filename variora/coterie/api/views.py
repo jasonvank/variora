@@ -84,6 +84,7 @@ def _update_coterie(coterie, request, user):
     coterie.save()
     return HttpResponse(status=200)
 
+
 class CoterieView(View):
     def get(self, request, pk, **kwargs):
         try:

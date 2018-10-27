@@ -8,8 +8,7 @@ from home.api.encoders import UserEncoder
 from home.models import User
 from variora import utils
 
-from ..models import Coterie, CoterieApplication, CoterieDocument, CoterieInvitation
-
+from ..models import *
 
 class CoterieEncoder(DjangoJSONEncoder):
     def default(self, obj):
@@ -67,6 +66,69 @@ class CoterieDocumentEncoder(DjangoJSONEncoder):
                 'upload_time': obj.upload_time
             }
         return super(CoterieDocumentEncoder, self).default(obj)
+
+
+class CoterieAnnotationReplyEncoder(DjangoJSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, CoterieAnnotationReply):
+            if obj.is_public:
+                replier = obj.replier
+            else:
+                replier = {
+                    'is_authenticated': False,
+                },
+
+            reply_to_annotation_reply_uuid = None
+            if obj.reply_to_annotation_reply is not None:
+                reply_to_annotation_reply_uuid = obj.reply_to_annotation_reply.uuid
+
+            return {
+                'pk': obj.pk,
+                'uuid': obj.uuid,
+                'post_time': obj.post_time,
+                'edit_time': obj.edit_time,
+                'replier': replier,
+                # 'content': conditional_escape(obj.content),
+                'content': obj.content,
+                'reply_to_annotation_reply_uuid': reply_to_annotation_reply_uuid
+            }
+        elif isinstance(obj, User):
+            return UserEncoder().default(obj)
+        return super(CoterieAnnotationReplyEncoder, self).default(obj)
+
+
+class CoterieAnnotationEncoder(DjangoJSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, CoterieAnnotation):
+            if obj.is_public:
+                annotator = obj.annotator
+            else:
+                annotator = {
+                    'is_authenticated': False,
+                },
+            return {
+                'pk': obj.pk,
+                'uuid': obj.uuid,
+                'annotator': annotator,
+                'page_index': obj.page_index,
+                'height_percent': obj.height_percent,
+                'width_percent': obj.width_percent,
+                'top_percent': obj.top_percent,
+                'left_percent': obj.left_percent,
+                'frame_color': obj.frame_color,
+                'num_like': obj.num_like,
+                'post_time': obj.post_time,
+                'edit_time': obj.edit_time,
+                'replies': list(obj.annotationreply_set.all()),
+                # 'content': conditional_escape(obj.content),
+                'content': obj.content,
+            }
+        elif isinstance(obj, User):
+            return UserEncoder().default(obj)
+        elif isinstance(obj, CoterieAnnotationReply):
+            return CoterieAnnotationReplyEncoder().default(obj)
+        else:
+            return super(CoterieAnnotationEncoder, self).default(obj)
 
 
 class CoterieInvitationEncoder(DjangoJSONEncoder):
