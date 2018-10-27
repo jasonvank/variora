@@ -26,4 +26,9 @@ urlpatterns = [  # obsolete UI pages
     url(r'^readlists', views.display_index),
     url(r'^search', views.display_index),
     url(r'^explore', views.display_index_explore),
+
+    # pwa
+    url(r'^settings', views.display_index),
+    url(r'^uploads', views.display_index),
+    url(r'^notifications', views.display_index),
 ]

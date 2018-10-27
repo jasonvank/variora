@@ -167,7 +167,7 @@ MAX_DOCUMENT_UPLOAD_SIZE = 5 * 1024 * 1024  # 5 MB
 
 
 ############ PWA ##########
-ENABLE_PWA = False
+ENABLE_PWA = True
 
 
 ############ Django Debug Toolbar ##########
