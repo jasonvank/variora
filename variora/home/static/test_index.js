@@ -282,7 +282,7 @@ class AppBeforeConnect extends React.Component {
                   {
                     this.state.createdReadlists.sort((a, b) => a.name > b.name).map((readlist) => {
                       return (
-                        <Menu.Item key={'readlists' + readlist.slug}>
+                        <Menu.Item key={'readlists' + readlist.slug} title={readlist.name}>
                           <Link style={{ overflow: 'hidden', textOverflow: 'ellipsis' }} to={ '/readlists/' + readlist.slug }><span>{ readlist.name }</span></Link>
                         </Menu.Item>
                       )
@@ -294,7 +294,7 @@ class AppBeforeConnect extends React.Component {
                   {
                     this.state.collectedReadlists.sort((a, b) => a.name > b.name).map((readlist) => {
                       return (
-                        <Menu.Item key={'readlists' + readlist.slug}>
+                        <Menu.Item key={'readlists' + readlist.slug} title={readlist.name}>
                           <Link style={{ overflow: 'hidden', textOverflow: 'ellipsis' }} to={ '/readlists/' + readlist.slug }><span>{ readlist.name }</span></Link>
                         </Menu.Item>
                       )
