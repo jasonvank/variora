@@ -18,7 +18,7 @@ from .encoders import (CoterieApplicationEncoder, CoterieDocumentEncoder,
 # @login_required(login_url='/')
 def create_application(request):
     POST = request.POST
-    user = get_user(request)
+    user = request.user
     if not user.is_authenticated:
         return HttpResponse(status=403)
     if 'coterie_id' not in POST or 'application_message' not in POST:
@@ -39,7 +39,7 @@ def create_application(request):
 class ApplicationsView(View):
     def get(self, request, **kwargs):
         GET = request.GET
-        user = get_user(request)
+        user = request.user
         if not user.is_authenticated:
             return JsonResponse([], encoder=CoterieApplicationEncoder, safe=False)
         try:
@@ -67,7 +67,7 @@ class ApplicationView(View):
 
     def post(self, request, pk, operation):
         try:
-            user = get_user(request)
+            user = request.user
             application = CoterieApplication.objects.get(pk=pk)
             coterie = application.coterie
             applicant = application.applicant
