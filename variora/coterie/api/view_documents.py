@@ -62,7 +62,7 @@ class CoterieDocumentView(View):
     def post(self, request, pk, operation):
         try:
             coteriedocument = CoterieDocument.objects.get(pk=pk)
-            user = get_user(request)
+            user = request.user
             if operation == 'delete':
                 return _delete_coteriedocument(coteriedocument, user)
             if operation == 'rename':
