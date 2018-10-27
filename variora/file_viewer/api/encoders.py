@@ -98,7 +98,7 @@ class AnnotationEncoder(DjangoJSONEncoder):
                 'num_like': obj.num_like,
                 'post_time': obj.post_time,
                 'edit_time': obj.edit_time,
-                'replies': list(obj.annotationreply_set.all()),
+                'replies': list(obj.annotationreply_set.all().order_by('post_time')),
                 # 'content': conditional_escape(obj.content),
                 'content': obj.content,
             }
