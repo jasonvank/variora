@@ -113,7 +113,7 @@ def display_coteriefile_viewer_page(request, **kwargs):
                 coterie = Coterie.objects.get(id=kwargs['coterie_id'])
                 document = models.CoterieDocument.objects.get(uuid=utils.slug2uuid(kwargs['document_slug']))
             else:
-                coterie = Coterie.objects.get(id=request.GET["coterie_id"])
+                coterie = Coterie.objects.get(id=request.POST["coterie_id"])
                 document = models.CoterieDocument.objects.get(id=int(request.GET["document_id"]))
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
