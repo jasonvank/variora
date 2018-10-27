@@ -23,7 +23,6 @@ urlpatterns = [
 
     url(r'^display_coteriefile_viewer_page', views.display_coteriefile_viewer_page, name="display_coteriefile_viewer_page"),
     url(r'^(?P<coterie_id>\d+)/documents/(?P<document_slug>[0-9A-Za-z_\-]+)/(?P<title>.*)', views.display_coteriefile_viewer_page),
-    url(r'^documents/(?P<document_slug>[0-9A-Za-z_\-]+)/(?P<title>.*)', views.display_coteriefile_viewer_page),
 
     url(r'^edit_coteriedoc_title', views.edit_coteriedoc_title),
 
