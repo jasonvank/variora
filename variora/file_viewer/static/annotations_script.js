@@ -47,8 +47,8 @@ function removeAnnotationReply(id) {
 
 
 function _checkCoverage(annotationDom, e, pageJQ) {
-  var top_left_relative_x = e.pageX - pageJQ.offset().left
-  var top_left_relative_y = e.pageY - pageJQ.offset().top
+  const top_left_relative_x = e.pageX - pageJQ.offset().left
+  const top_left_relative_y = e.pageY - pageJQ.offset().top
   return _getLeft(annotationDom) <= top_left_relative_x &&
         _getRight(annotationDom) >= top_left_relative_x &&
         _getTop(annotationDom) <= top_left_relative_y &&
@@ -221,8 +221,8 @@ function addAnnotationRelatedListenerWithin(jq) {
   })
 
   jq.find('.delete-annotation-btn').on('click', function() {
-    var index = layer.load(1, { shade: 0.18 })  // 0 represent the style, can be 0-2
-    var annotationID = this.value
+    const index = layer.load(1, { shade: 0.18 })  // 0 represent the style, can be 0-2
+    const annotationID = this.value
     $.post({
       url: '',
       data: {
