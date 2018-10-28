@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.auth import get_user
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseForbidden
 from django.utils.decorators import method_decorator
 from django.utils.timezone import now
 from django.views.generic import View
@@ -158,6 +158,21 @@ def edit_annotation_reply_content(request, id):
 def get_document_annotations_by_slug(request, **kwargs):
     try:
         document = Document.objects.get(uuid=utils.slug2uuid(kwargs['slug']))
+
+
+        ########################
+
+        # Temporary access control
+        # TODO: use group feature when it is implemented
+
+        user = request.user
+        if not request.user.is_superuser:
+            if document.owner.email_address.endswith('@ijc.sg') and (not user.is_authenticated or not user.email_address.endswith('@ijc.sg')):
+                return HttpResponseForbidden()
+
+        #######################
+
+
         return JsonResponse(
             list(document.annotation_set.all()),
             encoder=AnnotationEncoder,
@@ -170,6 +185,21 @@ def get_document_annotations_by_slug(request, **kwargs):
 def get_document_by_slug(request, **kwargs):
     try:
         document = Document.objects.get(uuid=utils.slug2uuid(kwargs['slug']))
+
+
+        ########################
+
+        # Temporary access control
+        # TODO: use group feature when it is implemented
+
+        user = request.user
+        if not request.user.is_superuser:
+            if document.owner.email_address.endswith('@ijc.sg') and (not user.is_authenticated or not user.email_address.endswith('@ijc.sg')):
+                return HttpResponseForbidden()
+
+        #######################
+
+
         return JsonResponse(document, encoder=DocumentEncoder, safe=False)
     except ObjectDoesNotExist:
         return HttpResponse(status=404)
