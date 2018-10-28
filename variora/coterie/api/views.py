@@ -160,8 +160,8 @@ class CombinedEncoder(DjangoJSONEncoder):
     def default(self, obj):
         if isinstance(obj, CoterieDocument):
             return CoterieDocumentEncoder().default(obj)
-        # elif isinstance(obj, User):
-        #     return UserEncoder().default(obj)
+        elif isinstance(obj, User):
+            return UserEncoder().default(obj)
         # elif isinstance(obj, Readlist):
         #     return ReadlistListEncoder().default(obj)
         # elif isinstance(obj, Coterie):

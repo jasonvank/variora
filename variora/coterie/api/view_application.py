@@ -2,7 +2,7 @@ from django.contrib.auth import get_user
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, HttpResponseForbidden, JsonResponse, HttpResponseNotFound
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.generic import View
@@ -20,9 +20,10 @@ def create_application(request):
     POST = request.POST
     user = request.user
     if not user.is_authenticated:
-        return HttpResponse(status=403)
+        return HttpResponseForbidden()
     if 'coterie_id' not in POST or 'application_message' not in POST:
-        return HttpResponse(status=403)
+        return HttpResponseForbidden()
+
     try:
         application = CoterieApplication()
 
@@ -33,7 +34,7 @@ def create_application(request):
         application.save()
         return JsonResponse(application, encoder=CoterieApplicationEncoder, safe=False)
     except ObjectDoesNotExist:
-        return HttpResponse(status=404)
+        return HttpResponseNotFound()
 
 
 class ApplicationsView(View):
@@ -42,16 +43,22 @@ class ApplicationsView(View):
         user = request.user
         if not user.is_authenticated:
             return JsonResponse([], encoder=CoterieApplicationEncoder, safe=False)
+
         try:
             applications = CoterieApplication.objects.filter(acceptance__isnull=True)
             if 'from' not in GET and 'for' not in GET:
                 applications = applications.filter(acceptance__isnull=True, applicant=user)
             else:
-                # TODO: add user right validation. not everyone can view whichever application list
                 if 'from' in GET:
-                    applications = applications.filter(applicant=User.objects.get(email_address=GET['from']))
+                    applicant = User.objects.get(email_address=GET['from'])
+                    if applicant.pk != user.pk:
+                        return HttpResponseForbidden()
+                    applications = applications.filter(applicant=applicant)
                 if 'for' in GET:
-                    applications = applications.filter(coterie=Coterie.objects.get(pk=GET['for']))
+                    coterie = Coterie.objects.get(pk=GET['for'])
+                    if user not in coterie.administrators.all():
+                        return HttpResponseForbidden()
+                    applications = applications.filter(coterie=coterie)
             return JsonResponse(list(applications), encoder=CoterieApplicationEncoder, safe=False)
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
