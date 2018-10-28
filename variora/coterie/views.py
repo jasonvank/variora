@@ -10,6 +10,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from notifications.signals import notify
 
+from api.encoders import CoterieAnnotationEncoder, CoterieAnnotationReplyEncoder
 import models
 from file_viewer import models as file_viewer_models
 from home.models import User
@@ -201,44 +202,50 @@ def display_coteriefile_viewer_page(request, **kwargs):
                 'new_annotationdiv_html': render(request, "file_viewer/one_annotation_div.html", context).content,
                 'new_annotation_id': annotation.id,
                 'new_annotation_uuid': str(annotation.clean_uuid),
-            })
+                'new_annotation_json': annotation,
+            }, encoder=CoterieAnnotationEncoder)
 
         elif request.POST["operation"] == "reply_annotation":
-            if request.POST["annotation_reply_content"] != "":
-                annotation_reply = models.CoterieAnnotationReply()
-                annotation = models.CoterieAnnotation.objects.get(id=int(request.POST["reply_to_annotation_id"]))
-                annotation_reply.content = request.POST["annotation_reply_content"]
-                annotation_reply.replier = user
-                annotation_reply.reply_to_annotation = annotation
-                annotation_reply.is_public = True if request.POST["is_public"] == 'true' else False
-                if "reply_to_annotation_reply_id" in request.POST:
-                    annotation_reply.reply_to_annotation_reply = models.CoterieAnnotationReply.objects.get(id=int(request.POST["reply_to_annotation_reply_id"]))
-                    if annotation_reply.reply_to_annotation_reply.replier.pk != annotation_reply.reply_to_annotation.annotator.pk:
-                        notify.send(
-                            sender=annotation_reply.replier,
-                            recipient=annotation_reply.reply_to_annotation_reply.replier,
-                            action_object=annotation_reply,
-                            verb='reply to annotation reply',
-                            redirect_url=annotation.url,
-                            image_url=annotation_reply.replier.portrait_url,
-                            description=h.handle(annotation_reply.content),
-                        )
-                annotation_reply.save()
-                notify.send(
-                    sender=annotation_reply.replier,
-                    recipient=annotation_reply.reply_to_annotation.annotator,
-                    action_object=annotation_reply,
-                    verb='reply to annotation',
-                    redirect_url=annotation.url,
-                    image_url=annotation_reply.replier.portrait_url,
-                    description=h.handle(annotation_reply.content),
-                )
-                context = {
-                    "annotation_reply": annotation_reply,
-                    'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,
-                }
-                return render(request, "file_viewer/one_annotation_reply.html", context)
-            return HttpResponse(status=200)
+            if request.POST["annotation_reply_content"] == "":
+                return HttpResponse(status=200)
+
+            annotation_reply = models.CoterieAnnotationReply()
+            annotation = models.CoterieAnnotation.objects.get(id=int(request.POST["reply_to_annotation_id"]))
+            annotation_reply.content = request.POST["annotation_reply_content"]
+            annotation_reply.replier = user
+            annotation_reply.reply_to_annotation = annotation
+            annotation_reply.is_public = True if request.POST["is_public"] == 'true' else False
+            if "reply_to_annotation_reply_id" in request.POST:
+                annotation_reply.reply_to_annotation_reply = models.CoterieAnnotationReply.objects.get(id=int(request.POST["reply_to_annotation_reply_id"]))
+                if annotation_reply.reply_to_annotation_reply.replier.pk != annotation_reply.reply_to_annotation.annotator.pk:
+                    notify.send(
+                        sender=annotation_reply.replier,
+                        recipient=annotation_reply.reply_to_annotation_reply.replier,
+                        action_object=annotation_reply,
+                        verb='reply to annotation reply',
+                        redirect_url=annotation.url,
+                        image_url=annotation_reply.replier.portrait_url,
+                        description=h.handle(annotation_reply.content),
+                    )
+            annotation_reply.save()
+            notify.send(
+                sender=annotation_reply.replier,
+                recipient=annotation_reply.reply_to_annotation.annotator,
+                action_object=annotation_reply,
+                verb='reply to annotation',
+                redirect_url=annotation.url,
+                image_url=annotation_reply.replier.portrait_url,
+                description=h.handle(annotation_reply.content),
+            )
+            context = {
+                "annotation_reply": annotation_reply,
+                'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,
+            }
+            return JsonResponse({
+                'new_annotationreply_html': render(request, "file_viewer/one_annotation_reply.html", context).content,
+                'new_annotationreply_json': annotation_reply,
+            }, encoder=CoterieAnnotationReplyEncoder)
+
     else:
         user = request.user
 
@@ -310,7 +317,7 @@ def handle_coteriefile_upload(request):
             document = CoterieDocument(owner=coterie, unique_file=unique_file, title=request.POST["title"])
             document.save()  # save this document to the database
 
-    url_request_from = request.POST["current_url"]
+    # url_request_from = request.POST["current_url"]
     return HttpResponse(status=200)  # redirect(to=url_request_from)
 
 
