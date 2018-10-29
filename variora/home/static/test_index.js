@@ -145,14 +145,14 @@ class AppBeforeConnect extends React.Component {
     //   }
     // }
 
-    this.removeCoterieCallback = (coteriePk) => {
-      const updatedAdministratedCoteries = this.state.administratedCoteries.filter(function(coterie) {return coterie.pk != coteriePk})
-      const updatedJoinedCoteries = this.state.joinedCoteries.filter(function(coterie) {return coterie.pk != coteriePk})
-      this.setState({
-        administratedCoteries: updatedAdministratedCoteries,
-        joinedCoteries: updatedJoinedCoteries
-      })
-    }
+    // this.removeCoterieCallback = (coteriePk) => {
+    //   const updatedAdministratedCoteries = this.state.administratedCoteries.filter(function(coterie) {return coterie.pk != coteriePk})
+    //   const updatedJoinedCoteries = this.state.joinedCoteries.filter(function(coterie) {return coterie.pk != coteriePk})
+    //   this.setState({
+    //     administratedCoteries: updatedAdministratedCoteries,
+    //     joinedCoteries: updatedJoinedCoteries
+    //   })
+    // }
 
     this.updateReadlistsCallback = (readlistSlug) => {
       const updatedCreatedReadlist = this.state.createdReadlists.filter(function(readlist) {return readlist.slug !== readlistSlug})
