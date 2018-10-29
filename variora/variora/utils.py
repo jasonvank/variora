@@ -40,6 +40,10 @@ def send_email_from_noreply(subject, content, receiver_list):
     )
 
 
+def should_return_pwa(request):
+    return request.user_agent.is_mobile or request.user_agent.is_tablet
+
+
 def check_valid_document_title(title):
     if title == '':
         return False

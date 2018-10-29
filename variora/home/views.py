@@ -2,7 +2,8 @@ import random
 
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
-from django.core.mail import EmailMessage  # for sending verification using e-mail
+from django.core.mail import \
+    EmailMessage  # for sending verification using e-mail
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
@@ -11,6 +12,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from coterie.models import Coterie
 from file_viewer.models import Document
 from home.models import UploadedImage, User
+from variora.utils import *
 
 
 def display_obsolete_home_page(request):
@@ -40,7 +42,7 @@ def display_sign_up_page(request):
 
 @ensure_csrf_cookie
 def display_sign_in_page(request):
-    if request.user_agent.is_mobile and settings.ENABLE_PWA:
+    if should_return_pwa(request) and settings.ENABLE_PWA:
         return render(request, 'home/pwa.html')
     return render(request, "home/sign_in_page.html", {'DEBUG': settings.DEBUG})
 
@@ -118,7 +120,7 @@ def handle_sign_up(request):
 
 
 def display_index(request):
-    if request.user_agent.is_mobile and settings.ENABLE_PWA:
+    if should_return_pwa(request) and settings.ENABLE_PWA:
         if not request.user.is_authenticated:
             return redirect('/sign-in')
         return render(request, 'home/pwa.html')
@@ -129,7 +131,7 @@ def display_index(request):
 
 
 def display_index_explore(request):
-    if request.user_agent.is_mobile and settings.ENABLE_PWA:
+    if should_return_pwa(request) and settings.ENABLE_PWA:
         return render(request, 'home/pwa.html')
     return render(request, 'home/test.html', {'DEBUG': settings.DEBUG})
 
@@ -151,7 +153,3 @@ def handle_image_upload(request):
     # return JsonResponse({
     #     'url': uploaded_image.image_field.url
     # })
-
-
-
-

@@ -3,7 +3,8 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse, JsonResponse, HttpResponseNotFound, HttpResponseForbidden
+from django.http import (HttpResponse, HttpResponseForbidden,
+                         HttpResponseNotFound, JsonResponse)
 from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
 from django.views.generic import View
@@ -13,6 +14,7 @@ from api.encoders import AnnotationEncoder, AnnotationReplyEncoder
 from models import Annotation, AnnotationReply, Comment, Document
 from utils import sanitize
 from variora import utils
+from variora.utils import *
 
 h = html2text.HTML2Text()
 h.ignore_images = True
@@ -200,7 +202,7 @@ class FileViewerView(View):
             return HttpResponseNotFound()
 
     def get(self, request, **kwargs):
-        if request.user_agent.is_mobile and settings.ENABLE_PWA:
+        if should_return_pwa(request) and settings.ENABLE_PWA:
             return render(request, 'home/pwa.html')
 
         try:
