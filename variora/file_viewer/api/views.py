@@ -173,8 +173,15 @@ def get_document_annotations_by_slug(request, **kwargs):
         #######################
 
 
+        annotations = document.annotation_set \
+            .select_related('annotator') \
+            .prefetch_related('annotationreply_set__replier') \
+            .prefetch_related('annotationreply_set__reply_to_annotation_reply') \
+            .prefetch_related('annotationreply_set__reply_to_annotation_reply__replier') \
+            .order_by("page_index", "top_percent").all()
+
         return JsonResponse(
-            list(document.annotation_set.all()),
+            list(annotations),
             encoder=AnnotationEncoder,
             safe=False
         )
