@@ -5,12 +5,9 @@ import {getCookie, getUrlFormat, groupAvatarColors} from 'util.js'
 
 import React from 'react'
 import axios from 'axios'
-import TimeAgo from 'react-timeago'
-
-const TabPane = Tabs.TabPane;
 
 
-class GroupAvaratWrapper extends React.Component {
+class GroupAvatarWrapper extends React.Component {
   render() {
     const color = groupAvatarColors[this.props.coterie.uuid.charCodeAt(0) % 8];
     return (
@@ -55,7 +52,7 @@ class GroupsList extends React.Component {
       key: 'avatar',
       width: '20%',
       render: (text, record, index) => (
-        <GroupAvaratWrapper coterie={record} />
+        <GroupAvatarWrapper coterie={record} />
       )
     }, {
       title: 'title',
@@ -67,7 +64,7 @@ class GroupsList extends React.Component {
     }]
 
     return (
-      <div style={{maxHeight: 'bold', overflowY: 'auto' }}>
+      <div id={'group-selection-div'} style={{maxHeight: 'bold', overflowY: 'auto' }}>
         <Table
           className='notification-table'
           dataSource={this.props.administratedCoteries}
@@ -112,12 +109,6 @@ class GroupSelectionButton extends React.Component {
     this.handleVisibleChange = (visible) => {
       this.setState({visible})
     }
-    // this.removeBadgeCallback = () => {
-    //   this.setState({show: false})
-    // }
-    // this.unreadNotificationsLeftCallback = (unreadNotificationsLeft) => {
-    //   this.setState({length: unreadNotificationsLeft})
-    // }
   }
 
   componentDidMount() {

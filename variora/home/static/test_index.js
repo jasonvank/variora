@@ -51,7 +51,7 @@ const { SubMenu } = Menu
 const { Header, Content, Sider, Footer } = Layout
 const MenuItemGroup = Menu.ItemGroup
 const Search = Input.Search
-const CREATE_NEW_GROUP_MENU_ITEM_KEY = 'createGroupButton'
+const CREATE_NEW_READLIST_MENU_ITEM_KEY = 'createReadlistButton'
 
 
 const URL_BASE = ''
@@ -72,6 +72,7 @@ class AppBeforeConnect extends React.Component {
         },
       },
       createGroupModelVisible: false,
+      createReadlistModelVisible: false,
       user: initialStore.user,
       administratedCoteries: [],
       joinedCoteries: [],
@@ -84,13 +85,17 @@ class AppBeforeConnect extends React.Component {
         window.location.href = decodeURIComponent(URL_BASE + '/search?key=' + searchKey)
     }
 
-    this.setCreateGroupModelVisible = (visibility) => {
+    this.setCreateCoterieModelVisible = (visibility) => {
       this.setState({ createGroupModelVisible: visibility })
     }
 
-    this.onClickCreateGroupMenuItem = (menuItem) => {
-      if (menuItem.key == CREATE_NEW_GROUP_MENU_ITEM_KEY)
-        this.setCreateGroupModelVisible(true)
+    this.setCreateReadlistModelVisible = (visibility) => {
+      this.setState({ createReadlistModelVisible: visibility })
+    }
+
+    this.onClickCreateReadlistMenuItem = (menuItem) => {
+      if (menuItem.key == CREATE_NEW_READLIST_MENU_ITEM_KEY)
+        this.setCreateReadlistModelVisible(true)
     }
 
     this.signOff = () => {
@@ -101,6 +106,12 @@ class AppBeforeConnect extends React.Component {
       })
     }
 
+    this.handleCreateReadlistFromChange = (changedFields) => {
+      this.setState({
+        fields: { ...this.state.fields, ...changedFields },
+      })
+    }
+
     this.handleCreateCoterieFromChange = (changedFields) => {
       this.setState({
         fields: { ...this.state.fields, ...changedFields },
@@ -108,11 +119,11 @@ class AppBeforeConnect extends React.Component {
     }
 
     this.getHighlightedMenuItems = () => {
-      var pathname = window.location.pathname
+      const pathname = window.location.pathname
       if (pathname.endsWith('/search'))
         return []
       else if (pathname.includes('/groups/') || pathname.includes('/readlists/')) {
-        var pageElement = pathname.split('/')
+        const pageElement = pathname.split('/')
         return [pageElement[1] + pageElement[2]]
       } else if (pathname.includes('/explore')) {
         return ['explore']
@@ -121,7 +132,7 @@ class AppBeforeConnect extends React.Component {
     }
 
     this.submitCreateReadlistForm = () => {
-      var readlistName = this.state.fields.readlistName.value
+      const readlistName = this.state.fields.readlistName.value
       if (readlistName == '')
         message.warning('The name of the readlist cannot be empty', 1)
       else {
@@ -132,7 +143,7 @@ class AppBeforeConnect extends React.Component {
         axios.post('/file_viewer/api/readlists/create', data).then((response) => {
           var newCreatedReadlists = this.state.createdReadlists.slice()
           newCreatedReadlists.push(response.data)
-          this.setCreateGroupModelVisible(false)
+          this.setCreateReadlistModelVisible(false)
           this.setState({
             fields: { ...this.state.fields, readlistName: { value: '' } },
             createdReadlists: newCreatedReadlists
@@ -141,25 +152,25 @@ class AppBeforeConnect extends React.Component {
       }
     }
 
-    // this.submitCreateCoterieForm = () => {
-    //   var coterieName = this.state.fields.coterieName.value
-    //   if (coterieName == '')
-    //     message.warning('Group name cannot be empty', 1)
-    //   else {
-    //     var data = new FormData()
-    //     data.append('coterie_name', coterieName)
-    //     data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-    //     axios.post('/coterie/api/coteries/create', data).then((response) => {
-    //       var newAdministratedCoteries = this.state.administratedCoteries.slice()
-    //       newAdministratedCoteries.push(response.data)
-    //       this.setCreateGroupModelVisible(false)
-    //       this.setState({
-    //         fields: { ...this.state.fields, coterieName: { value: '' } },
-    //         administratedCoteries: newAdministratedCoteries
-    //       })
-    //     })
-    //   }
-    // }
+    this.submitCreateCoterieForm = () => {
+      const coterieName = this.state.fields.coterieName.value
+      if (coterieName == '')
+        message.warning('Group name cannot be empty', 1)
+      else {
+        var data = new FormData()
+        data.append('coterie_name', coterieName)
+        data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+        axios.post('/coterie/api/coteries/create', data).then((response) => {
+          var newAdministratedCoteries = this.state.administratedCoteries.slice()
+          newAdministratedCoteries.push(response.data)
+          this.setCreateCoterieModelVisible(false)
+          this.setState({
+            fields: { ...this.state.fields, coterieName: { value: '' } },
+            administratedCoteries: newAdministratedCoteries
+          })
+        })
+      }
+    }
 
     this.removeCoterieCallback = (coteriePk) => {
       const updatedAdministratedCoteries = this.state.administratedCoteries.filter(function(coterie) {return coterie.pk != coteriePk})
@@ -277,22 +288,6 @@ class AppBeforeConnect extends React.Component {
               {/* <NotificationsToggleButton user={ this.state.user } acceptInvitationCallback={ this.acceptInvitationCallback } /> */}
               <NotificationsAlertButton />
               <GroupSelectionButton />
-              {/*<Popover*/}
-                {/*content={*/}
-                  {/*<a>gogol.com</a>*/}
-                {/*}*/}
-                {/*trigger='click'*/}
-                {/*visible={true}*/}
-                {/*// onVisibleChange={this.handleVisibleChange}*/}
-              {/*>*/}
-                {/*<Icon type="team"*/}
-                  {/*onClick={() => {*/}
-                    {/*notification['info']({message: 'We are rewriting the group function, it will come soon.'})*/}
-                  {/*}}*/}
-                  {/*style={{ fontSize: 18, marginLeft: 28, verticalAlign: 'middle' }}*/}
-                {/*/>*/}
-              {/*</Popover>*/}
-
               <span style={{ marginRight: 12, marginLeft: 28, color: '#666' }}>{ this.state.user.nickname }</span>
               { this.state.user.is_authenticated ? <a onClick={this.signOff}>Sign Off</a> : <a href="/sign-in">sign in</a> }
               <Avatar
@@ -310,7 +305,7 @@ class AppBeforeConnect extends React.Component {
               <Menu
                 mode="inline"
                 defaultOpenKeys={['created_readlists', 'collected_readlists']}
-                onClick={this.onClickCreateGroupMenuItem}
+                onClick={this.onClickCreateReadlistMenuItem}
                 style={{ height: '100%', borderRight: 0 }}
                 defaultSelectedKeys={this.getHighlightedMenuItems()}
               >
@@ -331,7 +326,7 @@ class AppBeforeConnect extends React.Component {
                       )
                     })
                   }
-                  <Menu.Item disabled={!this.state.user.is_authenticated} key={CREATE_NEW_GROUP_MENU_ITEM_KEY}><Icon type="plus"/></Menu.Item>
+                  <Menu.Item disabled={!this.state.user.is_authenticated} key={CREATE_NEW_READLIST_MENU_ITEM_KEY}><Icon type="plus"/></Menu.Item>
                 </SubMenu>
                 <SubMenu key="collected_readlists" title={<span><Icon type="folder" />Collected Readlists</span>} disabled={!this.state.user.is_authenticated}>
                   {
@@ -347,45 +342,22 @@ class AppBeforeConnect extends React.Component {
                 <Modal
                   title="create a new readlist"
                   wrapClassName="vertical-center-modal"
-                  visible={this.state.createGroupModelVisible}
+                  visible={this.state.createReadlistModelVisible}
                   onOk={this.submitCreateReadlistForm}
-                  onCancel={() => this.setCreateGroupModelVisible(false)}
+                  onCancel={() => this.setCreateReadlistModelVisible(false)}
                 >
-                  <CreateReadlistForm {...fields} onChange={this.handleCreateCoterieFromChange} />
+                  <CreateReadlistForm {...fields} onChange={this.handleCreateReadlistFromChange} />
                 </Modal>
 
-                {/* <SubMenu key="admin_teams" title={<span><Icon type="solution" />admin group</span>} disabled={!this.state.user.is_authenticated}>
-                  {
-                    this.state.administratedCoteries.map((coterie) => {
-                      return (
-                        <Menu.Item key={'groups' + coterie.pk}>
-                          <Link to={ '/groups/' + coterie.pk }><span>{ coterie.name }</span></Link>
-                        </Menu.Item>
-                      )
-                    })
-                  }
-                  <Menu.Item disabled={!this.state.user.is_authenticated} key={CREATE_NEW_GROUP_MENU_ITEM_KEY}><Icon type="plus"/></Menu.Item>
-                </SubMenu>
-                <SubMenu key="member_teams" title={<span><Icon type="team" />member group</span>} disabled={!this.state.user.is_authenticated}>
-                  {
-                    this.state.joinedCoteries.map((coterie) => {
-                      return (
-                        <Menu.Item key={'groups' + coterie.pk}>
-                          <Link to={ '/groups/' + coterie.pk }><span>{ coterie.name }</span></Link>
-                        </Menu.Item>
-                      )
-                    })
-                  }
-                </SubMenu>
                 <Modal
                   title="create a new group"
                   wrapClassName="vertical-center-modal"
                   visible={this.state.createGroupModelVisible}
                   onOk={this.submitCreateCoterieForm}
-                  onCancel={() => this.setCreateGroupModelVisible(false)}
+                  onCancel={() => this.setCreateCoterieModelVisible(false)}
                 >
-                  <CustomizedForm {...fields} onChange={this.handleCreateCoterieFromChange} />
-                </Modal> */}
+                  <CreateCoterieForm {...fields} onChange={this.handleCreateCoterieFromChange} />
+                </Modal>
               </Menu>
             </Sider>
             <Layout style={{ marginLeft: 200, padding: 0 }}>
@@ -441,30 +413,30 @@ const CreateReadlistForm = Form.create({
   )
 })
 
-// const CustomizedForm = Form.create({
-//   onFieldsChange(props, changedFields) {
-//     props.onChange(changedFields)
-//   },
-//   mapPropsToFields(props) {
-//     return {
-//       coterieName: {
-//         ...props.coterieName,
-//         value: props.coterieName.value,
-//       },
-//     }
-//   },
-// })((props) => {
-//   const { getFieldDecorator } = props.form
-//   return (
-//     <Form layout="inline">
-//       <FormItem label="group name">
-//         {getFieldDecorator('coterieName', {
-//           rules: [{ required: true, message: 'name is required!' }],
-//         })(<Input />)}
-//       </FormItem>
-//     </Form>
-//   )
-// })
+const CreateCoterieForm = Form.create({
+  onFieldsChange(props, changedFields) {
+    props.onChange(changedFields)
+  },
+  mapPropsToFields(props) {
+    return {
+      coterieName: {
+        ...props.coterieName,
+        value: props.coterieName.value,
+      },
+    }
+  },
+})((props) => {
+  const { getFieldDecorator } = props.form
+  return (
+    <Form layout="inline">
+      <FormItem label="group name">
+        {getFieldDecorator('coterieName', {
+          rules: [{ required: true, message: 'name is required!' }],
+        })(<Input />)}
+      </FormItem>
+    </Form>
+  )
+})
 
 const mapStoreToProps = (store, ownProps) => {
   return {...ownProps, user: store.user}

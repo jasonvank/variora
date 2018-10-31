@@ -117,8 +117,10 @@ td:hover .editable-cell-icon {
   border-bottom: none;
 }
 
-
-
+#group-selection-div .ant-table-title {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
 
 
 
