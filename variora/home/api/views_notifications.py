@@ -40,12 +40,12 @@ def get_combined_notification_list(request):
         return JsonResponse([], safe=False)
 
     try:
-        num_to_fetch = request.GET.get('max', 10)  # If they don't specify, make it 5.
+        num_to_fetch = request.GET.get('max', 20)  # If they don't specify, make it 5.
         num_to_fetch = int(num_to_fetch)
         num_to_fetch = max(1, num_to_fetch)  # if num_to_fetch is negative, force at least one fetched notifications
         num_to_fetch = min(num_to_fetch, 100)  # put a sane ceiling on the number retrievable
     except ValueError:
-        num_to_fetch = 10  # If casting to an int fails, just make it 5.
+        num_to_fetch = 20  # If casting to an int fails, just make it 5.
 
     unread_notifications = user.notifications \
         .prefetch_related('actor') \
