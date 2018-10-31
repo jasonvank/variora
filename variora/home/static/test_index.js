@@ -1,7 +1,22 @@
 import './css/test_index.css'
 import 'regenerator-runtime/runtime'
 
-import { Avatar, notification, Button, Col, Form, Icon, Input, Layout, LocaleProvider, Menu, Modal, Row, message } from 'antd'
+import {
+  Avatar,
+  notification,
+  Button,
+  Col,
+  Form,
+  Icon,
+  Input,
+  Layout,
+  LocaleProvider,
+  Menu,
+  Modal,
+  Row,
+  message,
+  Popover, Badge
+} from 'antd'
 import {
   Link,
   Route,
@@ -15,6 +30,7 @@ import { ExploreTab } from './components/explore_tab.jsx'
 import { GroupTab } from './components/group_tab/group_tab.jsx'
 import { ReadlistTab } from './components/readlist_tab/readlist_tab.jsx'
 import { NotificationsAlertButton } from './components/notifications_alert_button.jsx'
+import { GroupSelectionButton } from './components/group_selection_button.jsx'
 // import { NotificationsToggleButton } from './components/notifications_toggle_button.jsx'
 import { Provider, connect } from 'react-redux'
 import React from 'react'
@@ -260,12 +276,23 @@ class AppBeforeConnect extends React.Component {
             <Col span={10} style={{ textAlign: 'right' }}>
               {/* <NotificationsToggleButton user={ this.state.user } acceptInvitationCallback={ this.acceptInvitationCallback } /> */}
               <NotificationsAlertButton />
-              <Icon type="team"
-                onClick={() => {
-                  notification['info']({message: 'We are rewriting the group function, it will come soon.'})
-                }}
-                style={{ fontSize: 18, marginLeft: 28, verticalAlign: 'middle' }}
-              />
+              <GroupSelectionButton />
+              {/*<Popover*/}
+                {/*content={*/}
+                  {/*<a>gogol.com</a>*/}
+                {/*}*/}
+                {/*trigger='click'*/}
+                {/*visible={true}*/}
+                {/*// onVisibleChange={this.handleVisibleChange}*/}
+              {/*>*/}
+                {/*<Icon type="team"*/}
+                  {/*onClick={() => {*/}
+                    {/*notification['info']({message: 'We are rewriting the group function, it will come soon.'})*/}
+                  {/*}}*/}
+                  {/*style={{ fontSize: 18, marginLeft: 28, verticalAlign: 'middle' }}*/}
+                {/*/>*/}
+              {/*</Popover>*/}
+
               <span style={{ marginRight: 12, marginLeft: 28, color: '#666' }}>{ this.state.user.nickname }</span>
               { this.state.user.is_authenticated ? <a onClick={this.signOff}>Sign Off</a> : <a href="/sign-in">sign in</a> }
               <Avatar

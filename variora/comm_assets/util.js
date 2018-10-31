@@ -99,14 +99,20 @@ String.prototype.format = function() {
   return a
 }
 
+
 function renderMathJax() {
   if (window.hasOwnProperty('MathJax'))
     MathJax.Hub.Queue(['Typeset', MathJax.Hub])
 }
 
+
 function range(end) {
   return Array(end - 0).fill().map((_, idx) => 0 + idx)
 }
+
+
+exports.groupAvatarColors = ['#1BA39C', '#1abc9c', '#2ecc71', '#3498db', '#9b59b6', '#34495e', '#f1c40f', '#e67e22', '#e74c3c']
+
 
 export {
   getCookie,

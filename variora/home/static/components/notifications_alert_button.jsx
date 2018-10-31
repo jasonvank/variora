@@ -17,9 +17,9 @@ class NotificationsAvaratWrapper extends React.Component {
   }
 
   render() {
-    var defaultAvatarUrl = '/media/default_notification_img.png'
-    var defaultAvatar = <Avatar src={defaultAvatarUrl} style={{ verticalAlign: 'middle', background: 'white' }}></Avatar>
-    var userAvatar = <Avatar src={this.state.newNotification.data.image_url} style={{ verticalAlign: 'middle', background: 'white' }}></Avatar>
+    const defaultAvatarUrl = '/media/default_notification_img.png'
+    const defaultAvatar = <Avatar src={defaultAvatarUrl} style={{ verticalAlign: 'middle', background: 'white' }}></Avatar>
+    const userAvatar = <Avatar src={this.state.newNotification.data.image_url} style={{ verticalAlign: 'middle', background: 'white' }}></Avatar>
     return (
       this.state.newNotification.data.image_url ? userAvatar : defaultAvatar
     )
@@ -45,7 +45,7 @@ class NotificationsDetailsWrapper extends React.Component {
     else if (actionVerb == 'post annotation')
       verb = description == '' ? 'posted in your document' : 'posted in your document:'
 
-    var title = this.state.newNotification.actor + ' ' + verb
+    const title = this.state.newNotification.actor + ' ' + verb
 
     return (
       <div>

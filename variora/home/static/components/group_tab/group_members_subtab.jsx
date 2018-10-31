@@ -54,7 +54,7 @@ class GroupAdministratorsList extends React.Component {
         rowKey={record => record.email_address}
         columns={this.state.columns}
         pagination={false}
-        title={ () => <span><Icon type="team" />  Group Admin</span> }
+        title={ () => <span><Icon type="solution" />  Group Admin</span> }
         size='middle'
       />
     )
@@ -150,7 +150,7 @@ class GroupMembersList extends React.Component {
         rowKey={record => record.email_address}
         columns={this.state.isAdmin ? columns : columns.pop() ? columns : []}
         pagination={false}
-        title={ () => <span><Icon type="solution" /> Group Members</span> }
+        title={ () => <span><Icon type="team" /> Group Members</span> }
         size='middle'
       />
     )
