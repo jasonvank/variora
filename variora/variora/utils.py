@@ -34,7 +34,7 @@ def send_email_from_noreply(subject, content, receiver_list):
         subject=subject,
         message=content,
         html_message=content,
-        from_email='variora.noreply@gmail.com',
+        from_email='Variora Team <no-reply@variora.io>',
         recipient_list=receiver_list,
         fail_silently=False
     )

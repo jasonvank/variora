@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'cachalot',
     'memcache_status',
     'django_user_agents',
+    'anymail',
 
     # django apps
     'django.contrib.admin',

@@ -19,6 +19,7 @@ pyyaml
 ua-parser
 user-agents
 django-user-agents
+django-anymail[sendgrid]
 
 ###### development ######
 selenium  # write browser-side tests
