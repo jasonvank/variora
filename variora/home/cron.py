@@ -91,7 +91,7 @@ def _get_unread_notification_list(user):
 
     context = {
         'notification_list': [NotificationEncoder().default(notif) for notif in unread_notifications],
-        'domain': 'https://variora.ml'
+        'domain': 'https://variora.io'
     }
     return context
 
