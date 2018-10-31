@@ -17,7 +17,7 @@ from wand.image import Image
 
 from file_viewer.models import Document, DocumentThumbnail
 from home.api.views_notifications import NotificationEncoder
-from home.models import User
+from home.models import User, UserSetting
 from variora.utils import send_email_from_noreply
 
 
@@ -99,15 +99,19 @@ def _get_unread_notification_list(user):
 def _send_email_notification():
     threshold = 1
 
+    users_without_setting = User.objects.filter(setting=None)
+    for user in users_without_setting:
+        UserSetting.objects.create(user=user)
     users_with_setting = User.objects.exclude(setting=None)
     subscribed_users = users_with_setting.filter(setting__email_subscribe=True)
 
     unreads = Notification.objects.filter(unread=True)
     this_user_unreads_count = unreads.filter(recipient=OuterRef('pk')).annotate(c=Count('*')).values('c')[:1]
 
-    receivers = subscribed_users.filter(email_address__iendswith='@ijc.sg') \
+    receivers = subscribed_users \
         .annotate(notif_count=Subquery(this_user_unreads_count, output_field=IntegerField())) \
         .filter(notif_count__gte=threshold)
+        # .filter(email_address__iendswith='@ijc.sg') \
 
     for user in receivers:
         context = _get_unread_notification_list(user)
