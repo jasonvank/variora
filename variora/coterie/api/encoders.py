@@ -91,6 +91,7 @@ class CoterieAnnotationReplyEncoder(DjangoJSONEncoder):
                 'post_time': obj.post_time,
                 'edit_time': obj.edit_time,
                 'replier': replier,
+                'num_like': obj.num_like,
                 # 'content': conditional_escape(obj.content),
                 'content': obj.content,
                 'reply_to_annotation_reply_uuid': reply_to_annotation_reply_uuid
