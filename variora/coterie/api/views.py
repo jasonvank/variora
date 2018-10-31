@@ -67,6 +67,7 @@ def _remove_member(request, coterie, user):
         member = User.objects.get(email_address=request.POST['member_email_address'])
     except ObjectDoesNotExist:
         return HttpResponse(status=403)
+
     if user in coterie.administrators.all() and member in coterie.members.all():
         coterie.members.remove(member)
         return HttpResponse(status=200)
@@ -77,6 +78,7 @@ def _remove_member(request, coterie, user):
 def _update_coterie(coterie, request, user):
     if user not in coterie.administrators.all():
         return HttpResponse(status=403)
+
     if 'new_name' in request.POST:
         coterie.name = request.POST['new_name']
     if 'new_desc' in request.POST:

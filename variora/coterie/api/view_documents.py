@@ -4,7 +4,7 @@ from hashlib import md5
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseForbidden
 from django.views.generic import View
 
 from file_viewer.models import UniqueFile
@@ -44,6 +44,22 @@ def _rename_coteriedocument(document, user, new_title):
         return HttpResponse(status=403)  # user has no permission
 
 
+def _subscribe_coteriedocument(document, user):
+    coterie = document.owner
+    if not (user in coterie.administrators.all() or user in coterie.members.all()):
+        return HttpResponseForbidden()
+    document.subscribers.add(user)
+    return HttpResponse(status=200)
+
+
+def _unsubscribe_coteriedocument(document, user):
+    coterie = document.owner
+    if not (user in coterie.administrators.all() or user in coterie.members.all()):
+        return HttpResponseForbidden()
+    document.subscribers.remove(user)
+    return HttpResponse(status=200)
+
+
 class CoterieDocumentView(View):
     def get(self, request, pk, **kwargs):
         try:
@@ -65,6 +81,10 @@ class CoterieDocumentView(View):
             user = request.user
             if operation == 'delete':
                 return _delete_coteriedocument(coteriedocument, user)
+            if operation == 'subscribe':
+                return _subscribe_coteriedocument(coteriedocument, user)
+            if operation == 'unsubscribe':
+                return _unsubscribe_coteriedocument(coteriedocument, user)
             if operation == 'rename':
                 if 'new_title' not in request.POST:
                     return HttpResponse(status=403)
