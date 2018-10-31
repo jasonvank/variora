@@ -12,7 +12,7 @@ import { getCookie, getValFromUrlParam } from 'util.js'
 
 import { DocumentTab } from './components/document_tab.jsx'
 import { ExploreTab } from './components/explore_tab.jsx'
-// import { GroupTab } from './components/group_tab/group_tab.jsx'
+import { GroupTab } from './components/group_tab/group_tab.jsx'
 import { ReadlistTab } from './components/readlist_tab/readlist_tab.jsx'
 import { NotificationsAlertButton } from './components/notifications_alert_button.jsx'
 // import { NotificationsToggleButton } from './components/notifications_toggle_button.jsx'
@@ -145,14 +145,14 @@ class AppBeforeConnect extends React.Component {
     //   }
     // }
 
-    // this.removeCoterieCallback = (coteriePk) => {
-    //   const updatedAdministratedCoteries = this.state.administratedCoteries.filter(function(coterie) {return coterie.pk != coteriePk})
-    //   const updatedJoinedCoteries = this.state.joinedCoteries.filter(function(coterie) {return coterie.pk != coteriePk})
-    //   this.setState({
-    //     administratedCoteries: updatedAdministratedCoteries,
-    //     joinedCoteries: updatedJoinedCoteries
-    //   })
-    // }
+    this.removeCoterieCallback = (coteriePk) => {
+      const updatedAdministratedCoteries = this.state.administratedCoteries.filter(function(coterie) {return coterie.pk != coteriePk})
+      const updatedJoinedCoteries = this.state.joinedCoteries.filter(function(coterie) {return coterie.pk != coteriePk})
+      this.setState({
+        administratedCoteries: updatedAdministratedCoteries,
+        joinedCoteries: updatedJoinedCoteries
+      })
+    }
 
     this.updateReadlistsCallback = (readlistSlug) => {
       const updatedCreatedReadlist = this.state.createdReadlists.filter(function(readlist) {return readlist.slug !== readlistSlug})
@@ -189,11 +189,21 @@ class AppBeforeConnect extends React.Component {
     //   })
     // }
 
-    // this.renderGroupTab = (match, location) => {
-    //   var coteriePk = parseInt(match.params.coteriePk)
-    //   var isAdmin = this.state.administratedCoteries.map((coterie) => coterie.pk).includes(coteriePk)
-    //   return <GroupTab removeCoterieCallback={this.removeCoterieCallback} isAdmin={isAdmin} match={match} location={location} />
-    // }
+    this.renderGroupTab = (match, location) => {
+      const coterieUUID = match.params.coterieUUID
+      const isAdmin = this.state.administratedCoteries.map(coterie => coterie.uuid).includes(coterieUUID)
+      const filtered = this.state.administratedCoteries.filter(coterie => coterie.uuid === coterieUUID)
+      if (filtered.length === 0)
+        return null
+
+      return (
+        <GroupTab
+          removeCoterieCallback={this.removeCoterieCallback}
+          isAdmin={isAdmin} match={match} location={location}
+          coteriePk={filtered[0].pk} coterieUUI={coterieUUID}
+        />
+      )
+    }
 
     this.renderReadlistTab = (match, location) => {
       return <ReadlistTab
@@ -214,6 +224,12 @@ class AppBeforeConnect extends React.Component {
         collectedReadlists: response.data.collected_readlists,
       })
       this.props.setCollectedReadlists(response.data.collected_readlists)
+    })
+    axios.get('/coterie/api/coteries').then((response) => {
+      this.setState({
+        administratedCoteries: response.data.administratedCoteries,
+        joinedCoteries: response.data.joinedCoteries
+      })
     })
   }
 
@@ -351,7 +367,7 @@ class AppBeforeConnect extends React.Component {
                   <Route path='/explore' component={ExploreTab} />
                   <Route path='/search' component={SearchResultTab} />
                   <Route path='/readlists/:readlistSlug' render={ ({match, location}) => this.renderReadlistTab(match, location) } />
-                  <Route path='/groups/:coteriePk' render={ ({match, location}) => this.renderGroupTab(match, location) } />
+                  <Route path='/groups/:coterieUUID' render={ ({match, location}) => this.renderGroupTab(match, location) } />
                   <Route path='/' component={DocumentTab} />
                 </Switch>
               </Content>

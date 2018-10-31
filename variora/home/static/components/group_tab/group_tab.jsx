@@ -1,7 +1,7 @@
 import 'regenerator-runtime/runtime'
 
 import { Icon, Input, Layout, Menu } from 'antd'
-import { Link, Route, Switch } from 'react-router-dom'
+import { Link, Route, Switch, Redirect } from 'react-router-dom'
 import { getCookie, getUrlFormat } from 'util.js'
 
 import { GroupDocumentsSubtab } from './group_documents_subtab.jsx'
@@ -21,20 +21,22 @@ class GroupTab extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      coteriePk: props.match.params.coteriePk,
+      coteriePk: props.coteriePk,
+      coterieUUI: props.coterieUUI,
       isAdmin: props.isAdmin,
     }
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      coteriePk: nextProps.match.params.coteriePk,
+      coteriePk: nextProps.coteriePk,
+      coterieUUI: nextProps.coterieUUI,
       isAdmin: nextProps.isAdmin,
     })
   }
 
   render() {
-    var path = this.props.location.pathname
+    const path = this.props.location.pathname
     return (
       <Content style={{ paddingLeft: 18, paddingRight: 18, paddingTop: 16, margin: 0, minHeight: 280 }}>
         <Menu
@@ -47,19 +49,29 @@ class GroupTab extends React.Component {
           }
         >
           <Menu.Item key='group-documents'>
-            <Link to={SUB_URL_BASE + this.state.coteriePk + '/'}><Icon type="book" />Group Documents</Link>
+            <Link to={SUB_URL_BASE + this.state.coterieUUI + '/'}><Icon type="book" />Group Documents</Link>
           </Menu.Item>
           <Menu.Item key='group-members'>
-            <Link to={SUB_URL_BASE + this.state.coteriePk + '/members'}><Icon type="usergroup-add" />Group Members</Link>
+            <Link to={SUB_URL_BASE + this.state.coterieUUI + '/members'}><Icon type="usergroup-add" />Group Members</Link>
           </Menu.Item>
           <Menu.Item key='group-settings'>
-            <Link to={SUB_URL_BASE + this.state.coteriePk + '/settings'}><Icon type="setting" />Group Settings</Link>
+            <Link to={SUB_URL_BASE + this.state.coterieUUI + '/settings'}><Icon type="setting" />Group Settings</Link>
           </Menu.Item>
         </Menu>
         <Switch>
-          <Route exact path={SUB_URL_BASE + this.state.coteriePk + '/'} render={() => <GroupDocumentsSubtab isAdmin={this.state.isAdmin} coteriePk={this.state.coteriePk} />} />
-          <Route exact path={SUB_URL_BASE + this.state.coteriePk + '/members'} render={() => <GroupMembersSubtab isAdmin={this.state.isAdmin} coteriePk={this.state.coteriePk} />} />
-          <Route exact path={SUB_URL_BASE + this.state.coteriePk + '/settings'} render={() => <GroupSettingsSubtab isAdmin={this.state.isAdmin} coteriePk={this.state.coteriePk} removeCoterieCallback={this.props.removeCoterieCallback} />} />
+          <Route exact path={SUB_URL_BASE + this.state.coterieUUI + '/'} render={() =>
+            <GroupDocumentsSubtab isAdmin={this.state.isAdmin} coteriePk={this.state.coteriePk} />}
+          />
+
+          <Route exact path={SUB_URL_BASE + this.state.coterieUUI + '/members'} render={() =>
+            <GroupMembersSubtab isAdmin={this.state.isAdmin} coteriePk={this.state.coteriePk} />}
+          />
+
+          <Route exact path={SUB_URL_BASE + this.state.coterieUUI + '/settings'} render={() =>
+            <GroupSettingsSubtab isAdmin={this.state.isAdmin} coteriePk={this.state.coteriePk} removeCoterieCallback={this.props.removeCoterieCallback} />}
+          />
+
+          <Route exact path={SUB_URL_BASE + this.state.coterieUUI + '/uploads'} render={() => <Redirect to={SUB_URL_BASE + this.state.coterieUUI + '/'} />} />
         </Switch>
       </Content>
     )

@@ -36,9 +36,11 @@ class ChangeDocumentName extends React.Component {
       this.setState({ editable: true })
     }
   }
+
+
   render() {
-    var { value, editable } = this.state
-    var editInput = (
+    const { value, editable } = this.state
+    const editInput = (
       <div className="editable-cell-input-wrapper">
         <Input
           value={value}
@@ -54,7 +56,7 @@ class ChangeDocumentName extends React.Component {
         />
       </div>
     )
-    var link = (
+    const link = (
       <div className="editable-cell-text-wrapper" title={value}>
         <a className='document-link' href={formatOpenCoterieDocumentUrl(this.props.coterieDocument, this.props.coteriePk)}>{value || ' '}</a>
         <Icon
@@ -72,6 +74,7 @@ class ChangeDocumentName extends React.Component {
   }
 }
 
+
 class GroupDocumentsList extends React.Component {
   constructor(props) {
     super(props)
@@ -79,11 +82,13 @@ class GroupDocumentsList extends React.Component {
       coteriePk: this.props.coteriePk,
       data: [],
     }
+
     this.deleteDocument = (record) => {
-      var data = new FormData()
+      const data = new FormData()
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-      axios.post(record.delete_url, data).then(this.updateData())
+      axios.post(record.delete_url, data).then(() => this.updateData())
     }
+
     this.updateData = () => {
       axios.get(getUrlFormat('/coterie/api/coteries/' + this.state.coteriePk, {}))
       .then(response => {
@@ -93,6 +98,7 @@ class GroupDocumentsList extends React.Component {
       })
       .catch(e => { message.warning(e.message) })
     }
+
     this.onCoterieDocumentRename = (key, dataIndex) => {
       return (value) => {
         var data = this.state.data
@@ -116,8 +122,9 @@ class GroupDocumentsList extends React.Component {
     this.updateData()
   }
 
+
   render() {
-    var changeDocumentName = ((text, coterieDocument) => (
+    const changeDocumentName = ((text, coterieDocument) => (
       <ChangeDocumentName
         coterieDocument={coterieDocument}
         anchor={ <a className='document-link' href={formatOpenCoterieDocumentUrl(coterieDocument, this.state.coteriePk)}>{text}</a> }
@@ -126,7 +133,7 @@ class GroupDocumentsList extends React.Component {
       />)
     )
 
-    var documentDeleteAction = ((text, coterieDocument) => (
+    const documentDeleteAction = ((text, coterieDocument) => (
       <span>
         <Popconfirm
           title="Are you sure delete this document? It cannot be undone."
@@ -138,7 +145,7 @@ class GroupDocumentsList extends React.Component {
       </span>
     ))
 
-    var documentUploadDate = ((text, coterieDocument) => (
+    const documentUploadDate = ((text, coterieDocument) => (
       <TimeAgo date={coterieDocument.upload_time} />
     ))
 
@@ -164,6 +171,7 @@ class GroupDocumentsList extends React.Component {
                             documentUploadDate(text, coterieDocument)
       ),
     }]
+
     return (
       <Table
         dataSource={this.state.data}

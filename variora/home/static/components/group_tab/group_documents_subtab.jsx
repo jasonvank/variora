@@ -30,23 +30,25 @@ class GroupDocumentsSubtab extends React.Component {
       onlineDocumentName: undefined,
       uploadBtnLoading: false,
     }
+
     this.uploadedDocumentTable = undefined
+
     this.uploadLocalDocument = () => {
-      var title = this.state.uploadedDocumentName
+      const title = this.state.uploadedDocumentName
 
       if (!validateDocumentTitle(title))
         return false
       if (!validateDocumentSize(this.state.uploadedDocumentFileList[0]))
         return false
 
-      var data = new FormData()
+      const data = new FormData()
       data.append('title', title)
       data.append('file_upload', this.state.uploadedDocumentFileList[0])
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-      data.append('coterie_id', this.props.coteriePk)
+      data.append('coterie_pk', this.props.coteriePk)
       data.append('current_url', window.location.href)
       this.setState({ uploadBtnLoading: true })
-      axios.post('/coterie/handle_coteriefile_upload', data, {
+      axios.post('/coterie/api/coteriedocuments/upload', data, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -59,9 +61,10 @@ class GroupDocumentsSubtab extends React.Component {
         this.setState({ uploadBtnLoading: false })
       })
     }
+
     this.uploadOnlineDocument = () => {
-      var title = this.state.onlineDocumentName
-      var externalUrl = this.state.onlineDocumentUrl
+      const title = this.state.onlineDocumentName
+      const externalUrl = this.state.onlineDocumentUrl
       if (!validateDocumentTitle(title))
         return false
       if (externalUrl == undefined || externalUrl == '') {
@@ -71,7 +74,7 @@ class GroupDocumentsSubtab extends React.Component {
         })
         return false
       }
-      var data = new FormData()
+      const data = new FormData()
       data.append('title', title)
       data.append('external_url', externalUrl)
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
@@ -83,13 +86,16 @@ class GroupDocumentsSubtab extends React.Component {
           this.uploadedDocumentTable.updateData()
         })
     }
+
     this.handleDefaultDocumentName = this.handleDefaultDocumentName.bind(this)
     this.handleUserInputDocumentName = this.handleUserInputDocumentName.bind(this)
   }
+
   handleDefaultDocumentName(event) {
-    var defaultDocumentName = this.state.uploadedDocumentFileList[0] ? this.state.uploadedDocumentFileList[0].name : 'undefined'
+    const defaultDocumentName = this.state.uploadedDocumentFileList[0] ? this.state.uploadedDocumentFileList[0].name : 'undefined'
     this.setState({ uploadedDocumentName: defaultDocumentName })
   }
+
   handleUserInputDocumentName(event) {
     this.setState({ uploadedDocumentName: event.target.value })
   }
@@ -97,7 +103,7 @@ class GroupDocumentsSubtab extends React.Component {
 
   render() {
     self = this
-    var uploadProps = {
+    const uploadProps = {
       accept: 'application/pdf',
       showUploadList: true,
       beforeUpload(file, fileList) {
@@ -121,7 +127,7 @@ class GroupDocumentsSubtab extends React.Component {
       </span>
     )
 
-    var uploadDocumentSection = (
+    const uploadDocumentSection = (
       <Card title={cardTitle} className={'card'} bordered={false} style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }} noHovering>
         <Row>
           <Col span={12} style={{ textAlign: 'left' }}>
