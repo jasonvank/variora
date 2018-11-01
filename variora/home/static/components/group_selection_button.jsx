@@ -187,6 +187,11 @@ class GroupSelectionButton extends React.Component {
     //
     //   if (currentCoterie !== undefined) {
     //     const color = groupAvatarColors[this.props.currentCoterieUUID.charCodeAt(0) % 8]
+    //     iconToShow = (
+    //       <Avatar style={{ cursor: 'pointer', marginLeft: 28, backgroundColor: color, verticalAlign: 'middle' }} size='small'>
+    //         <span style={{position: 'initial'}}>{currentCoterie.name.slice(0, 2).toUpperCase()}</span>
+    //       </Avatar>
+    //     )
     //   }
     // }
 

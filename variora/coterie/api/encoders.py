@@ -20,6 +20,7 @@ class CoterieEncoder(DjangoJSONEncoder):
                 'pk': obj.pk,
                 'uuid': obj.clean_uuid,
                 'coteriedocument_set': list(obj.coteriedocument_set.all()),
+                'creator': obj.creator,
                 'administrators': list(obj.administrators.all()),
                 'members': list(obj.members.all()),
                 'remove_member_method': 'post',
