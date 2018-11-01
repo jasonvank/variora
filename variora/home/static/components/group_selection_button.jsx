@@ -72,14 +72,23 @@ class GroupsList extends React.Component {
       render: (text, record, index) => (
         <GroupDetailsWrapper coterie={record} />
       )
+    }, {
+      title: 'in',
+      key: 'in',
+      width: '5%',
+      render: (text, record, index) => (
+        <Icon style={{verticalAlign: 'middle', display: record.uuid === this.props.currentCoterieUUID ? 'block' : 'none'}} type="check" />
+      )
     }]
 
     const publicCoterie = [{
+      uuid: undefined,
       name: 'Public',
       description: 'Public content is visible by all users',
       avatarUrl: '/media/logo.png'
     }]
     const createNewGroupFakeItem = {
+      uuid: 'fake',
       name: 'New Group',
       description: 'Click to create a new group',
       icon: 'plus-square-o',
@@ -162,6 +171,7 @@ class GroupSelectionButton extends React.Component {
           <GroupsList
             administratedCoteries={this.props.administratedCoteries} joinedCoteries={this.props.joinedCoteries}
             setCreateCoterieModelVisible={this.props.setCreateCoterieModelVisible}
+            currentCoterieUUID={this.props.currentCoterieUUID}
           />
         }
         trigger='click'

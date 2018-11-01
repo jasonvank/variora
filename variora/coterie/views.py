@@ -248,16 +248,16 @@ def handle_coteriefile_upload(request):
     return HttpResponse(status=200)  # redirect(to=url_request_from)
 
 
-def handle_coteriefile_delete(request):
-    try:
-        document = models.CoterieDocument.objects.get(id=int(request.POST["document_id"]))
-        coterie = Coterie.objects.get(id=request.POST["coterie_id"])
+# def handle_coteriefile_delete(request):
+#     try:
+#         document = models.CoterieDocument.objects.get(id=int(request.POST["document_id"]))
+#         coterie = Coterie.objects.get(id=request.POST["coterie_id"])
 
-        if document.owner == coterie and request.user in coterie.administrators.all():
-            document.delete()
+#         if document.owner == coterie and request.user in coterie.administrators.all():
+#             document.delete()
 
-        url_request_from = request.POST["current_url"]
-        return redirect(to=url_request_from)
-    except ObjectDoesNotExist:
-        url_request_from = request.POST["current_url"]
-        return redirect(to=url_request_from)
+#         url_request_from = request.POST["current_url"]
+#         return redirect(to=url_request_from)
+#     except ObjectDoesNotExist:
+#         url_request_from = request.POST["current_url"]
+#         return redirect(to=url_request_from)

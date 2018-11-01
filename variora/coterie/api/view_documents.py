@@ -16,7 +16,7 @@ from .encoders import *
 
 
 def _delete_coteriedocument(document, user):
-    if user in document.owner.administrators.all():
+    if user in document.owner.administrators.all() or user.pk == document.uploader.pk:
         document.delete()
         return HttpResponse(status=200)
     else:
@@ -36,7 +36,7 @@ def _download_coteriedocument(document):
 
 
 def _rename_coteriedocument(document, user, new_title):
-    if user in document.owner.administrators.all():
+    if user in document.owner.administrators.all() or user.pk == document.uploader.pk:
         document.title = new_title
         document.save()
         return JsonResponse(document, encoder=CoterieDocumentEncoder, safe=False)
