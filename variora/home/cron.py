@@ -142,6 +142,21 @@ def clear_expired_sessions_kronjob():
 def ping_google_kronjob():
     ping_google()
 
+
 @kronos.register('0 6 * * *')
 def send_email_notification_kronjob():
     NotificationEmailThread().start()
+
+
+@kronos.register('0 0 5 31 2 ?')  # Feb 31 will never happen, so this cron job will never be executed unless manually
+def test_send_email():
+    send_email_from_noreply(
+        subject='Variora: test email',
+        receiver_list=['yuyang.royl8@gmail.com', 'royl8@outlook.com'],
+        content='This is a test email',
+    )
+
+
+
+
+
