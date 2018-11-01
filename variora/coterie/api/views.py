@@ -181,7 +181,7 @@ def search_api_view(request, coterie_uuid):
 
         key = request.GET['key']
 
-        result_documents = list(CoterieDocument.objects.filter_with_related(title__icontains=key))[:100]  # case-insensitive contain
+        result_documents = list(CoterieDocument.objects.filter_with_related(title__icontains=key).filter(owner=coterie))[:100]  # case-insensitive contain
         # result_users = list(User.objects.filter(Q(nickname__icontains=key) | Q(email_address__icontains=key)))[:100]
         # result_coteries = list(Coterie.objects.filter(Q(name__icontains=key) | Q(id__icontains=key)))[:100]
         # result_readlists = list(Readlist.objects.filter(Q(name__icontains=key) | Q(description__icontains=key)).filter(is_public=True))[:100]
