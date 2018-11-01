@@ -31,7 +31,7 @@ import { GroupTab } from './components/group_tab/group_tab.jsx'
 import { ReadlistTab } from './components/readlist_tab/readlist_tab.jsx'
 import { NotificationsAlertButton } from './components/notifications_alert_button.jsx'
 import { GroupSelectionButton } from './components/group_selection_button.jsx'
-// import { NotificationsToggleButton } from './components/notifications_toggle_button.jsx'
+import { NotificationsToggleButton } from './components/notifications_toggle_button.jsx'
 import { Provider, connect } from 'react-redux'
 import React from 'react'
 import ReactDOM from 'react-dom'
@@ -432,8 +432,9 @@ class AppBeforeConnect extends React.Component {
               />
             </Col>
             <Col span={10} style={{ textAlign: 'right' }}>
-              {/* <NotificationsToggleButton user={ this.state.user } acceptInvitationCallback={ this.acceptInvitationCallback } /> */}
+
               <NotificationsAlertButton />
+              <NotificationsToggleButton user={ this.state.user } acceptInvitationCallback={ this.acceptInvitationCallback } />
               <GroupSelectionButton
                 administratedCoteries={this.state.administratedCoteries} joinedCoteries={this.state.joinedCoteries}
                 setCreateCoterieModelVisible={this.setCreateCoterieModelVisible}

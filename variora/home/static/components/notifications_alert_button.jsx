@@ -193,7 +193,7 @@ class NotificationsAlertButton extends React.Component {
           visible={this.state.visible}
           onVisibleChange={this.handleVisibleChange}
         >
-          <Icon type="bell" style={{ cursor: 'pointer', fontSize: 18, marginLeft: 28, verticalAlign: 'middle', marginTop: -2 }}/>
+          <Icon type="bell" style={{ cursor: 'pointer', fontSize: 18, verticalAlign: 'middle', marginTop: -2 }}/>
         </Popover>
       </Badge>
     )

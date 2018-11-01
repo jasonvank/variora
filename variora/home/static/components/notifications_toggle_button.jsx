@@ -131,7 +131,7 @@ class NotificationsToggleButton extends React.Component {
         onClick={this.onClick}
       >
         <Icon type="inbox"
-          style={{ cursor: 'pointer', fontSize: 18, marginTop: -1 }}
+          style={{ cursor: 'pointer', fontSize: 18, marginLeft: 28, verticalAlign: 'middle', marginTop: -1 }}
         />
       </Badge>
     )
