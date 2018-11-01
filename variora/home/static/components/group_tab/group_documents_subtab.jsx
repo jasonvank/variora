@@ -119,7 +119,7 @@ class GroupDocumentsSubtab extends React.Component {
     const cardTitle = (
       <span style={{fontSize: '12px'}}>
         Upload Document
-        <Tooltip title={'Documents only visible to admins and members'} >
+        <Tooltip title={'Documents only visible to admins and members in the group'} >
           <a href="#">
             <Icon type="info-circle-o" style={{marginLeft: 6}} />
           </a>
@@ -175,7 +175,8 @@ class GroupDocumentsSubtab extends React.Component {
         <div className={'card'} style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}>
           <GroupDocumentsList ref={(ele) => this.uploadedDocumentTable = ele} coteriePk={this.props.coteriePk} isAdmin={this.props.isAdmin}/>
         </div>
-        { this.props.isAdmin ? uploadDocumentSection : null }
+        {/*{ this.props.isAdmin ? uploadDocumentSection : null }*/}
+        { uploadDocumentSection }
       </div>
     )
   }

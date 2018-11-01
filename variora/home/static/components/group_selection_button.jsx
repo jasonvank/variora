@@ -9,12 +9,16 @@ import axios from 'axios'
 
 class GroupAvatarWrapper extends React.Component {
   render() {
-    const color = groupAvatarColors[this.props.coterie.uuid.charCodeAt(0) % 8];
-    return (
-      <Avatar style={{ backgroundColor: color, verticalAlign: 'middle' }}>
-        <span style={{position: 'initial'}}>{this.props.coterie.name.slice(0, 2).toUpperCase()}</span>
-      </Avatar>
-    )
+    if (this.props.coterie.avatarUrl === undefined) {
+      const color = groupAvatarColors[this.props.coterie.uuid.charCodeAt(0) % 8]
+      return (
+        <Avatar style={{ backgroundColor: color, verticalAlign: 'middle' }}>
+          <span style={{position: 'initial'}}>{this.props.coterie.name.slice(0, 2).toUpperCase()}</span>
+        </Avatar>
+      )
+    } else
+      return <Avatar src={this.props.coterie.avatarUrl} style={{ verticalAlign: 'middle', background: 'white' }}></Avatar>
+
   }
 }
 
@@ -63,8 +67,26 @@ class GroupsList extends React.Component {
       )
     }]
 
+    const publicCoterie = [{
+      name: 'Public',
+      description: 'Public content is visible by all users',
+      avatarUrl: '/media/logo.png'
+    }]
     return (
       <div id={'group-selection-div'} style={{maxHeight: '66vh', overflowY: 'auto' }}>
+        <Table
+          className='notification-table'
+          dataSource={publicCoterie}
+          columns={columns}
+          pagination={false}
+          showHeader={false}
+          style={{width: '300px'}}
+          rowKey={record => record.slug}
+          onRowClick={() => {window.location.href = `/`}}
+          footer={() => null}
+          title={() => null}
+          locale={{ emptyText: '', }}
+        />
         <Table
           className='notification-table'
           dataSource={this.props.administratedCoteries}

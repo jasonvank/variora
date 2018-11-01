@@ -12,7 +12,6 @@ import { getUrlFormat } from 'util.js'
 
 const { Content } = Layout
 
-const SUB_URL_BASE = '/search'
 var fullUrl = window.location.href
 // TODO: refactoring this
 var searchKey = fullUrl.slice(fullUrl.indexOf('=') + 1)
@@ -60,7 +59,11 @@ class SearchResultTab extends React.Component {
 
 
   render() {
-    const path = window.location.href
+    var urlBase = '/search'
+    const path = window.location.pathname
+    if (path.includes('/groups/'))
+      urlBase = '/groups/' + path.split('/')[2] + urlBase
+
     return (
       <Content style={{ paddingLeft: 18, paddingRight: 18, paddingTop: 16, margin: 0, minHeight: 280 }}>
         <Menu
@@ -74,30 +77,30 @@ class SearchResultTab extends React.Component {
           }
         >
           <Menu.Item key='search-documents'>
-            <Link to={SUB_URL_BASE + '?key=' + searchKey}><Icon type='file' />Documents</Link>
+            <Link to={urlBase + '?key=' + searchKey}><Icon type='file' />Documents</Link>
           </Menu.Item>
           <Menu.Item key='search-readlists'>
-            <Link to={SUB_URL_BASE + '/readlists?key=' + searchKey}><Icon type='folder' />Readlists</Link>
+            <Link to={urlBase + '/readlists?key=' + searchKey}><Icon type='folder' />Readlists</Link>
           </Menu.Item>
           <Menu.Item key='search-users'>
-            <Link to={SUB_URL_BASE + '/users?key=' + searchKey}><Icon type='user' />Users</Link>
+            <Link to={urlBase + '/users?key=' + searchKey}><Icon type='user' />Users</Link>
           </Menu.Item>
         </Menu>
 
         <Switch>
-          <Route exact path={SUB_URL_BASE} render={() =>
+          <Route exact path={urlBase} render={() =>
             <DocumentResult
               resultDocuments={this.state.resultDocuments}
             />}
           />
 
-          <Route path={SUB_URL_BASE + '/users'} render={() =>
+          <Route path={urlBase + '/users'} render={() =>
             <UserResult
               resultUsers={this.state.resultUsers}
             />}
           />
 
-          <Route path={SUB_URL_BASE + '/readlists'} render={() =>
+          <Route path={urlBase + '/readlists'} render={() =>
             <ReadlistResult
               resultReadlists={this.state.resultReadlists}
             />}

@@ -37,6 +37,7 @@ class GroupTab extends React.Component {
 
   render() {
     const path = this.props.location.pathname
+    const selectedKeys = path.includes('members') ? ['group-members'] : path.includes('settings') ? ['group-settings'] : ['group-documents']
     return (
       <Content style={{ paddingLeft: 18, paddingRight: 18, paddingTop: 16, margin: 0, minHeight: 280 }}>
         <Menu
@@ -44,20 +45,19 @@ class GroupTab extends React.Component {
           mode="horizontal"
           style={{ padding: 0 }}
           defaultSelectedKeys={['group-documents']}
-          selectedKeys = {
-            path.includes('members') ? ['group-members'] : path.includes('settings') ? ['group-settings'] : ['group-documents']
-          }
+          selectedKeys = {selectedKeys}
         >
-          <Menu.Item key='group-documents'>
+          <Menu.Item key='group-documents' style={{display: selectedKeys.includes('group-documents') ? 'block' : 'none'}}>
             <Link to={SUB_URL_BASE + this.state.coterieUUI + '/'}><Icon type="book" />Group Documents</Link>
           </Menu.Item>
-          <Menu.Item key='group-members'>
+          <Menu.Item key='group-members' style={{display: selectedKeys.includes('group-members') ? 'block' : 'none'}}>
             <Link to={SUB_URL_BASE + this.state.coterieUUI + '/members'}><Icon type="usergroup-add" />Group Members</Link>
           </Menu.Item>
-          <Menu.Item key='group-settings'>
+          <Menu.Item key='group-settings' style={{display: selectedKeys.includes('group-settings') ? 'block' : 'none'}}>
             <Link to={SUB_URL_BASE + this.state.coterieUUI + '/settings'}><Icon type="setting" />Group Settings</Link>
           </Menu.Item>
         </Menu>
+
         <Switch>
           <Route exact path={SUB_URL_BASE + this.state.coterieUUI + '/'} render={() =>
             <GroupDocumentsSubtab isAdmin={this.state.isAdmin} coteriePk={this.state.coteriePk} />}

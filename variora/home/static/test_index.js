@@ -54,7 +54,7 @@ const Search = Input.Search
 const CREATE_NEW_READLIST_MENU_ITEM_KEY = 'createReadlistButton'
 
 
-const URL_BASE = ''
+const GLOBAL_URL_BASE = ''
 
 class AppBeforeConnect extends React.Component {
   constructor() {
@@ -81,8 +81,12 @@ class AppBeforeConnect extends React.Component {
     }
 
     this.handleSearch = (searchKey) => {
-      if (searchKey != '')
-        window.location.href = decodeURIComponent(URL_BASE + '/search?key=' + searchKey)
+      if (searchKey.length === 0) return
+      if (window.location.pathname.includes('/groups/')) {
+        const coterieUUID = window.location.pathname.split('/')[2]
+        window.location.href = decodeURIComponent('/groups/' + coterieUUID  + '/search?key=' + searchKey)
+      } else
+        window.location.href = decodeURIComponent(GLOBAL_URL_BASE + '/search?key=' + searchKey)
     }
 
     this.setCreateCoterieModelVisible = (visibility) => {
@@ -219,7 +223,8 @@ class AppBeforeConnect extends React.Component {
     this.renderGroupTab = (match, location) => {
       const coterieUUID = match.params.coterieUUID
       const isAdmin = this.state.administratedCoteries.map(coterie => coterie.uuid).includes(coterieUUID)
-      const filtered = this.state.administratedCoteries.filter(coterie => coterie.uuid === coterieUUID)
+      const filtered = this.state.administratedCoteries.filter(coterie => coterie.uuid === coterieUUID).
+        concat(this.state.joinedCoteries.filter(coterie => coterie.uuid === coterieUUID))
       if (filtered.length === 0)
         return null
 
@@ -268,6 +273,148 @@ class AppBeforeConnect extends React.Component {
     notification.config({ top: 66 })
 
     const fields = this.state.fields
+
+    const groupRouter = (coterieUUID) => {
+      const pathname = window.location.pathname
+      const defaultSelectedKeys = () => {
+        if (pathname.endsWith('/search'))
+          return []
+        return pathname.includes('members') ? ['group-members'] : pathname.includes('settings') ? ['group-settings'] : ['group-documents']
+      }
+
+      // return globalRouter
+      return (
+        <Router basename={GLOBAL_URL_BASE}>
+          <Layout>
+            <Sider className='sider' width={200} style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }}>
+              <Menu
+                mode="inline"
+                // defaultOpenKeys={['created_readlists', 'collected_readlists']}
+                onClick={this.onClickCreateReadlistMenuItem}
+                style={{ height: '100%', borderRight: 0 }}
+                defaultSelectedKeys={defaultSelectedKeys()}
+              >
+                {/*<Menu.Item key="explore" >*/}
+                  {/*<Link to="/explore"><span><Icon type="compass" />Explore</span></Link>*/}
+                {/*</Menu.Item>*/}
+                <Menu.Item key="group-documents" disabled={!this.state.user.is_authenticated}>
+                  <Link to={ '/groups/' + coterieUUID + "/" }><span><Icon type='book' />Group Documents</span></Link>
+                </Menu.Item>
+
+                <Menu.Item key="group-members" disabled={!this.state.user.is_authenticated}>
+                  <Link to={ '/groups/' + coterieUUID + "/members" }><span><Icon type='usergroup-add' />Group Members</span></Link>
+                </Menu.Item>
+
+                <Menu.Item key="group-settings" disabled={!this.state.user.is_authenticated}>
+                  <Link to={ '/groups/' + coterieUUID + "/settings" }><span><Icon type='setting' />Group Setting</span></Link>
+                </Menu.Item>
+                <Modal
+                  title="create a new group"
+                  wrapClassName="vertical-center-modal"
+                  visible={this.state.createGroupModelVisible}
+                  onOk={this.submitCreateCoterieForm}
+                  onCancel={() => this.setCreateCoterieModelVisible(false)}
+                >
+                  <CreateCoterieForm {...fields} onChange={this.handleCreateCoterieFromChange} />
+                </Modal>
+              </Menu>
+            </Sider>
+            <Layout style={{ marginLeft: 200, padding: 0 }}>
+              <Content>
+                <Switch>
+                  <Route path={'/groups/' + coterieUUID + '/search'} component={SearchResultTab} />
+                  <Route path='/groups/:coterieUUID' render={ ({match, location}) => this.renderGroupTab(match, location) } />
+                </Switch>
+              </Content>
+              <Footer style={{ textAlign: 'center' }}>
+                  © 2018 Variora. Reach us via <a style={{ color: '#37b' }} href='mailto:variora@outlook.com'>variora@outlook.com</a>
+              </Footer>
+            </Layout>
+          </Layout>
+        </Router>
+      )
+    }
+
+    const globalRouter = (
+      <Router basename={GLOBAL_URL_BASE}>
+        <Layout>
+          <Sider className='sider' width={200} style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }}>
+            <Menu
+              mode="inline"
+              defaultOpenKeys={['created_readlists', 'collected_readlists']}
+              onClick={this.onClickCreateReadlistMenuItem}
+              style={{ height: '100%', borderRight: 0 }}
+              defaultSelectedKeys={this.getHighlightedMenuItems()}
+            >
+              <Menu.Item key="explore" >
+                <Link to="/explore"><span><Icon type="compass" />Explore</span></Link>
+              </Menu.Item>
+              <Menu.Item key="documents" disabled={!this.state.user.is_authenticated}>
+                <Link to="/"><span><Icon type='file' />Documents</span></Link>
+              </Menu.Item>
+
+              <SubMenu key="created_readlists" title={<span><Icon type="folder-open" />Created Readlists</span>} disabled={!this.state.user.is_authenticated}>
+                {
+                  this.state.createdReadlists.sort((a, b) => a.name > b.name).map((readlist) => {
+                    return (
+                      <Menu.Item key={'readlists' + readlist.slug} title={readlist.name}>
+                        <Link style={{ overflow: 'hidden', textOverflow: 'ellipsis' }} to={ '/readlists/' + readlist.slug }><span>{ readlist.name }</span></Link>
+                      </Menu.Item>
+                    )
+                  })
+                }
+                <Menu.Item disabled={!this.state.user.is_authenticated} key={CREATE_NEW_READLIST_MENU_ITEM_KEY}><Icon type="plus"/></Menu.Item>
+              </SubMenu>
+              <SubMenu key="collected_readlists" title={<span><Icon type="folder" />Collected Readlists</span>} disabled={!this.state.user.is_authenticated}>
+                {
+                  this.state.collectedReadlists.sort((a, b) => a.name > b.name).map((readlist) => {
+                    return (
+                      <Menu.Item key={'readlists' + readlist.slug} title={readlist.name}>
+                        <Link style={{ overflow: 'hidden', textOverflow: 'ellipsis' }} to={ '/readlists/' + readlist.slug }><span>{ readlist.name }</span></Link>
+                      </Menu.Item>
+                    )
+                  })
+                }
+              </SubMenu>
+              <Modal
+                title="create a new readlist"
+                wrapClassName="vertical-center-modal"
+                visible={this.state.createReadlistModelVisible}
+                onOk={this.submitCreateReadlistForm}
+                onCancel={() => this.setCreateReadlistModelVisible(false)}
+              >
+                <CreateReadlistForm {...fields} onChange={this.handleCreateReadlistFromChange} />
+              </Modal>
+
+              <Modal
+                title="create a new group"
+                wrapClassName="vertical-center-modal"
+                visible={this.state.createGroupModelVisible}
+                onOk={this.submitCreateCoterieForm}
+                onCancel={() => this.setCreateCoterieModelVisible(false)}
+              >
+                <CreateCoterieForm {...fields} onChange={this.handleCreateCoterieFromChange} />
+              </Modal>
+            </Menu>
+          </Sider>
+          <Layout style={{ marginLeft: 200, padding: 0 }}>
+            <Content>
+              <Switch>
+                <Route path='/explore' component={ExploreTab} />
+                <Route path='/search' component={SearchResultTab} />
+                <Route path='/readlists/:readlistSlug' render={ ({match, location}) => this.renderReadlistTab(match, location) } />
+                <Route path='/groups/:coterieUUID' render={ ({match, location}) => this.renderGroupTab(match, location) } />
+                <Route path='/' component={DocumentTab} />
+              </Switch>
+            </Content>
+            <Footer style={{ textAlign: 'center' }}>
+                © 2018 Variora. Reach us via <a style={{ color: '#37b' }} href='mailto:variora@outlook.com'>variora@outlook.com</a>
+            </Footer>
+          </Layout>
+        </Layout>
+      </Router>
+    )
+
     return (
       <Layout style={{ height: '100%', width: '100%', position: 'absolute' }}>
         <Header className="header" style={{ backgroundColor: '#fff', diplay: 'inline' }}>
@@ -299,83 +446,7 @@ class AppBeforeConnect extends React.Component {
           </Row>
         </Header>
 
-        <Router basename={URL_BASE}>
-          <Layout>
-            <Sider className='sider' width={200} style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }}>
-              <Menu
-                mode="inline"
-                defaultOpenKeys={['created_readlists', 'collected_readlists']}
-                onClick={this.onClickCreateReadlistMenuItem}
-                style={{ height: '100%', borderRight: 0 }}
-                defaultSelectedKeys={this.getHighlightedMenuItems()}
-              >
-                <Menu.Item key="explore" >
-                  <Link to="/explore"><span><Icon type="compass" />Explore</span></Link>
-                </Menu.Item>
-                <Menu.Item key="documents" disabled={!this.state.user.is_authenticated}>
-                  <Link to="/"><span><Icon type='file' />Documents</span></Link>
-                </Menu.Item>
-
-                <SubMenu key="created_readlists" title={<span><Icon type="folder-open" />Created Readlists</span>} disabled={!this.state.user.is_authenticated}>
-                  {
-                    this.state.createdReadlists.sort((a, b) => a.name > b.name).map((readlist) => {
-                      return (
-                        <Menu.Item key={'readlists' + readlist.slug} title={readlist.name}>
-                          <Link style={{ overflow: 'hidden', textOverflow: 'ellipsis' }} to={ '/readlists/' + readlist.slug }><span>{ readlist.name }</span></Link>
-                        </Menu.Item>
-                      )
-                    })
-                  }
-                  <Menu.Item disabled={!this.state.user.is_authenticated} key={CREATE_NEW_READLIST_MENU_ITEM_KEY}><Icon type="plus"/></Menu.Item>
-                </SubMenu>
-                <SubMenu key="collected_readlists" title={<span><Icon type="folder" />Collected Readlists</span>} disabled={!this.state.user.is_authenticated}>
-                  {
-                    this.state.collectedReadlists.sort((a, b) => a.name > b.name).map((readlist) => {
-                      return (
-                        <Menu.Item key={'readlists' + readlist.slug} title={readlist.name}>
-                          <Link style={{ overflow: 'hidden', textOverflow: 'ellipsis' }} to={ '/readlists/' + readlist.slug }><span>{ readlist.name }</span></Link>
-                        </Menu.Item>
-                      )
-                    })
-                  }
-                </SubMenu>
-                <Modal
-                  title="create a new readlist"
-                  wrapClassName="vertical-center-modal"
-                  visible={this.state.createReadlistModelVisible}
-                  onOk={this.submitCreateReadlistForm}
-                  onCancel={() => this.setCreateReadlistModelVisible(false)}
-                >
-                  <CreateReadlistForm {...fields} onChange={this.handleCreateReadlistFromChange} />
-                </Modal>
-
-                <Modal
-                  title="create a new group"
-                  wrapClassName="vertical-center-modal"
-                  visible={this.state.createGroupModelVisible}
-                  onOk={this.submitCreateCoterieForm}
-                  onCancel={() => this.setCreateCoterieModelVisible(false)}
-                >
-                  <CreateCoterieForm {...fields} onChange={this.handleCreateCoterieFromChange} />
-                </Modal>
-              </Menu>
-            </Sider>
-            <Layout style={{ marginLeft: 200, padding: 0 }}>
-              <Content>
-                <Switch>
-                  <Route path='/explore' component={ExploreTab} />
-                  <Route path='/search' component={SearchResultTab} />
-                  <Route path='/readlists/:readlistSlug' render={ ({match, location}) => this.renderReadlistTab(match, location) } />
-                  <Route path='/groups/:coterieUUID' render={ ({match, location}) => this.renderGroupTab(match, location) } />
-                  <Route path='/' component={DocumentTab} />
-                </Switch>
-              </Content>
-              <Footer style={{ textAlign: 'center' }}>
-                  © 2018 Variora. Reach us via <a style={{ color: '#37b' }} href='mailto:variora@outlook.com'>variora@outlook.com</a>
-              </Footer>
-            </Layout>
-          </Layout>
-        </Router>
+        { window.location.pathname.includes('/groups/') ? groupRouter(window.location.pathname.split('/')[2]) : globalRouter }
       </Layout>
     )
   }
