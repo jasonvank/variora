@@ -8,7 +8,7 @@ import React from 'react'
 import { ReadlistResult } from './readlist_result_subtab.jsx'
 import TimeAgo from 'react-timeago'
 import axios from 'axios'
-import { getUrlFormat } from 'util.js'
+import { getUrlFormat, getCookie } from 'util.js'
 
 const { Content } = Layout
 const { TextArea } = Input

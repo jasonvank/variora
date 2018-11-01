@@ -165,6 +165,31 @@ class GroupSelectionButton extends React.Component {
   }
 
   render() {
+    var iconToShow = (
+      <Icon type="team"
+        // onClick={() => {
+        //   notification['info']({message: 'We are rewriting the group function, it will come soon.'})
+        // }}
+        style={{ cursor: 'pointer', fontSize: 18, marginLeft: 28, verticalAlign: 'middle' }}
+      />
+    )
+
+    // if (this.props.currentCoterieUUID !== undefined) {
+    //   var currentCoterie = undefined
+    //
+    //   var filtered = this.props.administratedCoteries.filter(c => c.uuid === this.props.currentCoterieUUID)
+    //   if (filtered.length > 0)
+    //     currentCoterie = filtered[0]
+    //
+    //   filtered = this.props.joinedCoteries.filter(c => c.uuid === this.props.currentCoterieUUID)
+    //   if (filtered.length > 0)
+    //     currentCoterie = filtered[0]
+    //
+    //   if (currentCoterie !== undefined) {
+    //     const color = groupAvatarColors[this.props.currentCoterieUUID.charCodeAt(0) % 8]
+    //   }
+    // }
+
     return (
       <Popover
         content={
@@ -178,12 +203,7 @@ class GroupSelectionButton extends React.Component {
         visible={this.state.visible}
         onVisibleChange={this.handleVisibleChange}
       >
-        <Icon type="team"
-          // onClick={() => {
-          //   notification['info']({message: 'We are rewriting the group function, it will come soon.'})
-          // }}
-          style={{ cursor: 'pointer', fontSize: 18, marginLeft: 28, verticalAlign: 'middle' }}
-        />
+        {iconToShow}
       </Popover>
     )
   }
