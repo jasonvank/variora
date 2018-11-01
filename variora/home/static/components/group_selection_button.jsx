@@ -9,16 +9,19 @@ import axios from 'axios'
 
 class GroupAvatarWrapper extends React.Component {
   render() {
-    if (this.props.coterie.avatarUrl === undefined) {
+    console.log(this.props.coterie)
+    if (this.props.coterie.avatarUrl !== undefined) {
+      return <Avatar src={this.props.coterie.avatarUrl} style={{ verticalAlign: 'middle', background: 'white' }}></Avatar>
+    } else if (this.props.coterie.icon !== undefined) {
+      return <Avatar icon={this.props.coterie.icon} style={{ verticalAlign: 'middle'}}></Avatar>
+    } else {
       const color = groupAvatarColors[this.props.coterie.uuid.charCodeAt(0) % 8]
       return (
         <Avatar style={{ backgroundColor: color, verticalAlign: 'middle' }}>
           <span style={{position: 'initial'}}>{this.props.coterie.name.slice(0, 2).toUpperCase()}</span>
         </Avatar>
       )
-    } else
-      return <Avatar src={this.props.coterie.avatarUrl} style={{ verticalAlign: 'middle', background: 'white' }}></Avatar>
-
+    }
   }
 }
 
@@ -46,7 +49,11 @@ class GroupsList extends React.Component {
     super(props)
 
     this.onClickRow = (record, index, event) => {
-      window.location.href = `/groups/${record.uuid}/`
+      if (record.callback !== undefined) {
+        record.callback()
+      } else {
+        window.location.href = `/groups/${record.uuid}/`
+      }
     }
   }
 
@@ -72,6 +79,12 @@ class GroupsList extends React.Component {
       description: 'Public content is visible by all users',
       avatarUrl: '/media/logo.png'
     }]
+    const createNewGroupFakeItem = {
+      name: 'New Group',
+      description: 'Click to create a new group',
+      icon: 'plus-square-o',
+      callback: () => {this.props.setCreateCoterieModelVisible(true)}
+    }
     return (
       <div id={'group-selection-div'} style={{maxHeight: '66vh', overflowY: 'auto' }}>
         <Table
@@ -89,7 +102,7 @@ class GroupsList extends React.Component {
         />
         <Table
           className='notification-table'
-          dataSource={this.props.administratedCoteries}
+          dataSource={this.props.administratedCoteries.concat([createNewGroupFakeItem])}
           columns={columns}
           pagination={false}
           showHeader={false}
@@ -134,19 +147,22 @@ class GroupSelectionButton extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('/coterie/api/coteries').then((response) => {
-      this.setState({
-        administratedCoteries: response.data.administratedCoteries,
-        joinedCoteries: response.data.joinedCoteries
-      })
-    })
+    // axios.get('/coterie/api/coteries').then((response) => {
+    //   this.setState({
+    //     administratedCoteries: response.data.administratedCoteries,
+    //     joinedCoteries: response.data.joinedCoteries
+    //   })
+    // })
   }
 
   render() {
     return (
       <Popover
         content={
-          <GroupsList administratedCoteries={this.state.administratedCoteries} joinedCoteries={this.state.joinedCoteries} />
+          <GroupsList
+            administratedCoteries={this.props.administratedCoteries} joinedCoteries={this.props.joinedCoteries}
+            setCreateCoterieModelVisible={this.props.setCreateCoterieModelVisible}
+          />
         }
         trigger='click'
         visible={this.state.visible}

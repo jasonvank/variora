@@ -434,7 +434,10 @@ class AppBeforeConnect extends React.Component {
             <Col span={10} style={{ textAlign: 'right' }}>
               {/* <NotificationsToggleButton user={ this.state.user } acceptInvitationCallback={ this.acceptInvitationCallback } /> */}
               <NotificationsAlertButton />
-              <GroupSelectionButton />
+              <GroupSelectionButton
+                administratedCoteries={this.state.administratedCoteries} joinedCoteries={this.state.joinedCoteries}
+                setCreateCoterieModelVisible={this.setCreateCoterieModelVisible}
+              />
               <span style={{ marginRight: 12, marginLeft: 28, color: '#666' }}>{ this.state.user.nickname }</span>
               { this.state.user.is_authenticated ? <a onClick={this.signOff}>Sign Off</a> : <a href="/sign-in">sign in</a> }
               <Avatar
