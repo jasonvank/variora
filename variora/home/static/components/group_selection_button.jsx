@@ -26,7 +26,7 @@ class GroupDetailsWrapper extends React.Component {
 
     return (
       <div>
-        <div style={{fontWeight: 600}}>{name}</div>
+        <div className={'group-name'}>{name}</div>
         { description.length === 0 ? null :
           <div className="notification-alert-list-wrapper" title={description}>{description}</div>
         }
@@ -64,7 +64,7 @@ class GroupsList extends React.Component {
     }]
 
     return (
-      <div id={'group-selection-div'} style={{maxHeight: 'bold', overflowY: 'auto' }}>
+      <div id={'group-selection-div'} style={{maxHeight: '66vh', overflowY: 'auto' }}>
         <Table
           className='notification-table'
           dataSource={this.props.administratedCoteries}

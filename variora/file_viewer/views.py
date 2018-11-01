@@ -23,6 +23,9 @@ h.ignore_links = True
 
 
 def _handle_post_annotation_request(user, document, request):
+    if not user.is_authenticated:
+        return HttpResponseForbidden()
+
     annotation = Annotation()
     annotation.annotator = user
     annotation.content = sanitize(request.POST['annotation_content'])
@@ -61,6 +64,8 @@ def _handle_post_annotation_request(user, document, request):
 def _handle_post_annotation_reply_request(user, document, request):
     if request.POST["annotation_reply_content"] == "":
         return HttpResponse(status=200)
+    if not user.is_authenticated:
+        return HttpResponseForbidden()
 
     annotation_reply = AnnotationReply()
     annotation = Annotation.objects.get(id=int(request.POST["reply_to_annotation_id"]))
@@ -124,6 +129,7 @@ class FileViewerView(View):
                 annotation = Annotation.objects.get(id=int(request.POST["annotation_id"]))
                 if user.pk != annotation.annotator.pk:
                     return HttpResponseForbidden()
+
                 annotation.delete()
                 return HttpResponse()
 
@@ -131,6 +137,7 @@ class FileViewerView(View):
                 reply_annotation = AnnotationReply.objects.get(id=int(request.POST["reply_id"]))
                 if user.pk != reply_annotation.replier.pk:
                     return HttpResponseForbidden()
+
                 reply_annotation.delete()
                 return HttpResponse()
 
@@ -152,17 +159,23 @@ class FileViewerView(View):
                 return HttpResponse()
 
             elif request.POST["operation"] == "like_comment":
+                if not user.is_authenticated:
+                    return HttpResponseForbidden()
                 comment = Comment.objects.get(id=int(request.POST["comment_id"]))
                 comment.num_like += 1
                 comment.save()
                 return HttpResponse()
 
             elif request.POST["operation"] == "collect":
+                if not user.is_authenticated:
+                    return HttpResponseForbidden()
                 document.collectors.add(user)
                 document.save()
                 return HttpResponse()
 
             elif request.POST["operation"] == "uncollect":
+                if not user.is_authenticated:
+                    return HttpResponseForbidden()
                 document.collectors.remove(user)
                 document.save()
                 return HttpResponse()
@@ -176,6 +189,9 @@ class FileViewerView(View):
                 return render(request, "file_viewer/comment_viewer_subpage.html", context)
 
             elif request.POST["operation"] == "comment":
+                if not user.is_authenticated:
+                    return HttpResponseForbidden()
+
                 if request.POST["comment_content"] != "":
                     comment = Comment()
                     comment.content = request.POST["comment_content"]

@@ -122,6 +122,9 @@ td:hover .editable-cell-icon {
   padding-bottom: 6px;
 }
 
+.group-name {
+  font-weight: bold;
+}
 
 
 

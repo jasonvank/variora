@@ -105,6 +105,7 @@ def display_coteriefile_viewer_page(request, **kwargs):
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
 
+        # only admins and members can interact with the documents in a group
         if not user.is_superuser and user not in coterie.administrators.all() and user not in coterie.members.all():
             return redirect("/")
 
@@ -186,6 +187,7 @@ def display_coteriefile_viewer_page(request, **kwargs):
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
 
+        # only admins and members can view the documents in a group
         if user not in coterie.administrators.all() and user not in coterie.members.all():
             return redirect("/")
 

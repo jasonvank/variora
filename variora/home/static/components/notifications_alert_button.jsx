@@ -141,7 +141,7 @@ class NotificationsList extends React.Component {
           columns={columns}
           pagination={false}
           showHeader={false}
-          style={{width: '300px', maxHeight: 380, overflowY: 'auto'}}
+          style={{width: '300px', maxHeight: '66vh', overflowY: 'auto'}}
           rowKey={record => record.slug}
           onRowClick={this.handleReadStatus}
           footer={() => null}
