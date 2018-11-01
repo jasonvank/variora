@@ -20,6 +20,7 @@ ua-parser
 user-agents
 django-user-agents
 django-anymail[sendgrid]
+django-anymail[mailgun]
 
 ###### development ######
 selenium  # write browser-side tests
