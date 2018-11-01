@@ -1,4 +1,4 @@
-import { Icon, Input, Popconfirm, Table, message, notification } from 'antd'
+import {Icon, Input, Popconfirm, Table, message, notification, Avatar} from 'antd'
 import { formatOpenCoterieDocumentUrl, getCookie, getUrlFormat } from 'util.js'
 
 import React from 'react'
@@ -81,6 +81,7 @@ class GroupDocumentsList extends React.Component {
     this.state = {
       coteriePk: this.props.coteriePk,
       data: [],
+      documentsUploadedByMe: []
     }
 
     this.deleteDocument = (record) => {
@@ -94,6 +95,10 @@ class GroupDocumentsList extends React.Component {
       .then(response => {
         this.setState({
           data: response.data.coteriedocument_set
+        })
+        axios.get(`/coterie/api/coteries/${this.props.coterieUUID}/members/me/uploaded-documents`, {}).then(response => {
+          this.setState({ documentsUploadedByMe: response.data })
+          console.log(response.data)
         })
       })
       .catch(e => { message.warning(e.message) })
@@ -149,27 +154,38 @@ class GroupDocumentsList extends React.Component {
       <TimeAgo date={coterieDocument.upload_time} />
     ))
 
+    const checkIAmUploader = (coterieDocument) => {
+      if (this.state.documentsUploadedByMe.map(d => d.pk).includes(coterieDocument.pk))
+        return true
+      return false
+    }
+
     const columns = [{
         title: '#',
         dataIndex: 'id',
-        width: '20%',
+        width: '10%',
         render: (text, record) => this.state.data.indexOf(record) + 1
       }, {
         title: 'Title',
         dataIndex: 'title',
         width: '40%',
         render: (text, coterieDocument) => (
-          this.props.isAdmin ? changeDocumentName(text, coterieDocument) :
-                              <a href={formatOpenCoterieDocumentUrl(coterieDocument, this.state.coteriePk)}>{text}</a>
+          checkIAmUploader(coterieDocument) ? changeDocumentName(text, coterieDocument) :
+                              <a className='document-link' href={formatOpenCoterieDocumentUrl(coterieDocument, this.state.coteriePk)}>{text}</a>
         )
       }, {
-      title: this.props.isAdmin ? 'Action' : 'Upload Time',
-      key: 'action',
-      width: '40%',
-      render: (text, coterieDocument) => (
-        this.props.isAdmin ? documentDeleteAction(text, coterieDocument) :
-                            documentUploadDate(text, coterieDocument)
-      ),
+        title: 'Uploader',
+        dataIndex: 'uploader_name',
+        render: (text, record) => <span><Avatar src={record.uploader_portrait_url} style={{ verticalAlign: 'middle', marginRight: 12}} />{text}</span>,
+        width: '20%',
+      }, {
+        title: this.props.isAdmin ? 'Action' : 'Upload Time',
+        key: 'action',
+        width: '30%',
+        render: (text, coterieDocument) => (
+          checkIAmUploader(coterieDocument) ? documentDeleteAction(text, coterieDocument) :
+                              documentUploadDate(text, coterieDocument)
+        ),
     }]
 
     return (

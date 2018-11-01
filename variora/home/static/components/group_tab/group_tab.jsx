@@ -60,7 +60,7 @@ class GroupTab extends React.Component {
 
         <Switch>
           <Route exact path={SUB_URL_BASE + this.state.coterieUUI + '/'} render={() =>
-            <GroupDocumentsSubtab isAdmin={this.state.isAdmin} coteriePk={this.state.coteriePk} />}
+            <GroupDocumentsSubtab isAdmin={this.state.isAdmin} coterieUUID={this.state.coterieUUI} coteriePk={this.state.coteriePk} />}
           />
 
           <Route exact path={SUB_URL_BASE + this.state.coterieUUI + '/members'} render={() =>
