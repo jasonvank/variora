@@ -98,7 +98,6 @@ class GroupDocumentsList extends React.Component {
         })
         axios.get(`/coterie/api/coteries/${this.props.coterieUUID}/members/me/uploaded-documents`, {}).then(response => {
           this.setState({ documentsUploadedByMe: response.data })
-          console.log(response.data)
         })
       })
       .catch(e => { message.warning(e.message) })

@@ -50,7 +50,7 @@ class ReadlistResult extends React.Component {
         className={'card'}
         style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}
         pagination={{ pageSize: 10 }}
-        rowKey={record => record.pk}
+        rowKey={record => record.uuid}
         onChange={this.handleChange}
       />
     )

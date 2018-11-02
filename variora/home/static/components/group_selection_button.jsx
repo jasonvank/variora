@@ -9,7 +9,6 @@ import axios from 'axios'
 
 class GroupAvatarWrapper extends React.Component {
   render() {
-    console.log(this.props.coterie)
     if (this.props.coterie.avatarUrl !== undefined) {
       return <Avatar src={this.props.coterie.avatarUrl} style={{ verticalAlign: 'middle', background: 'white' }}></Avatar>
     } else if (this.props.coterie.icon !== undefined) {

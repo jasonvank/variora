@@ -161,7 +161,7 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
                     <p style={{ fontSize: 16, marginBottom: 18, marginLeft: 8 }}>Suggested today: </p>
                     <Row type='flex' justify='start'>
                       {this.state.suggestedDocuments.map((document) => (
-                        <Col>
+                        <Col key={document.open_url}>
                           <div style={{ margin: 18 }}>
                             <Card style={{ width: 88 }} className='custome-card-cover' bodyStyle={{ padding: 0 }}>
                               <div className='custom-image'>
