@@ -9,11 +9,30 @@ from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.generic import View
 from validate_email import validate_email
+from threading import Thread
 
 from home.models import User
+from variora.utils import send_email_from_noreply
+from django.template.loader import render_to_string
 
 from ..models import Coterie, CoterieDocument, CoterieInvitation, NonRegisteredUserTempCoterieInvitation
 from .encoders import CoterieDocumentEncoder, CoterieEncoder, CoterieInvitationEncoder
+
+
+class InvitationEmailThread(Thread):
+    def __init__(self, unregistered_emails):
+        Thread.__init__(self)
+        self.unregistered_emails = unregistered_emails
+
+    def run(self):
+        html_message = render_to_string('home/email_templates/new_invitation_but_not_registered.html', {
+            'sign_in_url': 'https://www.variora.io/sign-in'
+        })
+        send_email_from_noreply(
+            subject='Variora: You have an group invitation. Sign up to view',
+            receiver_list=self.unregistered_emails,
+            content=html_message,
+        )
 
 
 # @login_required(login_url='/')
@@ -49,8 +68,9 @@ def create_invitation(request):
                 invitee_email=email,
             )
             temp_invitation.save()
-            # TODO: send email to them
-            
+
+            InvitationEmailThread(unregistered_emails).start()
+
         return JsonResponse({
             'successful_invitations': successful_invitations,
             'unregistered_emails': unregistered_emails,
