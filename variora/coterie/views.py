@@ -35,6 +35,28 @@ def _handle_post_annotation_request(user, document, request):
     annotation.frame_color = request.POST["frame_color"]
     annotation.is_public = True if request.POST["is_public"] == 'true' else False
     annotation.save()
+
+    # send notification
+    for user in document.owner.administrators.all():
+        if annotation.annotator.pk != user.pk:
+            notify.send(
+                sender=annotation.annotator, recipient=user,
+                action_object=annotation, verb='post annotation',
+                redirect_url=annotation.url,
+                image_url=annotation.annotator.portrait_url,
+                description=h.handle(annotation.content),
+            )
+
+    for user in document.owner.members.all():
+        if annotation.annotator.pk != user.pk:
+            notify.send(
+                sender=annotation.annotator, recipient=user,
+                action_object=annotation, verb='post annotation',
+                redirect_url=annotation.url,
+                image_url=annotation.annotator.portrait_url,
+                description=h.handle(annotation.content),
+            )
+
     context = {
         "document": document,
         "annotation": annotation,

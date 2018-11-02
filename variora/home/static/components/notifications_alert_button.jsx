@@ -43,7 +43,7 @@ class NotificationsDetailsWrapper extends React.Component {
     if (actionVerb == 'reply to annotation reply' || actionVerb == 'reply to annotation')
       verb = description == '' ? 'replied' : 'replied:'
     else if (actionVerb == 'post annotation')
-      verb = description == '' ? 'posted in your document' : 'posted in your document:'
+      verb = description == '' ? 'posted in the document' : 'posted in the document:'
 
     const title = this.state.newNotification.actor + ' ' + verb
 

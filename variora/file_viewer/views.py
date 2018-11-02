@@ -38,6 +38,8 @@ def _handle_post_annotation_request(user, document, request):
     annotation.frame_color = request.POST["frame_color"]
     annotation.is_public = True if request.POST["is_public"] == 'true' else False
     annotation.save()
+
+    # send notification
     if annotation.annotator.pk != document.owner.pk:
         notify.send(
             sender=annotation.annotator, recipient=document.owner,
@@ -46,6 +48,7 @@ def _handle_post_annotation_request(user, document, request):
             image_url=annotation.annotator.portrait_url,
             description=h.handle(annotation.content),
         )
+
     context = {
         "document": document,
         'annotation': annotation,
