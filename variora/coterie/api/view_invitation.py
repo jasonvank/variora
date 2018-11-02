@@ -118,7 +118,8 @@ class InvitationView(View):
             if user.pk != invitee.pk:
                 return HttpResponse(status=403)
             if operation == 'accept':
-                coterie.members.add(invitee)
+                if invitee not in coterie.administrators.all():
+                    coterie.members.add(invitee)
                 invitation.acceptance = True
             elif operation == 'reject':
                 invitation.acceptance = False
