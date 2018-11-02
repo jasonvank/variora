@@ -14,19 +14,22 @@
   <body>
     <div id="content" style="max-width: 80vw">
       <p>
-        You have a new group invitation. <br/><br/>
-        Group Name: {GROUPNAME HERE} <br/>
-        Message: {INVITATION MESSAGE} <br/><br/>
-        Please go to the following link to register with <b style="color: #1BA39C;">this email address</b> to view the invitations.
+        You have a new group invitation from: <br/><br/>
+        <div style="margin-left: 38px">
+          Group Name: {{ group_name }}<br/>
+          Inviter: {{ inviter }}<br/>
+          Message: {{ message }}<br/><br/>
+        </div>
+        Please click the following button to register with <b style="color: #1BA39C;">this email address</b> to view the invitations.
       </p>
 
       <h4 style="margin-left: 38px;">
         <a href="{{ sign_in_url }}" style="text-decoration: none;"><button style="color: #1BA39C">Sign In to Variora</button></a>
       </h4>
 
-      <p>
-        If you do not wish to use <b style="color: #1BA39C;">this email address</b> to sign up, you can still search for this group and apply to join.
-      </p>
+      <i>
+        If you do not wish to use this email address to sign up, you can use another email and manually search for this group and apply to join.
+      </i><br/><br/>
 
       <HR SIZE=1>
       <p style="color: #1BA39C;">This is a system generated email, please do not reply.</p>

@@ -20,13 +20,17 @@ from .encoders import CoterieDocumentEncoder, CoterieEncoder, CoterieInvitationE
 
 
 class InvitationEmailThread(Thread):
-    def __init__(self, unregistered_emails):
+    def __init__(self, unregistered_emails, invitation):
         Thread.__init__(self)
         self.unregistered_emails = unregistered_emails
+        self.invitation = invitation
 
     def run(self):
         html_message = render_to_string('home/email_templates/new_invitation_but_not_registered.html', {
-            'sign_in_url': 'https://www.variora.io/sign-in'
+            'sign_in_url': 'https://www.variora.io/sign-in',
+            'group_name': self.invitation.coterie.name,
+            'message': self.invitation.invitation_message,
+            'inviter': self.invitation.inviter.nickname
         })
         send_email_from_noreply(
             subject='Variora: You have an group invitation. Sign up to view',
@@ -69,7 +73,7 @@ def create_invitation(request):
             )
             temp_invitation.save()
 
-            InvitationEmailThread([email]).start()
+            InvitationEmailThread([email], temp_invitation).start()
 
         return JsonResponse({
             'successful_invitations': successful_invitations,
