@@ -222,15 +222,15 @@ class NormalLoginForm extends React.Component {
                     <i className='fa fa-windows' aria-hidden='true'></i>
                     {'  '}Log in with Office365
                   </Button>
-                  {/*<Button*/}
-                    {/*style={{backgroundColor: 'orange', borderColor: 'orange', marginTop: 16, color: 'white'}}*/}
-                    {/*className='login-form-button'*/}
-                    {/*htmlType='button'*/}
-                    {/*type='primary'*/}
-                    {/*onClick={this.redirectToNUSSignIn}*/}
-                  {/*>*/}
-                    {/*Log in with NUS ID*/}
-                  {/*</Button>*/}
+                  <Button
+                    style={{backgroundColor: 'orange', borderColor: 'orange', marginTop: 16, color: 'white'}}
+                    className='login-form-button'
+                    htmlType='button'
+                    type='primary'
+                    onClick={this.redirectToNUSSignIn}
+                  >
+                    Log in with NUS ID
+                  </Button>
                 </div>
               </FormItem>
             </Form>

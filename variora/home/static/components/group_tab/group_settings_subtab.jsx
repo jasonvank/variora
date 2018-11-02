@@ -198,7 +198,7 @@ class GroupInvitationForm extends React.Component {
           })
         if (unregistered_emails.length > 0)
           notification['warning']({
-            message: 'Following emails are not registered yet',
+            message: 'Following emails are not registered yet. We already send email to them about your invitation.',
             description: <UnregisteredEmailsNotificationWrapper unregistered_emails={unregistered_emails}/>,
             duration: 0,
             style: {
@@ -222,22 +222,38 @@ class GroupInvitationForm extends React.Component {
     await this.setState({ invitationMessage: e.target.value })
   }
 
-  _emailsStringToArray(emailsString) {
-    var rows = emailsString.trim().split('\n')
-    var emailsArray = []
-    for (var row of rows)
-      emailsArray = emailsArray.concat(row.trim().split(','))
-    return emailsArray
+  _handleCopyPasteEmailsFromEmailClient(emailsString) {
+    let resultArray = []
+    // use regex to extract everything between each "< >"
+    let matchesArray = emailsString.match(/<.+?>/g)
+    // validate each extracted term to ensure valid email
+    for (let index in matchesArray) {
+      let match = matchesArray[index]
+      let potentialEmailString = match.replace('<', '').replace('>', '')
+      if (validator.validate(potentialEmailString) && !(resultArray.includes(potentialEmailString))) {
+        resultArray.push(potentialEmailString)
+      }
+    }
+    return resultArray
   }
 
   preprocessEmailsString(emailsString) {
+    // handle copy paste from email client first
+    var copyPasteEmailArray = this._handleCopyPasteEmailsFromEmailClient(emailsString)
+    if (copyPasteEmailArray.length != 0) {
+      return [true, copyPasteEmailArray.join(',')]
+    }
+
+    // do normal flow
     var emailArray = this._emailsStringToArray(emailsString)
     var returnedEmailArray = []
     for (var email of emailArray) {
       email = email.trim()
       if (!validator.validate(email))
-        return (false, [])
-      returnedEmailArray.push(email)
+        return [false, [email]]
+      if (!returnedEmailArray.includes(email)) {
+        returnedEmailArray.push(email)
+      }
     }
     return [true, returnedEmailArray.join(',')]
   }
