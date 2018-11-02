@@ -19,7 +19,7 @@ from ..models import Coterie, CoterieDocument, CoterieInvitation, NonRegisteredU
 from .encoders import CoterieDocumentEncoder, CoterieEncoder, CoterieInvitationEncoder
 
 
-class InvitationEmailThread(Thread):
+class TempInvitationEmailThread(Thread):
     def __init__(self, unregistered_emails, invitation):
         Thread.__init__(self)
         self.unregistered_emails = unregistered_emails
@@ -33,8 +33,28 @@ class InvitationEmailThread(Thread):
             'inviter': self.invitation.inviter.nickname
         })
         send_email_from_noreply(
-            subject='Variora: You have an group invitation. Sign up to view',
+            subject='Variora: you have a group invitation. Sign up to view',
             receiver_list=self.unregistered_emails,
+            content=html_message,
+        )
+
+
+class InvitationEmailThread(Thread):
+    def __init__(self, emails, invitation):
+        Thread.__init__(self)
+        self.emails = emails
+        self.invitation = invitation
+
+    def run(self):
+        html_message = render_to_string('home/email_templates/new_invitation.html', {
+            'redirect_url': 'https://www.variora.io/',
+            'group_name': self.invitation.coterie.name,
+            'message': self.invitation.invitation_message,
+            'inviter': self.invitation.inviter.nickname
+        })
+        send_email_from_noreply(
+            subject='Variora: new group invitation',
+            receiver_list=self.emails,
             content=html_message,
         )
 
@@ -62,8 +82,13 @@ def create_invitation(request):
                         return HttpResponse(status=403)
                     invitation.save()
                     successful_invitations.append(invitation)
+
+                    # email to registered users
+                    InvitationEmailThread([invitee.email_address], invitation).start()
                 except ObjectDoesNotExist:
                     unregistered_emails.append(invitee_email)
+
+        # email to unregistered users
         for email in unregistered_emails:
             temp_invitation = NonRegisteredUserTempCoterieInvitation(
                 inviter=request.user,
@@ -73,7 +98,7 @@ def create_invitation(request):
             )
             temp_invitation.save()
 
-            InvitationEmailThread([email], temp_invitation).start()
+            TempInvitationEmailThread([email], temp_invitation).start()
 
         return JsonResponse({
             'successful_invitations': successful_invitations,

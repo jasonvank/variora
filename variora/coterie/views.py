@@ -21,24 +21,24 @@ h.ignore_images = True
 h.ignore_emphasis = True
 h.ignore_links = True
 
-import logging, logging.config
-import sys
-
-LOGGING = {
-    'version': 1,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'stream': sys.stdout,
-        }
-    },
-    'root': {
-        'handlers': ['console'],
-        'level': 'INFO'
-    }
-}
-
-logging.config.dictConfig(LOGGING)
+# import logging, logging.config
+# import sys
+#
+# LOGGING = {
+#     'version': 1,
+#     'handlers': {
+#         'console': {
+#             'class': 'logging.StreamHandler',
+#             'stream': sys.stdout,
+#         }
+#     },
+#     'root': {
+#         'handlers': ['console'],
+#         'level': 'INFO'
+#     }
+# }
+#
+# logging.config.dictConfig(LOGGING)
 
 
 def _handle_post_annotation_request(user, document, request):
