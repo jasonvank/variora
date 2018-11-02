@@ -222,6 +222,15 @@ class GroupInvitationForm extends React.Component {
     await this.setState({ invitationMessage: e.target.value })
   }
 
+  _emailsStringToArray(emailsString) {
+    var rows = emailsString.trim().split(/\n| /)
+    var emailsArray = []
+    for (var row of rows){
+      emailsArray = emailsArray.concat(row.trim().split(',').filter(element => element !== ''))
+    }
+    return emailsArray
+  }
+
   _handleCopyPasteEmailsFromEmailClient(emailsString) {
     let resultArray = []
     // use regex to extract everything between each "< >"

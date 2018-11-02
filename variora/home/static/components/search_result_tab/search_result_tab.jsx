@@ -73,9 +73,8 @@ class SearchResultTab extends React.Component {
           className={'card'}
           mode='horizontal'
           style={{ padding: 0 }}
-          defaultSelectedKeys={['search-documents']}
-          selectedKeys = {
-            path.includes('/users') ? ['search-users'] : path.includes('/readlists') ? ['search-readlists'] : ['search-documents']
+          defaultSelectedKeys={
+            path.includes('/users') ? ['search-users'] : path.includes('/readlists') ? ['search-readlists'] : path.includes('/groups') ? ['search-groups'] : ['search-documents']
           }
         >
           <Menu.Item key='search-documents'>
