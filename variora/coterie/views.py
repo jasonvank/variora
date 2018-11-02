@@ -13,6 +13,7 @@ from file_viewer import models as file_viewer_models
 from home.models import User
 from variora import utils
 from views_coterie import *
+from variora.utils import *
 
 from .models import Coterie, CoterieDocument
 
@@ -224,6 +225,9 @@ def display_coteriefile_viewer_page(request, **kwargs):
             return _handle_post_annotation_reply_request(user, coterie, request)
 
     else:
+        if should_return_pwa(request) and settings.ENABLE_PWA:
+            return render(request, 'home/pwa.html')
+
         user = request.user
 
         try:

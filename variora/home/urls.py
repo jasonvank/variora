@@ -31,4 +31,5 @@ urlpatterns = [  # obsolete UI pages
     url(r'^settings', views.display_index),
     url(r'^uploads', views.display_index),
     url(r'^notifications', views.display_index),
+    url(r'^profile', views.display_index),
 ]
