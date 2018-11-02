@@ -35,6 +35,15 @@ class CoterieInvitation(ModelWithCleanUUID):
     response_datetime = models.DateTimeField(null=True, blank=True)
 
 
+class NonRegisteredUserTempCoterieInvitation(ModelWithCleanUUID):
+    uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
+    coterie = models.ForeignKey(Coterie)
+    inviter = models.ForeignKey(User, related_name='sent_nonregisteredusertempinvitation_set')
+    invitee_email = models.EmailField(max_length=254, blank=True, null=True)
+    invitation_message = models.TextField(blank=True)
+    send_datetime = models.DateTimeField(auto_now=False, auto_now_add=True)
+
+
 class CoterieApplication(ModelWithCleanUUID):
     uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
     coterie = models.ForeignKey(Coterie, related_name='application_set')

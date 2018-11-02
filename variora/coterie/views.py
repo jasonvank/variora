@@ -49,7 +49,7 @@ def _handle_post_annotation_request(user, document, request):
     }, encoder=CoterieAnnotationEncoder)
 
 
-def _handle_post_annotation_reply_request(user, request):
+def _handle_post_annotation_reply_request(user, coterie, request):
     if request.POST["annotation_reply_content"] == "":
         return HttpResponse(status=200)
 
@@ -61,7 +61,8 @@ def _handle_post_annotation_reply_request(user, request):
     annotation_reply.is_public = True if request.POST["is_public"] == 'true' else False
     if "reply_to_annotation_reply_id" in request.POST:
         annotation_reply.reply_to_annotation_reply = models.CoterieAnnotationReply.objects.get(
-            id=int(request.POST["reply_to_annotation_reply_id"]))
+            id=int(request.POST["reply_to_annotation_reply_id"])
+        )
         if annotation_reply.reply_to_annotation_reply.replier.pk != annotation_reply.reply_to_annotation.annotator.pk:
             notify.send(
                 sender=annotation_reply.replier,
@@ -71,6 +72,7 @@ def _handle_post_annotation_reply_request(user, request):
                 redirect_url=annotation.url,
                 image_url=annotation_reply.replier.portrait_url,
                 description=h.handle(annotation_reply.content),
+                coterie_uuid=coterie.uuid
             )
     annotation_reply.save()
     notify.send(
@@ -170,7 +172,7 @@ def display_coteriefile_viewer_page(request, **kwargs):
             return _handle_post_annotation_request(user, document, request)
 
         elif request.POST["operation"] == "reply_annotation":
-            return _handle_post_annotation_reply_request(user, request)
+            return _handle_post_annotation_reply_request(user, coterie, request)
 
     else:
         user = request.user
