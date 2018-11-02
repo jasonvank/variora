@@ -21,8 +21,29 @@ h.ignore_images = True
 h.ignore_emphasis = True
 h.ignore_links = True
 
+import logging, logging.config
+import sys
+
+LOGGING = {
+    'version': 1,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'stream': sys.stdout,
+        }
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO'
+    }
+}
+
+logging.config.dictConfig(LOGGING)
+
 
 def _handle_post_annotation_request(user, document, request):
+    logging.info('Called')
+
     annotation = models.CoterieAnnotation()
     annotation.content = request.POST["annotation_content"]
     annotation.annotator = user
@@ -35,6 +56,9 @@ def _handle_post_annotation_request(user, document, request):
     annotation.frame_color = request.POST["frame_color"]
     annotation.is_public = True if request.POST["is_public"] == 'true' else False
     annotation.save()
+
+    logging.info(annotation.content)
+    logging.info(request)
 
     # send notification
     for user in document.owner.administrators.all():
@@ -56,6 +80,7 @@ def _handle_post_annotation_request(user, document, request):
                 image_url=annotation.annotator.portrait_url,
                 description=h.handle(annotation.content),
             )
+    logging.info('done send notif')
 
     context = {
         "document": document,
@@ -63,6 +88,8 @@ def _handle_post_annotation_request(user, document, request):
         'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,
         "new_annotation_id": annotation.id,
     }
+
+    logging.info('done context')
     return JsonResponse({
         'new_annotationdiv_html': render(request, "file_viewer/one_annotation_div.html", context).content,
         'new_annotation_id': annotation.id,
