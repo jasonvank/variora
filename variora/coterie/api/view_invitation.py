@@ -69,7 +69,7 @@ def create_invitation(request):
             )
             temp_invitation.save()
 
-            InvitationEmailThread(unregistered_emails).start()
+            InvitationEmailThread([email]).start()
 
         return JsonResponse({
             'successful_invitations': successful_invitations,
