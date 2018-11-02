@@ -150,7 +150,7 @@ class CoterieAnnotation(ModelWithCleanUUID):
     width_percent = models.FloatField()
     top_percent = models.FloatField()
     left_percent = models.FloatField()
-    frame_color = models.CharField(max_length=18)
+    frame_color = models.CharField(max_length=64)
 
     num_like = models.IntegerField(default=0)
 
