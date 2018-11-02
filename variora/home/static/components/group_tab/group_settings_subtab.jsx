@@ -177,14 +177,14 @@ class GroupInvitationForm extends React.Component {
         notification['warning']({
           message: 'Email list input is not valid',
           description: 'Please check again!',
-          duration: 2
+          duration: 2,
         })
         return
       }
 
       var data = new FormData()
       data.append('coterie_id', this.props.coteriePk)
-      data.append('invitee_emails', this.state.emailList)
+      data.append('invitee_emails', emailList)
       data.append('invitation_message', this.state.invitationMessage)
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
       axios.post('/coterie/api/invite', data).then((response) => {

@@ -182,11 +182,11 @@ class GroupDocumentsList extends React.Component {
         width: '20%',
       }, {
         title: 'Upload Time',
-        dataIndex: 'uploader_name',
+        dataIndex: 'uploader_time',
         render: (text, coterieDocument) => documentUploadDate(text, coterieDocument),
         width: '20%',
       }, {
-        title: this.props.isAdmin ? 'Action' : 'Upload Time',
+        title: 'Action',
         key: 'action',
         width: '20%',
         render: (text, coterieDocument) => (
