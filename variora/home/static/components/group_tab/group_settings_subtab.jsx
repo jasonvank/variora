@@ -1,6 +1,6 @@
 import 'regenerator-runtime/runtime'
 
-import { Button, Col, Collapse, Icon, Input, Layout, Menu, Popconfirm, Row, notification } from 'antd'
+import {Button, Col, Collapse, Icon, Input, Layout, Menu, Popconfirm, Row, notification, Card, Tooltip} from 'antd'
 import {
   Link,
   Route,
@@ -54,10 +54,23 @@ class GroupSettingsSubtab extends React.Component {
   render() {
     const Panel = Collapse.Panel
 
-    var invitationSection = (
-      <div className={'card'} style={{ backgroundColor: 'white', margin: '18px 0 28px 0' }}>
+    const cardTitle = (
+      <span style={{fontSize: '12px'}}>
+        Invite new members
+        <Tooltip title={'Or they can apply to join your group. Simply search the group name and click the apply button'} >
+          <a href="#">
+            <Icon type="info-circle-o" style={{marginLeft: 6}} />
+          </a>
+        </Tooltip>
+      </span>
+    )
+
+    const invitationSection = (
+      <Card title={cardTitle} className={'card'} bordered={false} style={{ overflow: 'auto', backgroundColor: 'white', margin: '18px 0 28px 0' }} noHovering>
+      {/*<div className={'card'} style={{ backgroundColor: 'white', margin: '18px 0 28px 0' }}>*/}
         <GroupInvitationForm coteriePk={this.state.coteriePk}/>
-      </div>
+      {/*</div>*/}
+      </Card>
     )
 
     var deleteGroupSection = (
