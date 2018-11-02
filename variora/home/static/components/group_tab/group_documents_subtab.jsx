@@ -80,7 +80,7 @@ class GroupDocumentsSubtab extends React.Component {
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
       data.append('coterie_id', this.props.coteriePk)
       data.append('current_url', window.location.href)
-      axios.post('/coterie/handle_coteriefile_upload', data).then(() => {
+      axios.post('/coterie/api/coteriedocuments/upload', data).then(() => {
           this.setState({ onlineDocumentName: '' })
           this.setState({ onlineDocumentUrl: '' })
           this.uploadedDocumentTable.updateData()

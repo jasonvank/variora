@@ -125,6 +125,7 @@ def post_upload_coteriedocument(request):
                 title=request.POST[TITLE_FORM_KEY]
             )
             document.save()
+            document.subscribers.add(user)
         else:
             file_upload = request.FILES["file_upload"]  # this is an UploadedFile object
 
@@ -145,7 +146,8 @@ def post_upload_coteriedocument(request):
                 unique_file=unique_file,
                 title=request.POST[TITLE_FORM_KEY]
             )
-            document.save()  # save this document to the database
+            document.save()
+            document.subscribers.add(user)
 
         return JsonResponse(document, encoder=CoterieDocumentEncoder, safe=False)
     except ObjectDoesNotExist:

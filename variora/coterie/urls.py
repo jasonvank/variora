@@ -17,8 +17,7 @@ urlpatterns = [
     url(r'^handle_remove_member', views.handle_remove_member),
 
     # coterie document related action
-    url(r'^handle_coteriefile_upload', views.handle_coteriefile_upload, name="handle_coteriefile_upload"),
-
+    # url(r'^handle_coteriefile_upload', views.handle_coteriefile_upload, name="handle_coteriefile_upload"),
     # url(r'^handle_coteriefile_delete', views.handle_coteriefile_delete, name="handle_coteriefile_delete"),
 
     url(r'^display_coteriefile_viewer_page', views.display_coteriefile_viewer_page, name="display_coteriefile_viewer_page"),
