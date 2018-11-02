@@ -160,12 +160,14 @@ class GroupDocumentsList extends React.Component {
       return false
     }
 
-    const columns = [{
-        title: '#',
-        dataIndex: 'id',
-        width: '10%',
-        render: (text, record) => this.state.data.indexOf(record) + 1
-      }, {
+    const columns = [
+    // {
+    //     title: '#',
+    //     dataIndex: 'id',
+    //     width: '10%',
+    //     render: (text, record) => this.state.data.indexOf(record) + 1
+    //   },
+      {
         title: 'Title',
         dataIndex: 'title',
         width: '40%',
@@ -179,12 +181,16 @@ class GroupDocumentsList extends React.Component {
         render: (text, record) => <span><Avatar src={record.uploader_portrait_url} style={{ verticalAlign: 'middle', marginRight: 12}} />{text}</span>,
         width: '20%',
       }, {
+        title: 'Upload Time',
+        dataIndex: 'uploader_name',
+        render: (text, coterieDocument) => documentUploadDate(text, coterieDocument),
+        width: '20%',
+      }, {
         title: this.props.isAdmin ? 'Action' : 'Upload Time',
         key: 'action',
-        width: '30%',
+        width: '20%',
         render: (text, coterieDocument) => (
-          checkIAmUploader(coterieDocument) ? documentDeleteAction(text, coterieDocument) :
-                              documentUploadDate(text, coterieDocument)
+          checkIAmUploader(coterieDocument) ? documentDeleteAction(text, coterieDocument) : null
         ),
     }]
 
