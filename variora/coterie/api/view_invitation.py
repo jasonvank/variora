@@ -12,7 +12,7 @@ from validate_email import validate_email
 
 from home.models import User
 
-from ..models import Coterie, CoterieDocument, CoterieInvitation
+from ..models import Coterie, CoterieDocument, CoterieInvitation, NonRegisteredUserTempCoterieInvitation
 from .encoders import CoterieDocumentEncoder, CoterieEncoder, CoterieInvitationEncoder
 
 
@@ -22,6 +22,7 @@ def create_invitation(request):
     if 'coterie_id' not in POST or 'invitee_emails' not in POST or 'invitation_message' not in POST:
         return HttpResponse(status=403)
     try:
+        coterie = Coterie.objects.get(pk=POST['coterie_id'])
         successful_invitations = []
         unregistered_emails = []
         for invitee_email in POST['invitee_emails'].split(','):
@@ -30,8 +31,8 @@ def create_invitation(request):
                 try:
                     invitee = User.objects.get(email_address=invitee_email)
                     invitation = CoterieInvitation()
-                    invitation.inviter = get_user(request)
-                    invitation.coterie = Coterie.objects.get(pk=POST['coterie_id'])
+                    invitation.inviter = request.user
+                    invitation.coterie = coterie
                     invitation.invitee = invitee
                     invitation.invitation_message = POST['invitation_message']
                     if invitation.inviter not in invitation.coterie.administrators.all():
@@ -40,6 +41,15 @@ def create_invitation(request):
                     successful_invitations.append(invitation)
                 except ObjectDoesNotExist:
                     unregistered_emails.append(invitee_email)
+        for email in unregistered_emails:
+            temp_invitation = NonRegisteredUserTempCoterieInvitation(
+                inviter=request.user,
+                invitation_message=POST['invitation_message'],
+                coterie=coterie,
+                invitee_email=email,
+            )
+            temp_invitation.save()
+            # TODO: send email to them
         return JsonResponse({
             'successful_invitations': successful_invitations,
             'unregistered_emails': unregistered_emails,

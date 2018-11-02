@@ -17,6 +17,7 @@ from wand.image import Image
 
 from file_viewer.models import Document, DocumentThumbnail
 from home.api.views_notifications import NotificationEncoder
+from coterie.models import NonRegisteredUserTempCoterieInvitation
 from home.models import User, UserSetting
 from variora.utils import send_email_from_noreply
 
@@ -136,6 +137,11 @@ def update_top_documents_kronjob():
 @kronos.register('0 0 * * *')
 def clear_expired_sessions_kronjob():
     call_command('clearsessions', interactive=True)
+
+
+@kronos.register('0 0 * * 0')
+def clear_expired_temp_invitation_kronjob():
+    pass
 
 
 @kronos.register('2 0 * * *')

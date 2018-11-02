@@ -44,6 +44,14 @@ class NonRegisteredUserTempCoterieInvitation(ModelWithCleanUUID):
     send_datetime = models.DateTimeField(auto_now=False, auto_now_add=True)
 
 
+@receiver(models.signals.post_save, sender=User)
+def create_setting(sender, instance, created, **kwargs):
+    if created:
+        for temp_invitation in NonRegisteredUserTempCoterieInvitation.objects.filter(invitee_email=instance.email_address):
+            print(temp_invitation)
+            # TODO: change temp invitation to real one
+
+
 class CoterieApplication(ModelWithCleanUUID):
     uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
     coterie = models.ForeignKey(Coterie, related_name='application_set')
