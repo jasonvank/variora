@@ -4,7 +4,7 @@ import uuid
 
 from django.db import models
 from django.dispatch import receiver
-
+from django.core.exceptions import ObjectDoesNotExist
 from file_viewer.managers import DocumentManager
 from file_viewer.models import UniqueFile
 from home.models import User
@@ -44,12 +44,23 @@ class NonRegisteredUserTempCoterieInvitation(ModelWithCleanUUID):
     send_datetime = models.DateTimeField(auto_now=False, auto_now_add=True)
 
 
+def _temp_invitation_to_real_invitation(temp_invitation, user):
+    real_invitation = CoterieInvitation(
+        coterie=temp_invitation.coterie,
+        inviter=temp_invitation.inviter,
+        invitation_message=temp_invitation.invitation_message,
+        send_datetime=temp_invitation.send_datetime,
+        invitee=user,
+    )
+    real_invitation.save()
+    temp_invitation.delete()
+
+
 @receiver(models.signals.post_save, sender=User)
-def create_setting(sender, instance, created, **kwargs):
+def change_temp_invitations_to_real_ones(sender, instance, created, **kwargs):
     if created:
         for temp_invitation in NonRegisteredUserTempCoterieInvitation.objects.filter(invitee_email=instance.email_address):
-            print(temp_invitation)
-            # TODO: change temp invitation to real one
+            _temp_invitation_to_real_invitation(temp_invitation, instance)
 
 
 class CoterieApplication(ModelWithCleanUUID):

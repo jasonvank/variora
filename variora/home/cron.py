@@ -141,7 +141,7 @@ def clear_expired_sessions_kronjob():
 
 @kronos.register('0 0 * * 0')
 def clear_expired_temp_invitation_kronjob():
-    pass
+    NonRegisteredUserTempCoterieInvitation.objects.all().delete()
 
 
 @kronos.register('2 0 * * *')

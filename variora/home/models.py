@@ -127,7 +127,8 @@ def delete_local_portrait(sender, instance, **kwargs):
 
 @receiver(models.signals.pre_delete, sender=User)
 def delete_user_setting(sender, instance, **kwargs):
-    instance.setting.delete()
+    if hasattr(instance, 'setting') and instance.setting is not None:
+        instance.setting.delete()
 
 
 @receiver(models.signals.post_save, sender=User)

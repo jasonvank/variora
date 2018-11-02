@@ -50,6 +50,7 @@ def create_invitation(request):
             )
             temp_invitation.save()
             # TODO: send email to them
+            
         return JsonResponse({
             'successful_invitations': successful_invitations,
             'unregistered_emails': unregistered_emails,
