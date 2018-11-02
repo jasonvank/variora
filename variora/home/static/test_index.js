@@ -161,11 +161,11 @@ class AppBeforeConnect extends React.Component {
       if (coterieName == '')
         message.warning('Group name cannot be empty', 1)
       else {
-        var data = new FormData()
+        const data = new FormData()
         data.append('coterie_name', coterieName)
         data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
         axios.post('/coterie/api/coteries/create', data).then((response) => {
-          var newAdministratedCoteries = this.state.administratedCoteries.slice()
+          const newAdministratedCoteries = this.state.administratedCoteries.slice()
           newAdministratedCoteries.push(response.data)
           this.setCreateCoterieModelVisible(false)
           this.setState({
@@ -425,7 +425,7 @@ class AppBeforeConnect extends React.Component {
             </Col>
             <Col span={8} style={{ textAlign: 'right' }}>
               <Search
-                placeholder="input search text"
+                placeholder="Search in Variora"
                 style={{ width: '60%' }}
                 onSearch={this.handleSearch}
                 defaultValue={window.location.pathname.includes('/search') ? getValFromUrlParam('key') : '' }

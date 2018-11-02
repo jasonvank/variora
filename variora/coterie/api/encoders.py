@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.serializers.json import DjangoJSONEncoder
+from django.conf import settings
 from django.utils.decorators import method_decorator
 
 from home.api.encoders import UserEncoder
@@ -52,6 +53,14 @@ class SearchResultCoterieEncoder(DjangoJSONEncoder):
 class CoterieDocumentEncoder(DjangoJSONEncoder):
     def default(self, obj):
         if isinstance(obj, CoterieDocument):
+            if obj.uploader is None:
+                if obj.owner.creator is not None:
+                    obj.uploader = obj.owner.creator
+                    obj.save()
+                elif obj.owner.administrators.all().exists():
+                    obj.uploader = obj.owner.administrators.all().first()
+                    obj.save()
+
             return {
                 'pk': obj.pk,
                 'uuid': obj.uuid,
@@ -66,8 +75,8 @@ class CoterieDocumentEncoder(DjangoJSONEncoder):
                 'file_on_server': obj.file_on_server,
                 'renameUrl': '/coterie/api/coteriedocuments/' + str(obj.pk) + '/rename',
                 'upload_time': obj.upload_time,
-                'uploader_name': obj.uploader.nickname if obj.uploader is not None else obj.owner.creator.nickname,
-                'uploader_portrait_url': obj.uploader.portrait_url if obj.uploader is not None else obj.owner.creator.portrait_url,
+                'uploader_name': obj.uploader.nickname if obj.uploader is not None else 'Unknown',
+                'uploader_portrait_url': obj.uploader.portrait_url if obj.uploader is not None else settings.ANONYMOUS_USER_PORTRAIT_URL,
             }
         return super(CoterieDocumentEncoder, self).default(obj)
 

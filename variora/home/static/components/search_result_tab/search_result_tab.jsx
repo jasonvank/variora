@@ -230,6 +230,7 @@ class GroupResult extends React.Component {
         >
           <TextArea
             onChange={async (e) => this.setState({ applicationMessage: e.target.value })}
+            placeholder={'Application message'}
             value={this.state.applicationMessage}
           ></TextArea>
         </Modal>
