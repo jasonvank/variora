@@ -13,7 +13,7 @@ from file_viewer import models as file_viewer_models
 from home.models import User
 from variora import utils
 from views_coterie import *
-from variora.utils import *
+from variora.utils import should_return_pwa
 
 from .models import Coterie, CoterieDocument
 
