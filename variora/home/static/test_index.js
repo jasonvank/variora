@@ -2,20 +2,13 @@ import './css/test_index.css'
 import 'regenerator-runtime/runtime'
 
 import {
-  Avatar,
-  notification,
+  Avatar, notification,
   Button,
-  Col,
-  Form,
-  Icon,
-  Input,
-  Layout,
-  LocaleProvider,
-  Menu,
-  Modal,
-  Row,
-  message,
-  Popover, Badge
+  Col, Form,
+  Icon, Input,
+  Layout, LocaleProvider, Menu,
+  Modal, Row,
+  message, Popover, Breadcrumb,
 } from 'antd'
 import {
   Link,
@@ -23,7 +16,7 @@ import {
   BrowserRouter as Router,
   Switch
 } from 'react-router-dom'
-import { getCookie, getValFromUrlParam } from 'util.js'
+import { getCookie, getValFromUrlParam, groupAvatarColors } from 'util.js'
 
 import { DocumentTab } from './components/document_tab.jsx'
 import { ExploreTab } from './components/explore_tab.jsx'
@@ -415,6 +408,33 @@ class AppBeforeConnect extends React.Component {
       </Router>
     )
 
+    let groupIcon = null
+    const currentCoterieUUID = window.location.pathname.includes('/groups/') ? window.location.pathname.split('/')[2] : undefined
+    if (currentCoterieUUID !== undefined) {
+      let currentCoterie = undefined
+
+      let filtered = this.state.administratedCoteries.filter(c => c.uuid === currentCoterieUUID)
+      if (filtered.length > 0)
+        currentCoterie = filtered[0]
+
+      filtered = this.state.joinedCoteries.filter(c => c.uuid === currentCoterieUUID)
+      if (filtered.length > 0)
+        currentCoterie = filtered[0]
+
+      if (currentCoterie !== undefined) {
+        const color = groupAvatarColors[currentCoterieUUID.charCodeAt(0) % 8]
+        groupIcon = (
+          <Avatar
+            style={{ width: 18, height: 18, backgroundColor: color, top: 16, left: -6, verticalAlign: 'middle' }}
+            size={'small'}
+          >
+            <span style={{position: 'relative', top: -3}}>{currentCoterie.name.slice(0, 2).toUpperCase()}</span>
+          </Avatar>
+        )
+      }
+    }
+
+
     return (
       <Layout style={{ height: '100%', width: '100%', position: 'absolute' }}>
         <Header className="header" style={{ backgroundColor: '#fff', diplay: 'inline' }}>
@@ -422,6 +442,7 @@ class AppBeforeConnect extends React.Component {
             <Col span={6}>
               {/* <div className="logo" /> */}
               <a href='/'><img src="/media/logo.png" height={48} style={{ verticalAlign: 'middle', marginLeft: 28 }}/></a>
+              {groupIcon}
             </Col>
             <Col span={8} style={{ textAlign: 'right' }}>
               <Search
