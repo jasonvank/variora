@@ -42,7 +42,7 @@ h.ignore_links = True
 
 
 def _handle_post_annotation_request(user, document, request):
-    logging.info('Called')
+    # logging.info('Called')
 
     annotation = models.CoterieAnnotation()
     annotation.content = request.POST["annotation_content"]
@@ -57,8 +57,8 @@ def _handle_post_annotation_request(user, document, request):
     annotation.is_public = True if request.POST["is_public"] == 'true' else False
     annotation.save()
 
-    logging.info(annotation.content)
-    logging.info(request)
+    # logging.info(annotation.content)
+    # logging.info(request)
 
     # send notification
     for user in document.owner.administrators.all():
@@ -80,7 +80,7 @@ def _handle_post_annotation_request(user, document, request):
                 image_url=annotation.annotator.portrait_url,
                 description=h.handle(annotation.content),
             )
-    logging.info('done send notif')
+    # logging.info('done send notif')
 
     context = {
         "document": document,
@@ -89,7 +89,7 @@ def _handle_post_annotation_request(user, document, request):
         "new_annotation_id": annotation.id,
     }
 
-    logging.info('done context')
+    # logging.info('done context')
     return JsonResponse({
         'new_annotationdiv_html': render(request, "file_viewer/one_annotation_div.html", context).content,
         'new_annotation_id': annotation.id,
