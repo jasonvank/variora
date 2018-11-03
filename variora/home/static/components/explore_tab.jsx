@@ -204,18 +204,18 @@ class DocumentTab extends React.Component {
           {<DisplayDocuments data={this.state.data.mostViewsDocuments} />}
         </div>
 
-        <div className='card' style={{ overflow: 'auto', color: 'white', marginTop: 18 }}>
-          <div className='card-header pubIndex-recommendationsHeader'>
-            <div className='card-headerText' style={{ color: 'black' }}>Most Stars</div>
-          </div>
-          {<DisplayDocuments data={this.state.data.mostStarsDocuments} />}
-        </div>
-
         <div className='card' style={{ overflow: 'auto', color: 'white', marginTop: 18  }}>
           <div className='card-header pubIndex-recommendationsHeader'>
             <div className='card-headerText' style={{ color: 'black' }}>Most Annotations</div>
           </div>
           {<DisplayDocuments data={this.state.data.mostAnnotationsDocuments} />}
+        </div>
+
+        <div className='card' style={{ overflow: 'auto', color: 'white', marginTop: 18 }}>
+          <div className='card-header pubIndex-recommendationsHeader'>
+            <div className='card-headerText' style={{ color: 'black' }}>Most Stars</div>
+          </div>
+          {<DisplayDocuments data={this.state.data.mostStarsDocuments} />}
         </div>
       </div>
     )

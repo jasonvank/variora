@@ -346,12 +346,12 @@ class AppBeforeConnect extends React.Component {
                 <Link to="/"><span><Icon type='file' />Documents</span></Link>
               </Menu.Item>
 
-              <SubMenu key="created_readlists" title={<span><Icon type="folder-open" />Created Readlists</span>} disabled={!this.state.user.is_authenticated}>
+              <SubMenu key="created_readlists" title={<span><Icon type="folder" />Created Readlists</span>} disabled={!this.state.user.is_authenticated}>
                 {
                   this.state.createdReadlists.sort((a, b) => a.name > b.name).map((readlist) => {
                     return (
                       <Menu.Item key={'readlists' + readlist.slug} title={readlist.name}>
-                        <Link style={{ overflow: 'hidden', textOverflow: 'ellipsis' }} to={ '/readlists/' + readlist.slug }><span>{ readlist.name }</span></Link>
+                        <Link style={{ overflow: 'hidden', textOverflow: 'ellipsis' }} to={ '/readlists/' + readlist.slug }><Icon type="folder-open" /><span>{ readlist.name }</span></Link>
                       </Menu.Item>
                     )
                   })
@@ -363,7 +363,7 @@ class AppBeforeConnect extends React.Component {
                   this.state.collectedReadlists.sort((a, b) => a.name > b.name).map((readlist) => {
                     return (
                       <Menu.Item key={'readlists' + readlist.slug} title={readlist.name}>
-                        <Link style={{ overflow: 'hidden', textOverflow: 'ellipsis' }} to={ '/readlists/' + readlist.slug }><span>{ readlist.name }</span></Link>
+                        <Link style={{ overflow: 'hidden', textOverflow: 'ellipsis' }} to={ '/readlists/' + readlist.slug }><Icon type="folder" /><span>{ readlist.name }</span></Link>
                       </Menu.Item>
                     )
                   })
