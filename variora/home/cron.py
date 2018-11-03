@@ -20,6 +20,8 @@ from home.api.views_notifications import NotificationEncoder
 from coterie.models import NonRegisteredUserTempCoterieInvitation
 from home.models import User, UserSetting
 from variora.utils import send_email_from_noreply
+from datetime import datetime, timedelta
+from django.utils import timezone
 
 
 def _generate_thumbnail_image_content_file(document):
@@ -81,10 +83,11 @@ class UpdateTopDocumentsThread(Thread):
             thumbnail.save()
 
 
-def _get_unread_notification_list(user):
+def _get_yesterday_unread_notification_list(user):
     max_num_to_fetch = 100
 
-    unread_notifications = user.notifications \
+    yesterday = timezone.now() - timedelta(1)
+    unread_notifications = user.notifications.filter(timestamp__gte=yesterday) \
         .prefetch_related('actor') \
         .prefetch_related('target') \
         .prefetch_related('action_object') \
@@ -106,7 +109,9 @@ def _send_email_notification():
     users_with_setting = User.objects.exclude(setting=None)
     subscribed_users = users_with_setting.filter(setting__email_subscribe=True)
 
-    unreads = Notification.objects.filter(unread=True)
+    # get unread notification from yesterday
+    yesterday = timezone.now() - timedelta(1)
+    unreads = Notification.objects.filter(unread=True).filter(timestamp__gte=yesterday)
     this_user_unreads_count = unreads.filter(recipient=OuterRef('pk')).annotate(c=Count('*')).values('c')[:1]
 
     receivers = subscribed_users \
@@ -115,7 +120,7 @@ def _send_email_notification():
         # .filter(email_address__iendswith='@ijc.sg') \
 
     for user in receivers:
-        context = _get_unread_notification_list(user)
+        context = _get_yesterday_unread_notification_list(user)
         html_message = render_to_string('home/email_templates/email.html', context)
         send_email_from_noreply(
             subject='Variora: Unread notifications',
