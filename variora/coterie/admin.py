@@ -45,7 +45,7 @@ class CoterieAnnotationModelAdmin(admin.ModelAdmin):
 
 
 class CoterieAnnotationReplyModelAdmin(admin.ModelAdmin):
-    list_display = ["id", "clean_uuid", "reply_to_annotation", "reply_to_annotation_reply", "replier", "num_like", "edit_time", "content"]
+    list_display = ["id", "clean_uuid", "replier", "num_like", "edit_time", "content", "reply_to_annotation", "reply_to_annotation_reply"]
     list_filter = ["content", "reply_to_annotation", "reply_to_annotation_reply", "replier", "num_like"]
     search_fields = ["id", "uuid", "content", "reply_to_annotation__pk", "reply_to_annotation_reply__pk", "replier__pk", "num_like"]
 
