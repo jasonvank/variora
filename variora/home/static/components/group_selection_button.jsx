@@ -207,7 +207,9 @@ class GroupSelectionButton extends React.Component {
         visible={this.state.visible}
         onVisibleChange={this.handleVisibleChange}
       >
-        {iconToShow}
+        {/*{iconToShow}*/}
+        <span style={{ fontWeight: 400, color: '#666', cursor: 'pointer', verticalAlign: 'middle', marginRight: 6 }}>Groups</span>
+        <Icon style={{ fontSize: 8, cursor: 'pointer', verticalAlign: 'middle' }} type="caret-down" />
       </Popover>
     )
   }
