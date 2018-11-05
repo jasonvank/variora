@@ -171,6 +171,11 @@ MAX_DOCUMENT_UPLOAD_SIZE = 5 * 1024 * 1024  # 5 MB
 ENABLE_PWA = True
 
 
+############ REDIS ##########
+REDIS_DOMAIN = "localhost"
+REDIS_PORT = 6379
+
+
 ############ Django Debug Toolbar ##########
 # if DEBUG:
 #     INTERNAL_IPS = ('127.0.0.1', 'localhost',)

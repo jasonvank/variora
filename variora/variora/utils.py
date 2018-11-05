@@ -4,6 +4,19 @@ import uuid
 from django.core.mail import EmailMessage, send_mail
 from django.db import models
 from validate_email import validate_email
+import redis
+from django.conf import settings
+
+
+strict_redis = redis.StrictRedis(
+    host=settings.REDIS_DOMAIN,
+    port=settings.REDIS_PORT,
+    db=0
+)
+
+
+def redis_socket_push(message):
+    strict_redis.publish('push_channel', message)
 
 
 def uuid2slug(uuid_val):
@@ -50,3 +63,4 @@ def check_valid_document_title(title):
     if ';' in title or ':' in title or '/' in title or '\\' in title or '?' in title or '<' in title or '>' in title:
         return False
     return True
+
