@@ -16,7 +16,7 @@ import {
   BrowserRouter as Router,
   Switch
 } from 'react-router-dom'
-import { getCookie, getValFromUrlParam, groupAvatarColors, socket } from 'util.js'
+import { getCookie, getValFromUrlParam, groupAvatarColors, sio } from 'util.js'
 
 import { DocumentTab } from './components/document_tab.jsx'
 import { ExploreTab } from './components/explore_tab.jsx'

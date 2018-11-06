@@ -11,7 +11,7 @@ rm -r ./variora/bundled_static/dev/*
 
 webpack --config webpack.config.dev.js --mode development &  # run webpack watching mode in background
 redis-server --daemonize yes
-pm2 start ./socket_service/socket_service.js
+pm2 start ./socket_service/socket_service.js --watch
 
 
 if [ $# -ge 1 ]; then
@@ -23,6 +23,7 @@ fi
 
 
 # on termination
+pm2 stop socket_service --watch
 pm2 delete socket_service
 pkill -f redis-server
 pkill -f webpack  # kill wepback watching mode after django dev server is terminated

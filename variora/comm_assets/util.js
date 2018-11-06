@@ -112,7 +112,7 @@ function range(end) {
 
 
 exports.groupAvatarColors = ['#1BA39C', '#1abc9c', '#2ecc71', '#3498db', '#9b59b6', '#34495e', '#f1c40f', '#e67e22', '#e74c3c']
-exports.socket = io(`${window.location.protocol}//${window.location.hostname}:8001`)
+exports.sio = io(`${window.location.protocol}//${window.location.hostname}:8001`)
 
 
 export {
