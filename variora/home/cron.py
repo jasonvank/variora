@@ -52,6 +52,16 @@ def _generate_thumbnail_image_content_file(document):
     return ContentFile(images.make_blob('jpg'))
 
 
+def _generate_thumbnail_obj(document, description=''):
+    thumbnail = DocumentThumbnail(document=document, description=description)
+    if DocumentThumbnail.objects.filter(document=document).exists():
+        thumbnail.thumbnail_image = DocumentThumbnail.objects.filter(document=document)[0].thumbnail_image
+    else:
+        thumbnail.thumbnail_image.save('temp_name.jpg', _generate_thumbnail_image_content_file(document))
+    thumbnail.save()
+    return thumbnail
+
+
 class UpdateTopDocumentsThread(Thread):
     def run(self):
         DocumentThumbnail.objects.all().delete()
@@ -59,28 +69,13 @@ class UpdateTopDocumentsThread(Thread):
         num_thumbnails = min(8, Document.objects.all().count())
 
         for document in Document.objects.all().order_by("-num_visit")[0:num_thumbnails]:
-            thumbnail = DocumentThumbnail(document=document, description='most_views')
-            if DocumentThumbnail.objects.filter(document=document).exists():
-                thumbnail.thumbnail_image = DocumentThumbnail.objects.filter(document=document)[0].thumbnail_image
-            else:
-                thumbnail.thumbnail_image.save('temp_name.jpg', _generate_thumbnail_image_content_file(document))
-            thumbnail.save()
+            _generate_thumbnail_obj(document, description='most_views')
 
         for document in Document.objects.annotate(annotation_count=Count('annotation__id')).order_by("-annotation_count")[0:num_thumbnails]:
-            thumbnail = DocumentThumbnail(document=document, description='most_annotations')
-            if DocumentThumbnail.objects.filter(document=document).exists():
-                thumbnail.thumbnail_image = DocumentThumbnail.objects.filter(document=document)[0].thumbnail_image
-            else:
-                thumbnail.thumbnail_image.save('temp_name.jpg', _generate_thumbnail_image_content_file(document))
-            thumbnail.save()
+            _generate_thumbnail_obj(document, description='most_annotations')
 
         for document in Document.objects.annotate(collectors_count=Count('collectors')).order_by("-collectors_count")[0:num_thumbnails]:
-            thumbnail = DocumentThumbnail(document=document, description='most_collectors')
-            if DocumentThumbnail.objects.filter(document=document).exists():
-                thumbnail.thumbnail_image = DocumentThumbnail.objects.filter(document=document)[0].thumbnail_image
-            else:
-                thumbnail.thumbnail_image.save('temp_name.jpg', _generate_thumbnail_image_content_file(document))
-            thumbnail.save()
+            _generate_thumbnail_obj(document, description='most_collectors')
 
 
 def _get_yesterday_unread_notification_list(user):
