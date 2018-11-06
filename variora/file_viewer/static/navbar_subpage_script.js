@@ -64,7 +64,6 @@ function prepareNavbarFunction() {
     const popup = layer.open({
       title: false,
       type: 1,
-      offset: '28%',
       shade: 0.18,
       shadeClose: true,
       content: $('#readlist'),

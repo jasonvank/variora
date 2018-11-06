@@ -1,10 +1,7 @@
 import urllib
 from hashlib import md5
 
-from django.conf import settings
-from django.contrib.auth.models import AnonymousUser
-from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse, JsonResponse, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.views.generic import View
 
 from file_viewer.models import UniqueFile
@@ -172,13 +169,3 @@ def get_coteriedocument_annotations_by_slug(request, **kwargs):
         )
     except ObjectDoesNotExist:
         return HttpResponse(status=404)
-
-
-
-
-
-
-
-
-
-

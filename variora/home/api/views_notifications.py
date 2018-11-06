@@ -1,6 +1,4 @@
-from django.contrib.auth import authenticate, get_user
-from django.contrib.auth.models import AnonymousUser
-from django.core.exceptions import ObjectDoesNotExist
+from django.conf import settings
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
@@ -14,15 +12,22 @@ class NotificationEncoder(DjangoJSONEncoder):
     def default(self, obj):
         if isinstance(obj, Notification):
             slug = str(id2slug(obj.id))
+            data = obj.data
+            actor_str = str(obj.actor)
+
+            if 'is_public' in data and not data['is_public']:
+                actor_str = 'Anonymous'
+                data['image_url'] = settings.ANONYMOUS_USER_PORTRAIT_URL
+
             return {
                 'slug': slug,
-                'actor': str(obj.actor),
+                'actor': actor_str,
                 'verb': obj.verb,
                 'description': obj.description or '',
                 'action_object': str(obj.action_object),
                 'target': str(obj.target),
                 'timestamp': obj.timestamp,
-                'data': obj.data,
+                'data': data,
                 'unread': obj.unread,
                 'mark_read_url': '/notifications/api/notifications/' + slug + '/mark-read',
             }
@@ -77,6 +82,7 @@ def _safe_cast(s):
         return long(s)
     except:
         return None
+
 
 def mark_all_as_read(request):
     if 'notif_slugs_to_mark_as_read' not in request.POST:

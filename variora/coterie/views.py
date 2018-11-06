@@ -9,8 +9,6 @@ from notifications.signals import notify
 
 from api.encoders import (CoterieAnnotationEncoder,
                           CoterieAnnotationReplyEncoder)
-from file_viewer import models as file_viewer_models
-from home.models import User
 from variora import utils
 from views_coterie import *
 from variora.utils import should_return_pwa
@@ -70,6 +68,7 @@ def _handle_post_annotation_request(user, document, request):
                 redirect_url=annotation.url,
                 image_url=annotation.annotator.portrait_url,
                 description=h.handle(annotation.content),
+                is_public=annotation.is_public,
             )
 
     for user in document.owner.members.all():
@@ -80,6 +79,7 @@ def _handle_post_annotation_request(user, document, request):
                 redirect_url=annotation.url,
                 image_url=annotation.annotator.portrait_url,
                 description=h.handle(annotation.content),
+                is_public=annotation.is_public,
             )
     # logging.info('done send notif')
 
@@ -122,7 +122,8 @@ def _handle_post_annotation_reply_request(user, coterie, request):
                 redirect_url=annotation.url,
                 image_url=annotation_reply.replier.portrait_url,
                 description=h.handle(annotation_reply.content),
-                coterie_uuid=coterie.uuid
+                coterie_uuid=coterie.uuid,
+                is_public=annotation_reply.is_public,
             )
     annotation_reply.save()
     notify.send(
@@ -133,6 +134,7 @@ def _handle_post_annotation_reply_request(user, coterie, request):
         redirect_url=annotation.url,
         image_url=annotation_reply.replier.portrait_url,
         description=h.handle(annotation_reply.content),
+        is_public=annotation_reply.is_public,
     )
     context = {
         "annotation_reply": annotation_reply,
@@ -265,55 +267,3 @@ def display_coteriefile_viewer_page(request, **kwargs):
         }
         return render(request, "coterie_file_viewer/pdf_file_viewer_page.html", context)
 
-
-def _handle_dropbox_link(link):
-    if link.endswith('dl=0'):
-        link = link.replace('dl=0', 'raw=1')
-    return link
-
-
-# def handle_coteriefile_upload(request):
-#     coterie = Coterie.objects.get(id=request.POST["coterie_id"])
-#
-#     if request.user in coterie.administrators.all():
-#         if 'external_url' in request.POST and request.POST['external_url'] != '':
-#             external_url = request.POST['external_url']
-#             if external_url.startswith('https://www.dropbox.com'):
-#                 external_url = _handle_dropbox_link(external_url)
-#             document = CoterieDocument(owner=coterie, external_url=external_url, title=request.POST["title"])
-#             document.save()
-#         else:
-#             file_upload = request.FILES["file_upload"]  # this is an UploadedFile object
-#
-#             if file_upload.size > settings.MAX_DOCUMENT_UPLOAD_SIZE:
-#                 return HttpResponse(status=403)
-#
-#             this_file_md5 = md5(file_upload.read()).hexdigest()
-#
-#             try:
-#                 unique_file = models.UniqueFile.objects.get(md5=this_file_md5)
-#             except ObjectDoesNotExist:
-#                 unique_file = models.UniqueFile(file_field=file_upload, md5=this_file_md5)
-#                 unique_file.save()
-#
-#             document = CoterieDocument(owner=coterie, unique_file=unique_file, title=request.POST["title"])
-#             document.save()  # save this document to the database
-#             document.subscribers.add()
-#
-#     # url_request_from = request.POST["current_url"]
-#     return HttpResponse(status=200)  # redirect(to=url_request_from)
-
-
-# def handle_coteriefile_delete(request):
-#     try:
-#         document = models.CoterieDocument.objects.get(id=int(request.POST["document_id"]))
-#         coterie = Coterie.objects.get(id=request.POST["coterie_id"])
-
-#         if document.owner == coterie and request.user in coterie.administrators.all():
-#             document.delete()
-
-#         url_request_from = request.POST["current_url"]
-#         return redirect(to=url_request_from)
-#     except ObjectDoesNotExist:
-#         url_request_from = request.POST["current_url"]
-#         return redirect(to=url_request_from)

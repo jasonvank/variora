@@ -47,6 +47,7 @@ def _handle_post_annotation_request(user, document, request):
             redirect_url=annotation.url,
             image_url=annotation.annotator.portrait_url,
             description=h.handle(annotation.content),
+            is_public=annotation.is_public,
         )
 
     context = {
@@ -86,6 +87,7 @@ def _handle_post_annotation_reply_request(user, document, request):
                 redirect_url=annotation.url,
                 image_url=annotation_reply.replier.portrait_url,
                 description=h.handle(annotation_reply.content),
+                is_public=annotation_reply.is_public,
             )
     annotation_reply.save()
     notify.send(
@@ -94,6 +96,7 @@ def _handle_post_annotation_reply_request(user, document, request):
         redirect_url=annotation.url,
         image_url=annotation_reply.replier.portrait_url,
         description=h.handle(annotation_reply.content),
+        is_public=annotation_reply.is_public,
     )
     context = {
         "annotation_reply": annotation_reply,

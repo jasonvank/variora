@@ -104,21 +104,6 @@ def handle_sign_up(request):
         del temp_user_information_dic[email_address]
 
 
-# def handle_search(request):
-#     search_key = request.GET["search_key"]
-#     result_documents = Document.objects.filter(title__icontains=search_key)  # case-insensitive contain
-#     result_users = User.objects.filter(Q(nickname__icontains=search_key) | Q(email_address__icontains=search_key))
-#     result_coteries = Coterie.objects.filter(Q(name__icontains=search_key) | Q(id__icontains=search_key))
-#     context = {
-#         "search_key": search_key,
-#         "result_documents": result_documents,
-#         "result_users": result_users,
-#         "result_coteries": result_coteries,
-#         "logged_in_user": request.user,
-#     }
-#     return render(request, "home/search_result_page.html", context)
-
-
 def display_index(request):
     if should_return_pwa(request) and settings.ENABLE_PWA:
         if not request.user.is_authenticated:
