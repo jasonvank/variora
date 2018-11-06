@@ -171,9 +171,9 @@ class GroupDocumentsList extends React.Component {
         dataIndex: 'title',
         width: '40%',
         render: (text, coterieDocument) => (
-          checkIAmUploader(coterieDocument) ? changeDocumentName(text, coterieDocument) :
-                              <a className='document-link' href={formatOpenCoterieDocumentUrl(coterieDocument, this.state.coteriePk)}>{text}</a>
-        )
+          checkIAmUploader(coterieDocument) ? changeDocumentName(text, coterieDocument) : <a className='document-link' href={formatOpenCoterieDocumentUrl(coterieDocument, this.state.coteriePk)}>{text}</a>
+        ),
+        sorter: (a, b) => a.title.localeCompare(b.title),
       }, {
         title: 'Uploader',
         dataIndex: 'uploader_name',
