@@ -44,6 +44,21 @@ class NonRegisteredUserTempCoterieInvitation(ModelWithCleanUUID):
     send_datetime = models.DateTimeField(auto_now=False, auto_now_add=True)
 
 
+class InvitationCode(ModelWithCleanUUID):
+    uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
+    code = models.CharField(max_length=64, null=False, blank=False)
+    coterie = models.ForeignKey(Coterie)
+    invitation = models.OneToOneField(
+        CoterieInvitation, null=True, blank=True,
+        related_name='invitation_code'
+    )
+    nonregistered_user_temp_invitation = models.OneToOneField(
+        NonRegisteredUserTempCoterieInvitation,
+        null=True, blank=True,
+        related_name='invitation_code'
+    )
+
+
 def _temp_invitation_to_real_invitation(temp_invitation, user):
     real_invitation = CoterieInvitation(
         coterie=temp_invitation.coterie,
@@ -53,6 +68,12 @@ def _temp_invitation_to_real_invitation(temp_invitation, user):
         invitee=user,
     )
     real_invitation.save()
+
+    if hasattr(temp_invitation, 'invitation_code'):
+        code = temp_invitation.invitation_code
+        code.invitation = real_invitation
+        code.nonregistered_user_temp_invitation = None
+        code.save()
     temp_invitation.delete()
 
 

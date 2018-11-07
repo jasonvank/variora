@@ -75,7 +75,7 @@ def _remove_member(request, coterie, user):
         return HttpResponse(status=403)
 
 
-def _update_coterie(coterie, request, user):
+def _update_coterie(request, coterie, user):
     if user not in coterie.administrators.all():
         return HttpResponse(status=403)
 
@@ -85,6 +85,31 @@ def _update_coterie(coterie, request, user):
         coterie.description = request.POST['new_desc']
     coterie.save()
     return HttpResponse(status=200)
+
+
+def _join_coterie_with_invitation_code(request, coterie, user):
+    post = request.POST
+    if 'invitation_code' not in post or not user.is_authenticated:
+        return HttpResponse(status=403)
+    try:
+        invitation_codes = InvitationCode.objects.filter(code=post['invitation_code'], coterie=coterie)
+        print(invitation_codes)
+        if not invitation_codes.exists():
+            return HttpResponse(status=404)
+        invitation_code = invitation_codes.first()
+
+        if invitation_code.invitation is not None:
+            invitation_code.invitation.delete()
+        if invitation_code.nonregistered_user_temp_invitation is not None:
+            invitation_code.nonregistered_user_temp_invitation.delete()
+        # I am still considering whether to delete the code since they will be cleared periodically
+        invitation_code.delete()
+
+        if user not in coterie.administrators.all():
+            coterie.members.add(user)
+        return JsonResponse(coterie, encoder=CoterieEncoder, safe=False)
+    except ObjectDoesNotExist:
+        return HttpResponse(status=404)
 
 
 class CoterieView(View):
@@ -108,7 +133,9 @@ class CoterieView(View):
             elif operation == 'removemember':
                 return _remove_member(request, coterie, user)
             elif operation == 'update':
-                return _update_coterie(coterie, request, user)
+                return _update_coterie(request, coterie, user)
+            elif operation == 'join_with_code':
+                return _join_coterie_with_invitation_code(request, coterie, user)
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
 

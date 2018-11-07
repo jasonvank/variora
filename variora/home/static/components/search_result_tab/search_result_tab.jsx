@@ -131,8 +131,10 @@ class GroupResult extends React.Component {
       data: this.props.resultCoteries,
       use: this.props.user,
       createApplicationModelVisible: false,
+      joinWithCodeModelVisible: false,
       targetedCoterie: {name: ''},
-      applicationMessage: ''
+      applicationMessage: '',
+      invitationCode: '',
     }
     this.handleChange = (sorter) => {
       this.setState({
@@ -142,6 +144,12 @@ class GroupResult extends React.Component {
     this.onApplyClick = (coterie) => {
       this.setState({
         createApplicationModelVisible: true,
+        targetedCoterie: coterie,
+      })
+    }
+    this.onJoinWithCodeClick = (coterie) => {
+      this.setState({
+        joinWithCodeModelVisible: true,
         targetedCoterie: coterie,
       })
     }
@@ -165,6 +173,23 @@ class GroupResult extends React.Component {
         notification['warning']({
           message: 'Unsuccessful application',
           description: <span>Your need to <a href="/sign-in">log in </a> first to join a group</span>,
+          duration: 3.8
+        })
+      })
+    }
+
+    this.joinCoterieWithCode = () => {
+      const data = new FormData()
+      data.append('application_message', this.state.applicationMessage)
+      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+      data.append('invitation_code', this.state.invitationCode)
+      axios.post(`/coterie/api/coteries/${this.state.targetedCoterie.pk}/join_with_code`, data)
+      .then(response => {
+        window.location.href = `/groups/${response.data.uuid}/`
+      }).catch(err => {
+        notification['warning']({
+          message: 'This invitation code does not exist or already expires',
+          // description: <span>Your need to <a href="/sign-in">log in </a> first to join a group</span>,
           duration: 3.8
         })
       })
@@ -212,7 +237,13 @@ class GroupResult extends React.Component {
         )
         var isMember = this.props.joinedCoteries.map(c => c.pk).includes(record.pk)
         var isAdmin = this.props.administratedCoteries.map(c => c.pk).includes(record.pk)
-        return isAdmin ? alreadyAdminLink : isMember ? alreadyMemberLink : applyLink
+        return (
+          <span>
+            {isAdmin ? alreadyAdminLink : isMember ? alreadyMemberLink : applyLink}
+            <span className="ant-divider" />
+            <a href='javascript:;' onClick={() => this.onJoinWithCodeClick(record)}>Join with invitation code</a>
+          </span>
+        )
       }
     }]
 
@@ -227,6 +258,7 @@ class GroupResult extends React.Component {
           rowKey={record => record.pk}
           onChange={this.handleChange}
         />
+
         <Modal
           title={'Apply to join: ' + this.state.targetedCoterie.name}
           wrapClassName='vertical-center-modal'
@@ -238,7 +270,21 @@ class GroupResult extends React.Component {
             onChange={async (e) => this.setState({ applicationMessage: e.target.value })}
             placeholder={'Application message'}
             value={this.state.applicationMessage}
-          ></TextArea>
+          />
+        </Modal>
+
+        <Modal
+          title={<span>Join <span style={{color: '#1BA39C'}}>{this.state.targetedCoterie.name}</span> with invitation code</span>}
+          wrapClassName='vertical-center-modal'
+          visible={this.state.joinWithCodeModelVisible}
+          onOk={this.joinCoterieWithCode}
+          onCancel={() => {this.setState({ joinWithCodeModelVisible: false })}}
+        >
+          <Input
+            onChange={async (e) => this.setState({ invitationCode: e.target.value })}
+            placeholder={'Invitation code you received'}
+            value={this.state.invitationCode}
+          />
         </Modal>
       </div>
     )

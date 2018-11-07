@@ -17,7 +17,7 @@ from wand.image import Image
 
 from file_viewer.models import Document, DocumentThumbnail
 from home.api.views_notifications import NotificationEncoder
-from coterie.models import NonRegisteredUserTempCoterieInvitation
+from coterie.models import NonRegisteredUserTempCoterieInvitation, InvitationCode
 from home.models import User, UserSetting
 from variora.utils import send_email_from_noreply
 from datetime import datetime, timedelta
@@ -139,9 +139,14 @@ def clear_expired_sessions_kronjob():
     call_command('clearsessions', interactive=True)
 
 
-@kronos.register('0 0 * * 0')
+@kronos.register('0 0 * * 1')
 def clear_expired_temp_invitation_kronjob():
     NonRegisteredUserTempCoterieInvitation.objects.all().delete()
+
+
+@kronos.register('1 0 * * 1')  # every Monday
+def clear_invitation_code_kronjob():
+    InvitationCode.objects.all().delete()
 
 
 @kronos.register('2 0 * * *')

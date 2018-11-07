@@ -1,3 +1,5 @@
+import random
+
 from django.contrib.auth import get_user
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
@@ -15,22 +17,24 @@ from home.models import User
 from variora.utils import send_email_from_noreply
 from django.template.loader import render_to_string
 
-from ..models import Coterie, CoterieDocument, CoterieInvitation, NonRegisteredUserTempCoterieInvitation
+from ..models import Coterie, CoterieDocument, CoterieInvitation, NonRegisteredUserTempCoterieInvitation, InvitationCode
 from .encoders import CoterieDocumentEncoder, CoterieEncoder, CoterieInvitationEncoder
 
 
 class TempInvitationEmailThread(Thread):
-    def __init__(self, unregistered_emails, invitation):
+    def __init__(self, unregistered_emails, invitation, random_code):
         Thread.__init__(self)
         self.unregistered_emails = unregistered_emails
         self.invitation = invitation
+        self.code = random_code
 
     def run(self):
         html_message = render_to_string('home/email_templates/new_invitation_but_not_registered.html', {
             'sign_in_url': 'https://www.variora.io/sign-in',
             'group_name': self.invitation.coterie.name,
             'message': self.invitation.invitation_message,
-            'inviter': self.invitation.inviter.nickname
+            'inviter': self.invitation.inviter.nickname,
+            'invitation_code': self.code,
         })
         send_email_from_noreply(
             subject='Variora: you have a group invitation. Sign up to view',
@@ -40,23 +44,31 @@ class TempInvitationEmailThread(Thread):
 
 
 class InvitationEmailThread(Thread):
-    def __init__(self, emails, invitation):
+    def __init__(self, emails, invitation, random_code):
         Thread.__init__(self)
         self.emails = emails
         self.invitation = invitation
+        self.code = random_code
 
     def run(self):
         html_message = render_to_string('home/email_templates/new_invitation.html', {
             'redirect_url': 'https://www.variora.io/',
             'group_name': self.invitation.coterie.name,
             'message': self.invitation.invitation_message,
-            'inviter': self.invitation.inviter.nickname
+            'inviter': self.invitation.inviter.nickname,
+            'invitation_code': self.code,
         })
         send_email_from_noreply(
             subject='Variora: new group invitation',
             receiver_list=self.emails,
             content=html_message,
         )
+
+
+def _generate_random_code():
+    code = random.randint(0, 999990)
+    code = str(code).zfill(5)
+    return code
 
 
 # @login_required(login_url='/')
@@ -83,8 +95,18 @@ def create_invitation(request):
                     invitation.save()
                     successful_invitations.append(invitation)
 
+                    # create invitation code
+                    random_code = _generate_random_code()
+                    code = InvitationCode(
+                        code=random_code,
+                        invitation=invitation,
+                        coterie=coterie,
+                        nonregistered_user_temp_invitation=None,
+                    )
+                    code.save()
+
                     # email to registered users
-                    InvitationEmailThread([invitee.email_address], invitation).start()
+                    InvitationEmailThread([invitee.email_address], invitation, random_code).start()
                 except ObjectDoesNotExist:
                     unregistered_emails.append(invitee_email)
 
@@ -98,7 +120,17 @@ def create_invitation(request):
             )
             temp_invitation.save()
 
-            TempInvitationEmailThread([email], temp_invitation).start()
+            # create invitation code
+            random_code = _generate_random_code()
+            code = InvitationCode(
+                code=random_code,
+                invitation=None,
+                coterie=coterie,
+                nonregistered_user_temp_invitation=temp_invitation,
+            )
+            code.save()
+
+            TempInvitationEmailThread([email], temp_invitation, random_code).start()
 
         return JsonResponse({
             'successful_invitations': successful_invitations,
