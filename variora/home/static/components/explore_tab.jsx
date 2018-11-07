@@ -103,7 +103,7 @@ class ReadlistTab extends React.Component {
       title: '#',
       dataIndex: 'id',
       width: '5%',
-      render: (text, record) => this.state.mostCollectedReadlists.indexOf(record) + 1
+      render: (text, record) => <img width={18} src={'https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678072-folder-document-512.png'}></img>  // this.state.mostCollectedReadlists.indexOf(record) + 1
     },
     // {
     //   dataIndex: 'trending',
@@ -139,7 +139,7 @@ class ReadlistTab extends React.Component {
       title: '#',
       dataIndex: 'id',
       width: '5%',
-      render: (text, record) => this.state.newestReadlists.indexOf(record) + 1
+      render: (text, record) => <img width={18} src={'https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678072-folder-document-512.png'}></img>   // this.state.newestReadlists.indexOf(record) + 1
     }
 
     return (
