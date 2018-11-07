@@ -78,9 +78,13 @@ class NotificationsToggleButton extends React.Component {
     }
 
     this.onClick = () => {
-      if (this.state.invitations == undefined)
-        return
-      var show = !this.state.showNotifications
+      if (this.state.invitations == undefined || this.state.invitations.length == 0) {
+        notification['info']({
+          message: 'You do not have new group invitations.',
+          duration: 3.8,
+        })
+      }
+      const show = !this.state.showNotifications
       if (show)
         this.displayInvitations(this.state.invitations)
       else
