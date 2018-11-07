@@ -1,6 +1,6 @@
 import 'regenerator-runtime/runtime'
 
-import { Avatar, Icon, Layout, Menu, Table, notification, Modal, Input, Tooltip } from 'antd'
+import { Avatar, Icon, Layout, Menu, message, Table, notification, Modal, Input, Tooltip } from 'antd'
 import { Link, Route, BrowserRouter as Router, Switch } from 'react-router-dom'
 
 import { DocumentResult } from './document_result_subtab.jsx'
@@ -17,6 +17,7 @@ const { TextArea } = Input
 const fullUrl = window.location.href
 // TODO: refactoring this
 const searchKey = fullUrl.slice(fullUrl.indexOf('=') + 1)
+
 
 class SearchResultTab extends React.Component {
   constructor(props) {
@@ -150,7 +151,7 @@ class GroupResult extends React.Component {
       data.append('application_message', this.state.applicationMessage)
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
       axios.post('/coterie/api/apply', data)
-      .then((response) => {
+      .then(response => {
         this.setState({
           applicationMessage: this.state.applicationMessage,
           createApplicationModelVisible: false,
@@ -159,6 +160,12 @@ class GroupResult extends React.Component {
           message: 'Application successfully sent',
           description: 'Your application has been sent to Group: ' + this.state.targetedCoterie.name + ' successfully!' + ' With message: ' + this.state.applicationMessage,
           duration: 4
+        })
+      }).catch(err => {
+        notification['warning']({
+          message: 'Unsuccessful application',
+          description: <span>Your need to <a href="/sign-in">log in </a> first to join a group</span>,
+          duration: 3.8
         })
       })
     }
@@ -237,6 +244,7 @@ class GroupResult extends React.Component {
     )
   }
 }
+
 
 class UserResult extends React.Component {
   constructor(props) {

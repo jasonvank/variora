@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.generic import View
 from validate_email import validate_email
+from notifications.signals import notify
 
 from home.models import User
 
@@ -32,6 +33,15 @@ def create_application(request):
         application.application_message = POST['application_message']
 
         application.save()
+
+        for user in application.coterie.administrators.all():
+            notify.send(
+                sender=application.applicant, recipient=user,
+                action_object=application, verb='apply join group',
+                redirect_url='/groups/' + application.coterie.clean_uuid + '/members',
+                image_url=application.applicant.portrait_url,
+                description=application.application_message,
+            )
         return JsonResponse(application, encoder=CoterieApplicationEncoder, safe=False)
     except ObjectDoesNotExist:
         return HttpResponseNotFound()

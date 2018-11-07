@@ -44,12 +44,18 @@ class NotificationsDetailsWrapper extends React.Component {
       verb = description == '' ? 'replied' : 'replied:'
     else if (actionVerb == 'post annotation')
       verb = description == '' ? 'posted in the document' : 'posted in the document:'
+    else if (actionVerb == 'apply join group')
+      verb = description == '' ? 'wants to join your group' : 'wants to join your group:'
 
     const title = this.state.newNotification.actor + ' ' + verb
 
     return (
       <div>
-        <div style={{fontWeight: 'bold'}}><a target="_blank" href={this.state.newNotification.data.redirect_url} style={{ textDecoration: 'none' }}>{title}</a></div>
+        <div style={{fontWeight: 'bold'}}>
+          <a target="_blank" href={this.state.newNotification.data.redirect_url} style={{ textDecoration: 'none' }}>
+            {title}
+          </a>
+        </div>
         <div className="notification-alert-list-wrapper" title={description}>{description}</div>
         <TimeAgo style={{color: '#91959d'}} date={this.state.newNotification.timestamp} />
       </div>

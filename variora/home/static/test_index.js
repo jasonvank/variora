@@ -204,12 +204,13 @@ class AppBeforeConnect extends React.Component {
 
     this.acceptInvitationCallback = (coteriePk) => {
       axios.get('/coterie/api/coteries/' + coteriePk).then((response) => {
-        var joinedCoteries = this.state.joinedCoteries
-        var hasAlreadyJoined = joinedCoteries.find(group => group.pk == coteriePk) != undefined ? true : false
+        const joinedCoteries = this.state.joinedCoteries
+        const hasAlreadyJoined = joinedCoteries.find(group => group.pk == coteriePk) != undefined ? true : false
         if (!hasAlreadyJoined) {
-          var updatedJoinedCoteries = this.state.joinedCoteries.concat(response.data)
+          const updatedJoinedCoteries = this.state.joinedCoteries.concat(response.data)
           this.setState({ joinedCoteries: updatedJoinedCoteries })
         }
+        window.location.href = `/groups/${response.data.uuid}/`
       })
     }
 
