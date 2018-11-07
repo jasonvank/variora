@@ -22,6 +22,7 @@ urlpatterns = [  # obsolete UI pages
     # index using react router
     url(r'^$', views.display_index),
     url(r'^collected', views.display_index),
+    url(r'^subscribed', views.display_index),
     url(r'^groups', views.display_index),
     url(r'^readlists', views.display_index),
     url(r'^search', views.display_index),

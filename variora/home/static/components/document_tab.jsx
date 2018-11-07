@@ -21,6 +21,10 @@ class DocumentTab extends React.Component {
   }
 
   render() {
+    let defaultSelectedKeys = this.props.location.pathname == '/collected' ? ["collected-documents"] : ['uploaded-documents']
+    if (this.props.location.pathname == '/subscribed')
+      defaultSelectedKeys = ['subscribed-documents']
+
     return (
       <Content style={{ paddingLeft: 18, paddingRight: 18, paddingTop: 16, margin: 0, minHeight: 280 }}>
         <Menu
@@ -28,8 +32,7 @@ class DocumentTab extends React.Component {
           className={'card'}
           mode="horizontal"
           style={{ padding: 0 }}
-          defaultSelectedKeys={['uploaded-documents']}
-          selectedKeys = { this.props.location.pathname == '/collected' ? ["collected-documents"] : ['uploaded-documents'] }
+          defaultSelectedKeys={defaultSelectedKeys}
         >
           <Menu.Item key="uploaded-documents">
             <Link to="/"><Icon type="file" />Uploaded Documents</Link>
@@ -37,10 +40,14 @@ class DocumentTab extends React.Component {
           <Menu.Item key="collected-documents">
             <Link to="/collected"><Icon type="heart-o" />Collected Documents</Link>
           </Menu.Item>
+          <Menu.Item key="subscribed-documents">
+            <Link to="/subscribed"><Icon type="eye-o" />Subscribed Documents</Link>
+          </Menu.Item>
         </Menu>
         <Switch>
           <Route exact path="/" component={UploadedDocuments}/>
           <Route exact path="/collected" component={CollectedDocuments}/>
+          <Route exact path="/subscribed" component={SubscribedDocuments}/>
         </Switch>
       </Content>
     )
@@ -175,6 +182,7 @@ class UploadedDocumentsBeforeConnect extends React.Component {
   }
 }
 
+
 class CollectedDocuments extends React.Component {
   constructor() {
     super()
@@ -189,6 +197,23 @@ class CollectedDocuments extends React.Component {
     )
   }
 }
+
+
+class SubscribedDocuments extends React.Component {
+  constructor() {
+    super()
+  }
+  render() {
+    return (
+      <div>
+        <div className={'card'} style={{ overflow: 'auto', marginTop: 18, textAlign: 'center', padding: 38}}>
+          <span>Subscription feature is currently under development.</span>
+        </div>
+      </div>
+    )
+  }
+}
+
 
 const mapStoreToProps = (store, ownProps) => {
   return {...ownProps, user: store.user}
