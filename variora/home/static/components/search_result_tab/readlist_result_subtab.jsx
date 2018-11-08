@@ -52,6 +52,9 @@ class ReadlistResult extends React.Component {
         pagination={{ pageSize: 10 }}
         rowKey={record => record.uuid}
         onChange={this.handleChange}
+        locale={{
+          emptyText: 'No readlist found'
+        }}
       />
     )
   }

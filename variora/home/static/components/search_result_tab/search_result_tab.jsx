@@ -257,6 +257,9 @@ class GroupResult extends React.Component {
           pagination={{ pageSize: 10 }}
           rowKey={record => record.pk}
           onChange={this.handleChange}
+          locale={{
+            emptyText: 'No group found'
+          }}
         />
 
         <Modal
@@ -341,6 +344,9 @@ class UserResult extends React.Component {
         pagination={{ pageSize: 10 }}
         rowKey={record => record.email_address}
         onChange={this.handleChange}
+        locale={{
+          emptyText: 'No user found'
+        }}
       />
     )
   }

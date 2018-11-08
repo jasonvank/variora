@@ -34,7 +34,7 @@ class CollectedDocumentsList extends React.Component {
     }
     this.onClickShareDocument = (document) => {
       copyToClipboard(window.location.origin + formatOpenDocumentUrl(document))
-      message.success('Copied to clipboard!')
+      message.success('Copied to clipboard! Paste elsewhere to share this document')
     }
   }
   componentDidMount() {

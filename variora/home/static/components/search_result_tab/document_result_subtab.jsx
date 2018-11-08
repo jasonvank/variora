@@ -54,6 +54,9 @@ class DocumentResult extends React.Component {
         pagination={{ pageSize: 10 }}
         rowKey={record => record.pk}
         onChange={this.handleChange}
+        locale={{
+          emptyText: 'No document found'
+        }}
       />
     )
   }

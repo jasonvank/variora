@@ -1,6 +1,6 @@
 import 'regenerator-runtime/runtime'
 
-import {Avatar, Badge, Col, Icon, Popover, Table, notification, Tabs } from 'antd'
+import {Avatar, Badge, Col, Icon, Popover, Table, notification, Tabs, Tooltip} from 'antd'
 import {getCookie, getUrlFormat, groupAvatarColors} from 'util.js'
 
 import React from 'react'
@@ -208,6 +208,12 @@ class GroupSelectionButton extends React.Component {
         onVisibleChange={this.handleVisibleChange}
       >
         {/*{iconToShow}*/}
+        <Tooltip title={'Documents and discussion inside a group is not visible to the world'} >
+          <a href="#">
+            <Icon type="info-circle-o" style={{marginRight: 6, verticalAlign: 'middle'}} />
+          </a>
+        </Tooltip>
+
         <span style={{ fontWeight: 400, color: '#666', cursor: 'pointer', verticalAlign: 'middle', marginRight: 6 }}>Groups</span>
         <Icon style={{ fontSize: 8, cursor: 'pointer', verticalAlign: 'middle' }} type="caret-down" />
       </Popover>
