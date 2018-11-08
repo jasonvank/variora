@@ -59,7 +59,10 @@ class CollectedDocumentsList extends React.Component {
         <span>
           <a onClick={() => this.onUncollectDocument(text, collectedDocument)}>Uncollect</a>
           <span className="ant-divider" />
-          <a href='javascript:;' onClick={() => this.onClickShareDocument(collectedDocument)}><Icon type="share-alt" />  Share</a>
+          <a href='javascript:;' onClick={() => this.onClickShareDocument(collectedDocument)}>
+            {/*<Icon type="share-alt" />*/}
+            Share
+          </a>
         </span>
       ),
     }]
@@ -69,6 +72,9 @@ class CollectedDocumentsList extends React.Component {
         columns={columns}
         pagination={false}
         rowKey={record => record.pk}
+        locale={{
+          emptyText: 'Documents you collected will be listed here'
+        }}
       />
     )
   }

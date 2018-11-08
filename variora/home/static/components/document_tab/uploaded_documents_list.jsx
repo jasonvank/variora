@@ -143,7 +143,10 @@ class UploadedDocumentsList extends React.Component {
             <a>Delete</a>
           </Popconfirm>
           <span className="ant-divider" />
-          <a href='javascript:;' onClick={() => this.onClickShareDocument(record)}><Icon type="share-alt" />  Share</a>
+          <a href='javascript:;' onClick={() => this.onClickShareDocument(record)}>
+            {/*<Icon type="share-alt" />*/}
+            Share
+          </a>
         </span>
       ),
     }]
@@ -153,6 +156,9 @@ class UploadedDocumentsList extends React.Component {
         columns={columns}
         pagination={false}
         rowKey={record => record.pk}
+        locale={{
+          emptyText: 'Documents uploaded by you will be listed here'
+        }}
       />
     )
   }

@@ -133,7 +133,7 @@ class AppBeforeConnect extends React.Component {
       if (readlistName == '')
         message.warning('The name of the readlist cannot be empty', 1)
       else {
-        var data = new FormData()
+        const data = new FormData()
         data.append('readlist_name', readlistName)
         data.append('description', this.state.fields.readlistDesc.value)
         data.append('csrfmiddlewaretoken', getCookie('csrftoken'))

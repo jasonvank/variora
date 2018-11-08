@@ -130,7 +130,11 @@ def create_readlist(request):
     user = request.user
     if not user.is_authenticated or 'readlist_name' not in request.POST or 'description' not in request.POST:
         return HttpResponse(status=403)
-    readlist = Readlist(name=request.POST['readlist_name'], description=request.POST['description'], creator=user)
+
+    readlist_name = request.POST['readlist_name']
+    if len(readlist_name) == 0:
+        return HttpResponse(status=403)
+    readlist = Readlist(name=readlist_name, description=request.POST['description'], creator=user)
     readlist.save()
     return JsonResponse(readlist, encoder=ReadlistListEncoder, safe=False)
 
