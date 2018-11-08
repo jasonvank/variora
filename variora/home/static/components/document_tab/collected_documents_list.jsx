@@ -5,6 +5,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import axios from 'axios'
 import enUS from 'antd/lib/locale-provider/en_US'
+import {copyToClipboard} from 'CommAssets/util'
 
 const { Column } = Table
 
@@ -31,6 +32,10 @@ class CollectedDocumentsList extends React.Component {
         this.setState({ data: updateCollectDocuments })
       })
     }
+    this.onClickShareDocument = (document) => {
+      copyToClipboard(window.location.origin + formatOpenDocumentUrl(document))
+      message.success('Copied to clipboard!')
+    }
   }
   componentDidMount() {
     this.updateData()
@@ -51,7 +56,11 @@ class CollectedDocumentsList extends React.Component {
       key: 'action',
       width: '40%',
       render: (text, collectedDocument) => (
-        <a onClick={() => this.onUncollectDocument(text, collectedDocument)}>Uncollect</a>
+        <span>
+          <a onClick={() => this.onUncollectDocument(text, collectedDocument)}>Uncollect</a>
+          <span className="ant-divider" />
+          <a href='javascript:;' onClick={() => this.onClickShareDocument(collectedDocument)}><Icon type="share-alt" />  Share</a>
+        </span>
       ),
     }]
     return (

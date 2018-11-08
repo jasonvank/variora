@@ -1,5 +1,5 @@
 import { Icon, Input, Popconfirm, Table, message, notification } from 'antd'
-import { formatOpenDocumentUrl, getCookie, getUrlFormat } from 'util.js'
+import { formatOpenDocumentUrl, getCookie, getUrlFormat, copyToClipboard } from 'util.js'
 
 import React from 'react'
 import axios from 'axios'
@@ -100,8 +100,11 @@ class UploadedDocumentsList extends React.Component {
         }
       }
     }
-    this.updateCollectDocumentCallback = () => {
+    this.updateCollectDocumentCallback = () => {}
 
+    this.onClickShareDocument = (document) => {
+      copyToClipboard(window.location.origin + formatOpenDocumentUrl(document))
+      message.success('Copied to clipboard!')
     }
   }
 
@@ -139,6 +142,8 @@ class UploadedDocumentsList extends React.Component {
           >
             <a>Delete</a>
           </Popconfirm>
+          <span className="ant-divider" />
+          <a href='javascript:;' onClick={() => this.onClickShareDocument(record)}><Icon type="share-alt" />  Share</a>
         </span>
       ),
     }]
