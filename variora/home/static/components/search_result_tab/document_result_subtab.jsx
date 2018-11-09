@@ -44,7 +44,7 @@ class DocumentResult extends React.Component {
       width: '20%',
       render: (text, record) => <TimeAgo date={record.upload_time} />
     },{
-      title: 'Number of Views',
+      title: 'Views',
       width: '10%',
       render: (text, record) => <span>{parseInt(record.num_visit)} views</span>,
       sorter: (a, b) => parseInt(a.num_visit) - parseInt(b.num_visit),
