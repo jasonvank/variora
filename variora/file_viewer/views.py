@@ -78,9 +78,14 @@ def _handle_post_annotation_reply_request(user, document, request):
     annotation_reply.reply_to_annotation = annotation
     annotation_reply.is_public = True if request.POST["is_public"] == 'true' else False
 
+    annotation_poster = annotation_reply.reply_to_annotation.annotator
+
     if "reply_to_annotation_reply_id" in request.POST:
         annotation_reply.reply_to_annotation_reply = AnnotationReply.objects.get(id=int(request.POST["reply_to_annotation_reply_id"]))
-        if annotation_reply.reply_to_annotation_reply.replier.pk != annotation_reply.reply_to_annotation.annotator.pk:
+        # avoid 2 duplicate notifications in the case
+        # where the annotation I reply to and the reply I reply to are both from the same guy
+        replier_who_i_reply_to = annotation_reply.reply_to_annotation_reply.replier
+        if replier_who_i_reply_to.pk != annotation_poster.pk and user.pk != replier_who_i_reply_to.pk:
             notify.send(
                 sender=annotation_reply.replier, recipient=annotation_reply.reply_to_annotation_reply.replier,
                 action_object=annotation_reply, verb='reply to annotation reply',
@@ -89,15 +94,17 @@ def _handle_post_annotation_reply_request(user, document, request):
                 description=h.handle(annotation_reply.content),
                 is_public=annotation_reply.is_public,
             )
+
     annotation_reply.save()
-    notify.send(
-        sender=annotation_reply.replier, recipient=annotation_reply.reply_to_annotation.annotator,
-        action_object=annotation_reply, verb='reply to annotation',
-        redirect_url=annotation.url,
-        image_url=annotation_reply.replier.portrait_url,
-        description=h.handle(annotation_reply.content),
-        is_public=annotation_reply.is_public,
-    )
+    if user.pk != annotation_poster.pk:
+        notify.send(
+            sender=annotation_reply.replier, recipient=annotation_reply.reply_to_annotation.annotator,
+            action_object=annotation_reply, verb='reply to annotation',
+            redirect_url=annotation.url,
+            image_url=annotation_reply.replier.portrait_url,
+            description=h.handle(annotation_reply.content),
+            is_public=annotation_reply.is_public,
+        )
     context = {
         "annotation_reply": annotation_reply,
         'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,
