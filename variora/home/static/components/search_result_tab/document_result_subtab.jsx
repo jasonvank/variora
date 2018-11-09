@@ -38,11 +38,18 @@ class DocumentResult extends React.Component {
       title: 'Uploader',
       dataIndex: 'uploader_name',
       render: (text, record) => <span><Avatar src={record.uploader_portrait_url} style={{ verticalAlign: 'middle', marginRight: 12}} />{text}</span>,
-      width: '30%',
+      width: '20%',
     }, {
       title: 'Upload time',
-      width: '30%',
+      width: '20%',
       render: (text, record) => <TimeAgo date={record.upload_time} />
+    },{
+      title: 'Number of Views',
+      width: '10%',
+      render: (text, record) => <span>{parseInt(record.num_visit)} views</span>,
+      sorter: (a, b) => parseInt(a.num_visit) - parseInt(b.num_visit),
+    },{
+      title: '', width: '10%', render: (text, record) => null,
     }]
 
     return (

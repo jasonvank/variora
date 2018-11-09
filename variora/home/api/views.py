@@ -9,6 +9,7 @@ from django.contrib.auth import authenticate, get_user, login, logout
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.serializers.json import DjangoJSONEncoder
+from django.db import connection
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect
@@ -55,10 +56,17 @@ def search_api_view(request):
 
     key = request.GET['key']
 
-    result_documents = list(Document.objects.filter_with_related(title__icontains=key))[:100]  # case-insensitive contain
-    result_users = list(User.objects.filter(Q(nickname__icontains=key) | Q(email_address__icontains=key)))[:100]
-    result_coteries = list(Coterie.objects.filter(Q(name__icontains=key) | Q(id__icontains=key)))[:100]
-    result_readlists = list(Readlist.objects.filter(Q(name__icontains=key) | Q(description__icontains=key)).filter(is_public=True))[:100]
+    if connection.vendor == 'postgresql':
+        result_documents = list(Document.objects.filter_with_related(title__search=key))[:100]  # case-insensitive contain
+        result_users = list(User.objects.filter(Q(nickname__search=key) | Q(email_address__search=key)))[:100]
+        result_coteries = list(Coterie.objects.filter(Q(name__search=key) | Q(id__search=key)))[:100]
+        result_readlists = list(Readlist.objects.filter(Q(name__search=key) | Q(description__search=key)).filter(is_public=True))[:100]
+    else:
+        result_documents = list(Document.objects.filter_with_related(title__icontains=key))[:100]  # case-insensitive contain
+        result_users = list(User.objects.filter(Q(nickname__icontains=key) | Q(email_address__icontains=key)))[:100]
+        result_coteries = list(Coterie.objects.filter(Q(name__icontains=key) | Q(id__icontains=key)))[:100]
+        result_readlists = list(Readlist.objects.filter(Q(name__icontains=key) | Q(description__icontains=key)).filter(is_public=True))[:100]
+        
     return JsonResponse(
         {
             'resultDocuments': result_documents,
