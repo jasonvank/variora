@@ -154,6 +154,8 @@ def post_upload_coteriedocument(request):
 def get_coteriedocument_by_slug(request, **kwargs):
     try:
         document = CoterieDocument.objects.get(uuid=utils.slug2uuid(kwargs['slug']))
+        document.num_visit += 1
+        document.save()
         return JsonResponse(document, encoder=CoterieDocumentEncoder, safe=False)
     except ObjectDoesNotExist:
         return HttpResponse(status=404)

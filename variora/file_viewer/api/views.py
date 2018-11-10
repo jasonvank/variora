@@ -193,9 +193,7 @@ def get_document_by_slug(request, **kwargs):
     try:
         document = Document.objects.get(uuid=utils.slug2uuid(kwargs['slug']))
 
-
         ########################
-
         # Temporary access control
         # TODO: use group feature when it is implemented
 
@@ -206,7 +204,8 @@ def get_document_by_slug(request, **kwargs):
 
         #######################
 
-
+        document.num_visit += 1
+        document.save()
         return JsonResponse(document, encoder=DocumentEncoder, safe=False)
     except ObjectDoesNotExist:
         return HttpResponse(status=404)
