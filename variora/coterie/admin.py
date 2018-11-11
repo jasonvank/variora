@@ -6,6 +6,7 @@ from models import CoterieAnnotationReply
 from models import CoterieComment
 from models import CoterieInvitation, NonRegisteredUserTempCoterieInvitation, InvitationCode
 from models import CoterieApplication
+from models import CoterieReadlist
 
 
 class CoterieModelAdmin(admin.ModelAdmin):
@@ -43,6 +44,13 @@ class CoterieDocumentModelAdmin(admin.ModelAdmin):
     search_fields = ["id", "uuid", "title", "unique_file__pk", "owner__pk"]
 
 
+class CoterieReadlistModelAdmin(admin.ModelAdmin):
+    list_display = ["id", 'clean_uuid', 'name', 'is_public', 'creator']
+    search_fields = ['id', 'uuid', 'name', 'creator__nickname']
+    list_filter = ['is_public']
+    filter_horizontal = ['collectors', 'documents']
+
+
 class CoterieAnnotationModelAdmin(admin.ModelAdmin):
     list_display = ["id", "clean_uuid", "document_this_annotation_belongs", "page_index",  "annotator", "num_like", "edit_time", "content"]
     list_filter = ["content", "document_this_annotation_belongs", "annotator", "num_like"]
@@ -63,6 +71,7 @@ class CoterieCommentModelAdmin(admin.ModelAdmin):
 
 admin.site.register(Coterie, CoterieModelAdmin)
 admin.site.register(CoterieDocument, CoterieDocumentModelAdmin)
+admin.site.register(CoterieReadlist, CoterieReadlistModelAdmin)
 admin.site.register(CoterieAnnotation, CoterieAnnotationModelAdmin)
 admin.site.register(CoterieComment, CoterieCommentModelAdmin)
 admin.site.register(CoterieAnnotationReply, CoterieAnnotationReplyModelAdmin)

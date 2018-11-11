@@ -160,16 +160,19 @@ class GroupDocumentsList extends React.Component {
     }
 
     const columns = [
-    // {
-    //     title: '#',
-    //     dataIndex: 'id',
-    //     width: '10%',
-    //     render: (text, record) => this.state.data.indexOf(record) + 1
-    //   },
+      {
+        dataIndex: 'space',
+        width: '3%',
+      }, {
+        title: '',
+        dataIndex: 'icon',
+        width: '7%',
+        render: (text, record) => <img width={18} src="/media/pdf.png" alt="pdf-logo"/>
+      },
       {
         title: 'Title',
         dataIndex: 'title',
-        width: '40%',
+        width: '30%',
         render: (text, coterieDocument) => (
           checkIAmUploader(coterieDocument) ? changeDocumentName(text, coterieDocument) : <a className='document-link' href={formatOpenCoterieDocumentUrl(coterieDocument, this.state.coteriePk)}>{text}</a>
         ),
@@ -184,6 +187,7 @@ class GroupDocumentsList extends React.Component {
         dataIndex: 'uploader_time',
         render: (text, coterieDocument) => documentUploadDate(text, coterieDocument),
         width: '20%',
+        sorter: (a, b) => Date.parse(a.upload_time) > Date.parse(b.upload_time),
       }, {
         title: 'Action',
         key: 'action',

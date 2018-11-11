@@ -40,7 +40,8 @@ class ReadlistResult extends React.Component {
     }, {
       title: 'Create date',
       width: '30%',
-      render: (text, record) => <TimeAgo date={record.create_time} />
+      render: (text, record) => <TimeAgo date={record.create_time} />,
+      sorter: (a, b) => Date.parse(a.create_time) > Date.parse(b.create_time),
     }]
 
     return (

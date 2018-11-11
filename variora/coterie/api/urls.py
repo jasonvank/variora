@@ -1,6 +1,7 @@
 from django.conf.urls import url, include
 
 from . import views
+from . import views_readlist
 
 
 urlpatterns = [
@@ -27,27 +28,25 @@ urlpatterns = [
 ] + [
 
     url(r'^coteries/(?P<coterie_uuid>[0-9a-f-]+)/members/me/uploaded-documents$', views.get_uploaded_documents_for_member),
-
+    url(r'^coteries/(?P<coterie_uuid>[0-9a-f-]+)/members/me/coteriereadlists$', views_readlist.ReadlistListView.as_view()),
 ] + [
 
     url(r'^invite$', views.create_invitation),
-
     url(r'^invitations$', views.InvitationsView.as_view()),
-
     url(r'^invitations/(?P<pk>\d+)$', views.InvitationView.as_view()),
-
     url(r'^invitations/(?P<pk>\d+)/(?P<operation>\w+)', views.InvitationView.as_view()),
-
 ] + [
 
     url(r'^apply$', views.create_application),
-
     url(r'^applications$', views.ApplicationsView.as_view()),
-
     url(r'^applications/(?P<pk>\d+)$', views.ApplicationView.as_view()),
-
     url(r'^applications/(?P<pk>\d+)/(?P<operation>\w+)', views.ApplicationView.as_view()),
+] + [
 
+    # readlist views
+    url(r'^coteriereadlists/create$', views_readlist.create_readlist),
+    url(r'^coteriereadlists/(?P<slug>[0-9A-Za-z_\-]+)$', views_readlist.ReadlistView.as_view()),
+    url(r'^coteriereadlists/(?P<slug>[0-9A-Za-z_\-]+)/(?P<operation>\w+)', views_readlist.ReadlistView.as_view()),
 ]
 
 

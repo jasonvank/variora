@@ -141,6 +141,22 @@ def may_delete_unique_file(sender, instance, **kwargs):
             unique_file.delete()
 
 
+class CoterieReadlist(ModelWithCleanUUID):
+    uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=1028, db_index=True)
+    create_time = models.DateTimeField(auto_now=False, auto_now_add=True)
+    coterie = models.ForeignKey(Coterie, related_name="coteriereadlist_set")
+    creator = models.ForeignKey(User, related_name="created_coteriereadlist_set")
+    collectors = models.ManyToManyField(User, related_name="collected_coteriereadlist_set", blank=True)
+    documents = models.ManyToManyField(CoterieDocument, related_name="belonged_coteriereadlist_set", blank=True)
+    is_public = models.BooleanField(default=True)
+    description = models.TextField(blank=True)
+
+    @property
+    def slug(self):
+        return utils.uuid2slug(self.uuid)
+
+
 class CoterieComment(ModelWithCleanUUID):
     uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
     post_time = models.DateTimeField(auto_now=False, auto_now_add=True)

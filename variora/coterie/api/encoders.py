@@ -21,6 +21,7 @@ class CoterieEncoder(DjangoJSONEncoder):
                 'pk': obj.pk,
                 'uuid': obj.clean_uuid,
                 'coteriedocument_set': list(obj.coteriedocument_set.all()),
+                'coteriereadlist_set': list(obj.coteriereadlist_set.all()),
                 'creator': obj.creator,
                 'administrators': list(obj.administrators.all()),
                 'members': list(obj.members.all()),
@@ -29,6 +30,8 @@ class CoterieEncoder(DjangoJSONEncoder):
             }
         elif isinstance(obj, CoterieDocument):
             return CoterieDocumentEncoder().default(obj)
+        elif isinstance(obj, CoterieReadlist):
+            return CoterieReadlistEncoder().default(obj)
         elif isinstance(obj, User):
             return UserEncoder().default(obj)
         elif isinstance(obj, CoterieApplication):
@@ -184,3 +187,53 @@ class CoterieApplicationEncoder(DjangoJSONEncoder):
         elif isinstance(obj, User):
             return UserEncoder().default(obj)
         return super(CoterieApplicationEncoder, self).default(obj)
+
+
+class CoterieReadlistListEncoder(DjangoJSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, CoterieReadlist):
+            return {
+                'id': obj.id,
+                'uuid': obj.clean_uuid,
+                'slug': obj.slug,
+                'name': obj.name,
+                'owner': obj.creator,
+                'url': '/readlists/' + obj.slug,
+                'documents_uuids': list(map(lambda document: document.clean_uuid, list(obj.documents.all()))),
+                'num_collectors': obj.collectors.count(),
+                'create_time': obj.create_time,
+            }
+        elif isinstance(obj, User):
+            return UserEncoder().default(obj)
+        else:
+            return super(CoterieReadlistListEncoder, self).default(obj)
+
+
+class CoterieReadlistEncoder(DjangoJSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, CoterieReadlist):
+            return {
+                'uuid': obj.clean_uuid,
+                'slug': obj.slug,
+                'name': obj.name,
+                'documents': list(obj.documents.all()),
+                'owner': obj.creator,
+                'description': obj.description,
+                'num_collectors': obj.collectors.count(),
+                'create_time': obj.create_time,
+
+                'url': '/readlists/' + obj.slug,
+                'delete_url': '/file_viewer/api/readlists/' + obj.slug + '/delete',
+                'collect_url': '/file_viewer/api/readlists/' + obj.slug + '/collect',
+                'uncollect_url': '/file_viewer/api/readlists/' + obj.slug + '/uncollect',
+                'remove_document_url': '/file_viewer/api/readlists/' + obj.slug + '/remove_document',
+                'rename_url': '/file_viewer/api/readlists/' + obj.slug + '/rename',
+                'change_desc_url': '/file_viewer/api/readlists/' + obj.slug + '/change_desc',
+                'change_privacy_url': '/file_viewer/api/readlists/' + obj.slug + '/change_privacy',
+            }
+        elif isinstance(obj, CoterieDocument):
+            return CoterieDocumentEncoder().default(obj)
+        elif isinstance(obj, User):
+            return UserEncoder().default(obj)
+        else:
+            return super(CoterieReadlistEncoder, self).default(obj)

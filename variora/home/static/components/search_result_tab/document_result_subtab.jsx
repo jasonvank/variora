@@ -42,7 +42,8 @@ class DocumentResult extends React.Component {
     }, {
       title: 'Upload time',
       width: '20%',
-      render: (text, record) => <TimeAgo date={record.upload_time} />
+      render: (text, record) => <TimeAgo date={record.upload_time} />,
+      sorter: (a, b) => Date.parse(a.upload_time) > Date.parse(b.upload_time),
     },{
       title: 'Views',
       width: '10%',

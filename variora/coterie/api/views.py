@@ -15,11 +15,12 @@ from ..models import (Coterie, CoterieAnnotation, CoterieAnnotationReply,
                       CoterieDocument, CoterieInvitation)
 from .encoders import (CoterieDocumentEncoder, CoterieEncoder,
                        CoterieInvitationEncoder)
-from .view_application import (ApplicationsView, ApplicationView,
+from .views_application import (ApplicationsView, ApplicationView,
                                create_application)
-from .view_documents import *
-from .view_invitation import InvitationsView, InvitationView, create_invitation
-from .view_member import *
+from .views_documents import *
+from .views_invitation import InvitationsView, InvitationView, create_invitation
+from .views_member import *
+from .views_readlist import *
 
 
 class CoterieListView(View):
