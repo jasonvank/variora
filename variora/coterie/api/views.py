@@ -4,7 +4,8 @@ from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Q, prefetch_related_objects
-from django.http import HttpResponse, JsonResponse, HttpResponseNotFound, HttpResponseForbidden
+from django.http import (HttpResponse, HttpResponseForbidden,
+                         HttpResponseNotFound, JsonResponse)
 from django.utils.decorators import method_decorator
 from django.utils.timezone import now
 from django.views.generic import View
@@ -16,9 +17,10 @@ from ..models import (Coterie, CoterieAnnotation, CoterieAnnotationReply,
 from .encoders import (CoterieDocumentEncoder, CoterieEncoder,
                        CoterieInvitationEncoder)
 from .views_application import (ApplicationsView, ApplicationView,
-                               create_application)
+                                create_application)
 from .views_documents import *
-from .views_invitation import InvitationsView, InvitationView, create_invitation
+from .views_invitation import (InvitationsView, InvitationView,
+                               create_invitation)
 from .views_member import *
 from .views_readlist import *
 

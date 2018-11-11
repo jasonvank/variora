@@ -10,8 +10,8 @@ from notifications.signals import notify
 from api.encoders import (CoterieAnnotationEncoder,
                           CoterieAnnotationReplyEncoder)
 from variora import utils
-from views_coterie import *
 from variora.utils import should_return_pwa
+from views_coterie import *
 
 from .models import Coterie, CoterieDocument
 
@@ -267,4 +267,3 @@ def display_coteriefile_viewer_page(request, **kwargs):
             "prev_page_url": request.META['HTTP_REFERER'] if 'HTTP_REFERER' in request.META else '/'
         }
         return render(request, "coterie_file_viewer/pdf_file_viewer_page.html", context)
-

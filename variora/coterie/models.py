@@ -2,9 +2,10 @@ from __future__ import unicode_literals
 
 import uuid
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.dispatch import receiver
-from django.core.exceptions import ObjectDoesNotExist
+
 from file_viewer.managers import DocumentManager
 from file_viewer.models import UniqueFile
 from home.models import User

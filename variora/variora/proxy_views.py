@@ -1,10 +1,10 @@
 import requests
-from django.http import HttpResponse
-from django.http import QueryDict
-from django.views.decorators.cache import cache_page
-from file_viewer.models import Document
-from coterie.models import CoterieDocument
+from django.http import HttpResponse, QueryDict
 from django.utils.encoding import iri_to_uri
+from django.views.decorators.cache import cache_page
+
+from coterie.models import CoterieDocument
+from file_viewer.models import Document
 
 
 @cache_page(60 * 5)

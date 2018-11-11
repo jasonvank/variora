@@ -1,4 +1,5 @@
 import random
+from threading import Thread
 
 from django.contrib.auth import get_user
 from django.contrib.auth.decorators import login_required
@@ -7,18 +8,19 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
+from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.generic import View
 from validate_email import validate_email
-from threading import Thread
 
 from home.models import User
 from variora.utils import send_email_from_noreply
-from django.template.loader import render_to_string
 
-from ..models import Coterie, CoterieDocument, CoterieInvitation, NonRegisteredUserTempCoterieInvitation, InvitationCode
-from .encoders import CoterieDocumentEncoder, CoterieEncoder, CoterieInvitationEncoder
+from ..models import (Coterie, CoterieDocument, CoterieInvitation,
+                      InvitationCode, NonRegisteredUserTempCoterieInvitation)
+from .encoders import (CoterieDocumentEncoder, CoterieEncoder,
+                       CoterieInvitationEncoder)
 
 
 class TempInvitationEmailThread(Thread):

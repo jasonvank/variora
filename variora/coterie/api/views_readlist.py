@@ -5,7 +5,7 @@ from django.views.generic import View
 
 from variora import utils
 
-from ..models import CoterieDocument, CoterieReadlist, Coterie
+from ..models import Coterie, CoterieDocument, CoterieReadlist
 from .encoders import CoterieReadlistEncoder, CoterieReadlistListEncoder
 
 
@@ -141,4 +141,3 @@ def create_readlist(request, coterie_uuid):
     readlist = CoterieReadlist(name=readlist_name, description=request.POST['description'], creator=user, coterie=coterie)
     readlist.save()
     return JsonResponse(readlist, encoder=CoterieReadlistListEncoder, safe=False)
-

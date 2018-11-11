@@ -2,12 +2,13 @@ from django.contrib.auth import get_user
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse, HttpResponseForbidden, JsonResponse, HttpResponseNotFound
+from django.http import (HttpResponse, HttpResponseForbidden,
+                         HttpResponseNotFound, JsonResponse)
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.generic import View
-from validate_email import validate_email
 from notifications.signals import notify
+from validate_email import validate_email
 
 from home.models import User
 
@@ -34,9 +35,9 @@ def create_application(request):
 
         application.save()
 
-        for user in application.coterie.administrators.all():
+        for admin in application.coterie.administrators.all():
             notify.send(
-                sender=application.applicant, recipient=user,
+                sender=application.applicant, recipient=admin,
                 action_object=application, verb='apply join group',
                 redirect_url='/groups/' + application.coterie.clean_uuid + '/members',
                 image_url=application.applicant.portrait_url,

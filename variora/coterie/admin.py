@@ -1,12 +1,9 @@
 from django.contrib import admin
-from models import Coterie
-from models import CoterieDocument
-from models import CoterieAnnotation
-from models import CoterieAnnotationReply
-from models import CoterieComment
-from models import CoterieInvitation, NonRegisteredUserTempCoterieInvitation, InvitationCode
-from models import CoterieApplication
-from models import CoterieReadlist
+
+from models import (Coterie, CoterieAnnotation, CoterieAnnotationReply,
+                    CoterieApplication, CoterieComment, CoterieDocument,
+                    CoterieInvitation, CoterieReadlist, InvitationCode,
+                    NonRegisteredUserTempCoterieInvitation)
 
 
 class CoterieModelAdmin(admin.ModelAdmin):
