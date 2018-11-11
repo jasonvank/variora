@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'memcache_status',
     'django_user_agents',
     'anymail',
+    'fcm_django',
 
     # django apps
     'django.contrib.admin',
@@ -170,7 +171,6 @@ MAX_DOCUMENT_UPLOAD_SIZE = 5 * 1024 * 1024  # 5 MB
 
 ############ PWA ##########
 ENABLE_PWA = True
-
 
 ############ Django Debug Toolbar ##########
 # if DEBUG:

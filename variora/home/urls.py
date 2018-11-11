@@ -1,4 +1,5 @@
 from django.conf.urls import include, url
+from django.views.generic import TemplateView
 
 from . import views
 
@@ -27,6 +28,9 @@ urlpatterns = [  # obsolete UI pages
     url(r'^readlists', views.display_index),
     url(r'^search', views.display_index),
     url(r'^explore', views.display_index_explore),
+
+    # service workers
+    url(r'firebase-messaging-sw.js', TemplateView.as_view(template_name='firebase-messaging-sw.js', content_type='application/x-javascript')),
 
     # pwa
     url(r'^settings', views.display_index),

@@ -24,6 +24,7 @@ import proxy_views
 from file_viewer.models import Document
 from home.api import views_notifications
 
+from fcm_django.api.rest_framework import FCMDeviceAuthorizedViewSet
 
 class DocumentSitemap(Sitemap):
     changefreq = "daily"
@@ -67,6 +68,9 @@ urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
     # app: coterie
     url(r'^coterie/', include('coterie.urls')),
     url(r'^coteries/', include('coterie.urls')),
+
+    # app: fcm-django
+    url(r'^devices?$', FCMDeviceAuthorizedViewSet.as_view({'get': 'list', 'post': 'create'}), name='fcm_device'),
 
     # MUST BE THE LAST ONE
     url(r'^', include('home.urls')),
