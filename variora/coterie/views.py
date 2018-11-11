@@ -255,6 +255,7 @@ def display_coteriefile_viewer_page(request, **kwargs):
             "DEBUG": settings.DEBUG,
             "document": document,
             "file_url": document.url,
+            "coterie_id": coterie.id,
             "comments": document.coteriecomment_set.order_by("-post_time"),
             "annotations": document.coterieannotation_set
                 .select_related('annotator')

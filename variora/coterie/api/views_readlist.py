@@ -5,7 +5,7 @@ from django.views.generic import View
 
 from variora import utils
 
-from ..models import CoterieDocument, CoterieReadlist
+from ..models import CoterieDocument, CoterieReadlist, Coterie
 from .encoders import CoterieReadlistEncoder, CoterieReadlistListEncoder
 
 
@@ -56,7 +56,7 @@ def _remove_document_from_readlist(readlist, user, request):
 
 
 class ReadlistView(View):
-    def get(self, request, slug, **kwargs):
+    def get(self, request, coterie_id, slug, **kwargs):
         user = request.user
 
         readlists = CoterieReadlist.objects.filter(uuid=utils.slug2uuid(slug))
@@ -69,7 +69,7 @@ class ReadlistView(View):
         else:
             return HttpResponse(status=404)
 
-    def post(self, request, slug, operation):
+    def post(self, request, coterie_id, slug, operation):
         try:
             user = request.user
             if not user.is_authenticated:
@@ -105,16 +105,18 @@ class ReadlistView(View):
 
 
 class ReadlistListView(View):
-    def get(self, request):
+    def get(self, request, coterie_uuid):
         user = request.user
+        coterie = Coterie.objects.get(pk=coterie_uuid)
+
         if not user.is_authenticated:
             return JsonResponse({
                 'created_readlists': [],
                 'collected_readlists': []
             }, encoder=CoterieReadlistListEncoder, safe=False)
 
-        created_readlist = user.created_readlist_set.select_related('creator').all()
-        collected_readlist = user.collected_readlist_set.select_related('creator').filter(is_public=True)
+        created_readlist = user.created_coteriereadlist_set.select_related('creator').filter(coterie=coterie)
+        collected_readlist = user.collected_coteriereadlist_set.select_related('creator').filter(is_public=True).filter(coterie=coterie)
 
         list_of_created_readlist = list(created_readlist)
         list_of_collected_readlist = list(collected_readlist)
@@ -126,15 +128,17 @@ class ReadlistListView(View):
         }, encoder=CoterieReadlistListEncoder, safe=False)
 
 
-def create_readlist(request):
+def create_readlist(request, coterie_uuid):
     user = request.user
+    coterie = Coterie.objects.get(pk=coterie_uuid)
+
     if not user.is_authenticated or 'readlist_name' not in request.POST or 'description' not in request.POST:
         return HttpResponse(status=403)
 
     readlist_name = request.POST['readlist_name']
     if len(readlist_name) == 0:
         return HttpResponse(status=403)
-    readlist = CoterieReadlist(name=readlist_name, description=request.POST['description'], creator=user)
+    readlist = CoterieReadlist(name=readlist_name, description=request.POST['description'], creator=user, coterie=coterie)
     readlist.save()
     return JsonResponse(readlist, encoder=CoterieReadlistListEncoder, safe=False)
 

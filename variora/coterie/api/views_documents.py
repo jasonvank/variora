@@ -57,6 +57,16 @@ def _unsubscribe_coteriedocument(document, user):
     return HttpResponse(status=200)
 
 
+def _change_readlists(document, user, request):
+    coterie = Coterie.objects.get(pk=request.POST['coterie_id'])
+    for readlist in user.created_coteriereadlist_set.filter(coterie=coterie):
+        if readlist.clean_uuid in request.POST.getlist('add_readlists[]'):
+            readlist.documents.add(document)
+        elif readlist.clean_uuid in request.POST.getlist('remove_readlists[]'):
+            readlist.documents.remove(document)
+    return HttpResponse(status=200)
+
+
 class CoterieDocumentView(View):
     def get(self, request, pk, **kwargs):
         try:
@@ -82,6 +92,8 @@ class CoterieDocumentView(View):
                 return _subscribe_coteriedocument(coteriedocument, user)
             if operation == 'unsubscribe':
                 return _unsubscribe_coteriedocument(coteriedocument, user)
+            if operation == 'changereadlists':
+                return _change_readlists(coteriedocument, user, request)
             if operation == 'rename':
                 if 'new_title' not in request.POST:
                     return HttpResponse(status=403)

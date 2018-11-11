@@ -44,9 +44,9 @@ urlpatterns = [
 ] + [
 
     # readlist views
-    url(r'^coteriereadlists/create$', views_readlist.create_readlist),
-    url(r'^coteriereadlists/(?P<slug>[0-9A-Za-z_\-]+)$', views_readlist.ReadlistView.as_view()),
-    url(r'^coteriereadlists/(?P<slug>[0-9A-Za-z_\-]+)/(?P<operation>\w+)', views_readlist.ReadlistView.as_view()),
+    url(r'^(?P<coterie_id>\d+)/coteriereadlists/create$', views_readlist.create_readlist),
+    url(r'^(?P<coterie_id>\d+)/coteriereadlists/(?P<slug>[0-9A-Za-z_\-]+)$', views_readlist.ReadlistView.as_view()),
+    url(r'^(?P<coterie_id>\d+)/coteriereadlists/(?P<slug>[0-9A-Za-z_\-]+)/(?P<operation>\w+)', views_readlist.ReadlistView.as_view()),
 ]
 
 

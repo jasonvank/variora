@@ -80,6 +80,8 @@ class CoterieDocumentEncoder(DjangoJSONEncoder):
                 'upload_time': obj.upload_time,
                 'uploader_name': obj.uploader.nickname if obj.uploader is not None else 'Unknown',
                 'uploader_portrait_url': obj.uploader.portrait_url if obj.uploader is not None else settings.ANONYMOUS_USER_PORTRAIT_URL,
+                'subscribe_url': '/coterie/api/coteriedocuments/' + str(obj.pk) + '/subscribe',
+                'unsubscribe_url': '/coterie/api/coteriedocuments/' + str(obj.pk) + '/unsubscribe',
             }
         return super(CoterieDocumentEncoder, self).default(obj)
 
