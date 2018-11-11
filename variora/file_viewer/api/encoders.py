@@ -10,6 +10,10 @@ from ..models import (Annotation, AnnotationReply, Document, DocumentThumbnail,
 
 class DocumentEncoder(DjangoJSONEncoder):
     def default(self, obj):
+        if hasattr(obj, 'thumbnail_set') and obj.thumbnail_set.exists():
+            thumbnail_url = obj.thumbnail_set.first().thumbnail_image.url
+        else:
+            thumbnail_url = '/media/pdf.png',
         if isinstance(obj, Document):
             return {
                 'pk': obj.pk,
@@ -28,6 +32,7 @@ class DocumentEncoder(DjangoJSONEncoder):
                 'upload_time': obj.upload_time,
                 'uploader_name': obj.owner.nickname,
                 'uploader_portrait_url': obj.owner.portrait_url,
+                'thumbnail_url': thumbnail_url,
             }
         return super(DocumentEncoder, self).default(obj)
 

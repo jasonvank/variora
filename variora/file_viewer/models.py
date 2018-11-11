@@ -99,7 +99,7 @@ def thumbnail_upload_to(instance, filename):
 
 
 class DocumentThumbnail(models.Model):
-    document = models.ForeignKey(Document)
+    document = models.ForeignKey(Document, related_name='thumbnail_set')
     thumbnail_image = models.ImageField(upload_to=thumbnail_upload_to)
     description = models.CharField(max_length=128, db_index=True)
     create_time = models.DateTimeField(auto_now=False, auto_now_add=True)

@@ -114,11 +114,24 @@ class UploadedDocumentsList extends React.Component {
 
   render() {
     const columns = [{
+      title: '',
+      dataIndex: 'space',
+      width: '5%',
+      render: (text, record) => null
+    },
+    {
       title: '#',
       dataIndex: 'id',
-      width: '20%',
+      width: '15%',
       render: (text, record) => this.state.data.indexOf(record) + 1
-    }, {
+    },
+    // {
+    //   title: '',
+    //   dataIndex: 'thumbnail',
+    //   width: '10%',
+    //   render: (text, record) => <img height={28} width={24} src={record.thumbnail_url} alt=""/>
+    // },
+    {
       title: 'Title',
       dataIndex: 'title',
       width: '40%',
