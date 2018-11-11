@@ -16,6 +16,8 @@ urlpatterns = [  # obsolete UI pages
 
     url(r'^sign-in$', views.display_sign_in_page),
 
+    url(r'^sw$', views.service_worker),
+
     # using igmur (free public image hostring), so do not open this url
     # url(r'^upload-image$', views.handle_image_upload),
 

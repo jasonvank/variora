@@ -1,4 +1,5 @@
 import random
+import requests
 
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
@@ -138,3 +139,10 @@ def handle_image_upload(request):
     # return JsonResponse({
     #     'url': uploaded_image.image_field.url
     # })
+
+
+def service_worker(request):
+    content = requests.get(request.scheme + '://' + request.META['HTTP_HOST'] + '/static/service-worker.js').text
+    response = HttpResponse(content, content_type='application/javascript')
+    return response
+
