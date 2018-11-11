@@ -37,6 +37,60 @@ import { initialStore } from './redux/init_store.js'
 import TextArea from '../../../node_modules/antd/lib/input/TextArea'
 // import { Home } from './components/landing_page/index.jsx'
 
+// // ========= Register firebase push service worker ==========
+console.log("registering service worker")
+const config = {
+  messagingSenderId: "241959101179"
+}
+import firebase from "firebase"
+firebase.initializeApp(config);
+if ('serviceWorker' in navigator) {
+  const messaging = firebase.messaging()
+  navigator.serviceWorker.register('./firebase-messaging-sw.js')
+    .then((registration) => {
+      messaging.useServiceWorker(registration);
+      // only do this if user is authenticated.
+      messaging.requestPermission()
+        .then(() => {
+          console.log('Notification permission granted.')
+          return messaging.getToken()
+        })  
+        .then(token => {
+          console.log("FCM Token:", token)
+          console.log(getCookie('csrftoken'))
+          fetch('http://localhost:8000/devices', {
+            method: "POST",
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({
+              'registration_id': token,
+              'type': 'web',
+            }),
+            credentials: "include",
+          }).then(function(response) {
+            console.log(response);
+            return response.json();
+          }).then(json => console.log(json))
+        })
+    })
+    .catch(error => {
+      if (error.code === "messaging/permission-blocked") {
+        console.log("Please Unblock Notification Request Manually");
+      } else {
+        console.log("Error Occurred", error);
+      }
+    })
+
+  // called when app has focus
+  messaging.onMessage(function(payload) {
+  console.log("Message received. ", payload);
+  // Can update UI to reflect message
+      
+  });
+}
+// ==========================================================
 const FormItem = Form.Item
 
 
@@ -45,7 +99,6 @@ const { Header, Content, Sider, Footer } = Layout
 const MenuItemGroup = Menu.ItemGroup
 const Search = Input.Search
 const CREATE_NEW_READLIST_MENU_ITEM_KEY = 'createReadlistButton'
-
 
 const GLOBAL_URL_BASE = ''
 

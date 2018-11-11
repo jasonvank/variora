@@ -137,6 +137,6 @@ db.sqlite3
 **/media/pdf/*
 **/media/portrait/*/*
 **/media/document_thumbnails/*
-
+package-lock.json
 
 
