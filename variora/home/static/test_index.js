@@ -36,7 +36,7 @@ import { fetchUser, setCollectedReadlists } from './redux/actions.js'
 import { initialStore } from './redux/init_store.js'
 import TextArea from '../../../node_modules/antd/lib/input/TextArea'
 // import { Home } from './components/landing_page/index.jsx'
-import { initializeWebPush } from './initialize_push'
+import { initializeWebPush, invalidateToken } from './initialize_push'
 
 const FormItem = Form.Item
 
@@ -96,10 +96,12 @@ class AppBeforeConnect extends React.Component {
     }
 
     this.signOff = () => {
-      var data = new FormData()
-      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-      axios.post('/api/signoff', data).then(response => {
-        window.location.reload()
+      invalidateToken().then(() => {
+        var data = new FormData()
+        data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+        axios.post('/api/signoff', data).then(response => {
+          window.location.reload()
+        })  
       })
     }
 

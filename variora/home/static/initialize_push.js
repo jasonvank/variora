@@ -1,54 +1,105 @@
 import firebase from "firebase"
 import { getCookie } from 'util.js'
 
+/* ========= Basic workflow of the web push code ===============
+- When user visits page while signed in for the first time:
+  - register firebase messaging service worker
+  - request for permission to send web push notifications
+  - get token from firebase cloud messaging (fcm)
+  - sends token to server endpoint which saves it as user-token entry
+  - saves to localStorage that token is sent to server
+- When user visits page for the 2nd to nth time:
+  - skip sending token to server due to cached localStorage
+- When user signs out
+  * fcm is device-oriented, we make it user-oriented since we will target users with notifications
+  * hence need to clean up backend database and ensure that if another user sign in, they won't be mistaken for the prior user
+  - invalidate token in fcm
+  - delete cache in localStorage - next time a token is gotten from fcm, it will be saved to server
+  - call server endpoint to delete corresponding user-token entry in database
+- On token refresh: messaging.onTokenRefresh handler
+- On web push while app has focus: messaging.onMessage handler
+- On web push while app does not have focus: firebase-messaging-sw.js's messaging.setBackgroundMessageHandler
+=================================================================
+*/
+
+const config = {
+  messagingSenderId: "241959101179"
+}
+firebase.initializeApp(config);
+if (!('serviceWorker' in navigator)) {
+  console.debug("serviceWorker not in navigator")
+}
+
+function isTokenSentToServer() {
+  if (window.localStorage.getItem('fcmTokenSentToServer') == 1) {
+        return true;
+  }
+  return false;
+}
+
+function setTokenSentToServer(sent) {
+  if (sent) {
+    window.localStorage.setItem('fcmTokenSentToServer', 1);
+  } else {
+    window.localStorage.setItem('fcmTokenSentToServer', 0);
+  }
+}
+
+// called when user signs out
+export function invalidateToken() {
+  setTokenSentToServer(false)
+  const deleteToken = async() => {
+    try {
+      console.debug("deleteToken: invalidating token from fcm") 
+      const messaging = firebase.messaging() 
+      const token = await messaging.getToken()
+      await messaging.deleteToken(token)
+      console.debug("deleteToken: deleting record from server")  
+      // call server endpoint to cleanup the corresponding row in table
+      const response = await fetch('http://localhost:8000/devices/delete', {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({
+          'token_id': token
+        }),
+        credentials: "include",
+      })
+      console.debug(response)
+      console.debug("deleteToken: token deleted")  
+    } catch (error) {
+      console.debug(error)
+      return
+    }
+  }
+  return deleteToken()
+}
 
 export function initializeWebPush() {
-  function isTokenSentToServer() {
-    if (window.localStorage.getItem('sentToServer') == 1) {
-          return true;
-    }
-    return false;
-  }
-
-  function setTokenSentToServer(sent) {
-    if (sent) {
-      window.localStorage.setItem('sentToServer', 1);
-    } else {
-      window.localStorage.setItem('sentToServer', 0);
-    }
-  }
-
-  const registerServiceWorker = async() => {
-    try {
+  try {
+    const messaging = firebase.messaging()
+    const registerServiceWorker = async() => {
       const registration = await navigator.serviceWorker.register('./firebase-messaging-sw.js')
       messaging.useServiceWorker(registration)
-      console.log("registerServiceWorker done")
-    } catch (error) {
-      console.error(error)
-      return
+      console.debug("registerServiceWorker done")
     }
-  }
-
-  const requestPermission = async() => {
-    try {
+  
+    const requestPermission = async() => {
       await messaging.requestPermission()
-      console.log('requestPermission: notification permission granted.')
-    } catch (error) {
-      console.error(error)
-      return
+      console.debug('requestPermission: notification permission granted.')
     }
-  }
-
-  const sendTokenToServer = async() => {
-    try {
+  
+    const sendTokenToServer = async() => {
       const token = await messaging.getToken()
       if (isTokenSentToServer()) {
         // token already sent
-        console.log("sendTokenToServer: already sent to server, won't send again until it changes")
+        console.debug("sendTokenToServer: already sent to server, won't send again until it changes")
         return
       }
-      console.log("sendTokenToServer: ", token)
-      const response = await fetch('http://localhost:8000/devices', {
+      console.debug("sendTokenToServer: not yet sent, sending", token)
+      const request = {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -59,57 +110,70 @@ export function initializeWebPush() {
           'type': 'web',
         }),
         credentials: "include",
-      })
-      console.log("sendTokenToServer done. response: ", response)
-      const json = await response.json()
-      console.log("sendTokenToServer done. response json: ", json)
-      setTokenSentToServer(true)
-    } catch (error) {
-      if (error.code === "messaging/permission-blocked") {
-        console.log("Please Unblock Notification Request Manually")
-      } else {
-        console.error(error)
       }
-      return
+      console.debug(request)
+      const response = await fetch('http://localhost:8000/devices', request)
+      console.debug("sendTokenToServer done. response: ", response)
+  
+      // hacky way to handle an unlogged in user
+      // couldn't find a right place to call this function such that
+      // user.is_authenticated is set properly to do the check
+      // TODO: don't ask for permission if this fails
+      if (response.status === 403) {
+        setTokenSentToServer(false)
+        return
+      }
+  
+      setTokenSentToServer(true)
     }
-  }
+  
+    const init = async() => {
+      try {
+        const messaging = firebase.messaging() 
+        await registerServiceWorker()
+        const token = await messaging.getToken()
+        if (token) {
+          console.debug("init: token already found")
+          await sendTokenToServer()
+          return
+        }
+        console.debug("init: no token available. generating one")
+        await requestPermission()
+        setTokenSentToServer(false)
+        await sendTokenToServer()
+      }
+      catch (error) {
+        console.error(error)
+        return
+      }
+    }
+  
+    const refreshToken = async() => {
+      setTokenSentToServer(false)
+      await sendTokenToServer()
+    }
+  
+    // ============= setup logic ====================
+    init()
+  
+    // ============ handler functions ===================
+    // called when app has focus
+    messaging.onMessage(function(payload) {
+      console.debug("onMessage called with payload: ", payload);
+      // Can update UI to reflect message
+          
+    });
+  
+    // called when instance id token updated
+    messaging.onTokenRefresh(function() {
+      console.debug("onTokenRefresh called")
+      refreshToken()
+    })
+  
 
-  const initToken = async() => {
-    await registerServiceWorker()
-    await requestPermission()
-    await sendTokenToServer()
+  } catch (error) {
+    console.error(error)
+    return
   }
-
-  const refreshToken = async() => {
-    setTokenSentToServer(false)
-    await sendTokenToServer()
-  }
-
-  // ============= setup logic ====================
-  console.log("registering service worker")
-  const config = {
-    messagingSenderId: "241959101179"
-  }
-  firebase.initializeApp(config);
-  if (!('serviceWorker' in navigator)) {
-    console.log("serviceWorker not in navigator")
-  }
-  const messaging = firebase.messaging()
-  // check if user is authenticated. if not, exit
-  initToken()
-
-  //  ============ handler functions ===================
-  // called when app has focus
-  messaging.onMessage(function(payload) {
-    console.log("onMessage called with payload: ", payload);
-    // Can update UI to reflect message
-        
-  });
-
-  // called when instance id token updated
-  messaging.onTokenRefresh(function() {
-    console.log("onTokenRefresh called")
-    refreshToken()
-  })
 }
 
