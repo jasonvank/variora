@@ -9,7 +9,6 @@ const messaging = firebase.messaging();
 // this service worker handles notification when app on background.
 messaging.setBackgroundMessageHandler(payload => {
    const title = payload.notification.title;
-   console.log('payload', payload.notification.icon);
    const options = {
       body: payload.notification.body,
       icon: payload.notification.icon

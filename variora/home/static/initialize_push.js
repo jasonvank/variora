@@ -23,14 +23,6 @@ import { notification } from 'antd'
 =================================================================
 */
 
-const config = {
-  messagingSenderId: "241959101179"
-}
-firebase.initializeApp(config);
-if (!('serviceWorker' in navigator)) {
-  console.debug("serviceWorker not in navigator")
-}
-
 function isTokenSentToServer() {
   if (window.localStorage.getItem('fcmTokenSentToServer') == 1) {
         return true;
@@ -57,7 +49,7 @@ export function invalidateToken() {
       await messaging.deleteToken(token)
       console.debug("deleteToken: deleting record from server")  
       // call server endpoint to cleanup the corresponding row in table
-      const response = await fetch('http://localhost:8000/devices/delete', {
+      const response = await fetch(window.location.href + 'devices/delete', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -112,7 +104,7 @@ export function initializeWebPush() {
         credentials: "include",
       }
       console.debug(request)
-      const response = await fetch('http://localhost:8000/devices', request)
+      const response = await fetch(window.location.href + 'devices', request)
       console.debug("sendTokenToServer done. response: ", response)
   
       // hacky way to handle an unlogged in user
@@ -159,7 +151,7 @@ export function initializeWebPush() {
     // ============ handler functions ===================
     // called when app has focus
     messaging.onMessage(function(payload) {
-      console.log("onMessage called with payload: ", payload);
+      console.debug("onMessage called with payload: ", payload);
       if (payload.notification) {
         const body = payload.notification.body ? payload.notification.body : "This notification does not have a body."
         const title = payload.notification.title ? payload.notification.title : "This notification does not have a title."

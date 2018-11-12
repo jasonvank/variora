@@ -36,10 +36,14 @@ import { fetchUser, setCollectedReadlists } from './redux/actions.js'
 import { initialStore } from './redux/init_store.js'
 import TextArea from '../../../node_modules/antd/lib/input/TextArea'
 // import { Home } from './components/landing_page/index.jsx'
-import { initializeWebPush, invalidateToken } from './initialize_push'
-
+import { invalidateToken } from './initialize_push'
 const FormItem = Form.Item
 
+import firebase from "firebase"
+const config = {
+  messagingSenderId: "241959101179"
+}
+firebase.initializeApp(config); 
 
 const { SubMenu } = Menu
 const { Header, Content, Sider, Footer } = Layout

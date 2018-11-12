@@ -49,7 +49,8 @@ def _handle_post_annotation_request(user, document, request):
             description=h.handle(annotation.content),
             is_public=annotation.is_public,
         )
-
+    # TODO YY
+    web_push_notify_user(user, "some title", "some body")
     context = {
         "document": document,
         'annotation': annotation,
