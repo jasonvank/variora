@@ -52,7 +52,7 @@ def check_valid_document_title(title):
         return False
     return True
 
-# TODO: call this function to notify user 
+# TODO: use this to notify user
 def web_push_notify_user(user, title, message):
-  devices = FCMDevice.objects.get(user=user)
+  devices = FCMDevice.objects.filter(user=user).all()
   devices.send_message(title=title, body=message)

@@ -1,5 +1,6 @@
 import firebase from "firebase"
 import { getCookie } from 'util.js'
+import { notification } from 'antd'
 
 /* ========= Basic workflow of the web push code ===============
 - When user visits page while signed in for the first time:
@@ -94,7 +95,6 @@ export function initializeWebPush() {
     const sendTokenToServer = async() => {
       const token = await messaging.getToken()
       if (isTokenSentToServer()) {
-        // token already sent
         console.debug("sendTokenToServer: already sent to server, won't send again until it changes")
         return
       }
@@ -159,9 +159,15 @@ export function initializeWebPush() {
     // ============ handler functions ===================
     // called when app has focus
     messaging.onMessage(function(payload) {
-      console.debug("onMessage called with payload: ", payload);
-      // Can update UI to reflect message
-          
+      console.log("onMessage called with payload: ", payload);
+      if (payload.notification) {
+        const body = payload.notification.body ? payload.notification.body : "This notification does not have a body."
+        const title = payload.notification.title ? payload.notification.title : "This notification does not have a title."
+        notification['info']({
+          message: title,
+          description: body,
+        });      
+      }
     });
   
     // called when instance id token updated
