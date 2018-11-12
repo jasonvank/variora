@@ -270,6 +270,8 @@ class AppBeforeConnect extends React.Component {
   }
 
   render() {
+    notification.config({ top: 66 })
+
     const fields = this.state.fields
 
     const groupRouter = (coterieUUID) => {

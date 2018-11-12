@@ -105,17 +105,7 @@ export function initializeWebPush() {
       }
       console.debug(request)
       const response = await fetch(window.location.href + 'devices', request)
-      console.debug("sendTokenToServer done. response: ", response)
-  
-      // hacky way to handle an unlogged in user
-      // couldn't find a right place to call this function such that
-      // user.is_authenticated is set properly to do the check
-      // TODO: don't ask for permission if this fails
-      if (response.status === 403) {
-        setTokenSentToServer(false)
-        return
-      }
-  
+      console.debug("sendTokenToServer done. response: ", response)  
       setTokenSentToServer(true)
     }
   
