@@ -63,7 +63,7 @@ export function invalidateToken() {
       console.debug(response)
       console.debug("deleteToken: token deleted")  
     } catch (error) {
-      console.debug(error)
+      console.error(error)
       return
     }
   }
