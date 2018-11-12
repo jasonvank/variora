@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { getUrlFormat } from 'util.js'
+import { initializeWebPush } from '../initialize_push'
 
 
 const FETCH_USEREXPLORE_DOCS = 'FETCH_USEREXPLORE_DOCS'
@@ -44,6 +45,9 @@ const fetchExploreReadlists = () => dispatch => {
 const fetchUser = () => dispatch => {
   axios.get('/api/user').then((response) => {
     var user = response.data
+    if (user.is_authenticated) {
+      initializeWebPush()
+    }
     dispatch({
       type: FETCH_USER,
       user: user,

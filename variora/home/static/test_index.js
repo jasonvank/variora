@@ -245,7 +245,6 @@ class AppBeforeConnect extends React.Component {
   }
 
   componentDidMount() {
-    initializeWebPush()
     this.props.fetchUser()
     axios.get('/file_viewer/api/readlists').then((response) => {
       this.setState({
@@ -267,8 +266,6 @@ class AppBeforeConnect extends React.Component {
   }
 
   render() {
-    notification.config({ top: 66 })
-
     const fields = this.state.fields
 
     const groupRouter = (coterieUUID) => {
