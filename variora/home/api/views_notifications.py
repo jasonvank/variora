@@ -15,7 +15,7 @@ class NotificationEncoder(DjangoJSONEncoder):
             data = obj.data
             actor_str = str(obj.actor)
 
-            if 'is_public' in data and not data['is_public']:
+            if data is not None and 'is_public' in data and not data['is_public']:
                 actor_str = 'Anonymous'
                 data['image_url'] = settings.ANONYMOUS_USER_PORTRAIT_URL
 
