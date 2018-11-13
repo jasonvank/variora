@@ -45,6 +45,7 @@ class SearchResultCoterieEncoder(DjangoJSONEncoder):
         if isinstance(obj, Coterie):
             return {
                 'pk': obj.pk,
+                'uuid': obj.clean_uuid,
                 'name': obj.name,
                 'description': obj.description,
                 'administrators': list(obj.administrators.all()),
