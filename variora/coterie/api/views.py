@@ -209,7 +209,7 @@ def search_api_view(request, coterie_uuid):
         if 'key' not in request.GET or request.GET['key'] == '':
             return HttpResponseForbidden()
         user = request.user
-        if user not in coterie.members.all() or user not  in coterie.administrators.all():
+        if user not in coterie.members.all() or user not in coterie.administrators.all():
             return HttpResponseForbidden()
 
         key = request.GET['key']
