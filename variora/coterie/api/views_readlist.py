@@ -107,7 +107,7 @@ class ReadlistView(View):
 class ReadlistListView(View):
     def get(self, request, coterie_uuid):
         user = request.user
-        coterie = Coterie.objects.get(pk=coterie_uuid)
+        coterie = Coterie.objects.get(uuid=coterie_uuid)
 
         if not user.is_authenticated:
             return JsonResponse({
@@ -128,9 +128,9 @@ class ReadlistListView(View):
         }, encoder=CoterieReadlistListEncoder, safe=False)
 
 
-def create_readlist(request, coterie_uuid):
+def create_readlist(request, coterie_id):
     user = request.user
-    coterie = Coterie.objects.get(pk=coterie_uuid)
+    coterie = Coterie.objects.get(pk=coterie_id)
 
     if not user.is_authenticated or 'readlist_name' not in request.POST or 'description' not in request.POST:
         return HttpResponse(status=403)
