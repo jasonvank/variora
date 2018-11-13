@@ -225,7 +225,7 @@ class CoterieReadlistEncoder(DjangoJSONEncoder):
                 'num_collectors': obj.collectors.count(),
                 'create_time': obj.create_time,
 
-                'url': '/readlists/' + obj.slug,
+                'url': '/groups/' + obj.coterie.clean_uuid + '/readlists/' + obj.slug,
                 'delete_url': '/coterie/api/' + str(obj.coterie.id) + '/coteriereadlists/' + obj.slug + '/delete',
                 'collect_url': '/coterie/api/' + str(obj.coterie.id) + '/coteriereadlists/' + obj.slug + '/collect',
                 'uncollect_url': '/coterie/api/' + str(obj.coterie.id) + '/coteriereadlists/' + obj.slug + '/uncollect',
