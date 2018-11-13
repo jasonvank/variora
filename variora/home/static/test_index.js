@@ -338,10 +338,13 @@ class AppBeforeConnect extends React.Component {
           return ['group-members']
         else if (pathname.includes('settings'))
           return ['group-settings']
-        else if (pathname.includes('readlists'))
-          return ['group-readlists']
+        else if (pathname.includes('readlists')) {
+          const pageElement = pathname.split('/')
+          return [pageElement[3] + pageElement[4]]
+        }
         return ['group-documents']
       }
+
       return (
         <Router basename={GLOBAL_URL_BASE}>
           <Layout>
