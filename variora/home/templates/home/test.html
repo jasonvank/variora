@@ -29,6 +29,7 @@
   {% include "home/tools_import_subpage.html" %}
   <title>Variora</title>
 </head>
+
 <body>
     <div id="main"></div>
 </body>
@@ -38,5 +39,46 @@
 {% else %}
   <script src="/static/bundle/home/test_index.js"></script>
 {% endif %}
+
+<script>
+const isLocalhost = Boolean(
+  window.location.hostname === 'localhost' ||
+    // [::1] is the IPv6 localhost address.
+    window.location.hostname === '[::1]' ||
+    // 127.0.0.1/8 is considered localhost for IPv4.
+    window.location.hostname.match(
+      /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/
+    )
+)
+
+if ('serviceWorker' in navigator && !isLocalhost) {
+  console.log('Service Worker Supported');
+  window.addEventListener('load', () => {
+
+    navigator.serviceWorker.register('/sw', { scope: '/' }).then(function(registration) {
+      // console.log('Service Worker Registered');
+      registration.onupdatefound = () => {
+        const installingWorker = registration.installing;
+        installingWorker.onstatechange = () => {
+          if (installingWorker.state === 'installed') {
+            if (navigator.serviceWorker.controller) {
+              // At this point, the old content will have been purged and
+              // the fresh content will have been added to the cache.
+              // It's the perfect time to display a "New content is
+              // available; please refresh." message in your web app.
+              // console.log('New content is available; please refresh.');
+              location.reload(true)
+            }
+          }
+        };
+      }
+    });
+
+    navigator.serviceWorker.ready.then(function(registration) {
+      // console.log('Service Worker Ready');
+    });
+  })
+}
+</script>
 
 </html>
