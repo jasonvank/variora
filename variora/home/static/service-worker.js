@@ -1,11 +1,8 @@
-const version = "0.0.5"
-const cacheName = `weshare-${version}`
+const PWAVersion = "0.0.1"
+const DesktopVersion = "0.0.1"
+const cacheName = `VA-${PWAVersion}-${DesktopVersion}`
 const cacheAssets = [
   `/`,
-  `/static/bundle/main/index.js`,
-
-  // `/login/`,
-  // `/static/bundle/main/login.js`,
 ]
 
 
@@ -34,42 +31,44 @@ self.addEventListener('activate', event => {
         )
       })
     })
-  );
-})
-
-
-self.addEventListener('fetch', event => {
-  if (event.request.url.includes('login') || event.request.method != 'GET')
-    return
-
-  event.respondWith(
-    fetch(event.request)
-      .then(response => {
-        const responseClone = response.clone()
-
-        if (event.request.url.includes('/static/') || event.request.url.includes('/api/'))
-          caches
-            .open(cacheName)
-            .then(cache => {
-              cache.put(event.request.url, responseClone)  // online, so update cache on every call
-            })
-
-        return response
-      })
-      .catch((res) => {  // cache will be called if offline
-        return caches
-                .open(cacheName).then(cache => cache.match(event.request.url))
-                .then(response => {
-                  if (response) {
-                    console.log('SW offline: hit  -  ' + event.request.url)
-                    return response
-                  } else {
-                    return res
-                  }
-                })
-      })
   )
 })
+
+
+// self.addEventListener('fetch', event => {
+//   if (event.request.url.includes('login') || event.request.method != 'GET')
+//     return
+//
+//   event.respondWith(
+//     fetch(event.request)
+//       .then(response => {
+//         const responseClone = response.clone()
+//
+//         if (event.request.url.includes('/static/')
+//             // || event.request.url.includes('/api/')
+//         )
+//           caches
+//             .open(cacheName)
+//             .then(cache => {
+//               cache.put(event.request.url, responseClone)  // online, so update cache on every call
+//             })
+//
+//         return response
+//       })
+//       .catch((res) => {  // cache will be called if offline
+//         return caches
+//                 .open(cacheName).then(cache => cache.match(event.request.url))
+//                 .then(response => {
+//                   if (response) {
+//                     console.log('SW offline: hit  -  ' + event.request.url)
+//                     return response
+//                   } else {
+//                     return res
+//                   }
+//                 })
+//       })
+//   )
+// })
 
 
 
