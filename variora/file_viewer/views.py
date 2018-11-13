@@ -49,15 +49,12 @@ def _handle_post_annotation_request(user, document, request):
             description=h.handle(annotation.content),
             is_public=annotation.is_public,
         )
-    # TODO YY
-    web_push_notify_user(user, "some title", "some body")
     context = {
         "document": document,
         'annotation': annotation,
         'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,
         "new_annotation_id": annotation.id,
     }
-
     return JsonResponse({
         'new_annotationdiv_html': render(request, "file_viewer/one_annotation_div.html", context).content,
         'new_annotation_id': annotation.id,
@@ -110,7 +107,6 @@ def _handle_post_annotation_reply_request(user, document, request):
         "annotation_reply": annotation_reply,
         'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,
     }
-
     return JsonResponse({
         'new_annotationreply_html': render(request, "file_viewer/one_annotation_reply.html", context).content,
         'new_annotationreply_json': annotation_reply,
