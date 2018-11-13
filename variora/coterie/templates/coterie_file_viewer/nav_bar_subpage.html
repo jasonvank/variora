@@ -14,11 +14,11 @@
     <button class="awesome blue" style="height: 28px;" type="button" id="btn-for-larger"><i class="fa fa-plus" aria-hidden="true"></i></button>
     <button class="awesome blue" style="height: 28px;" type="button" id="btn-for-smaller"><i class="fa fa-minus" aria-hidden="true"></i></button>
   </div>
-  <button class="awesome blue" id="show_annotation_frame_button" style="height: 28px;">Show</button>
-  <button class="awesome blue" id="hide_annotation_frame_button" style="height: 28px;">Hide</button>
-  <button class="awesome blue" id="comment_button" data-toggle="modal" data-target="#comment_modal" style="height: 28px;">
-    <i class="fa fa-comments" aria-hidden="true"></i>&nbspComments
-  </button>
+{#  <button class="awesome blue" id="show_annotation_frame_button" style="height: 28px;">Show</button>#}
+{#  <button class="awesome blue" id="hide_annotation_frame_button" style="height: 28px;">Hide</button>#}
+{#  <button class="awesome blue" id="comment_button" data-toggle="modal" data-target="#comment_modal" style="height: 28px;">#}
+{#    <i class="fa fa-comments" aria-hidden="true"></i>&nbspComments#}
+{#  </button>#}
   <div class="dropdown" id="annotation-color-buttons-div">
     <button class="awesome blue dropdown-toggle" style="height: 28px;" data-toggle="dropdown"><i class="fa fa-paint-brush" aria-hidden="true"></i>&nbspColors
         <b class="caret"></b>
@@ -31,5 +31,49 @@
     {% csrf_token %}
     <button type="submit" class="awesome blue" style="height: 28px" name="document_id" value={{ document.id }}><i class="fa fa-cloud-download" aria-hidden="true"></i>&nbspdownload</button>
   </form>
+
+  <button class="awesome blue" style="height: 28px; padding: 5px 6px 9px 9px" type="button" id="readlist_button">
+    <i class="material-icons" style="font-size: 20px">playlist_add</i>
+  </button>
   <!-- <b id="num_visit" style="float: right; color: white; padding-top: 4px;">{{ document.num_visit }} visits</b> -->
+</div>
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css">
+<style>
+  .p-icon {
+    margin: 16px;
+    display: block;
+  }
+  .pretty input:checked~.state.p-primary label:after {
+    background-color: #888 !important;
+  }
+  label:before {
+    top: 0 !important;
+  }
+  label:after {
+    top: 0 !important;
+  }
+  label::before {
+    top: 0 !important;
+  }
+  label::after {
+    top: 0 !important;
+  }
+</style>
+<div id="readlist" style="display: none; font-size: 16px; max-height: 60vh;">
+  <div style="font-size: 16px; padding: 16px">Add to Group Readlist ...
+      <i class="material-icons" id="close-readlist-icon" style="cursor: pointer; margin-top: 2px; float: right; font-size: 18px; color: #9f9f9f">close</i>
+  </div>
+  <hr style="margin-top: 0px; margin-bottom: 16px">
+  <form id="add_to_readlist_form">
+    <div id="checkbox_template" class="pretty p-icon p-smooth p-curve p-thick" style="margin: 24px 16px; display: none;">
+      <input type="checkbox" />
+      <div class="state p-primary">
+        <i class="icon material-icons" style="top: 1px">done</i>
+        <label style="margin-left: 8px; width: 88%; overflow: hidden; text-overflow: ellipsis; height: 18px">Templateg</label>
+        <i class="fa fa-globe" style="float: right; color: #989898; font-size: 18px" aria-hidden="true"></i>
+      </div>
+    </div>
+  </form>
 </div>

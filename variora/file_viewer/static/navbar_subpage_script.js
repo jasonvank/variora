@@ -81,13 +81,21 @@ function prepareNavbarFunction() {
           else
             removeReadlists.push(readlistCheckbox.val())
         }
+
+        let url = '/file_viewer/api/documents/' + $('#document-id').val() + '/changereadlists'
+        let data = {
+          csrfmiddlewaretoken: getCookie('csrftoken'),
+          add_readlists: addReadlists,
+          remove_readlists: removeReadlists,
+        }
+        let coterieUUID = $('#coterie-uuid').val()
+        if (coterieUUID !== undefined) {
+          url = '/coterie/api/coteriedocuments/' + $('#document-id').val() + '/changereadlists'
+          data.coterie_id = $('#coterie-id').val()
+        }
         $.post({
-          url: '/file_viewer/api/documents/' + $('#document-id').val() + '/changereadlists',
-          data: {
-            csrfmiddlewaretoken: getCookie('csrftoken'),
-            add_readlists: addReadlists,
-            remove_readlists: removeReadlists,
-          },
+          url: url,
+          data: data,
           success: function() { layer.close(popup) }
         })
       }
@@ -99,8 +107,12 @@ function prepareNavbarFunction() {
     })
   })
 
+  let url = '/file_viewer/api/readlists'
+  let coterieUUID = $('#coterie-uuid').val()
+  if (coterieUUID !== undefined)
+    url = `/coterie/api/coteries/${coterieUUID}/members/me/coteriereadlists`
   $.get({
-    url: '/file_viewer/api/readlists',
+    url: url,
     success: function(data) {
       const createdReadlists = data.created_readlists
       var form = $('#add_to_readlist_form')

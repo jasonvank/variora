@@ -72,6 +72,8 @@ class CoterieDocumentEncoder(DjangoJSONEncoder):
                 'title': obj.title,
                 'num_visit': str(obj.num_visit),
                 'url': obj.url,
+
+                'viewer_url': '/coteries/' + str(obj.owner.id) + '/documents/' + obj.slug + '/' + obj.title.replace(' ', '-'),
                 'download_method': 'get',
                 'download_url': '/coterie/api/coteriedocuments/' + str(obj.pk) + '/download',
                 'delete_method': 'post',

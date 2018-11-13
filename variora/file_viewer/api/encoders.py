@@ -22,6 +22,8 @@ class DocumentEncoder(DjangoJSONEncoder):
                 'title': obj.title,
                 'num_visit': str(obj.num_visit),
                 'url': obj.url,
+
+                'viewer_url': '/documents/' + obj.slug + '/' + obj.title.replace(' ', '-'),
                 'download_method': 'get',
                 'download_url': '/file_viewer/api/documents/' + str(obj.pk) + '/download',
                 'delete_method': 'post',

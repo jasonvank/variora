@@ -32,7 +32,7 @@ class DocumentResult extends React.Component {
       title: 'Document Name',
       dataIndex: 'title',
       width: '40%',
-      render: (text, record) => <a className='document-link custom-card-text-wrapper' title={text} href={formatOpenDocumentUrl(record)}>{text}</a>,
+      render: (text, record) => <a className='document-link custom-card-text-wrapper' title={text} href={record.viewer_url}>{text}</a>,
       sorter: (a, b) => a.title.localeCompare(b.title),
     }, {
       title: 'Uploader',

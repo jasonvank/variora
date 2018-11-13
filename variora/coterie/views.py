@@ -256,6 +256,7 @@ def display_coteriefile_viewer_page(request, **kwargs):
             "document": document,
             "file_url": document.url,
             "coterie_id": coterie.id,
+            "coterie_uuid": coterie.clean_uuid,
             "comments": document.coteriecomment_set.order_by("-post_time"),
             "annotations": document.coterieannotation_set
                 .select_related('annotator')
