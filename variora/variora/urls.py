@@ -22,8 +22,9 @@ from django.contrib.sitemaps.views import sitemap
 
 import proxy_views
 from file_viewer.models import Document
-from home.api import views_notifications
+from home.api import views_notifications, views_web_push
 
+from fcm_django.api.rest_framework import FCMDeviceAuthorizedViewSet
 
 class DocumentSitemap(Sitemap):
     changefreq = "daily"
@@ -67,6 +68,10 @@ urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
     # app: coterie
     url(r'^coterie/', include('coterie.urls')),
     url(r'^coteries/', include('coterie.urls')),
+
+    # app: web_push
+    url(r'^devices/delete', views_web_push.delete_device),
+    url(r'^devices?$', FCMDeviceAuthorizedViewSet.as_view({'post': 'create'})),
 
     # MUST BE THE LAST ONE
     url(r'^', include('home.urls')),

@@ -36,16 +36,20 @@ import { fetchUser, setCollectedReadlists } from './redux/actions.js'
 import { initialStore } from './redux/init_store.js'
 import TextArea from '../../../node_modules/antd/lib/input/TextArea'
 // import { Home } from './components/landing_page/index.jsx'
-
+import { invalidateToken } from './initialize_push'
 const FormItem = Form.Item
 
+import firebase from "firebase"
+const config = {
+  messagingSenderId: "241959101179"
+}
+firebase.initializeApp(config); 
 
 const { SubMenu } = Menu
 const { Header, Content, Sider, Footer } = Layout
 const MenuItemGroup = Menu.ItemGroup
 const Search = Input.Search
 const CREATE_NEW_READLIST_MENU_ITEM_KEY = 'createReadlistButton'
-
 
 const GLOBAL_URL_BASE = ''
 
@@ -96,10 +100,12 @@ class AppBeforeConnect extends React.Component {
     }
 
     this.signOff = () => {
-      var data = new FormData()
-      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-      axios.post('/api/signoff', data).then(response => {
-        window.location.reload()
+      invalidateToken().then(() => {
+        var data = new FormData()
+        data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+        axios.post('/api/signoff', data).then(response => {
+          window.location.reload()
+        })  
       })
     }
 

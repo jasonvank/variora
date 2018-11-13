@@ -4,6 +4,7 @@ import uuid
 from django.core.mail import EmailMessage, send_mail
 from django.db import models
 from validate_email import validate_email
+from fcm_django.models import FCMDevice
 
 
 def uuid2slug(uuid_val):
@@ -50,3 +51,8 @@ def check_valid_document_title(title):
     if ';' in title or ':' in title or '/' in title or '\\' in title or '?' in title or '<' in title or '>' in title:
         return False
     return True
+
+# TODO yy: use this to notify user
+def web_push_notify_user(user, title, message):
+  devices = FCMDevice.objects.filter(user=user)
+  devices.send_message(title=title, body=message, icon="https://www.variora.io/media/logo.png")
