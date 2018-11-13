@@ -95,14 +95,14 @@ class SearchResultTab extends React.Component {
           <Menu.Item key='search-documents'>
             <Link to={urlBase + '?key=' + searchKey}><Icon type='file' />Documents</Link>
           </Menu.Item>
-          <Menu.Item key='search-readlists'>
-            <Link to={urlBase + '/readlists?key=' + searchKey}><Icon type='folder' />Readlists</Link>
-          </Menu.Item>
           <Menu.Item key='search-users'>
             <Link to={urlBase + '/users?key=' + searchKey}><Icon type='user' />Users</Link>
           </Menu.Item>
           <Menu.Item key='search-groups'>
             <Link to={urlBase + '/groups?key=' + searchKey}><Icon type='team' />Groups</Link>
+          </Menu.Item>
+          <Menu.Item key='search-readlists'>
+            <Link to={urlBase + '/readlists?key=' + searchKey}><Icon type='folder' />Readlists</Link>
           </Menu.Item>
         </Menu>
 

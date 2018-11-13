@@ -21,6 +21,7 @@ import { getCookie, getValFromUrlParam, groupAvatarColors } from 'util.js'
 import { DocumentTab } from './components/document_tab.jsx'
 import { ExploreTab } from './components/explore_tab.jsx'
 import { GroupTab } from './components/group_tab/group_tab.jsx'
+import {GroupReadlistsTab} from './components/group_tab/group_readlists_tab.jsx'
 import { ReadlistTab } from './components/readlist_tab/readlist_tab.jsx'
 import { NotificationsAlertButton } from './components/notifications_alert_button.jsx'
 import { GroupSelectionButton } from './components/group_selection_button.jsx'
@@ -75,6 +76,8 @@ class AppBeforeConnect extends React.Component {
       joinedCoteries: [],
       createdReadlists: [],
       collectedReadlists: [],
+      coterieUUID: undefined,
+      currentCoterie: {},
     }
 
     this.handleSearch = (searchKey) => {
@@ -135,6 +138,10 @@ class AppBeforeConnect extends React.Component {
     }
 
     this.submitCreateReadlistForm = () => {
+      let url = '/file_viewer/api/readlists/create'
+      if (this.state.currentCoterie.pk !== undefined)
+        url = `/coterie/api/${this.state.currentCoterie.pk}/coteriereadlists/create`
+
       const readlistName = this.state.fields.readlistName.value
       if (readlistName == '')
         message.warning('The name of the readlist cannot be empty', 1)
@@ -143,7 +150,7 @@ class AppBeforeConnect extends React.Component {
         data.append('readlist_name', readlistName)
         data.append('description', this.state.fields.readlistDesc.value)
         data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-        axios.post('/file_viewer/api/readlists/create', data).then((response) => {
+        axios.post(url, data).then((response) => {
           var newCreatedReadlists = this.state.createdReadlists.slice()
           newCreatedReadlists.push(response.data)
           this.setCreateReadlistModelVisible(false)
@@ -191,7 +198,11 @@ class AppBeforeConnect extends React.Component {
         createdReadlists: updatedCreatedReadlist,
         collectedReadlists: updatedCollectedReadlist
       })
-      axios.get('/file_viewer/api/readlists').then((response) => {
+      let url = '/file_viewer/api/readlists'
+      if (this.state.coterieUUID !== undefined)
+        url = `/coterie/api/coteries/${this.state.coterieUUID}/members/me/coteriereadlists`
+
+      axios.get(url).then((response) => {
         this.setState({
           collectedReadlists: response.data.collected_readlists,
         })
@@ -241,10 +252,29 @@ class AppBeforeConnect extends React.Component {
       return <ReadlistTab
         user={this.state.user}
         match={match}
+        coterieUUID={match.params.coterieUUID}
+        coterie={match.params.coterieUUID === undefined ? undefined : this.state.currentCoterie}
         location={location}
         updateReadlistsCallback={this.updateReadlistsCallback}
         updateReadlistsNameCallback={this.updateReadlistsNameCallback}
       />
+    }
+
+    this.renderGroupReadlistsTab = (match, location) => {
+      const coterieUUID = match.params.coterieUUID
+      const isAdmin = this.state.administratedCoteries.map(coterie => coterie.uuid).includes(coterieUUID)
+      const filtered = this.state.administratedCoteries.filter(coterie => coterie.uuid === coterieUUID).
+        concat(this.state.joinedCoteries.filter(coterie => coterie.uuid === coterieUUID))
+      if (filtered.length === 0)
+        return null
+
+      return (
+        <GroupReadlistsTab
+          removeCoterieCallback={this.removeCoterieCallback}
+          isAdmin={isAdmin} match={match} location={location}
+          coteriePk={filtered[0].pk} coterieUUI={coterieUUID}
+        />
+      )
     }
 
     this.renderSearchTab = (match, location) => {
@@ -269,6 +299,23 @@ class AppBeforeConnect extends React.Component {
       this.setState({
         administratedCoteries: response.data.administratedCoteries,
         joinedCoteries: response.data.joinedCoteries
+      }, () => {
+        if (window.location.pathname.includes('/groups/')) {
+          const coterieUUID = window.location.pathname.split('/')[2]
+          const filtered = this.state.administratedCoteries.concat(this.state.joinedCoteries).filter(c => c.uuid === coterieUUID)
+          if (filtered.length === 0)
+            return null
+          const coterie = filtered[0]
+          this.setState({coterieUUID: coterieUUID, currentCoterie: coterie})
+
+          axios.get(`/coterie/api/coteries/${coterieUUID}/members/me/coteriereadlists`).then(response => {
+            this.setState({
+              createdReadlists: response.data.created_readlists,
+              collectedReadlists: response.data.collected_readlists,
+            })
+            this.props.setCollectedReadlists(response.data.collected_readlists)
+          })
+        }
       })
     })
   }
@@ -287,17 +334,21 @@ class AppBeforeConnect extends React.Component {
       const defaultSelectedKeys = () => {
         if (pathname.endsWith('/search'))
           return []
-        return pathname.includes('members') ? ['group-members'] : pathname.includes('settings') ? ['group-settings'] : ['group-documents']
+        else if (pathname.includes('members'))
+          return ['group-members']
+        else if (pathname.includes('settings'))
+          return ['group-settings']
+        else if (pathname.includes('readlists'))
+          return ['group-readlists']
+        return ['group-documents']
       }
-
-      // return globalRouter
       return (
         <Router basename={GLOBAL_URL_BASE}>
           <Layout>
             <Sider className='sider' width={200} style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }}>
               <Menu
                 mode="inline"
-                // defaultOpenKeys={['created_readlists', 'collected_readlists']}
+                defaultOpenKeys={['created_readlists', 'collected_readlists']}
                 onClick={this.onClickCreateReadlistMenuItem}
                 style={{ height: '100%', borderRight: 0 }}
                 defaultSelectedKeys={defaultSelectedKeys()}
@@ -309,6 +360,10 @@ class AppBeforeConnect extends React.Component {
                   <Link to={ '/groups/' + coterieUUID + "/" }><span><Icon type='book' />Group Documents</span></Link>
                 </Menu.Item>
 
+                <Menu.Item key="group-readlists" disabled={!this.state.user.is_authenticated}>
+                  <Link to={ '/groups/' + coterieUUID + "/readlists" }><span><Icon type='folder' />Group Readlists</span></Link>
+                </Menu.Item>
+
                 <Menu.Item key="group-members" disabled={!this.state.user.is_authenticated}>
                   <Link to={ '/groups/' + coterieUUID + "/members" }><span><Icon type='usergroup-add' />Group Members</span></Link>
                 </Menu.Item>
@@ -316,6 +371,39 @@ class AppBeforeConnect extends React.Component {
                 <Menu.Item key="group-settings" disabled={!this.state.user.is_authenticated}>
                   <Link to={ '/groups/' + coterieUUID + "/settings" }><span><Icon type='setting' />Group Setting</span></Link>
                 </Menu.Item>
+
+                <SubMenu key="created_readlists" title={<span><Icon type="folder" />Created Readlists</span>} disabled={!this.state.user.is_authenticated}>
+                  {
+                    this.state.createdReadlists.sort((a, b) => a.name > b.name).map((readlist) => {
+                      return (
+                        <Menu.Item key={'readlists' + readlist.slug} title={readlist.name}>
+                          <Link style={{ overflow: 'hidden', textOverflow: 'ellipsis' }} to={ '/groups/' + coterieUUID + '/readlists/' + readlist.slug }><Icon type="folder-open" /><span>{ readlist.name }</span></Link>
+                        </Menu.Item>
+                      )
+                    })
+                  }
+                  <Menu.Item disabled={!this.state.user.is_authenticated} key={CREATE_NEW_READLIST_MENU_ITEM_KEY}><Icon type="plus"/></Menu.Item>
+                </SubMenu>
+                <SubMenu key="collected_readlists" title={<span><Icon type="folder" />Collected Readlists</span>} disabled={!this.state.user.is_authenticated}>
+                  {
+                    this.state.collectedReadlists.sort((a, b) => a.name > b.name).map((readlist) => {
+                      return (
+                        <Menu.Item key={'readlists' + readlist.slug} title={readlist.name}>
+                          <Link style={{ overflow: 'hidden', textOverflow: 'ellipsis' }} to={ '/groups/' + coterieUUID + '/readlists/' + readlist.slug }><Icon type="folder" /><span>{ readlist.name }</span></Link>
+                        </Menu.Item>
+                      )
+                    })
+                  }
+                </SubMenu>
+                <Modal
+                  title="create a new readlist"
+                  wrapClassName="vertical-center-modal"
+                  visible={this.state.createReadlistModelVisible}
+                  onOk={this.submitCreateReadlistForm}
+                  onCancel={() => this.setCreateReadlistModelVisible(false)}
+                >
+                  <CreateReadlistForm {...fields} onChange={this.handleCreateReadlistFromChange} />
+                </Modal>
                 <Modal
                   title="create a new group"
                   wrapClassName="vertical-center-modal"
@@ -330,7 +418,9 @@ class AppBeforeConnect extends React.Component {
             <Layout style={{ marginLeft: 200, padding: 0 }}>
               <Content>
                 <Switch>
-                  <Route path={'/groups/:coterieUUID/search'} render={ ({match, location}) => this.renderSearchTab(match, location) } />
+                  <Route path='/groups/:coterieUUID/readlists/:readlistSlug' render={ ({match, location}) => this.renderReadlistTab(match, location) } />
+                  <Route path='/groups/:coterieUUID/search' render={ ({match, location}) => this.renderSearchTab(match, location) } />
+                  <Route path='/groups/:coterieUUID/readlists' render={ ({match, location}) => this.renderGroupReadlistsTab(match, location) } />
                   <Route path='/groups/:coterieUUID' render={ ({match, location}) => this.renderGroupTab(match, location) } />
                 </Switch>
               </Content>

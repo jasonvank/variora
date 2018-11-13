@@ -15,8 +15,6 @@ const { Header, Content, Sider } = Layout
 const MenuItemGroup = Menu.ItemGroup
 
 
-const SUB_URL_BASE = '/readlists/'
-
 class ReadlistTabBeforeConnect extends React.Component {
   constructor(props) {
     super(props)
@@ -35,9 +33,18 @@ class ReadlistTabBeforeConnect extends React.Component {
       isOwner: false,
       isCollector: false,
     }
-
+    if (this.props.coterieUUID !== undefined)
+      this.state.sub_url_base = `/groups/${this.props.coterieUUID}/readlists/`
+    else
+      this.state.sub_url_base = `/readlists/`
     this.updateData = () => {
-      axios.get(getUrlFormat('/file_viewer/api/readlists/' + this.state.readlistSlug, {})).then(response => {
+      let url = `/file_viewer/api/readlists/${this.state.readlistSlug}`
+      if (this.props.coterie !== undefined) {
+        if (this.props.coterie.pk === undefined) return
+        url = `/coterie/api/${this.props.coterie.pk}/coteriereadlists/${this.state.readlistSlug}`
+      }
+
+      axios.get(url).then(response => {
         this.setState({
           readlist: {
             ...response.data,
@@ -83,20 +90,20 @@ class ReadlistTabBeforeConnect extends React.Component {
           }
         >
           <Menu.Item key='readlist-documents'>
-            <Link to={SUB_URL_BASE + this.state.readlistSlug + '/'}><Icon type="book" />Readlist Documents</Link>
+            <Link to={this.state.sub_url_base + this.state.readlistSlug + '/'}><Icon type="book" />Readlist Documents</Link>
           </Menu.Item>
 
           {
             this.state.isOwner ? (
               <Menu.Item key='readlist-settings'>
-                <Link to={SUB_URL_BASE + this.state.readlistSlug + '/settings'}><Icon type="setting" />Readlist Settings</Link>
+                <Link to={this.state.sub_url_base + this.state.readlistSlug + '/settings'}><Icon type="setting" />Readlist Settings</Link>
               </Menu.Item>
             ) : null
           }
         </Menu>
         <Switch>
           <Route
-            exact path={SUB_URL_BASE + this.state.readlistSlug + '/'}
+            exact path={this.state.sub_url_base + this.state.readlistSlug + '/'}
             render={() =>
               <ReadlistDocumentsSubtab
                 user={this.state.user}
@@ -109,7 +116,7 @@ class ReadlistTabBeforeConnect extends React.Component {
               />}
           />
           <Route
-            exact path={SUB_URL_BASE + this.state.readlistSlug + '/settings'}
+            exact path={this.state.sub_url_base + this.state.readlistSlug + '/settings'}
             render={() =>
               <ReadlistSettingsSubtab
                 readlistSlug={this.state.readlistSlug}

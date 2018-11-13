@@ -1,0 +1,145 @@
+import 'regenerator-runtime/runtime'
+
+import {Avatar, Icon, Input, Layout, Menu, message, Table} from 'antd'
+import { Link, Route, Switch, Redirect } from 'react-router-dom'
+import { getCookie, getUrlFormat } from 'util.js'
+
+import { GroupDocumentsSubtab } from './group_documents_subtab.jsx'
+import React from 'react'
+import axios from 'axios'
+import TimeAgo from 'react-timeago'
+
+const { SubMenu } = Menu
+const { Header, Content, Sider } = Layout
+const MenuItemGroup = Menu.ItemGroup
+
+
+const SUB_URL_BASE = '/groups/'
+
+class GroupReadlistsTab extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      coteriePk: props.coteriePk,
+      coterieUUI: props.coterieUUI,
+      isAdmin: props.isAdmin,
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      coteriePk: nextProps.coteriePk,
+      coterieUUI: nextProps.coterieUUI,
+      isAdmin: nextProps.isAdmin,
+    })
+  }
+
+  render() {
+    const path = this.props.location.pathname
+    return (
+      <Content style={{ paddingLeft: 18, paddingRight: 18, paddingTop: 16, margin: 0, minHeight: 280 }}>
+        <Menu
+          onClick={this.handleClick}
+          mode="horizontal"
+          style={{ padding: 0 }}
+          defaultSelectedKeys={['group-readlists']}
+        >
+          <Menu.Item key='group-readlists'>
+            <Link to={SUB_URL_BASE + this.state.coterieUUI + '/readlists'}><Icon type="folder" />Group Readlists</Link>
+          </Menu.Item>
+        </Menu>
+
+        <Switch>
+          <Route exact path={SUB_URL_BASE + this.state.coterieUUI + '/readlists'} render={() =>
+            <GroupReadlistsSubtab
+              isAdmin={this.state.isAdmin}
+              coterieUUID={this.state.coterieUUI}
+              coteriePk={this.state.coteriePk}
+            />}
+          />
+        </Switch>
+      </Content>
+    )
+  }
+}
+
+
+class GroupReadlistsSubtab extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      sortedInfo: null,
+      data: [],
+    }
+
+    this.handleChange = (sorter) => {
+      this.setState({
+        sortedInfo: sorter,
+      })
+    }
+
+    this.updateData = () => {
+      axios.get(getUrlFormat('/coterie/api/coteries/' + this.props.coteriePk, {}))
+        .then(response => {
+          this.setState({
+            data: response.data.coteriereadlist_set
+          })
+        })
+        .catch(e => { message.warning(e.message) })
+    }
+  }
+
+  componentDidMount() { this.updateData() }
+  componentWillReceiveProps(nextProps) { this.updateData() }
+
+  render() {
+    let sortedInfo = this.state.sortedInfo
+    sortedInfo = sortedInfo || {}
+
+    const columns = [{
+      title: 'Readlist Name',
+      dataIndex: 'name',
+      width: '40%',
+      render: (text, record) => <a className='document-link custom-card-text-wrapper' title={text} href={record.url}>{text}</a>,
+      sorter: (a, b) => a.name.localeCompare(b.name),
+    }, {
+      title: 'Creator',
+      render: (text, record) => <span><Avatar src={record.owner.portrait_url} style={{ verticalAlign: 'middle', marginRight: 12}} />{record.owner.nickname}</span>,
+      width: '30%',
+    }, {
+      title: 'Create date',
+      width: '30%',
+      render: (text, record) => <TimeAgo date={record.create_time} />,
+      sorter: (a, b) => Date.parse(a.create_time) > Date.parse(b.create_time),
+    }]
+
+    return (
+      <Table
+        dataSource={this.state.data}
+        columns={columns}
+        className={'card'}
+        style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}
+        pagination={{ pageSize: 10 }}
+        rowKey={record => record.uuid}
+        onChange={this.handleChange}
+        locale={{
+          emptyText: 'No readlist found'
+        }}
+      />
+    )
+  }
+}
+
+
+export { GroupReadlistsTab }
+
+
+
+
+
+
+
+
+
+
+

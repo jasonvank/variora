@@ -225,13 +225,13 @@ class CoterieReadlistEncoder(DjangoJSONEncoder):
                 'create_time': obj.create_time,
 
                 'url': '/readlists/' + obj.slug,
-                'delete_url': '/file_viewer/api/readlists/' + obj.slug + '/delete',
-                'collect_url': '/file_viewer/api/readlists/' + obj.slug + '/collect',
-                'uncollect_url': '/file_viewer/api/readlists/' + obj.slug + '/uncollect',
-                'remove_document_url': '/file_viewer/api/readlists/' + obj.slug + '/remove_document',
-                'rename_url': '/file_viewer/api/readlists/' + obj.slug + '/rename',
-                'change_desc_url': '/file_viewer/api/readlists/' + obj.slug + '/change_desc',
-                'change_privacy_url': '/file_viewer/api/readlists/' + obj.slug + '/change_privacy',
+                'delete_url': '/coterie/api/' + str(obj.coterie.id) + '/coteriereadlists/' + obj.slug + '/delete',
+                'collect_url': '/coterie/api/' + str(obj.coterie.id) + '/coteriereadlists/' + obj.slug + '/collect',
+                'uncollect_url': '/coterie/api/' + str(obj.coterie.id) + '/coteriereadlists/' + obj.slug + '/uncollect',
+                'remove_document_url': '/coterie/api/' + str(obj.coterie.id) + '/coteriereadlists/' + obj.slug + '/remove_document',
+                'rename_url': '/coterie/api/' + str(obj.coterie.id) + '/coteriereadlists/' + obj.slug + '/rename',
+                'change_desc_url': '/coterie/api/' + str(obj.coterie.id) + '/coteriereadlists/' + obj.slug + '/change_desc',
+                'change_privacy_url': '/coterie/api/' + str(obj.coterie.id) + '/coteriereadlists/' + obj.slug + '/change_privacy',
             }
         elif isinstance(obj, CoterieDocument):
             return CoterieDocumentEncoder().default(obj)
