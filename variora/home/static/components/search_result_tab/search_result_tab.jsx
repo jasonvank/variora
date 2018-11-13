@@ -47,17 +47,31 @@ class SearchResultTab extends React.Component {
           })
         })
     })
-    axios.get(getUrlFormat('/api/search', {
-      'key': searchKey
-    })).then((response) => {
-      const data = response.data
-      this.setState({
-        resultDocuments: data.resultDocuments,
-        resultCoteries: data.resultCoteries,
-        resultUsers: data.resultUsers,
-        resultReadlists: data.resultReadlists,
+    if (this.props.match !== undefined && this.props.match.params.coterieUUID !== undefined) {
+      axios.get(getUrlFormat(`/coterie/api/coteries/${this.props.match.params.coterieUUID}/search`, {
+        'key': searchKey
+      })).then((response) => {
+        const data = response.data
+        this.setState({
+          resultDocuments: data.resultDocuments,
+          resultCoteries: data.resultCoteries,
+          resultUsers: data.resultUsers,
+          resultReadlists: data.resultReadlists,
+        })
       })
-    })
+    } else {
+      axios.get(getUrlFormat('/api/search', {
+        'key': searchKey
+      })).then((response) => {
+        const data = response.data
+        this.setState({
+          resultDocuments: data.resultDocuments,
+          resultCoteries: data.resultCoteries,
+          resultUsers: data.resultUsers,
+          resultReadlists: data.resultReadlists,
+        })
+      })
+    }
   }
 
 

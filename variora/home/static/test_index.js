@@ -240,6 +240,14 @@ class AppBeforeConnect extends React.Component {
         updateReadlistsNameCallback={this.updateReadlistsNameCallback}
       />
     }
+
+    this.renderSearchTab = (match, location) => {
+      return <SearchResultTab
+        user={this.state.user}
+        match={match}
+        location={location}
+      />
+    }
   }
 
   componentDidMount() {
@@ -316,7 +324,7 @@ class AppBeforeConnect extends React.Component {
             <Layout style={{ marginLeft: 200, padding: 0 }}>
               <Content>
                 <Switch>
-                  <Route path={'/groups/' + coterieUUID + '/search'} component={SearchResultTab} />
+                  <Route path={'/groups/:coterieUUID/search'} render={ ({match, location}) => this.renderSearchTab(match, location) } />
                   <Route path='/groups/:coterieUUID' render={ ({match, location}) => this.renderGroupTab(match, location) } />
                 </Switch>
               </Content>
@@ -435,6 +443,13 @@ class AppBeforeConnect extends React.Component {
       }
     }
 
+    let searchPlaceholder = 'Search in Variora'
+    if (window.location.pathname.includes('/groups/')) {
+      const coterieUUID = window.location.pathname.split('/')[2]
+      const filtered = this.state.administratedCoteries.concat(this.state.joinedCoteries).filter(c => c.uuid === coterieUUID)
+      if (filtered.length !== 0)
+        searchPlaceholder = `Search in this Group: ${filtered[0].name}`
+    }
 
     return (
       <Layout style={{ height: '100%', width: '100%', position: 'absolute' }}>
@@ -447,7 +462,7 @@ class AppBeforeConnect extends React.Component {
             </Col>
             <Col span={8} style={{ textAlign: 'right' }}>
               <Search
-                placeholder="Search in Variora"
+                placeholder={searchPlaceholder}
                 style={{ width: '60%' }}
                 onSearch={this.handleSearch}
                 defaultValue={window.location.pathname.includes('/search') ? getValFromUrlParam('key') : '' }
