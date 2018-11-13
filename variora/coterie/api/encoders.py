@@ -203,7 +203,7 @@ class CoterieReadlistListEncoder(DjangoJSONEncoder):
                 'slug': obj.slug,
                 'name': obj.name,
                 'owner': obj.creator,
-                'url': '/readlists/' + obj.slug,
+                'url': '/groups/' + obj.coterie.clean_uuid + '/readlists/' + obj.slug,
                 'documents_uuids': list(map(lambda document: document.clean_uuid, list(obj.documents.all()))),
                 'num_collectors': obj.collectors.count(),
                 'create_time': obj.create_time,

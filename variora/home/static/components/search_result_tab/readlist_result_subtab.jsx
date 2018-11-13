@@ -1,6 +1,7 @@
 import {Avatar, Table} from 'antd'
 
 import React from 'react'
+import { Link, Route, Switch, Redirect } from 'react-router-dom'
 import TimeAgo from 'react-timeago'
 
 class ReadlistResult extends React.Component {
@@ -31,7 +32,7 @@ class ReadlistResult extends React.Component {
       title: 'Readlist Name',
       dataIndex: 'name',
       width: '40%',
-      render: (text, record) => <a className='document-link custom-card-text-wrapper' title={text} href={record.url}>{text}</a>,
+      render: (text, record) => <Link className='document-link custom-card-text-wrapper' title={text} to={record.url}>{text}</Link>,
       sorter: (a, b) => a.name.localeCompare(b.name),
     }, {
       title: 'Creator',

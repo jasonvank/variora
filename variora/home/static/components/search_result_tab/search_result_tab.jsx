@@ -92,18 +92,21 @@ class SearchResultTab extends React.Component {
             path.endsWith('/users') ? ['search-users'] : path.endsWith('/readlists') ? ['search-readlists'] : path.endsWith('/groups') ? ['search-groups'] : ['search-documents']
           }
         >
-          <Menu.Item key='search-documents'>
+          {this.state.resultDocuments !== undefined ? <Menu.Item key='search-documents'>
             <Link to={urlBase + '?key=' + searchKey}><Icon type='file' />Documents</Link>
-          </Menu.Item>
-          <Menu.Item key='search-users'>
-            <Link to={urlBase + '/users?key=' + searchKey}><Icon type='user' />Users</Link>
-          </Menu.Item>
-          <Menu.Item key='search-groups'>
-            <Link to={urlBase + '/groups?key=' + searchKey}><Icon type='team' />Groups</Link>
-          </Menu.Item>
-          <Menu.Item key='search-readlists'>
+          </Menu.Item> : null}
+
+          {this.state.resultReadlists !== undefined ? <Menu.Item key='search-readlists'>
             <Link to={urlBase + '/readlists?key=' + searchKey}><Icon type='folder' />Readlists</Link>
-          </Menu.Item>
+          </Menu.Item> : null}
+
+          {this.state.resultUsers !== undefined ? <Menu.Item key='search-users'>
+            <Link to={urlBase + '/users?key=' + searchKey}><Icon type='user' />Users</Link>
+          </Menu.Item> : null}
+
+          {this.state.resultCoteries !== undefined ? <Menu.Item key='search-groups'>
+            <Link to={urlBase + '/groups?key=' + searchKey}><Icon type='team' />Groups</Link>
+          </Menu.Item> : null}
         </Menu>
 
         <Switch>

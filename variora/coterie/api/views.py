@@ -194,8 +194,8 @@ class CombinedEncoder(DjangoJSONEncoder):
             return CoterieDocumentEncoder().default(obj)
         elif isinstance(obj, User):
             return UserEncoder().default(obj)
-        # elif isinstance(obj, Readlist):
-        #     return ReadlistListEncoder().default(obj)
+        elif isinstance(obj, CoterieReadlist):
+            return CoterieReadlistListEncoder().default(obj)
         # elif isinstance(obj, Coterie):
         #     return SearchResultCoterieEncoder().default(obj)
         else:
@@ -217,13 +217,13 @@ def search_api_view(request, coterie_uuid):
         result_documents = list(CoterieDocument.objects.filter_with_related(title__icontains=key).filter(owner=coterie))[:100]  # case-insensitive contain
         # result_users = list(User.objects.filter(Q(nickname__icontains=key) | Q(email_address__icontains=key)))[:100]
         # result_coteries = list(Coterie.objects.filter(Q(name__icontains=key) | Q(id__icontains=key)))[:100]
-        # result_readlists = list(Readlist.objects.filter(Q(name__icontains=key) | Q(description__icontains=key)).filter(is_public=True))[:100]
+        result_readlists = list(CoterieReadlist.objects.filter(Q(name__icontains=key) | Q(description__icontains=key)).filter(coterie=coterie).filter(is_public=True))[:100]
         return JsonResponse(
             {
                 'resultDocuments': result_documents,
-                'resultUsers': [],
+                # 'resultUsers': [],
                 # 'resultCoteries': result_coteries,
-                'resultReadlists': [],
+                'resultReadlists': result_readlists,
             },
             encoder=CombinedEncoder,
             safe=False
