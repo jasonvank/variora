@@ -112,6 +112,15 @@
   </script>
   <script src="/static/pwa/js/1.48baec1f.chunk.js"></script>
   <script src="/static/pwa/js/main.573b526a.chunk.js"></script>
+  <script>
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      // Prevent Chrome 67 and earlier from automatically showing the prompt
+      e.preventDefault();
+      // Stash the event so it can be triggered later.
+      deferredPrompt = e;
+    });
+  </script>
 </body>
 
 </html>
