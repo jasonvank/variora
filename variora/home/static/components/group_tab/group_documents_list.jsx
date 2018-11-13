@@ -163,16 +163,17 @@ class GroupDocumentsList extends React.Component {
       {
         dataIndex: 'space',
         width: '3%',
-      }, {
+      },
+      {
         title: '',
         dataIndex: 'icon',
-        width: '7%',
-        render: (text, record) => <img width={18} src="/media/pdf.png" alt="pdf-logo"/>
+        width: '5%',
+        render: (text, record) => <img width={20} height={24} src="/media/pdf.png" alt="pdf-logo"/>
       },
       {
         title: 'Title',
         dataIndex: 'title',
-        width: '30%',
+        width: '32%',
         render: (text, coterieDocument) => (
           checkIAmUploader(coterieDocument) ? changeDocumentName(text, coterieDocument) : <a className='document-link' href={formatOpenCoterieDocumentUrl(coterieDocument, this.state.coteriePk)}>{text}</a>
         ),
@@ -203,6 +204,7 @@ class GroupDocumentsList extends React.Component {
         columns={columns}
         pagination={false}
         rowKey={record => record.pk}
+        // size={'medium'}
       />
     )
   }
