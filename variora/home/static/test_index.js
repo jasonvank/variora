@@ -336,7 +336,7 @@ class AppBeforeConnect extends React.Component {
           return []
         else if (pathname.includes('members'))
           return ['group-members']
-        else if (pathname.includes('settings'))
+        else if (pathname.includes('settings') && !pathname.includes('readlists'))
           return ['group-settings']
         else if (pathname.includes('readlists')) {
           const pageElement = pathname.split('/')

@@ -119,6 +119,7 @@ class ReadlistTabBeforeConnect extends React.Component {
             exact path={this.state.sub_url_base + this.state.readlistSlug + '/settings'}
             render={() =>
               <ReadlistSettingsSubtab
+                coterieUUID={this.props.coterieUUID}
                 readlistSlug={this.state.readlistSlug}
                 readlist={this.state.readlist}
                 updateReadlistsCallback={this.props.updateReadlistsCallback}

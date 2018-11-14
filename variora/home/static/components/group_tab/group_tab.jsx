@@ -37,7 +37,7 @@ class GroupTab extends React.Component {
 
   render() {
     const path = this.props.location.pathname
-    const selectedKeys = path.includes('members') ? ['group-members'] : path.includes('settings') ? ['group-settings'] : ['group-documents']
+    const selectedKeys = path.includes('members') ? ['group-members'] : (path.includes('settings') && !path.includes('readlists')) ? ['group-settings'] : ['group-documents']
     return (
       <Content style={{ paddingLeft: 18, paddingRight: 18, paddingTop: 16, margin: 0, minHeight: 280 }}>
         <Menu
