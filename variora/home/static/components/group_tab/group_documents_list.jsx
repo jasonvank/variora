@@ -202,7 +202,7 @@ class GroupDocumentsList extends React.Component {
       <Table
         dataSource={this.state.data}
         columns={columns}
-        pagination={false}
+        pagination={{ pageSize: 10 }}
         rowKey={record => record.pk}
         // size={'medium'}
       />

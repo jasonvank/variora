@@ -60,27 +60,36 @@ def _handle_post_annotation_request(user, document, request):
     # logging.info(request)
 
     # send notification
-    for user in document.owner.administrators.all():
-        if annotation.annotator.pk != user.pk:
-            notify.send(
-                sender=annotation.annotator, recipient=user,
-                action_object=annotation, verb='post annotation',
-                redirect_url=annotation.url,
-                image_url=annotation.annotator.portrait_url,
-                description=h.handle(annotation.content),
-                is_public=annotation.is_public,
-            )
-
-    for user in document.owner.members.all():
-        if annotation.annotator.pk != user.pk:
-            notify.send(
-                sender=annotation.annotator, recipient=user,
-                action_object=annotation, verb='post annotation',
-                redirect_url=annotation.url,
-                image_url=annotation.annotator.portrait_url,
-                description=h.handle(annotation.content),
-                is_public=annotation.is_public,
-            )
+    # for user in document.owner.administrators.all():
+    #     if annotation.annotator.pk != user.pk:
+    #         notify.send(
+    #             sender=annotation.annotator, recipient=user,
+    #             action_object=annotation, verb='post annotation',
+    #             redirect_url=annotation.url,
+    #             image_url=annotation.annotator.portrait_url,
+    #             description=h.handle(annotation.content),
+    #             is_public=annotation.is_public,
+    #         )
+    #
+    # for user in document.owner.members.all():
+    #     if annotation.annotator.pk != user.pk:
+    #         notify.send(
+    #             sender=annotation.annotator, recipient=user,
+    #             action_object=annotation, verb='post annotation',
+    #             redirect_url=annotation.url,
+    #             image_url=annotation.annotator.portrait_url,
+    #             description=h.handle(annotation.content),
+    #             is_public=annotation.is_public,
+    #         )
+    if annotation.annotator.pk != document.uploader.pk:
+        notify.send(
+            sender=annotation.annotator, recipient=document.uploader,
+            action_object=annotation, verb='post annotation',
+            redirect_url=annotation.url,
+            image_url=annotation.annotator.portrait_url,
+            description=h.handle(annotation.content),
+            is_public=annotation.is_public,
+        )
     # logging.info('done send notif')
 
     context = {
@@ -109,11 +118,16 @@ def _handle_post_annotation_reply_request(user, coterie, request):
     annotation_reply.replier = user
     annotation_reply.reply_to_annotation = annotation
     annotation_reply.is_public = True if request.POST["is_public"] == 'true' else False
+
+    annotation_poster = annotation_reply.reply_to_annotation.annotator
+
     if "reply_to_annotation_reply_id" in request.POST:
         annotation_reply.reply_to_annotation_reply = models.CoterieAnnotationReply.objects.get(
             id=int(request.POST["reply_to_annotation_reply_id"])
         )
-        if annotation_reply.reply_to_annotation_reply.replier.pk != annotation_reply.reply_to_annotation.annotator.pk:
+
+        replier_who_i_reply_to = annotation_reply.reply_to_annotation_reply.replier
+        if replier_who_i_reply_to.pk != annotation_poster.pk and user.pk != replier_who_i_reply_to.pk:
             notify.send(
                 sender=annotation_reply.replier,
                 recipient=annotation_reply.reply_to_annotation_reply.replier,
@@ -126,16 +140,18 @@ def _handle_post_annotation_reply_request(user, coterie, request):
                 is_public=annotation_reply.is_public,
             )
     annotation_reply.save()
-    notify.send(
-        sender=annotation_reply.replier,
-        recipient=annotation_reply.reply_to_annotation.annotator,
-        action_object=annotation_reply,
-        verb='reply to annotation',
-        redirect_url=annotation.url,
-        image_url=annotation_reply.replier.portrait_url,
-        description=h.handle(annotation_reply.content),
-        is_public=annotation_reply.is_public,
-    )
+
+    if user.pk != annotation_poster.pk:
+        notify.send(
+            sender=annotation_reply.replier,
+            recipient=annotation_reply.reply_to_annotation.annotator,
+            action_object=annotation_reply,
+            verb='reply to annotation',
+            redirect_url=annotation.url,
+            image_url=annotation_reply.replier.portrait_url,
+            description=h.handle(annotation_reply.content),
+            is_public=annotation_reply.is_public,
+        )
     context = {
         "annotation_reply": annotation_reply,
         'ANONYMOUS_USER_PORTRAIT_URL': settings.ANONYMOUS_USER_PORTRAIT_URL,
