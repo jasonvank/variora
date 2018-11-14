@@ -1,6 +1,3 @@
-from django.contrib.auth import get_user
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import (HttpResponse, HttpResponseForbidden,
                          HttpResponseNotFound, JsonResponse)
@@ -11,6 +8,7 @@ from notifications.signals import notify
 from validate_email import validate_email
 
 from home.models import User
+from variora.utils import web_push_notify_user
 
 from ..models import Coterie, CoterieApplication, CoterieDocument
 from .encoders import (CoterieApplicationEncoder, CoterieDocumentEncoder,
@@ -43,6 +41,7 @@ def create_application(request):
                 image_url=application.applicant.portrait_url,
                 description=application.application_message,
             )
+            # web_push_notify_user(admin, title='new application', message='Your group has a new applicant')
         return JsonResponse(application, encoder=CoterieApplicationEncoder, safe=False)
     except ObjectDoesNotExist:
         return HttpResponseNotFound()

@@ -367,14 +367,6 @@ class AppBeforeConnect extends React.Component {
                   <Link to={ '/groups/' + coterieUUID + "/readlists" }><span><Icon type='folder' />Group Readlists</span></Link>
                 </Menu.Item>
 
-                <Menu.Item key="group-members" disabled={!this.state.user.is_authenticated}>
-                  <Link to={ '/groups/' + coterieUUID + "/members" }><span><Icon type='usergroup-add' />Group Members</span></Link>
-                </Menu.Item>
-
-                <Menu.Item key="group-settings" disabled={!this.state.user.is_authenticated}>
-                  <Link to={ '/groups/' + coterieUUID + "/settings" }><span><Icon type='setting' />Group Setting</span></Link>
-                </Menu.Item>
-
                 <SubMenu key="created_readlists" title={<span><Icon type="folder" />Created Readlists</span>} disabled={!this.state.user.is_authenticated}>
                   {
                     this.state.createdReadlists.sort((a, b) => a.name > b.name).map((readlist) => {
@@ -398,6 +390,15 @@ class AppBeforeConnect extends React.Component {
                     })
                   }
                 </SubMenu>
+
+                <Menu.Item key="group-members" disabled={!this.state.user.is_authenticated}>
+                  <Link to={ '/groups/' + coterieUUID + "/members" }><span><Icon type='usergroup-add' />Group Members</span></Link>
+                </Menu.Item>
+
+                <Menu.Item key="group-settings" disabled={!this.state.user.is_authenticated}>
+                  <Link to={ '/groups/' + coterieUUID + "/settings" }><span><Icon type='setting' />Group Setting</span></Link>
+                </Menu.Item>
+
                 <Modal
                   title="create a new readlist"
                   wrapClassName="vertical-center-modal"
