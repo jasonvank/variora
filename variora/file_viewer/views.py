@@ -39,7 +39,7 @@ def _handle_post_annotation_request(user, document, request):
     annotation.is_public = True if request.POST["is_public"] == 'true' else False
     annotation.save()
 
-    # send notification
+    # send notification to the document uploader
     if annotation.annotator.pk != document.owner.pk:
         notify.send(
             sender=annotation.annotator, recipient=document.owner,
@@ -49,6 +49,18 @@ def _handle_post_annotation_request(user, document, request):
             description=h.handle(annotation.content),
             is_public=annotation.is_public,
         )
+    # send notification to the collectors, i.e., followers
+    for user in document.collectors.all():
+        if annotation.annotator.pk != user.pk and document.owner.pk != user.pk:
+            notify.send(
+                sender=annotation.annotator, recipient=user,
+                action_object=annotation, verb='post annotation',
+                redirect_url=annotation.url,
+                image_url=annotation.annotator.portrait_url,
+                description=h.handle(annotation.content),
+                is_public=annotation.is_public,
+            )
+
     context = {
         "document": document,
         'annotation': annotation,

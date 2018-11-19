@@ -40,14 +40,14 @@ class DocumentTab extends React.Component {
           <Menu.Item key="collected-documents">
             <Link to="/collected"><Icon type="heart-o" />Collected Documents</Link>
           </Menu.Item>
-          <Menu.Item key="subscribed-documents">
-            <Link to="/subscribed"><Icon type="eye-o" />Subscribed Documents</Link>
-          </Menu.Item>
+          {/*<Menu.Item key="subscribed-documents">*/}
+            {/*<Link to="/subscribed"><Icon type="eye-o" />Subscribed Documents</Link>*/}
+          {/*</Menu.Item>*/}
         </Menu>
         <Switch>
           <Route exact path="/" component={UploadedDocuments}/>
           <Route exact path="/collected" component={CollectedDocuments}/>
-          <Route exact path="/subscribed" component={SubscribedDocuments}/>
+          {/*<Route exact path="/subscribed" component={SubscribedDocuments}/>*/}
         </Switch>
       </Content>
     )
