@@ -141,8 +141,8 @@ class FileViewerView(View):
             # Temporary access control
             # TODO: use group feature when it is implemented
 
-            if document.owner.email_address.endswith('@ijc.sg') and (isinstance(user, AnonymousUser) or not user.email_address.endswith('@ijc.sg')):
-                return HttpResponseForbidden()
+            # if document.owner.email_address.endswith('@ijc.sg') and (isinstance(user, AnonymousUser) or not user.email_address.endswith('@ijc.sg')):
+            #     return HttpResponseForbidden()
 
             #######################
 
@@ -263,9 +263,9 @@ class FileViewerView(View):
         # Temporary access control
         # TODO: use group feature when it is implemented
 
-        if not user.is_superuser:
-            if document.owner.email_address.endswith('@ijc.sg') and (isinstance(user, AnonymousUser) or not user.email_address.endswith('@ijc.sg')):
-                return render(request, "file_viewer/temp_no_access_page.html")
+        # if not user.is_superuser:
+        #     if document.owner.email_address.endswith('@ijc.sg') and (isinstance(user, AnonymousUser) or not user.email_address.endswith('@ijc.sg')):
+        #         return render(request, "file_viewer/temp_no_access_page.html")
 
         #######################
 
