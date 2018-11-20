@@ -197,10 +197,10 @@ def get_document_by_slug(request, **kwargs):
         # Temporary access control
         # TODO: use group feature when it is implemented
 
-        user = request.user
-        if not request.user.is_superuser:
-            if document.owner.email_address.endswith('@ijc.sg') and (not user.is_authenticated or not user.email_address.endswith('@ijc.sg')):
-                return HttpResponseForbidden()
+        # user = request.user
+        # if not request.user.is_superuser:
+        #     if document.owner.email_address.endswith('@ijc.sg') and (not user.is_authenticated or not user.email_address.endswith('@ijc.sg')):
+        #         return HttpResponseForbidden()
 
         #######################
 
