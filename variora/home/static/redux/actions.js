@@ -46,7 +46,7 @@ const fetchUser = () => dispatch => {
   axios.get('/api/user').then((response) => {
     var user = response.data
     if (user.is_authenticated) {
-      initializeWebPush()
+      // initializeWebPush()
     }
     dispatch({
       type: FETCH_USER,

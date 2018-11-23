@@ -44,7 +44,7 @@ import firebase from "firebase"
 const config = {
   messagingSenderId: "241959101179"
 }
-firebase.initializeApp(config); 
+firebase.initializeApp(config);
 
 const { SubMenu } = Menu
 const { Header, Content, Sider, Footer } = Layout
@@ -103,12 +103,17 @@ class AppBeforeConnect extends React.Component {
     }
 
     this.signOff = () => {
-      invalidateToken().then(() => {
-        var data = new FormData()
-        data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-        axios.post('/api/signoff', data).then(response => {
-          window.location.reload()
-        })  
+      // invalidateToken().then(() => {
+      //   var data = new FormData()
+      //   data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+      //   axios.post('/api/signoff', data).then(response => {
+      //     window.location.reload()
+      //   })
+      // })
+      var data = new FormData()
+      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+      axios.post('/api/signoff', data).then(response => {
+        window.location.reload()
       })
     }
 
