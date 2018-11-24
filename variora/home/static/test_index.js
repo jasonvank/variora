@@ -2,13 +2,18 @@ import './css/test_index.css'
 import 'regenerator-runtime/runtime'
 
 import {
-  Avatar, notification,
-  Button,
-  Col, Form,
-  Icon, Input,
-  Layout, LocaleProvider, Menu,
-  Modal, Row,
-  message, Popover, Breadcrumb,
+  Avatar,
+  Col,
+  Form,
+  Icon,
+  Input,
+  Layout,
+  LocaleProvider,
+  Menu,
+  Modal,
+  Row,
+  message,
+  notification,
 } from 'antd'
 import {
   Link,
@@ -16,31 +21,32 @@ import {
   BrowserRouter as Router,
   Switch
 } from 'react-router-dom'
+import { Provider, connect } from 'react-redux'
+import { fetchUser, setCollectedReadlists } from './redux/actions.js'
 import { getCookie, getValFromUrlParam, groupAvatarColors } from 'util.js'
 
 import { DocumentTab } from './components/document_tab.jsx'
 import { ExploreTab } from './components/explore_tab.jsx'
-import { GroupTab } from './components/group_tab/group_tab.jsx'
 import {GroupReadlistsTab} from './components/group_tab/group_readlists_tab.jsx'
-import { ReadlistTab } from './components/readlist_tab/readlist_tab.jsx'
-import { NotificationsAlertButton } from './components/notifications_alert_button.jsx'
 import { GroupSelectionButton } from './components/group_selection_button.jsx'
+import { GroupTab } from './components/group_tab/group_tab.jsx'
+import { NotificationsAlertButton } from './components/notifications_alert_button.jsx'
 import { NotificationsToggleButton } from './components/notifications_toggle_button.jsx'
-import { Provider, connect } from 'react-redux'
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { ReadlistTab } from './components/readlist_tab/readlist_tab.jsx'
 import { SearchResultTab } from './components/search_result_tab/search_result_tab.jsx'
+import TextArea from '../../../node_modules/antd/lib/input/TextArea'
 import axios from 'axios'
 import enUS from 'antd/lib/locale-provider/en_US'
-import { store } from './redux/store.js'
-import { fetchUser, setCollectedReadlists } from './redux/actions.js'
+import firebase from "firebase"
 import { initialStore } from './redux/init_store.js'
-import TextArea from '../../../node_modules/antd/lib/input/TextArea'
 // import { Home } from './components/landing_page/index.jsx'
 import { invalidateToken } from './initialize_push'
+import { store } from './redux/store.js'
+
 const FormItem = Form.Item
 
-import firebase from "firebase"
 const config = {
   messagingSenderId: "241959101179"
 }
@@ -52,7 +58,16 @@ const MenuItemGroup = Menu.ItemGroup
 const Search = Input.Search
 const CREATE_NEW_READLIST_MENU_ITEM_KEY = 'createReadlistButton'
 
+
 const GLOBAL_URL_BASE = ''
+
+
+function getCoterieUUID() {
+  if (window.location.pathname.includes('/groups/'))
+    return window.location.pathname.split('/')[2]
+  return undefined
+}
+
 
 class AppBeforeConnect extends React.Component {
   constructor() {
@@ -82,10 +97,10 @@ class AppBeforeConnect extends React.Component {
 
     this.handleSearch = (searchKey) => {
       if (searchKey.length === 0) return
-      if (window.location.pathname.includes('/groups/')) {
-        const coterieUUID = window.location.pathname.split('/')[2]
+      const coterieUUID = getCoterieUUID()
+      if (coterieUUID !== undefined)
         window.location.href = decodeURIComponent('/groups/' + coterieUUID  + '/search?key=' + searchKey)
-      } else
+      else
         window.location.href = decodeURIComponent(GLOBAL_URL_BASE + '/search?key=' + searchKey)
     }
 
@@ -197,26 +212,22 @@ class AppBeforeConnect extends React.Component {
     }
 
     this.updateReadlistsCallback = (readlistSlug) => {
-      const updatedCreatedReadlist = this.state.createdReadlists.filter(function(readlist) {return readlist.slug !== readlistSlug})
-      const updatedCollectedReadlist = this.state.collectedReadlists.filter(function(readlist) {return readlist.slug !== readlistSlug})
       this.setState({
-        createdReadlists: updatedCreatedReadlist,
-        collectedReadlists: updatedCollectedReadlist
+        createdReadlists: this.state.createdReadlists.filter(function(readlist) {return readlist.slug !== readlistSlug}),
+        collectedReadlists: this.state.collectedReadlists.filter(function(readlist) {return readlist.slug !== readlistSlug}),
       })
       let url = '/file_viewer/api/readlists'
       if (this.state.coterieUUID !== undefined)
         url = `/coterie/api/coteries/${this.state.coterieUUID}/members/me/coteriereadlists`
 
       axios.get(url).then((response) => {
-        this.setState({
-          collectedReadlists: response.data.collected_readlists,
-        })
+        this.setState({ collectedReadlists: response.data.collected_readlists, })
         this.props.setCollectedReadlists(response.data.collected_readlists)
       })
     }
 
     this.updateReadlistsNameCallback = (readlistSlug, new_name) => {
-      var updatedCreatedReadlist = this.state.createdReadlists.map(readlist => {
+      const updatedCreatedReadlist = this.state.createdReadlists.map(readlist => {
         if (readlist.slug !== readlistSlug)
           return readlist
         return Object.assign({}, readlist, {name: new_name})
@@ -289,37 +300,32 @@ class AppBeforeConnect extends React.Component {
         location={location}
       />
     }
+
+    this.updateReadlist = data => {
+      this.setState({ createdReadlists: data.created_readlists, collectedReadlists: data.collected_readlists, })
+      this.props.setCollectedReadlists(data.collected_readlists)
+    }
   }
 
   componentDidMount() {
     this.props.fetchUser()
-    axios.get('/file_viewer/api/readlists').then((response) => {
-      this.setState({
-        createdReadlists: response.data.created_readlists,
-        collectedReadlists: response.data.collected_readlists,
-      })
-      this.props.setCollectedReadlists(response.data.collected_readlists)
-    })
+
     axios.get('/coterie/api/coteries').then((response) => {
       this.setState({
         administratedCoteries: response.data.administratedCoteries,
         joinedCoteries: response.data.joinedCoteries
       }, () => {
-        if (window.location.pathname.includes('/groups/')) {
-          const coterieUUID = window.location.pathname.split('/')[2]
+        if (getCoterieUUID() !== undefined) {
+          const coterieUUID = getCoterieUUID()
           const filtered = this.state.administratedCoteries.concat(this.state.joinedCoteries).filter(c => c.uuid === coterieUUID)
           if (filtered.length === 0)
             return null
           const coterie = filtered[0]
           this.setState({coterieUUID: coterieUUID, currentCoterie: coterie})
 
-          axios.get(`/coterie/api/coteries/${coterieUUID}/members/me/coteriereadlists`).then(response => {
-            this.setState({
-              createdReadlists: response.data.created_readlists,
-              collectedReadlists: response.data.collected_readlists,
-            })
-            this.props.setCollectedReadlists(response.data.collected_readlists)
-          })
+          axios.get(`/coterie/api/coteries/${coterieUUID}/members/me/coteriereadlists`).then( response => this.updateReadlist(response.data) )
+        } else {
+          axios.get('/file_viewer/api/readlists').then( response => this.updateReadlist(response.data) )
         }
       })
     })
@@ -523,7 +529,7 @@ class AppBeforeConnect extends React.Component {
     )
 
     let groupIcon = null
-    const currentCoterieUUID = window.location.pathname.includes('/groups/') ? window.location.pathname.split('/')[2] : undefined
+    const currentCoterieUUID = getCoterieUUID()
     if (currentCoterieUUID !== undefined) {
       let currentCoterie = undefined
 
@@ -577,7 +583,7 @@ class AppBeforeConnect extends React.Component {
               <GroupSelectionButton
                 administratedCoteries={this.state.administratedCoteries} joinedCoteries={this.state.joinedCoteries}
                 setCreateCoterieModelVisible={this.setCreateCoterieModelVisible}
-                currentCoterieUUID={window.location.pathname.includes('/groups/') ? window.location.pathname.split('/')[2] : undefined}
+                currentCoterieUUID={getCoterieUUID()}
               />
               <NotificationsAlertButton />
               <NotificationsToggleButton user={ this.state.user } acceptInvitationCallback={ this.acceptInvitationCallback } />
@@ -593,7 +599,7 @@ class AppBeforeConnect extends React.Component {
           </Row>
         </Header>
 
-        { window.location.pathname.includes('/groups/') ? groupRouter(window.location.pathname.split('/')[2]) : globalRouter }
+        { getCoterieUUID() !== undefined ? groupRouter(getCoterieUUID()) : globalRouter }
       </Layout>
     )
   }
