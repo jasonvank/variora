@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+      body {
+        font-family: 'Roboto', sans-serif;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="content" style="max-width: 80vw">
+      {% block content %}
+        Your application to the group: {{ coterie.name }} has been accepted by {{ admin.nickname }}.
+        You can now find this group in your group list.
+
+        <HR SIZE=1>
+        <p style="color: #1BA39C;">This is a system generated email, please do not reply.</p>
+        <p>
+          Regards, <br />
+          Variora Team
+        </p>
+      {% endblock %}
+    </div>
+  </body>
+</html>

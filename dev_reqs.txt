@@ -23,6 +23,9 @@ django-anymail[sendgrid]
 django-anymail[mailgun]
 fcm-django
 djangorestframework
+django-storages[google]
+django-storages
+boto3
 
 ###### development ######
 selenium  # write browser-side tests
