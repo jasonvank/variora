@@ -270,7 +270,7 @@ class GroupResult extends React.Component {
           dataSource={this.state.data}
           columns={columns}
           className={'card'}
-          style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, padding: 18 }}
+          style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18, }}
           pagination={{ pageSize: 10 }}
           rowKey={record => record.pk}
           onChange={this.handleChange}

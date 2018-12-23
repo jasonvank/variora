@@ -48,12 +48,12 @@ td:hover .editable-cell-icon {
   color: #369 !important;
 }
 
-.document-link:hover {
-  text-decoration: underline;
-}
-
 .ant-table-row a {
   color: #666;
+}
+
+.ant-table-row a:hover {
+  text-decoration: underline;
 }
 
 .custom-image img {
