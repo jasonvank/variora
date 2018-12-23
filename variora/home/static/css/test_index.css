@@ -44,12 +44,16 @@ td:hover .editable-cell-icon {
   color: #108ee9;
 }
 
+.document-link {
+  color: #369 !important;
+}
+
 .document-link:hover {
-  color: #108ee9 !important;
+  text-decoration: underline;
 }
 
 .ant-table-row a {
-  color: #666 !important;
+  color: #666;
 }
 
 .custom-image img {
