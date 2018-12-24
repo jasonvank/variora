@@ -3,6 +3,7 @@ import { formatOpenDocumentUrl, getCookie, getUrlFormat, copyToClipboard } from 
 
 import React from 'react'
 import axios from 'axios'
+import TimeAgo from 'react-timeago'
 import { validateDocumentTitle } from 'home_util.js'
 
 const { Column } = Table
@@ -116,13 +117,12 @@ class UploadedDocumentsList extends React.Component {
     const columns = [{
       title: '',
       dataIndex: 'space',
-      width: '5%',
+      width: '4%',
       render: (text, record) => null
-    },
-    {
+    }, {
       title: '#',
       dataIndex: 'id',
-      width: '15%',
+      width: '6%',
       render: (text, record) => this.state.data.indexOf(record) + 1
     },
     // {
@@ -143,9 +143,14 @@ class UploadedDocumentsList extends React.Component {
         />
       ),
     }, {
+      title: 'Upload time',
+      width: '20%',
+      render: (text, record) => <TimeAgo date={record.upload_time} />,
+      // sorter: (a, b) => Date.parse(a.upload_time) > Date.parse(b.upload_time),
+    }, {
       title: 'Action',
       key: 'action',
-      width: '40%',
+      width: '30%',
       render: (text, record) => (
         <span>
           <Popconfirm

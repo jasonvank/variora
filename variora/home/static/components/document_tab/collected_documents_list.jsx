@@ -42,9 +42,14 @@ class CollectedDocumentsList extends React.Component {
   }
   render() {
     const columns = [{
+      title: '',
+      dataIndex: 'space',
+      width: '8%',
+      render: (text, record) => null
+    }, {
       title: '#',
       dataIndex: 'id',
-      width: '20%',
+      width: '12%',
       render: (text, record) => this.state.data.indexOf(record) + 1
     }, {
       title: 'Title',
