@@ -403,7 +403,7 @@ class AppBeforeConnect extends React.Component {
                 </SubMenu>
 
                 <Menu.Item key="group-members" disabled={!this.state.user.is_authenticated}>
-                  <Link to={ '/groups/' + coterieUUID + "/members" }><span><Icon type='usergroup-add' />Group Members</span></Link>
+                  <Link to={ '/groups/' + coterieUUID + "/members" }><span><Icon type='team' />Group Members</span></Link>
                 </Menu.Item>
 
                 <Menu.Item key="group-settings" disabled={!this.state.user.is_authenticated}>
