@@ -1,14 +1,10 @@
 import 'regenerator-runtime/runtime'
 
-import { Avatar, Button, Col, Dropdown, Icon, Input, Layout, Menu, Modal, Popconfirm, Row, Table } from 'antd'
+import { Avatar, Button, Col, Dropdown, Icon, Input, Layout, Menu, Modal, message, Popconfirm, Row, Table } from 'antd'
 import { getCookie, getUrlFormat } from 'util.js'
 
 import React from 'react'
 import axios from 'axios'
-
-const { SubMenu } = Menu
-const { Header, Content, Sider } = Layout
-const MenuItemGroup = Menu.ItemGroup
 
 
 class GroupAdministratorsList extends React.Component {
