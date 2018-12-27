@@ -145,7 +145,6 @@ class GroupInformationChange extends React.Component {
       // data2.append('new_desc', newDesc)
       // data2.append('csrfmiddlewaretoken', getCookie('csrftoken'))
 
-      console.log(this.state.coterieName)
       axios.post('/coterie/api/coteries/' + this.state.coteriePk + '/update', data1).then(function() {
         self.setState({loading: false})
         self.props.updateCoterieCallback(self.state.coteriePk, newName)
