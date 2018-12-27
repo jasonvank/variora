@@ -52,7 +52,7 @@ class NotificationsDetailsWrapper extends React.Component {
     return (
       <div>
         <div style={{fontWeight: 'bold'}}>
-          <a target="_blank" href={this.state.newNotification.data.redirect_url} style={{ textDecoration: 'none' }}>
+          <a target="_blank" href={this.state.newNotification.data.redirect_url} style={{ textDecoration: 'none', color: '#37b'}}>
             {title}
           </a>
         </div>

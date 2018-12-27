@@ -31,7 +31,7 @@ class GroupDetailsWrapper extends React.Component {
     const name = this.props.coterie.name
 
     return (
-      <div>
+      <div style={{cursor: 'pointer'}}>
         <div className={'group-name'}>{name}</div>
         { description.length === 0 ? null :
           <div className="notification-alert-list-wrapper" title={description}>{description}</div>
