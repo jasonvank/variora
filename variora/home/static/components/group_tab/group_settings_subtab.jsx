@@ -137,6 +137,12 @@ class GroupInformationChange extends React.Component {
       const newName = this.state.coterieName
       // const newDesc = this.state.coterieDescription
 
+      if (newName == '') {
+        self.setState({loading: false})
+        notification['warning']({ message: 'Group name cannot be empty', duration: 4, })
+        return
+      }
+
       var data = new FormData()
       data.append('new_name', newName)
       // data.append('new_desc', newDesc)
@@ -145,7 +151,7 @@ class GroupInformationChange extends React.Component {
       axios.post('/coterie/api/coteries/' + this.state.coteriePk + '/update', data).then(function() {
         self.props.updateCoterieCallback(self.state.coteriePk, newName)
         self.setState({loading: false})
-        notification['success']({ message: 'Group info updated', duration: 2,})
+        notification['success']({ message: 'Group info updated', duration: 4, })
       })
     }
   }
