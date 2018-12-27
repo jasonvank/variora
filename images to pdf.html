@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <script src="https://unpkg.com/jspdf@latest/dist/jspdf.min.js"></script>
+
+    <script
+    src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
+    crossorigin="anonymous"></script>
+
+    <title>Document</title>
+</head>
+<body>
+    <form action="">
+        <input type="file" onchange="addFile(this.files)">
+        <input type="file" onchange="addFile(this.files)">
+        <button type="button" id="btn"> to pdf </button>
+    </form>
+
+</body>
+<script>
+var images = []
+var reader = new FileReader()
+
+reader.onload = function() { // file is loaded
+    var img = new Image()
+    img.onload = function() {
+        images.push(img)
+        // console.log(images)
+        // console.log(img.width)
+        // console.log(img.height)
+        document.getElementById("btn").disabled = false
+    };
+    img.src = reader.result;
+}
+
+function addFile(file) {
+    document.getElementById("btn").disabled = true
+    file = file[0]
+    reader.readAsDataURL(file);
+}
+
+$(document).ready(function() {
+    $('#btn').on('click', function() {
+        var doc = new jsPDF()  //new jsPDF('p', 'mm', [297, 210])
+        var numPage = 1
+
+        doc.text('Made with Variora', 8, 8)
+        
+        for (var pageIndex = 1; pageIndex <= images.length; pageIndex++) {
+            var img = images[pageIndex - 1]
+            if (pageIndex > 1) {
+                doc.addPage()
+                doc.setPage(pageIndex)
+            }
+            var height, width, x, y = 0
+            if (img.height / img.width > 297 / 210) {
+                height = 297
+                width = 297 / img.height * img.width
+                y = 0
+                x = (210 - width) / 2
+            } else {
+                width = 210
+                height = 210 / img.width * img.height
+                x = 0
+                y = (297 - height) / 2
+            }
+            doc.addImage(img, 'JPEG', x, y, width, height)
+        }
+
+        doc.save('aaaaaaaaaaaaaaaaaaaaaa.pdf')
+    })
+})
+
+</script>
+</html>

@@ -1,5 +1,6 @@
 import os
 import random
+from datetime import datetime, timedelta
 from threading import Thread
 
 import kronos
@@ -10,18 +11,18 @@ from django.core.files.base import ContentFile
 from django.core.management import call_command
 from django.db.models import Count, IntegerField, OuterRef, Subquery
 from django.template.loader import render_to_string
+from django.utils import timezone
 from notifications.models import Notification
 from pdfrw import PdfReader, PdfWriter
 from wand.color import Color
 from wand.image import Image
 
+from coterie.models import (InvitationCode,
+                            NonRegisteredUserTempCoterieInvitation)
 from file_viewer.models import Document, DocumentThumbnail
 from home.api.views_notifications import NotificationEncoder
-from coterie.models import NonRegisteredUserTempCoterieInvitation, InvitationCode
 from home.models import User, UserSetting
 from variora.utils import send_email_from_noreply
-from datetime import datetime, timedelta
-from django.utils import timezone
 
 
 def _generate_thumbnail_image_content_file(document):
@@ -166,8 +167,3 @@ def send_email_notification_kronjob():
 #         receiver_list=['yuyang.royl8@gmail.com'],
 #         content='This is a test email',
 #     )
-
-
-
-
-
