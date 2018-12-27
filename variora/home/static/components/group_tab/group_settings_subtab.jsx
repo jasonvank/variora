@@ -126,7 +126,7 @@ class GroupInformationChange extends React.Component {
       'loading': false,
       'coteriePk': props.coteriePk,
       'coterieName': props.coterieName,
-
+      // 'coterieDesc': props.coterieDesc,
     }
 
     this.handleSubmit = (e) => {
@@ -135,20 +135,17 @@ class GroupInformationChange extends React.Component {
       e.preventDefault()
       this.setState({loading: true})
       const newName = this.state.coterieName
-      // const newDesc = this.state.readlistDescription
+      // const newDesc = this.state.coterieDescription
 
-      var data1 = new FormData()
-      data1.append('new_name', newName)
-      data1.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+      var data = new FormData()
+      data.append('new_name', newName)
+      // data.append('new_desc', newDesc)
+      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
 
-      // var data2 = new FormData()
-      // data2.append('new_desc', newDesc)
-      // data2.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-
-      axios.post('/coterie/api/coteries/' + this.state.coteriePk + '/update', data1).then(function() {
-        self.setState({loading: false})
+      axios.post('/coterie/api/coteries/' + this.state.coteriePk + '/update', data).then(function() {
         self.props.updateCoterieCallback(self.state.coteriePk, newName)
-         notification['success']({ message: 'Group info updated', })
+        self.setState({loading: false})
+        notification['success']({ message: 'Group info updated', duration: 2,})
       })
     }
   }
@@ -158,6 +155,7 @@ class GroupInformationChange extends React.Component {
     this.setState({
       coteriePk: nextProps.coteriePk,
       coterieName: nextProps.coterieName,
+      coterieDesc: nextProps.coterieDesc,
     })
   }
 
@@ -186,9 +184,9 @@ class GroupInformationChange extends React.Component {
               {/*{...formItemLayout}*/}
             {/*>*/}
               {/*<TextArea rows={6}*/}
-                {/*value={this.state.readlistDescription}*/}
+                {/*value={this.state.coterieDesc}*/}
                 {/*onChange={async (e) => {*/}
-                  {/*await this.setState({ readlistDescription: e.target.value })*/}
+                  {/*await this.setState({ coterieDescription: e.target.value })*/}
                 {/*}}*/}
               {/*/>*/}
             {/*</FormItem>*/}
