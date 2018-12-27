@@ -160,7 +160,6 @@ class GroupInformationChange extends React.Component {
       coteriePk: nextProps.coteriePk,
       coterieName: nextProps.coterieName,
     })
-    console.log("tttt", nextProps)
   }
 
   render() {
