@@ -22,6 +22,7 @@ class GroupTab extends React.Component {
       coteriePk: props.coteriePk,
       coterieUUI: props.coterieUUI,
       isAdmin: props.isAdmin,
+      coterieName: props.coterieName,
     }
   }
 
@@ -30,6 +31,7 @@ class GroupTab extends React.Component {
       coteriePk: nextProps.coteriePk,
       coterieUUI: nextProps.coterieUUI,
       isAdmin: nextProps.isAdmin,
+      coterieName: nextProps.coterieName,
     })
   }
 
@@ -76,7 +78,7 @@ class GroupTab extends React.Component {
           />
 
           <Route exact path={SUB_URL_BASE + this.state.coterieUUI + '/settings'} render={() =>
-            <GroupSettingsSubtab isAdmin={this.state.isAdmin} coteriePk={this.state.coteriePk} removeCoterieCallback={this.props.removeCoterieCallback} />}
+            <GroupSettingsSubtab isAdmin={this.state.isAdmin} coteriePk={this.state.coteriePk} coterieName={this.state.coterieName} removeCoterieCallback={this.props.removeCoterieCallback} updateCoterieCallback={this.props.updateCoterieCallback} />}
           />
 
           <Route exact path={SUB_URL_BASE + this.state.coterieUUI + '/uploads'} render={() =>
