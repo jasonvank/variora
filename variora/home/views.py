@@ -16,27 +16,6 @@ from home.models import UploadedImage, User
 from variora.utils import *
 
 
-def display_obsolete_home_page(request):
-    popular_documents = Document.objects.order_by('-num_visit')
-    if len(popular_documents) > 6:
-        popular_documents = popular_documents[:6]
-
-    popular_documents_with_cover = []
-    for i in range(len(popular_documents)):
-        popular_documents_with_cover.append((popular_documents[i], "/static/assets/img/cover" + str(i) + ".jpg"))
-
-    # popular_document_ids = [1,2,3,4,5,6]
-    # popular_documents_with_cover = []
-    # for i in range(6):
-    #     popular_documents_with_cover.append((Document.objects.get(id=popular_document_id[i]),
-    #                                         "/static/assets/img/cover" + str(i) + ".jpg"))
-
-    context = {
-        'popular_documents_with_cover': popular_documents_with_cover,
-    }
-    return render(request, "home/home_page.html", context)
-
-
 def display_sign_up_page(request):
     return render(request, "home/sign_up_page.html")
 
@@ -46,6 +25,10 @@ def display_sign_in_page(request):
     if should_return_pwa(request) and settings.ENABLE_PWA:
         return render(request, 'home/pwa.html')
     return render(request, "home/sign_in_page.html", {'DEBUG': settings.DEBUG})
+
+
+def display_make_pdf_page(request):
+    return render(request, "home/images_to_pdf.html", {'DEBUG': settings.DEBUG})
 
 
 # temp_user_information_dic is a python dictionary

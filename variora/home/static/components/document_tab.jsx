@@ -155,6 +155,9 @@ class UploadedDocumentsBeforeConnect extends React.Component {
               <div>
                 <Button type="primary" icon="upload" style={{ margin: 8 }} loading={this.state.uploadBtnLoading} onClick={this.uploadLocalDocument}>upload</Button>
               </div>
+              <div style={{ margin: '8px 8px 0px 8px' }}>
+                <a href="/make-pdf" target='_blank'>convert image(s) to PDF</a>
+              </div>
             </Col>
             <Col span={12} style={{ textAlign: 'left' }}>
               <Input

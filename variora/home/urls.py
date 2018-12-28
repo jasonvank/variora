@@ -4,8 +4,6 @@ from django.views.generic import TemplateView
 from . import views
 
 urlpatterns = [  # obsolete UI pages
-    url(r'^obsolete_home$', views.display_obsolete_home_page),
-
     url(r'^sign_up', views.display_sign_up_page),
 
     url(r'^handle_sign_up', views.handle_sign_up, name="handle_sign_up"),
@@ -16,6 +14,7 @@ urlpatterns = [  # obsolete UI pages
     # url(r'^jason_test', views.jason_test),
 
     url(r'^sign-in$', views.display_sign_in_page),
+    url(r'^make-pdf$', views.display_make_pdf_page),
 
     url(r'^sw$', views.service_worker),
 
