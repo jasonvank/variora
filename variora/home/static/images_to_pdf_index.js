@@ -147,9 +147,9 @@ class Main extends React.Component {
           <a href='/'><img src="/media/logo.png" height={66} /></a>
         </Row> */}
 
-        <Row style={{marginTop: '6%', marginBottom: '6%'}}>
+        <Row style={{marginTop: '8%', marginBottom: '6%'}}>
           <Col span={8} offset={4}>
-            <Dragger {...props} style={{padding: 18}}>
+            <Dragger {...props} style={{padding: 18}} accept='image/png, image/jpeg'>
               <p className="ant-upload-drag-icon">
                 <Icon type="inbox" />
               </p>
@@ -158,13 +158,15 @@ class Main extends React.Component {
             </Dragger>
           </Col>
 
-          <Col span={8} style={{padding: 28}}>
+          <Col span={8} style={{paddingLeft: 28}}>
             <Form.Item label="Name of the document">
               <Input value={this.state.documentName} onChange={this.handleDocNameChange}></Input>
             </Form.Item>
-            <Button type='primary' style={{marginTop: 8}} className='login-form-button' onClick={this.makePdf}>
+            <Button type='primary' className='login-form-button' onClick={this.makePdf}>
               Make a PDF document from the selected images
             </Button>
+            <br /><br />
+            For more features and customizability, we recommend <a target='_blank' href='https://www.camscanner.com/user/download'>CamScanner</a>
           </Col>
         </Row>
 
