@@ -1,7 +1,7 @@
 import './css/sign_in_index.css'
 import 'regenerator-runtime/runtime'
 
-import { Button, Row, Col, Form, Icon, Input, Layout, LocaleProvider, Menu, Modal, Upload, notification } from 'antd'
+import { Button, Row, Col, Form, Icon, Input, Radio, Layout, LocaleProvider, Menu, Modal, Upload, notification } from 'antd'
 
 import React from 'react'
 import ReactDOM from 'react-dom'
@@ -19,6 +19,7 @@ class Main extends React.Component {
       previewVisible: false,
       previewImage: '',
       fileList: [],
+      documentName: 'PDF made by Variora'
     }
 
     this.fileReader = new FileReader()
@@ -85,6 +86,10 @@ class Main extends React.Component {
       }
     }
 
+    this.handleDocNameChange = (e) => {
+      this.setState({documentName: e.target.value})
+    }
+
     this.makePdf = () => {
       var doc = new jsPDF()  //new jsPDF('p', 'mm', [297, 210])
       var numPage = 1
@@ -112,7 +117,7 @@ class Main extends React.Component {
         doc.addImage(img, 'JPEG', x, y, width, height)
       }
 
-      doc.save('PDF made by Variora.pdf')
+      doc.save(this.state.documentName + '.pdf')
     }
   }
 
@@ -143,7 +148,7 @@ class Main extends React.Component {
         </Row> */}
 
         <Row style={{marginTop: '6%', marginBottom: '6%'}}>
-          <Col span={12} offset={6}>
+          <Col span={8} offset={4}>
             <Dragger {...props} style={{padding: 18}}>
               <p className="ant-upload-drag-icon">
                 <Icon type="inbox" />
@@ -151,9 +156,14 @@ class Main extends React.Component {
               <p className="ant-upload-hint">Click or drag image(s) to this area. They will be put into one PDF document.</p>
               {/* <p className="ant-upload-hint">Support for a single or bulk upload. Strictly prohibit from uploading company data or other band files</p> */}
             </Dragger>
+          </Col>
 
-            <Button type='primary' style={{marginTop: 18}} className='login-form-button' onClick={this.makePdf}>
-              Merge into one PDF document
+          <Col span={8} style={{padding: 28}}>
+            <Form.Item label="Name of the document">
+              <Input value={this.state.documentName} onChange={this.handleDocNameChange}></Input>
+            </Form.Item>
+            <Button type='primary' style={{marginTop: 8}} className='login-form-button' onClick={this.makePdf}>
+              Make a PDF document from the selected images
             </Button>
           </Col>
         </Row>
