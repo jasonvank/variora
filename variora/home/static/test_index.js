@@ -226,6 +226,15 @@ class AppBeforeConnect extends React.Component {
       })
     }
 
+    this.updateCoterieCallback = (coteriePk, new_name) => {
+      const updatedAdministratedCoteries = this.state.administratedCoteries.map(coterie => {
+        if (coterie.pk !== coteriePk)
+          return coterie
+        return Object.assign({}, coterie, {name: new_name})
+      })
+      this.setState({ administratedCoteries: updatedAdministratedCoteries })
+    }
+
     this.updateReadlistsNameCallback = (readlistSlug, new_name) => {
       const updatedCreatedReadlist = this.state.createdReadlists.map(readlist => {
         if (readlist.slug !== readlistSlug)
@@ -258,8 +267,10 @@ class AppBeforeConnect extends React.Component {
       return (
         <GroupTab
           removeCoterieCallback={this.removeCoterieCallback}
+          updateCoterieCallback={this.updateCoterieCallback}
           isAdmin={isAdmin} match={match} location={location}
           coteriePk={filtered[0].pk} coterieUUI={coterieUUID}
+          coterieName={filtered[0].name}
         />
       )
     }

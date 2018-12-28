@@ -1,18 +1,21 @@
 import 'regenerator-runtime/runtime'
 
-import {Col, Collapse, Icon, Popconfirm, Row, Tooltip} from 'antd'
+import {Button, Col, Collapse, Form, Icon, Input, notification, Popconfirm, Row, Spin, Tooltip} from 'antd'
 
 
 import React from 'react'
 import axios from 'axios'
 import { getCookie } from 'util.js'
 
+const { TextArea } = Input
+const FormItem = Form.Item
 
 class GroupSettingsSubtab extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      'coteriePk': props.coteriePk
+      'coteriePk': props.coteriePk,
+      'coterieName': props.coterieName,
     }
     this.deleteGroup = () => {
       var self = this
@@ -36,7 +39,8 @@ class GroupSettingsSubtab extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      coteriePk: nextProps.coteriePk
+      coteriePk: nextProps.coteriePk,
+      coterieName: nextProps.coterieName,
     })
   }
 
@@ -108,11 +112,99 @@ class GroupSettingsSubtab extends React.Component {
     return (
       <div>
         { this.props.isAdmin ? deleteDangerZone : exitDangerZone }
+        { this.props.isAdmin ? <GroupInformationChange coteriePk = {this.state.coteriePk} coterieName = {this.state.coterieName} updateCoterieCallback = {this.props.updateCoterieCallback} /> : null}
       </div>
     )
   }
 }
 
+
+class GroupInformationChange extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      'loading': false,
+      'coteriePk': props.coteriePk,
+      'coterieName': props.coterieName,
+      // 'coterieDesc': props.coterieDesc,
+    }
+
+    this.handleSubmit = (e) => {
+      var self = this
+
+      e.preventDefault()
+      this.setState({loading: true})
+      const newName = this.state.coterieName
+      // const newDesc = this.state.coterieDescription
+
+      if (newName == '') {
+        self.setState({loading: false})
+        notification['warning']({ message: 'Group name cannot be empty', duration: 4, })
+        return
+      }
+
+      var data = new FormData()
+      data.append('new_name', newName)
+      // data.append('new_desc', newDesc)
+      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+
+      axios.post('/coterie/api/coteries/' + this.state.coteriePk + '/update', data).then(function() {
+        self.props.updateCoterieCallback(self.state.coteriePk, newName)
+        self.setState({loading: false})
+        notification['success']({ message: 'Group info updated', duration: 4, })
+      })
+    }
+  }
+
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      coteriePk: nextProps.coteriePk,
+      coterieName: nextProps.coterieName,
+      coterieDesc: nextProps.coterieDesc,
+    })
+  }
+
+  render() {
+    const formItemLayout = {
+      labelCol: { span: 8 },
+      wrapperCol: { span: 8 },
+    }
+
+    const buttonItemLayout = {
+      wrapperCol: { span: 8, offset: 8 },
+    }
+    return (
+      <Spin spinning={this.state.loading}>
+        <div className={'card'} style={{ overflow: 'auto', marginTop: 16, padding: 18 }}>
+          <Form style={{ marginTop: 24 }} onSubmit={this.handleSubmit}>
+            <FormItem
+              label="Group Name"
+              {...formItemLayout}
+            >
+              <Input value={this.state.coterieName} onChange={async (e) => await this.setState({ coterieName: e.target.value })}/>
+
+            </FormItem>
+            {/*<FormItem*/}
+              {/*label="Description"*/}
+              {/*{...formItemLayout}*/}
+            {/*>*/}
+              {/*<TextArea rows={6}*/}
+                {/*value={this.state.coterieDesc}*/}
+                {/*onChange={async (e) => {*/}
+                  {/*await this.setState({ coterieDescription: e.target.value })*/}
+                {/*}}*/}
+              {/*/>*/}
+            {/*</FormItem>*/}
+            <FormItem {...buttonItemLayout}>
+              <Button type="primary" htmlType="submit">Submit</Button>
+            </FormItem>
+          </Form>
+        </div>
+      </Spin>
+    )
+  }
+}
 
 export { GroupSettingsSubtab }
 

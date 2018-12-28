@@ -35,6 +35,12 @@ class ReadlistSettingsSubtab extends React.Component {
       const newName = this.state.readlistName
       const newDesc = this.state.readlistDescription
 
+      if (newName == '') {
+        this.setState({loading: false})
+        notification['warning']({ message: 'Readlist name cannot be empty', duration: 4, })
+        return
+      }
+
       var data1 = new FormData()
       data1.append('new_name', newName)
       data1.append('csrfmiddlewaretoken', getCookie('csrftoken'))
