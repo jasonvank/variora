@@ -22,9 +22,7 @@ def _delete_coteriedocument(document, user):
 
 def _download_coteriedocument(document):
     if document.file_on_server:
-        file_model = document.unique_file
-        file_position = file_model.file_field.storage.path(file_model.file_field)
-        content = open(file_position, 'rb')
+        content = document.unique_file.file_field.read()
     else:
         content = urllib.urlopen(document.external_url)
     response = HttpResponse(content, content_type='application/pdf')
