@@ -197,7 +197,7 @@ class GroupInformationChange extends React.Component {
               {/*/>*/}
             {/*</FormItem>*/}
             <FormItem {...buttonItemLayout}>
-              <Button type="primary" htmlType="submit">Submit</Button>
+              <Button type="primary" htmlType="submit">Update</Button>
             </FormItem>
           </Form>
         </div>

@@ -1,7 +1,6 @@
 import random
 from threading import Thread
 
-from django.contrib.auth import get_user
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
@@ -145,7 +144,7 @@ def create_invitation(request):
 class InvitationsView(View):
     def get(self, request, **kwargs):
         GET = request.GET
-        user = get_user(request)
+        user = request.user
         if not user.is_authenticated:
             return JsonResponse([], encoder=CoterieInvitationEncoder, safe=False)
         try:
@@ -174,7 +173,7 @@ class InvitationView(View):
 
     def post(self, request, pk, operation):
         try:
-            user = get_user(request)
+            user = request.user
             invitation = CoterieInvitation.objects.get(pk=pk)
             coterie = invitation.coterie
             invitee = invitation.invitee

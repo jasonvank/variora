@@ -91,12 +91,11 @@ def _update_coterie(request, coterie, user):
 
 
 def _join_coterie_with_invitation_code(request, coterie, user):
-    post = request.POST
-    if 'invitation_code' not in post or not user.is_authenticated:
+    POST = request.POST
+    if 'invitation_code' not in POST or not user.is_authenticated:
         return HttpResponse(status=403)
     try:
-        invitation_codes = InvitationCode.objects.filter(code=post['invitation_code'], coterie=coterie)
-        print(invitation_codes)
+        invitation_codes = InvitationCode.objects.filter(code=POST['invitation_code'], coterie=coterie)
         if not invitation_codes.exists():
             return HttpResponse(status=404)
         invitation_code = invitation_codes.first()
@@ -105,6 +104,7 @@ def _join_coterie_with_invitation_code(request, coterie, user):
             invitation_code.invitation.delete()
         if invitation_code.nonregistered_user_temp_invitation is not None:
             invitation_code.nonregistered_user_temp_invitation.delete()
+
         # I am still considering whether to delete the code since they will be cleared periodically
         invitation_code.delete()
 

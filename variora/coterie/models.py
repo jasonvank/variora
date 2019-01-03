@@ -26,6 +26,9 @@ class Coterie(ModelWithCleanUUID):
 
 
 class CoterieInvitation(ModelWithCleanUUID):
+    """
+    invitation sent from inviter to a registered user (invitee)
+    """
     uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
     coterie = models.ForeignKey(Coterie)
     inviter = models.ForeignKey(User, related_name='sent_invitation_set')
@@ -37,6 +40,9 @@ class CoterieInvitation(ModelWithCleanUUID):
 
 
 class NonRegisteredUserTempCoterieInvitation(ModelWithCleanUUID):
+    """
+    invitation sent from inviter to a unregtistered email address
+    """
     uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
     coterie = models.ForeignKey(Coterie)
     inviter = models.ForeignKey(User, related_name='sent_nonregisteredusertempinvitation_set')
@@ -50,7 +56,8 @@ class InvitationCode(ModelWithCleanUUID):
     code = models.CharField(max_length=64, null=False, blank=False)
     coterie = models.ForeignKey(Coterie)
     invitation = models.OneToOneField(
-        CoterieInvitation, null=True, blank=True,
+        CoterieInvitation,
+        null=True, blank=True,
         related_name='invitation_code'
     )
     nonregistered_user_temp_invitation = models.OneToOneField(
@@ -75,12 +82,17 @@ def _temp_invitation_to_real_invitation(temp_invitation, user):
         code.invitation = real_invitation
         code.nonregistered_user_temp_invitation = None
         code.save()
+
     temp_invitation.delete()
 
 
 @receiver(models.signals.post_save, sender=User)
 def change_temp_invitations_to_real_ones(sender, instance, created, **kwargs):
-    if created:
+    """
+    when an unregistered email address is registered so that a new user is created,
+    migrate the correlated NonRegisteredUserTempCoterieInvitation to CoterieInvitation
+    """
+    if created:  # when saved for creating a user rather than updating a user
         for temp_invitation in NonRegisteredUserTempCoterieInvitation.objects.filter(invitee_email=instance.email_address):
             _temp_invitation_to_real_invitation(temp_invitation, instance)
 
@@ -164,9 +176,11 @@ class CoterieComment(ModelWithCleanUUID):
     commenter = models.ForeignKey(User)
     document_this_comment_belongs = models.ForeignKey(CoterieDocument)
     content = models.TextField()
-    reply_to_comment = models.ForeignKey("CoterieComment",
-                                         related_name="reply_set",
-                                         null=True, blank=True)
+    reply_to_comment = models.ForeignKey(
+        "CoterieComment",
+        related_name="reply_set",
+        null=True, blank=True
+    )
     num_like = models.IntegerField(default=0)
     is_public = models.BooleanField(default=True)
 

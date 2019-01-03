@@ -8,14 +8,14 @@ from models import (Coterie, CoterieAnnotation, CoterieAnnotationReply,
 
 class CoterieModelAdmin(admin.ModelAdmin):
     list_display = ["id", "clean_uuid", "name", 'creator', "description"]
-    list_filter = ["name", "administrators", "members"]
+    list_filter = []
     search_fields = ["id", "uuid", "name", "administrators__pk", "members__pk"]
     filter_horizontal = ["administrators", "members"]
 
 
 class CoterieInvitationAdmin(admin.ModelAdmin):
     list_display = ["id", "clean_uuid", "inviter", "invitee", "acceptance"]
-    list_filter = ["inviter", "invitee", "acceptance"]
+    list_filter = ["acceptance"]
     search_fields = ["id", "uuid", "inviter__pk", "invitee__pk"]
 
 
@@ -37,8 +37,8 @@ class CoterieApplicationAdmin(admin.ModelAdmin):
 
 class CoterieDocumentModelAdmin(admin.ModelAdmin):
     list_display = ["id", "clean_uuid", "title", "unique_file", "owner", "size"]
-    list_filter = ["title", "unique_file", "owner"]
-    search_fields = ["id", "uuid", "title", "unique_file__pk", "owner__pk"]
+    list_filter = []
+    search_fields = ["id", "uuid", "title", "unique_file__pk", "owner__pk", "owner__name"]
 
 
 class CoterieReadlistModelAdmin(admin.ModelAdmin):
