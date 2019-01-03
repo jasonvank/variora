@@ -105,8 +105,10 @@ function findTargetAnnotation(e, allAnnotationsInThisPage, pageJQ) {
 
 function addAnnotationRelatedListenerWithin(jq) {
   const appName = window.location.pathname.split('/')[1]
+
   jq.find('code').addClass('prettyprint')
   PR.prettyPrint()
+
 
   jq.find('.AnnotationBlock').on({
     mouseover: function() {
@@ -123,6 +125,7 @@ function addAnnotationRelatedListenerWithin(jq) {
     }
   })
 
+
   // jq.find(".AnnotationBlock").on("click", function(e) { // scroll to the corresponding Anotation when clicking a certain AnnotationBlock
   //   if ($(e.target).parents().addBack().hasClass('btn'))
   //     return
@@ -135,11 +138,13 @@ function addAnnotationRelatedListenerWithin(jq) {
   //   }, 240)
   // })
 
+
   jq.find('.AnnotationDirectButton').on('click', function(e) {
     var annotation_id = $(this).parents('.AnnotationDiv').attr('annotation_id')
     var Annotation = $('.Annotation[annotation_id="{0}"]'.format(annotation_id))
     scrollAnnotationIntoView(Annotation)
   })
+
 
   jq.find('.PostReplyReplyButton').on('click', function() {
     if (is_authenticated) {
@@ -171,6 +176,7 @@ function addAnnotationRelatedListenerWithin(jq) {
       layer.msg('You need to <a href="/sign-in" style="color: #ECECEC; text-decoration: underline">log in</a> first')
   })
 
+
   jq.find('.DeleteAnnotationReplyButton').on('click', function() {
     var index = layer.load(1, {
       shade: 0.18
@@ -190,6 +196,7 @@ function addAnnotationRelatedListenerWithin(jq) {
       }
     })
   })
+
 
   jq.find('.PostAnnotationReplyButton').on('click', function() {
     if (is_authenticated) {
@@ -220,6 +227,7 @@ function addAnnotationRelatedListenerWithin(jq) {
       layer.msg('You need to <a href="/sign-in" style="color: #ECECEC; text-decoration: underline">log in</a> first')
   })
 
+
   jq.find('.delete-annotation-btn').on('click', function() {
     const index = layer.load(1, { shade: 0.18 })  // 0 represent the style, can be 0-2
     const annotationID = this.value
@@ -237,6 +245,7 @@ function addAnnotationRelatedListenerWithin(jq) {
     })
   })
 
+
   jq.find('.share-annotation-btn').on('click', function() {
     const uuid = $(this).parents('.AnnotationDiv').attr('annotation_uuid')
     const url = [location.protocol, '//', location.host, location.pathname].join('') + '?annotation=' + uuid
@@ -248,6 +257,7 @@ function addAnnotationRelatedListenerWithin(jq) {
       layer.msg('URL copied', { time: 1228 })
     })
   })
+
 
   jq.find('.like-annotation-btn').on('click', function() {
     if (is_authenticated) {
@@ -274,6 +284,7 @@ function addAnnotationRelatedListenerWithin(jq) {
       layer.msg('You need to <a href="/sign-in" style="color: #ECECEC; text-decoration: underline">log in</a> first')
   })
 
+
   jq.find('.like-annotation-reply-btn').on('click', function() {
     if (is_authenticated) {
       const $this = $(this)
@@ -299,6 +310,7 @@ function addAnnotationRelatedListenerWithin(jq) {
       layer.msg('You need to <a href="/sign-in" style="color: #ECECEC; text-decoration: underline">log in</a> first')
   })
 
+
   jq.find('.ReplyAnnotationButton').on('click', function() {
     const thisForm = $(this).parents('footer').children('form')
     const thisFormEle = thisForm[0]
@@ -321,6 +333,7 @@ function addAnnotationRelatedListenerWithin(jq) {
     // }})
   })
 
+
   jq.find('.EditFormToggleButton').on('click', function() {
     let $this = $(this)
     $this.parents('.AnnotationDiv').find('.AnnotationBlock').css('display', 'none')
@@ -338,6 +351,7 @@ function addAnnotationRelatedListenerWithin(jq) {
       }
     })
   })
+
 
   jq.find('.annotation-reply-edit-form-toggle-btn').on('click', function() {
     let $this = $(this)
@@ -357,6 +371,7 @@ function addAnnotationRelatedListenerWithin(jq) {
     })
   })
 
+
   jq.find('.cancel-annotation-edit-btn').on('click', function() {
     let $this = $(this)
     let annotationDivJQ = $this.parents('.AnnotationDiv')
@@ -366,6 +381,7 @@ function addAnnotationRelatedListenerWithin(jq) {
     tinyMCEEditor.setContent('')
   })
 
+
   jq.find('.cancel-annotation-reply-edit-btn').on('click', function() {
     let $this = $(this)
     $this.parents('.annotation-reply-div').find('.annotation-reply-block').css('display', 'block')
@@ -373,6 +389,7 @@ function addAnnotationRelatedListenerWithin(jq) {
     let tinyMCEEditor = tinyMCE.get($(this).parents('.annotation-reply-div').find('.annotation-reply-edit-form').find('textarea').attr('id'))
     tinyMCEEditor.setContent('')
   })
+
 
   jq.find('.PostAnnotationEditButton').on('click', function() {
     let $this = $(this)
@@ -392,11 +409,12 @@ function addAnnotationRelatedListenerWithin(jq) {
         annotationDivJQ.find('.AnnotationBlock').fadeIn(666)
         annotationDivJQ.find('.AnnotationBlock').css('display', 'block')
         tinyMCEEditor.setContent('')
-        renderMathJax()
+        addAnnotationRelatedListenerWithin(annotationDivJQ)
         tinymceInit()
       }
     })
   })
+
 
   jq.find('.PostAnnotationReplyEditButton').on('click', function() {
     let $this = $(this)
@@ -416,11 +434,12 @@ function addAnnotationRelatedListenerWithin(jq) {
         annotationReplyDiv.find('.annotation-reply-block').fadeIn(666)
         annotationReplyDiv.find('.annotation-reply-block').css('display', 'block')
         tinyMCEEditor.setContent('')
-        renderMathJax()
+        addAnnotationRelatedListenerWithin(annotationReplyDiv)
         tinymceInit()
       }
     })
   })
+
 
   jq.find('.Annotation').addBack('.Annotation').on('mouseover', function() {
     const pageJQ = $(this).parent('.page_div').children('.PageCanvas')
@@ -450,6 +469,7 @@ function addAnnotationRelatedListenerWithin(jq) {
     })
   })
 
+
   jq.find('.Annotation').addBack('.Annotation').on('mouseout', function(e) {
     if (e.which != 0)
       return
@@ -460,6 +480,23 @@ function addAnnotationRelatedListenerWithin(jq) {
       $('.AnnotationBlock[annotation_id="{0}"]'.format($(a).attr('annotation_id'))).css('box-shadow', 'none')
       $(a).off('mousemove')
     }
+  })
+
+
+  jq.find('.annotation-content img, .annotation-reply-content img').on('click', function(e) {
+    layer.photos({
+      photos: {
+        'data': [{
+          'src': $(this).attr('src'),
+          'alt': undefined,
+        }]
+      },
+      shift: 5,
+      tab: function(pic, layero){
+        $('.layui-layer-imgsee').find('em').remove()
+        $('.layui-layer-imgbar').remove()
+      }
+    })
   })
 
   renderMathJax()

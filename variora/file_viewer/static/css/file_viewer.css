@@ -187,6 +187,11 @@ input {
   height: auto;
 }
 
+.annotation-content img,
+.annotation-reply-content img {
+  cursor: pointer;
+}
+
 .btn {
   padding: 6px 8px
 }
