@@ -230,7 +230,7 @@ class GroupApplicationList extends React.Component {
         dataSource={this.state.data}
         columns={columns}
         pagination={false}
-        expandedRowRender={record => <p style={{ margin: 0 }}>{'Message from this applicant: ' + record.application_message}</p>}
+        expandedRowRender={record => <p><b>{'Message from this applicant: '}</b><span style={{ margin: 0 }}>{record.application_message}</span></p>}
         title={ () => <span><Icon type="usergroup-add" /> Group Applications</span> }
         size='middle'
       />
