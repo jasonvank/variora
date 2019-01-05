@@ -99,15 +99,14 @@ td:hover .editable-cell-icon {
   -webkit-box-orient: vertical !important;
 }
 
-.add-to-readlist-wrapper {
+.add-to-readlists-wrapper {
   font-size: 14px!important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   display: -webkit-box !important;
-  padding: 15px 20px 15px !important;
+  padding: 15px 12px 15px !important;
   -webkit-line-clamp: 2 !important;
   -webkit-box-orient: vertical !important;
-  overflow-x: 12px!important;
   flex-direction: row;
   margin-left: 2px!important;
   border-bottom: 0.1px solid;
@@ -115,11 +114,17 @@ td:hover .editable-cell-icon {
 
 }
 
-.add-to-readlist-title-wrapper {
-    padding: 8px 20px 10px;
-    border-bottom: 0.1px solid;
-    font-size: 16px;
-    display:inline-block;
+.add-to-readlists-title-wrapper {
+  padding: 8px 15px 10px;
+  border-bottom: 0.1px solid;
+  font-size: 16px;
+}
+
+.add-to-readlists-popover {
+  max-width: 240px !important;
+  max-height: 350px !important;
+  overflow-y: scroll !important;
+  background-color: #FFFFFF !important;
 }
 
 .custom-card-text-wrapper {

@@ -289,12 +289,12 @@ class AddToReadlist extends React.Component {
   render() {
     const readlists = this.state.createdReadlists.map(readlist => {
       return (
-        <div className="add-to-readlist-wrapper" key={readlist.slug}>
+        <div className="add-to-readlists-wrapper" key={readlist.slug}>
           <Checkbox
             style={{ width: 150 }}
             value={readlist.uuid.replace(/-/g,"")}
           >
-            <span title={readlist.name}>{readlist.name.substring(0, 20)}</span>
+            <span title={readlist.name}>{readlist.name.substring(0, 18)}</span>
           </Checkbox>
           <Icon type="global" style={{ width: 20 }}/>
         </div>
@@ -302,8 +302,8 @@ class AddToReadlist extends React.Component {
     })
 
     const readlistTitleWrapper = (
-      <div style={{ backgroundColor: '#FFFFFF', width: 220 }}>
-        <div className="add-to-readlist-title-wrapper">
+      <div className="add-to-readlists-popover">
+        <div className="add-to-readlists-title-wrapper">
           Add to...
         </div>
         <CheckboxGroup
@@ -311,7 +311,7 @@ class AddToReadlist extends React.Component {
           defaultValue={this.state.defaultValues}>
           {readlists}
         </CheckboxGroup>
-        <div style={{ height: 50 }}><Button type="primary" size="default" style={{ float: 'right', margin: 12 }} onClick={this.handleSubmit}>Submit</Button></div>
+        <div><Button type="primary" size="default" style={{ float: 'right', margin: 12 }} onClick={this.handleSubmit}>Submit</Button></div>
       </div>
     );
 
