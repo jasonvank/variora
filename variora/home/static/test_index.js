@@ -528,7 +528,7 @@ class AppBeforeConnect extends React.Component {
                 <Route path='/search' component={SearchResultTab} />
                 <Route path='/readlists/:readlistSlug' render={ ({match, location}) => this.renderReadlistTab(match, location) } />
                 <Route path='/groups/:coterieUUID' render={ ({match, location}) => this.renderGroupTab(match, location) } />
-                <Route path='/' component={DocumentTab} />
+                <Route path='/' component={() => <DocumentTab createdReadlists={this.state.createdReadlists} />} />
               </Switch>
             </Content>
             <Footer style={{ textAlign: 'center' }}>

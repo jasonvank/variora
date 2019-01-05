@@ -1,4 +1,4 @@
-import { Icon, Input, Popconfirm, Table, message, notification } from 'antd'
+import { Button, Checkbox, Popover, Icon, Input, Popconfirm, Table, message, Menu, notification } from 'antd'
 import { formatOpenDocumentUrl, getCookie, getUrlFormat, copyToClipboard } from 'util.js'
 
 import React from 'react'
@@ -7,6 +7,7 @@ import TimeAgo from 'react-timeago'
 import { validateDocumentTitle } from 'home_util.js'
 
 const { Column } = Table
+const CheckboxGroup = Checkbox.Group;
 
 class ChangeOpenDocumentName extends React.Component {
   constructor(props){
@@ -75,11 +76,21 @@ class UploadedDocumentsList extends React.Component {
     super(props)
     this.state = {
       data: [],
+      createdReadlists: []
     }
     this.deleteDocument = (record) => {
       var data = new FormData()
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
       axios.post(record.delete_url, data).then(this.updateData)
+    }
+    this.collectDocument = (record) => {
+      var data = new FormData()
+      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+      axios.post(record.collect_url, data).then(this.updateData)
+      notification['success']({
+        message: 'Document has been collected',
+        duration: 2,
+      })
     }
     this.updateData = (response) => {
       axios.get(getUrlFormat('/file_viewer/api/documents', {
@@ -107,10 +118,25 @@ class UploadedDocumentsList extends React.Component {
       copyToClipboard(window.location.origin + formatOpenDocumentUrl(document))
       message.success('Copied to clipboard! Paste elsewhere to share this document')
     }
+    // this.updateCreatedReadlist = () => {
+    //   axios.get('/file_viewer/api/readlists').then( response => {
+    //     var created_readlists = response.data.created_readlists
+    //     this.setState({ createdReadlists: created_readlists })
+    //   })
+    // }
   }
 
   componentDidMount() {
     this.updateData()
+    this.setState({
+      createdReadlists: this.props.createdReadlists
+    })
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      createdReadlists: nextProps.createdReadlists
+    })
   }
 
   render() {
@@ -165,6 +191,12 @@ class UploadedDocumentsList extends React.Component {
             {/*<Icon type="share-alt" />*/}
             Share
           </a>
+          <span className="ant-divider" />
+          <a href='javascript:;' onClick={() => this.collectDocument(record)}>
+            Collect
+          </a>
+          <span className="ant-divider" />
+          <AddToReadlist createdReadlists={this.state.createdReadlists} record={record} />
         </span>
       ),
     }]
@@ -181,6 +213,124 @@ class UploadedDocumentsList extends React.Component {
     )
   }
 }
+
+class AddToReadlist extends React.Component {
+  constructor(){
+    super()
+    this.state = {
+      createdReadlists: [],
+      checkedValues: [],
+      defaultValues: [],
+      visible: false,
+    };
+    this.onChange = (checkedValues) => {
+      this.setState({
+        checkedValues: checkedValues,
+      })
+    }
+
+    this.handleSubmit = () => {
+      this.setState({
+        visible: false,
+      })
+
+      var url = '/file_viewer/api/documents/' + this.state.record.pk + '/changereadlists'
+      var data = new FormData()
+      var addReadlists = []
+      var removeReadlists = []
+      this.state.createdReadlists.forEach(
+        (readlist) => this.state.checkedValues.includes(readlist.uuid)
+          ? addReadlists.push(readlist.uuid) : removeReadlists.push(readlist.uuid)
+      )
+      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+      data.append('add_readlists', addReadlists)
+      data.append('remove_readlists', removeReadlists)
+
+      axios.post(url, data).then((response) => {
+        notification['success']({
+          message: 'Updated',
+          duration: 2,
+        })
+      })
+    }
+
+    this.handleVisibleChange = (visible) => {
+      this.setState({ visible });
+    }
+
+    this.updateData = () => {
+      var defaultCheckedValue = []
+      this.state.createdReadlists.forEach((readlist) => {
+        var document_uuid = this.state.record.uuid.replace(/-/g,"")
+        readlist.documents_uuids.includes(document_uuid) ? defaultCheckedValue.push(readlist.uuid) : null
+      })
+      this.setState({ defaultValues: defaultCheckedValue })
+    }
+  }
+
+  componentDidMount() {
+    this.setState({
+      createdReadlists: this.props.createdReadlists,
+      record: this.props.record
+    }, () => {
+      this.updateData()
+    })
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      createdReadlists: nextProps.createdReadlists,
+      record: nextProps.record
+    }, () => {
+      this.updateData()
+    })
+  }
+
+  render() {
+    const readlists = this.state.createdReadlists.map(readlist => {
+      return (
+        <div className="add-to-readlist-wrapper" key={readlist.slug}>
+          <Checkbox
+            style={{ width: 150 }}
+            value={readlist.uuid.replace(/-/g,"")}
+          >
+            <span title={readlist.name}>{readlist.name.substring(0, 20)}</span>
+          </Checkbox>
+          <Icon type="global" style={{ width: 20 }}/>
+        </div>
+      )
+    })
+
+    const readlistTitleWrapper = (
+      <div style={{ backgroundColor: '#FFFFFF', width: 220 }}>
+        <div className="add-to-readlist-title-wrapper">
+          Add to...
+        </div>
+        <CheckboxGroup
+          onChange={this.onChange}
+          defaultValue={this.state.defaultValues}>
+          {readlists}
+        </CheckboxGroup>
+        <div style={{ height: 50 }}><Button type="primary" size="default" style={{ float: 'right', margin: 12 }} onClick={this.handleSubmit}>Submit</Button></div>
+      </div>
+    );
+
+    return (
+      <Popover
+        content={readlistTitleWrapper}
+        placement="bottomLeft"
+        trigger={['click']}
+        visible={this.state.visible}
+        onVisibleChange={this.handleVisibleChange}
+      >
+        <a className="ant-dropdown-link" href="#">
+          Add <Icon type="down" />
+        </a>
+      </Popover>
+    )
+  }
+}
+
 
 export { UploadedDocumentsList }
 

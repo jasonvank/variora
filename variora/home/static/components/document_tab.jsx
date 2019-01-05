@@ -17,12 +17,26 @@ import { connect } from 'react-redux'
 class DocumentTab extends React.Component {
   constructor() {
     super()
-    this.state = {}
+    this.state = {
+      createdReadlists: []
+    }
+  }
+
+  componentDidMount() {
+    this.setState({
+      createdReadlists: this.props.createdReadlists
+    })
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      createdReadlists: nextProps.createdReadlists
+    })
   }
 
   render() {
-    let defaultSelectedKeys = this.props.location.pathname == '/collected' ? ["collected-documents"] : ['uploaded-documents']
-    if (this.props.location.pathname == '/subscribed')
+    let defaultSelectedKeys = window.location.pathname == '/collected' ? ["collected-documents"] : ['uploaded-documents']
+    if (window.location.pathname == '/subscribed')
       defaultSelectedKeys = ['subscribed-documents']
 
     return (
@@ -45,7 +59,7 @@ class DocumentTab extends React.Component {
           {/*</Menu.Item>*/}
         </Menu>
         <Switch>
-          <Route exact path="/" component={UploadedDocuments}/>
+          <Route exact path="/" component={() => <UploadedDocuments createdReadlists={this.state.createdReadlists} />}/>
           <Route exact path="/collected" component={CollectedDocuments}/>
           {/*<Route exact path="/subscribed" component={SubscribedDocuments}/>*/}
         </Switch>
@@ -63,6 +77,7 @@ class UploadedDocumentsBeforeConnect extends React.Component {
       onlineDocumentUrl: '',
       onlineDocumentName: '',
       uploadBtnLoading: false,
+      createdReadlists: []
     }
     this.uploadedDocumentTable = undefined
     this.uploadLocalDocument = () => {
@@ -119,6 +134,18 @@ class UploadedDocumentsBeforeConnect extends React.Component {
     }
   }
 
+  componentDidMount() {
+    this.setState({
+      createdReadlists: this.props.createdReadlists
+    })
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      createdReadlists: nextProps.createdReadlists
+    })
+  }
+
   render() {
     var self = this
     var uploadProps = {
@@ -136,7 +163,7 @@ class UploadedDocumentsBeforeConnect extends React.Component {
     return (
       <div>
         <div className={'card'} style={{ overflow: 'auto', marginTop: 16 }}>
-          <UploadedDocumentsList ref={(ele) => this.uploadedDocumentTable = ele} />
+          <UploadedDocumentsList ref={(ele) => this.uploadedDocumentTable = ele} createdReadlists={this.state.createdReadlists} />
         </div>
         <div className={'card'} style={{ overflow: 'auto', marginTop: 16, padding: 18 }}>
           <Row>
