@@ -222,6 +222,7 @@ class CoterieReadlistEncoder(DjangoJSONEncoder):
                 'slug': obj.slug,
                 'name': obj.name,
                 'documents': list(obj.documents.all()),
+                'documents_uuids': list(map(lambda document: document.clean_uuid, list(obj.documents.all()))),
                 'owner': obj.creator,
                 'description': obj.description,
                 'num_collectors': obj.collectors.count(),

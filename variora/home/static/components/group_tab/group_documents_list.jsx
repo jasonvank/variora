@@ -1,4 +1,4 @@
-import {Icon, Input, Popconfirm, Table, message, notification, Avatar} from 'antd'
+import { Button, Checkbox, Icon, Input, Popover, Popconfirm, Table, message, notification, Avatar} from 'antd'
 import { formatOpenCoterieDocumentUrl, getCookie, getUrlFormat } from 'util.js'
 
 import React from 'react'
@@ -6,8 +6,10 @@ import ReactDOM from 'react-dom'
 import axios from 'axios'
 import { validateDocumentTitle } from 'home_util.js'
 import TimeAgo from 'react-timeago'
+import { AddToReadlist } from '../document_tab/uploaded_documents_list.jsx'
 
 const { Column } = Table
+const CheckboxGroup = Checkbox.Group;
 
 
 class ChangeDocumentName extends React.Component {
@@ -81,7 +83,9 @@ class GroupDocumentsList extends React.Component {
     this.state = {
       coteriePk: this.props.coteriePk,
       data: [],
-      documentsUploadedByMe: []
+      documentsUploadedByMe: [],
+      createdReadlists: [],
+      coterieUUID: this.props.coterieUUID,
     }
 
     this.deleteDocument = (record) => {
@@ -92,15 +96,20 @@ class GroupDocumentsList extends React.Component {
 
     this.updateData = () => {
       axios.get(getUrlFormat('/coterie/api/coteries/' + this.state.coteriePk, {}))
-      .then(response => {
-        this.setState({
-          data: response.data.coteriedocument_set
+        .then(response => {
+          this.setState({
+            data: response.data.coteriedocument_set,
+          })
+          axios.get(`/coterie/api/coteries/${this.props.coterieUUID}/members/me/uploaded-documents`, {}).then(response => {
+            this.setState({documentsUploadedByMe: response.data})
+          })
+          axios.get(`/coterie/api/coteries/${this.props.coterieUUID}/members/me/coteriereadlists`, {}).then(response => {
+            this.setState({createdReadlists: response.data.created_readlists})
+          })
         })
-        axios.get(`/coterie/api/coteries/${this.props.coterieUUID}/members/me/uploaded-documents`, {}).then(response => {
-          this.setState({ documentsUploadedByMe: response.data })
+        .catch(e => {
+          message.warning(e.message)
         })
-      })
-      .catch(e => { message.warning(e.message) })
     }
 
     this.onCoterieDocumentRename = (key, dataIndex) => {
@@ -154,7 +163,7 @@ class GroupDocumentsList extends React.Component {
     ))
 
     const checkIAmUploader = (coterieDocument) => {
-      if (this.state.documentsUploadedByMe.map(d => d.pk).includes(coterieDocument.pk))
+      if (this.state.documentsUploadedByMe.map(document => document.pk).includes(coterieDocument.pk))
         return true
       return false
     }
@@ -194,8 +203,12 @@ class GroupDocumentsList extends React.Component {
         key: 'action',
         width: '20%',
         render: (text, coterieDocument) => (
-          checkIAmUploader(coterieDocument) ? documentDeleteAction(text, coterieDocument) : null
-        ),
+        <span>
+          {checkIAmUploader(coterieDocument) ? documentDeleteAction(text, coterieDocument) : null}
+          <span className="ant-divider" />
+          <AddToReadlist createdReadlists={this.state.createdReadlists} record={coterieDocument} coteriePk={this.state.coteriePk} coterieUUID={this.state.coterieUUID} />
+        </span>
+      ),
     }]
 
     return (

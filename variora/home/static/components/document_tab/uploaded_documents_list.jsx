@@ -205,6 +205,7 @@ class UploadedDocumentsList extends React.Component {
   }
 }
 
+
 class AddToReadlist extends React.Component {
   constructor(){
     super()
@@ -213,6 +214,7 @@ class AddToReadlist extends React.Component {
       checkedValues: [],
       defaultValues: [],
       visible: false,
+      coteriePk: undefined,
     };
     this.onChange = (checkedValues) => {
       this.setState({
@@ -223,7 +225,7 @@ class AddToReadlist extends React.Component {
     this.updateData = () => {
       var defaultCheckedValue = []
       this.state.createdReadlists.forEach((readlist) => {
-        var document_uuid = this.state.record.uuid.replace(/-/g,"")
+        var document_uuid = this.state.record.uuid.replace(/-/g, '')
         readlist.documents_uuids.includes(document_uuid) ? defaultCheckedValue.push(readlist.uuid) : null
       })
       this.setState({ defaultValues: defaultCheckedValue })
@@ -233,15 +235,18 @@ class AddToReadlist extends React.Component {
       this.setState({
         visible: false,
       })
-
-      var url = '/file_viewer/api/documents/' + this.state.record.pk + '/changereadlists'
       var data = new FormData()
       var addReadlists = []
       var removeReadlists = []
+      var url = '/file_viewer/api/documents/' + this.state.record.pk + '/changereadlists'
       this.state.createdReadlists.forEach(
         (readlist) => this.state.checkedValues.includes(readlist.uuid)
           ? addReadlists.push(readlist.uuid) : removeReadlists.push(readlist.uuid)
       )
+      if (this.state.coteriePk !== undefined ) {
+        url = '/coterie/api/coteriedocuments/' + this.state.record.pk + '/changereadlists'
+        data.append('coterie_id', this.state.coteriePk)
+      }
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
       data.append('add_readlists', addReadlists)
       data.append('remove_readlists', removeReadlists)
@@ -263,7 +268,8 @@ class AddToReadlist extends React.Component {
   componentDidMount() {
     this.setState({
       createdReadlists: this.props.createdReadlists,
-      record: this.props.record
+      record: this.props.record,
+      coteriePk: this.props.coteriePk,
     }, () => {
       this.updateData()
     })
@@ -272,7 +278,8 @@ class AddToReadlist extends React.Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       createdReadlists: nextProps.createdReadlists,
-      record: nextProps.record
+      record: nextProps.record,
+      coteriePk: this.props.coteriePk,
     }, () => {
       this.updateData()
     })
@@ -284,7 +291,7 @@ class AddToReadlist extends React.Component {
         <div className="add-to-readlists-wrapper" key={readlist.slug}>
           <Checkbox
             style={{ width: 150 }}
-            value={readlist.uuid.replace(/-/g,"")}
+            value={readlist.uuid}
           >
             <span title={readlist.name}>{readlist.name.substring(0, 18)}</span>
           </Checkbox>
@@ -324,7 +331,7 @@ class AddToReadlist extends React.Component {
 }
 
 
-export { UploadedDocumentsList }
+export { UploadedDocumentsList, AddToReadlist }
 
 
 

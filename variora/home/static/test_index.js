@@ -225,18 +225,6 @@ class AppBeforeConnect extends React.Component {
         this.props.setCollectedReadlists(response.data.collected_readlists)
       })
     }
-    //
-    // this.addDocumentToReadlistsCallback = () => {
-    //   alert("hey")
-    //   let url = '/file_viewer/api/readlists'
-    //   if (this.state.coterieUUID !== undefined)
-    //     url = `/coterie/api/coteries/${this.state.coterieUUID}/members/me/coteriereadlists`
-    //
-    //   // axios.get(url).then((response) => {
-    //   //   this.setState({ createdReadlists: response.data.created_readlists, })
-    //   //   this.props.setCreatedReadlists(response.data.created_readlists)
-    //   // })
-    // }
 
     this.updateCoterieCallback = (coteriePk, new_name) => {
       const updatedAdministratedCoteries = this.state.administratedCoteries.map(coterie => {
