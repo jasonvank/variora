@@ -2,6 +2,7 @@ const initialStore = {
   mostViewsDocuments: undefined,
   mostStarsDocuments: undefined,
   mostAnnotationsDocuments: undefined,
+  createdReadlists: [],
   collectedReadlists: [],
   user: {
     nickname: '',

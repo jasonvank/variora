@@ -6,7 +6,9 @@ import { initializeWebPush } from '../initialize_push'
 const FETCH_USEREXPLORE_DOCS = 'FETCH_USEREXPLORE_DOCS'
 const FETCH_USEREXPLORE_READLISTS = 'FETCH_USEREXPLORE_READLISTS'
 const FETCH_USER = 'FETCH_USER'
+const FETCH_CREATED_READLISTS = 'FETCH_CREATED_READLISTS'
 const SET_COLLECTED_READLISTS = 'SET_COLLECTED_READLISTS'
+const SET_CREATED_READLISTS = 'SET_CREATED_READLISTS'
 
 const fetchExploreDocs = () => dispatch => {
   axios.get(getUrlFormat('/documents/api/documents/explore'))
@@ -55,6 +57,22 @@ const fetchUser = () => dispatch => {
   })
 }
 
+const fetchCreatedReadlists = () => dispatch => {
+  axios.get('/file_viewer/api/readlists').then( response => {
+    dispatch({
+      type: FETCH_CREATED_READLISTS,
+      createdReadlists: response.data.created_readlists,
+    })
+  })
+}
+
+const setCreatedReadlists = (createdReadlists) => dispatch => {
+  dispatch({
+    type: SET_CREATED_READLISTS,
+    createdReadlists: createdReadlists
+  })
+}
+
 const setCollectedReadlists = (collectedReadlists) => dispatch => {
   dispatch({
     type: SET_COLLECTED_READLISTS,
@@ -66,9 +84,13 @@ export {
   fetchExploreDocs,
   fetchExploreReadlists,
   fetchUser,
+  fetchCreatedReadlists,
+  setCreatedReadlists,
   setCollectedReadlists,
   FETCH_USEREXPLORE_DOCS,
   FETCH_USEREXPLORE_READLISTS,
   FETCH_USER,
+  FETCH_CREATED_READLISTS,
+  SET_CREATED_READLISTS,
   SET_COLLECTED_READLISTS,
 }

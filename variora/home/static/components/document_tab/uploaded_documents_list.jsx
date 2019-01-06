@@ -118,19 +118,10 @@ class UploadedDocumentsList extends React.Component {
       copyToClipboard(window.location.origin + formatOpenDocumentUrl(document))
       message.success('Copied to clipboard! Paste elsewhere to share this document')
     }
-    // this.updateCreatedReadlist = () => {
-    //   axios.get('/file_viewer/api/readlists').then( response => {
-    //     var created_readlists = response.data.created_readlists
-    //     this.setState({ createdReadlists: created_readlists })
-    //   })
-    // }
   }
 
   componentDidMount() {
     this.updateData()
-    this.setState({
-      createdReadlists: this.props.createdReadlists
-    })
   }
 
   componentWillReceiveProps(nextProps) {
@@ -229,6 +220,15 @@ class AddToReadlist extends React.Component {
       })
     }
 
+    this.updateData = () => {
+      var defaultCheckedValue = []
+      this.state.createdReadlists.forEach((readlist) => {
+        var document_uuid = this.state.record.uuid.replace(/-/g,"")
+        readlist.documents_uuids.includes(document_uuid) ? defaultCheckedValue.push(readlist.uuid) : null
+      })
+      this.setState({ defaultValues: defaultCheckedValue })
+    }
+
     this.handleSubmit = () => {
       this.setState({
         visible: false,
@@ -252,19 +252,11 @@ class AddToReadlist extends React.Component {
           duration: 2,
         })
       })
+      this.updateData()
     }
 
     this.handleVisibleChange = (visible) => {
       this.setState({ visible });
-    }
-
-    this.updateData = () => {
-      var defaultCheckedValue = []
-      this.state.createdReadlists.forEach((readlist) => {
-        var document_uuid = this.state.record.uuid.replace(/-/g,"")
-        readlist.documents_uuids.includes(document_uuid) ? defaultCheckedValue.push(readlist.uuid) : null
-      })
-      this.setState({ defaultValues: defaultCheckedValue })
     }
   }
 

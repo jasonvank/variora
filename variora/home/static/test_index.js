@@ -22,12 +22,12 @@ import {
   Switch
 } from 'react-router-dom'
 import { Provider, connect } from 'react-redux'
-import { fetchUser, setCollectedReadlists } from './redux/actions.js'
+import { fetchUser, setCollectedReadlists, setCreatedReadlists } from './redux/actions.js'
 import { getCookie, getValFromUrlParam, groupAvatarColors } from 'util.js'
 
 import { DocumentTab } from './components/document_tab.jsx'
 import { ExploreTab } from './components/explore_tab.jsx'
-import {GroupReadlistsTab} from './components/group_tab/group_readlists_tab.jsx'
+import { GroupReadlistsTab } from './components/group_tab/group_readlists_tab.jsx'
 import { GroupSelectionButton } from './components/group_selection_button.jsx'
 import { GroupTab } from './components/group_tab/group_tab.jsx'
 import { NotificationsAlertButton } from './components/notifications_alert_button.jsx'
@@ -225,6 +225,18 @@ class AppBeforeConnect extends React.Component {
         this.props.setCollectedReadlists(response.data.collected_readlists)
       })
     }
+    //
+    // this.addDocumentToReadlistsCallback = () => {
+    //   alert("hey")
+    //   let url = '/file_viewer/api/readlists'
+    //   if (this.state.coterieUUID !== undefined)
+    //     url = `/coterie/api/coteries/${this.state.coterieUUID}/members/me/coteriereadlists`
+    //
+    //   // axios.get(url).then((response) => {
+    //   //   this.setState({ createdReadlists: response.data.created_readlists, })
+    //   //   this.props.setCreatedReadlists(response.data.created_readlists)
+    //   // })
+    // }
 
     this.updateCoterieCallback = (coteriePk, new_name) => {
       const updatedAdministratedCoteries = this.state.administratedCoteries.map(coterie => {
@@ -528,7 +540,7 @@ class AppBeforeConnect extends React.Component {
                 <Route path='/search' component={SearchResultTab} />
                 <Route path='/readlists/:readlistSlug' render={ ({match, location}) => this.renderReadlistTab(match, location) } />
                 <Route path='/groups/:coterieUUID' render={ ({match, location}) => this.renderGroupTab(match, location) } />
-                <Route path='/' component={() => <DocumentTab createdReadlists={this.state.createdReadlists} />} />
+                <Route path='/' component={DocumentTab} />
               </Switch>
             </Content>
             <Footer style={{ textAlign: 'center' }}>
