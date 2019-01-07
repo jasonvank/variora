@@ -66,17 +66,17 @@ const fetchCreatedReadlists = () => dispatch => {
   })
 }
 
-const setCreatedReadlists = (createdReadlists) => dispatch => {
+const setCreatedReadlists = (created_readlists) => dispatch => {
   dispatch({
     type: SET_CREATED_READLISTS,
-    createdReadlists: createdReadlists
+    createdReadlists: created_readlists
   })
 }
 
-const setCollectedReadlists = (collectedReadlists) => dispatch => {
+const setCollectedReadlists = (collected_readlists) => dispatch => {
   dispatch({
     type: SET_COLLECTED_READLISTS,
-    collectedReadlists: collectedReadlists
+    collectedReadlists: collected_readlists
   })
 }
 

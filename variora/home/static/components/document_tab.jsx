@@ -232,6 +232,6 @@ class SubscribedDocuments extends React.Component {
 const mapStoreToProps = (store, ownProps) => {
   return {...ownProps, user: store.user, createdReadlists: store.createdReadlists}
 }
-const UploadedDocuments = connect(mapStoreToProps, {fetchCreatedReadlists})(UploadedDocumentsBeforeConnect)
+const UploadedDocuments = connect(mapStoreToProps, {fetchCreatedReadlists, setCreatedReadlists})(UploadedDocumentsBeforeConnect)
 
 export { DocumentTab }
