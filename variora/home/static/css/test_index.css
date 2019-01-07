@@ -114,6 +114,10 @@ td:hover .editable-cell-icon {
 
 }
 
+.ant-popover-inner-content {
+  padding: 8px 2px 16px 8px!important;;
+}
+
 .add-to-readlists-title-wrapper {
   padding: 8px 15px 10px;
   border-bottom: 0.1px solid;
@@ -125,6 +129,7 @@ td:hover .editable-cell-icon {
   max-height: 350px !important;
   overflow-y: scroll !important;
   background-color: #FFFFFF !important;
+  padding-right: 10px;
 }
 
 .custom-card-text-wrapper {

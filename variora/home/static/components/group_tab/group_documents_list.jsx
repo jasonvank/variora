@@ -206,7 +206,7 @@ class GroupDocumentsList extends React.Component {
         <span>
           {checkIAmUploader(coterieDocument) ? documentDeleteAction(text, coterieDocument) : null}
           <span className="ant-divider" />
-          <AddToReadlist createdReadlists={this.state.createdReadlists} record={coterieDocument} coteriePk={this.state.coteriePk} coterieUUID={this.state.coterieUUID} />
+          <AddToReadlist createdReadlists={this.state.createdReadlists} document={coterieDocument} coteriePk={this.state.coteriePk} coterieUUID={this.state.coterieUUID} />
         </span>
       ),
     }]

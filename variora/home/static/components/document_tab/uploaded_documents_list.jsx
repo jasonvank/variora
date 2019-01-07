@@ -187,7 +187,7 @@ class UploadedDocumentsList extends React.Component {
             Collect
           </a>
           <span className="ant-divider" />
-          <AddToReadlist createdReadlists={this.state.createdReadlists} record={record} />
+          <AddToReadlist createdReadlists={this.state.createdReadlists} document={record} className="test" />
         </span>
       ),
     }]
@@ -225,7 +225,7 @@ class AddToReadlist extends React.Component {
     this.updateData = () => {
       var defaultCheckedValue = []
       this.state.createdReadlists.forEach((readlist) => {
-        var document_uuid = this.state.record.uuid.replace(/-/g, '')
+        var document_uuid = this.state.document.uuid.replace(/-/g, '')
         readlist.documents_uuids.includes(document_uuid) ? defaultCheckedValue.push(readlist.uuid) : null
       })
       this.setState({ defaultValues: defaultCheckedValue })
@@ -238,13 +238,13 @@ class AddToReadlist extends React.Component {
       var data = new FormData()
       var addReadlists = []
       var removeReadlists = []
-      var url = '/file_viewer/api/documents/' + this.state.record.pk + '/changereadlists'
+      var url = '/file_viewer/api/documents/' + this.state.document.pk + '/changereadlists'
       this.state.createdReadlists.forEach(
         (readlist) => this.state.checkedValues.includes(readlist.uuid)
           ? addReadlists.push(readlist.uuid) : removeReadlists.push(readlist.uuid)
       )
       if (this.state.coteriePk !== undefined ) {
-        url = '/coterie/api/coteriedocuments/' + this.state.record.pk + '/changereadlists'
+        url = '/coterie/api/coteriedocuments/' + this.state.document.pk + '/changereadlists'
         data.append('coterie_id', this.state.coteriePk)
       }
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
@@ -261,14 +261,14 @@ class AddToReadlist extends React.Component {
     }
 
     this.handleVisibleChange = (visible) => {
-      this.setState({ visible });
+      this.setState({ visible })
     }
   }
 
   componentDidMount() {
     this.setState({
       createdReadlists: this.props.createdReadlists,
-      record: this.props.record,
+      document: this.props.document,
       coteriePk: this.props.coteriePk,
     }, () => {
       this.updateData()
@@ -278,7 +278,7 @@ class AddToReadlist extends React.Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       createdReadlists: nextProps.createdReadlists,
-      record: nextProps.record,
+      document: nextProps.document,
       coteriePk: this.props.coteriePk,
     }, () => {
       this.updateData()
@@ -317,10 +317,10 @@ class AddToReadlist extends React.Component {
     return (
       <Popover
         content={readlistTitleWrapper}
-        placement="bottomLeft"
         trigger={['click']}
         visible={this.state.visible}
         onVisibleChange={this.handleVisibleChange}
+        className="test"
       >
         <a className="ant-dropdown-link" href="#">
           Add <Icon type="down" />
