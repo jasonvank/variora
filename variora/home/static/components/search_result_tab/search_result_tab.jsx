@@ -248,7 +248,7 @@ class GroupResult extends React.Component {
           </Tooltip>
         )
         var alreadyAdminLink = (
-          <Tooltip placement='right' title={'You are a admin of this group'}>
+          <Tooltip placement='right' title={'You are an admin of this group'}>
             <span><a disabled='disabled'>Apply</a></span>
           </Tooltip>
         )
