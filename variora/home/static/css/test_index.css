@@ -60,13 +60,16 @@ td:hover .editable-cell-icon {
 .custom-image img {
   display: block;
 }
+
 .custom-card {
   padding: 10px 16px;
   background-color: #f7f7f7;
 }
+
 .custom-card p {
   color: #999;
 }
+
 .custome-card-cover {
   box-shadow: 0px 1px 3px rgba(26, 26, 26, .1);
 }
@@ -111,11 +114,6 @@ td:hover .editable-cell-icon {
   margin-left: 2px!important;
   border-bottom: 0.1px solid;
   display:inline-block;
-
-}
-
-.ant-popover-inner-content {
-  padding: 8px 2px 16px 8px!important;;
 }
 
 .add-to-readlists-title-wrapper {
@@ -130,6 +128,7 @@ td:hover .editable-cell-icon {
   overflow-y: scroll !important;
   background-color: #FFFFFF !important;
   padding-right: 10px;
+  margin-right: -14px;
 }
 
 .custom-card-text-wrapper {
@@ -163,7 +162,3 @@ td:hover .editable-cell-icon {
 .group-name {
   font-weight: bold;
 }
-
-
-
-

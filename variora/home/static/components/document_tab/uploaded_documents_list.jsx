@@ -183,11 +183,7 @@ class UploadedDocumentsList extends React.Component {
             Share
           </a>
           <span className="ant-divider" />
-          <a href='javascript:;' onClick={() => this.collectDocument(record)}>
-            Collect
-          </a>
-          <span className="ant-divider" />
-          <AddToReadlist createdReadlists={this.state.createdReadlists} document={record} className="test" />
+          <AddToReadlists createdReadlists={this.state.createdReadlists} document={record} className="test" />
         </span>
       ),
     }]
@@ -206,7 +202,7 @@ class UploadedDocumentsList extends React.Component {
 }
 
 
-class AddToReadlist extends React.Component {
+class AddToReadlists extends React.Component {
   constructor(){
     super()
     this.state = {
@@ -288,19 +284,19 @@ class AddToReadlist extends React.Component {
   render() {
     const readlists = this.state.createdReadlists.map(readlist => {
       return (
-        <div className="add-to-readlists-wrapper" key={readlist.slug}>
+        <div className="add-to-readlists-wrapper" key={readlist.slug} title={readlist.name}>
           <Checkbox
             style={{ width: 150 }}
             value={readlist.uuid}
           >
-            <span title={readlist.name}>{readlist.name.substring(0, 18)}</span>
+            {readlist.name.substring(0, 18)}
           </Checkbox>
           <Icon type="global" style={{ width: 20 }}/>
         </div>
       )
     })
 
-    const readlistTitleWrapper = (
+    const readlistsTitleWrapper = (
       <div className="add-to-readlists-popover">
         <div className="add-to-readlists-title-wrapper">
           Add to...
@@ -310,17 +306,16 @@ class AddToReadlist extends React.Component {
           defaultValue={this.state.defaultValues}>
           {readlists}
         </CheckboxGroup>
-        <div><Button type="primary" size="default" style={{ float: 'right', margin: 12 }} onClick={this.handleSubmit}>Submit</Button></div>
+        <Button type="primary" size="default" style={{ float: 'right', margin: 12 }} onClick={this.handleSubmit}>Submit</Button>
       </div>
     );
 
     return (
       <Popover
-        content={readlistTitleWrapper}
+        content={readlistsTitleWrapper}
         trigger={['click']}
         visible={this.state.visible}
         onVisibleChange={this.handleVisibleChange}
-        className="test"
       >
         <a className="ant-dropdown-link" href="#">
           Add <Icon type="down" />
@@ -331,14 +326,4 @@ class AddToReadlist extends React.Component {
 }
 
 
-export { UploadedDocumentsList, AddToReadlist }
-
-
-
-
-
-
-
-
-
-
+export { UploadedDocumentsList, AddToReadlists }

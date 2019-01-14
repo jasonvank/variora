@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom'
 import axios from 'axios'
 import { validateDocumentTitle } from 'home_util.js'
 import TimeAgo from 'react-timeago'
-import { AddToReadlist } from '../document_tab/uploaded_documents_list.jsx'
+import { AddToReadlists } from '../document_tab/uploaded_documents_list.jsx'
 
 const { Column } = Table
 const CheckboxGroup = Checkbox.Group;
@@ -206,7 +206,7 @@ class GroupDocumentsList extends React.Component {
         <span>
           {checkIAmUploader(coterieDocument) ? documentDeleteAction(text, coterieDocument) : null}
           <span className="ant-divider" />
-          <AddToReadlist createdReadlists={this.state.createdReadlists} document={coterieDocument} coteriePk={this.state.coteriePk} coterieUUID={this.state.coterieUUID} />
+          <AddToReadlists createdReadlists={this.state.createdReadlists} document={coterieDocument} coteriePk={this.state.coteriePk} coterieUUID={this.state.coterieUUID} />
         </span>
       ),
     }]
