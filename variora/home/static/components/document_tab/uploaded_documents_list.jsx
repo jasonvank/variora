@@ -1,4 +1,4 @@
-import { Icon, Input, Popconfirm, Table, message, notification } from 'antd'
+import { Button, Checkbox, Popover, Icon, Input, Popconfirm, Table, message, Menu, notification } from 'antd'
 import { formatOpenDocumentUrl, getCookie, getUrlFormat, copyToClipboard } from 'util.js'
 
 import React from 'react'
@@ -7,6 +7,7 @@ import TimeAgo from 'react-timeago'
 import { validateDocumentTitle } from 'home_util.js'
 
 const { Column } = Table
+const CheckboxGroup = Checkbox.Group;
 
 class ChangeOpenDocumentName extends React.Component {
   constructor(props){
@@ -75,11 +76,21 @@ class UploadedDocumentsList extends React.Component {
     super(props)
     this.state = {
       data: [],
+      createdReadlists: []
     }
     this.deleteDocument = (record) => {
       var data = new FormData()
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
       axios.post(record.delete_url, data).then(this.updateData)
+    }
+    this.collectDocument = (record) => {
+      var data = new FormData()
+      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+      axios.post(record.collect_url, data).then(this.updateData)
+      notification['success']({
+        message: 'Document has been collected',
+        duration: 2,
+      })
     }
     this.updateData = (response) => {
       axios.get(getUrlFormat('/file_viewer/api/documents', {
@@ -111,6 +122,12 @@ class UploadedDocumentsList extends React.Component {
 
   componentDidMount() {
     this.updateData()
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      createdReadlists: nextProps.createdReadlists
+    })
   }
 
   render() {
@@ -165,6 +182,8 @@ class UploadedDocumentsList extends React.Component {
             {/*<Icon type="share-alt" />*/}
             Share
           </a>
+          <span className="ant-divider" />
+          <AddToReadlists createdReadlists={this.state.createdReadlists} document={record} className="test" />
         </span>
       ),
     }]
@@ -182,14 +201,129 @@ class UploadedDocumentsList extends React.Component {
   }
 }
 
-export { UploadedDocumentsList }
+
+class AddToReadlists extends React.Component {
+  constructor(){
+    super()
+    this.state = {
+      createdReadlists: [],
+      checkedValues: [],
+      defaultValues: [],
+      visible: false,
+      coteriePk: undefined,
+    };
+    this.onChange = (checkedValues) => {
+      this.setState({
+        checkedValues: checkedValues,
+      })
+    }
+
+    this.updateData = () => {
+      var defaultCheckedValue = []
+      this.state.createdReadlists.forEach((readlist) => {
+        var document_uuid = this.state.document.uuid.replace(/-/g, '')
+        readlist.documents_uuids.includes(document_uuid) ? defaultCheckedValue.push(readlist.uuid) : null
+      })
+      this.setState({ defaultValues: defaultCheckedValue })
+    }
+
+    this.handleSubmit = () => {
+      this.setState({
+        visible: false,
+      })
+      var data = new FormData()
+      var addReadlists = []
+      var removeReadlists = []
+      var url = '/file_viewer/api/documents/' + this.state.document.pk + '/changereadlists'
+      this.state.createdReadlists.forEach(
+        (readlist) => this.state.checkedValues.includes(readlist.uuid)
+          ? addReadlists.push(readlist.uuid) : removeReadlists.push(readlist.uuid)
+      )
+      if (this.state.coteriePk !== undefined ) {
+        url = '/coterie/api/coteriedocuments/' + this.state.document.pk + '/changereadlists'
+        data.append('coterie_id', this.state.coteriePk)
+      }
+      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+      data.append('add_readlists', addReadlists)
+      data.append('remove_readlists', removeReadlists)
+
+      axios.post(url, data).then((response) => {
+        notification['success']({
+          message: 'Updated',
+          duration: 2,
+        })
+      })
+      this.updateData()
+    }
+
+    this.handleVisibleChange = (visible) => {
+      this.setState({ visible })
+    }
+  }
+
+  componentDidMount() {
+    this.setState({
+      createdReadlists: this.props.createdReadlists,
+      document: this.props.document,
+      coteriePk: this.props.coteriePk,
+    }, () => {
+      this.updateData()
+    })
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      createdReadlists: nextProps.createdReadlists,
+      document: nextProps.document,
+      coteriePk: this.props.coteriePk,
+    }, () => {
+      this.updateData()
+    })
+  }
+
+  render() {
+    const readlists = this.state.createdReadlists.map(readlist => {
+      return (
+        <div className="add-to-readlists-wrapper" key={readlist.slug} title={readlist.name}>
+          <Checkbox
+            style={{ width: 150 }}
+            value={readlist.uuid}
+          >
+            {readlist.name.substring(0, 18)}
+          </Checkbox>
+          <Icon type="global" style={{ width: 20 }}/>
+        </div>
+      )
+    })
+
+    const readlistsTitleWrapper = (
+      <div className="add-to-readlists-popover">
+        <div className="add-to-readlists-title-wrapper">
+          Add to...
+        </div>
+        <CheckboxGroup
+          onChange={this.onChange}
+          defaultValue={this.state.defaultValues}>
+          {readlists}
+        </CheckboxGroup>
+        <Button type="primary" size="default" style={{ float: 'right', margin: 12 }} onClick={this.handleSubmit}>Submit</Button>
+      </div>
+    );
+
+    return (
+      <Popover
+        content={readlistsTitleWrapper}
+        trigger={['click']}
+        visible={this.state.visible}
+        onVisibleChange={this.handleVisibleChange}
+      >
+        <a className="ant-dropdown-link" href="#">
+          Add <Icon type="down" />
+        </a>
+      </Popover>
+    )
+  }
+}
 
 
-
-
-
-
-
-
-
-
+export { UploadedDocumentsList, AddToReadlists }

@@ -58,9 +58,9 @@ def _unsubscribe_coteriedocument(document, user):
 def _change_readlists(document, user, request):
     coterie = Coterie.objects.get(pk=request.POST['coterie_id'])
     for readlist in user.created_coteriereadlist_set.filter(coterie=coterie):
-        if readlist.clean_uuid in request.POST.getlist('add_readlists[]'):
+        if readlist.clean_uuid in (request.POST.getlist('add_readlists[]') or request.POST.get('add_readlists')):
             readlist.documents.add(document)
-        elif readlist.clean_uuid in request.POST.getlist('remove_readlists[]'):
+        elif readlist.clean_uuid in (request.POST.getlist('remove_readlists[]') or request.POST.get('remove_readlists')):
             readlist.documents.remove(document)
     return HttpResponse(status=200)
 

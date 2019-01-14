@@ -28,6 +28,14 @@ def _delete_document(document, user):
         return HttpResponse(status=403)  # user has no permission
 
 
+def _collect_document(document, user):
+    if not user.is_authenticated:
+        return HttpResponse(status=403)
+    document.collectors.add(user)
+    document.save()
+    return HttpResponse(status=200)
+
+
 def _uncollect_document(document, user):
     if not user.is_authenticated:
         return HttpResponse(status=403)
@@ -50,9 +58,9 @@ def _download_document(document):
 
 def _change_readlists(document, user, request):
     for readlist in user.created_readlist_set.all():
-        if readlist.clean_uuid in request.POST.getlist('add_readlists[]'):
+        if readlist.clean_uuid in (request.POST.getlist('add_readlists[]') or request.POST.get('add_readlists')):
             readlist.documents.add(document)
-        elif readlist.clean_uuid in request.POST.getlist('remove_readlists[]'):
+        elif readlist.clean_uuid in (request.POST.getlist('remove_readlists[]') or request.POST.get('remove_readlists')):
             readlist.documents.remove(document)
     return HttpResponse(status=200)
 
@@ -88,6 +96,8 @@ class DocumentView(View):
             user = get_user(request)
             if operation == 'delete':
                 return _delete_document(document, user)
+            elif operation == 'collect':
+                return _collect_document(document, user)
             elif operation == 'uncollect':
                 return _uncollect_document(document, user)
             elif operation == 'changereadlists':

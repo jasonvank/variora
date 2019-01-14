@@ -22,12 +22,12 @@ import {
   Switch
 } from 'react-router-dom'
 import { Provider, connect } from 'react-redux'
-import { fetchUser, setCollectedReadlists } from './redux/actions.js'
+import { fetchUser, setCollectedReadlists, setCreatedReadlists } from './redux/actions.js'
 import { getCookie, getValFromUrlParam, groupAvatarColors } from 'util.js'
 
 import { DocumentTab } from './components/document_tab.jsx'
 import { ExploreTab } from './components/explore_tab.jsx'
-import {GroupReadlistsTab} from './components/group_tab/group_readlists_tab.jsx'
+import { GroupReadlistsTab } from './components/group_tab/group_readlists_tab.jsx'
 import { GroupSelectionButton } from './components/group_selection_button.jsx'
 import { GroupTab } from './components/group_tab/group_tab.jsx'
 import { NotificationsAlertButton } from './components/notifications_alert_button.jsx'
@@ -178,6 +178,7 @@ class AppBeforeConnect extends React.Component {
             fields: { ...this.state.fields, readlistName: { value: '' } },
             createdReadlists: newCreatedReadlists
           })
+          this.props.setCreatedReadlists(newCreatedReadlists)
         })
       }
     }
@@ -212,9 +213,11 @@ class AppBeforeConnect extends React.Component {
     }
 
     this.updateReadlistsCallback = (readlistSlug) => {
+      var newCreatedReadlists = this.state.createdReadlists.filter(function(readlist) {return readlist.slug !== readlistSlug})
+      var newCollectedReadlists = this.state.collectedReadlists.filter(function(readlist) {return readlist.slug !== readlistSlug})
       this.setState({
-        createdReadlists: this.state.createdReadlists.filter(function(readlist) {return readlist.slug !== readlistSlug}),
-        collectedReadlists: this.state.collectedReadlists.filter(function(readlist) {return readlist.slug !== readlistSlug}),
+        createdReadlists: newCreatedReadlists,
+        collectedReadlists: newCollectedReadlists,
       })
       let url = '/file_viewer/api/readlists'
       if (this.state.coterieUUID !== undefined)
@@ -223,6 +226,7 @@ class AppBeforeConnect extends React.Component {
       axios.get(url).then((response) => {
         this.setState({ collectedReadlists: response.data.collected_readlists, })
         this.props.setCollectedReadlists(response.data.collected_readlists)
+        this.props.setCreatedReadlists(newCreatedReadlists)
       })
     }
 
@@ -676,7 +680,7 @@ const CreateCoterieForm = Form.create({
 const mapStoreToProps = (store, ownProps) => {
   return {...ownProps, user: store.user}
 }
-const App = connect(mapStoreToProps, {fetchUser, setCollectedReadlists})(AppBeforeConnect)
+const App = connect(mapStoreToProps, {fetchUser, setCollectedReadlists, setCreatedReadlists})(AppBeforeConnect)
 
 ReactDOM.render(
   <Provider store={store}>

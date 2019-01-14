@@ -30,6 +30,7 @@ class DocumentEncoder(DjangoJSONEncoder):
                 'delete_url': '/file_viewer/api/documents/' + str(obj.pk) + '/delete',
                 'file_on_server': obj.file_on_server,
                 'renameUrl': '/file_viewer/api/documents/' + str(obj.pk) + '/rename',
+                'collect_url': '/file_viewer/api/documents/' + str(obj.pk) + '/collect',
                 'uncollectUrl': '/file_viewer/api/documents/' + str(obj.pk) + '/uncollect',
                 'upload_time': obj.upload_time,
                 'uploader_name': obj.owner.nickname,

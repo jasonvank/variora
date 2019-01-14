@@ -9,20 +9,22 @@ import React from 'react'
 import { UploadedDocumentsList } from './document_tab/uploaded_documents_list.jsx'
 import axios from 'axios'
 import { validateDocumentTitle, validateDocumentSize } from 'home_util.js'
+import { setCreatedReadlists, fetchCreatedReadlists } from '../redux/actions.js'
 
 const { Content } = Layout
 import { connect } from 'react-redux'
-
+import { initialStore } from '../redux/init_store.js'
 
 class DocumentTab extends React.Component {
   constructor() {
     super()
-    this.state = {}
+    this.state = {
+    }
   }
 
   render() {
-    let defaultSelectedKeys = this.props.location.pathname == '/collected' ? ["collected-documents"] : ['uploaded-documents']
-    if (this.props.location.pathname == '/subscribed')
+    let defaultSelectedKeys = window.location.pathname == '/collected' ? ["collected-documents"] : ['uploaded-documents']
+    if (window.location.pathname == '/subscribed')
       defaultSelectedKeys = ['subscribed-documents']
 
     return (
@@ -45,8 +47,8 @@ class DocumentTab extends React.Component {
           {/*</Menu.Item>*/}
         </Menu>
         <Switch>
-          <Route exact path="/" component={UploadedDocuments}/>
-          <Route exact path="/collected" component={CollectedDocuments}/>
+          <Route exact path="/" component={UploadedDocuments} />
+          <Route exact path="/collected" component={CollectedDocuments} />
           {/*<Route exact path="/subscribed" component={SubscribedDocuments}/>*/}
         </Switch>
       </Content>
@@ -63,6 +65,7 @@ class UploadedDocumentsBeforeConnect extends React.Component {
       onlineDocumentUrl: '',
       onlineDocumentName: '',
       uploadBtnLoading: false,
+      createdReadlists: initialStore.createdReadlists
     }
     this.uploadedDocumentTable = undefined
     this.uploadLocalDocument = () => {
@@ -119,6 +122,14 @@ class UploadedDocumentsBeforeConnect extends React.Component {
     }
   }
 
+  componentDidMount() {
+    this.props.fetchCreatedReadlists()
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ createdReadlists: nextProps.createdReadlists })
+  }
+
   render() {
     var self = this
     var uploadProps = {
@@ -136,7 +147,7 @@ class UploadedDocumentsBeforeConnect extends React.Component {
     return (
       <div>
         <div className={'card'} style={{ overflow: 'auto', marginTop: 16 }}>
-          <UploadedDocumentsList ref={(ele) => this.uploadedDocumentTable = ele} />
+          <UploadedDocumentsList ref={(ele) => this.uploadedDocumentTable = ele} createdReadlists={this.state.createdReadlists} />
         </div>
         <div className={'card'} style={{ overflow: 'auto', marginTop: 16, padding: 18 }}>
           <Row>
@@ -219,8 +230,8 @@ class SubscribedDocuments extends React.Component {
 
 
 const mapStoreToProps = (store, ownProps) => {
-  return {...ownProps, user: store.user}
+  return {...ownProps, user: store.user, createdReadlists: store.createdReadlists}
 }
-const UploadedDocuments = connect(mapStoreToProps)(UploadedDocumentsBeforeConnect)
+const UploadedDocuments = connect(mapStoreToProps, {fetchCreatedReadlists, setCreatedReadlists})(UploadedDocumentsBeforeConnect)
 
 export { DocumentTab }

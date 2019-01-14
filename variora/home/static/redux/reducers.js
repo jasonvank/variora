@@ -2,6 +2,8 @@ import {
   FETCH_USEREXPLORE_DOCS,
   FETCH_USEREXPLORE_READLISTS,
   FETCH_USER,
+  FETCH_CREATED_READLISTS,
+  SET_CREATED_READLISTS,
   SET_COLLECTED_READLISTS,
 } from './actions.js'
 import {
@@ -23,6 +25,16 @@ const rootReducer = (store = initialStore, dispatchTarget) => {
     return {
       ...store,
       user: dispatchTarget.user,
+    }
+  } else if (dispatchTarget.type == FETCH_CREATED_READLISTS) {
+    return {
+      ...store,
+      createdReadlists: dispatchTarget.createdReadlists,
+    }
+  } else if (dispatchTarget.type == SET_CREATED_READLISTS) {
+    return {
+      ...store,
+      createdReadlists: dispatchTarget.createdReadlists,
     }
   } else if (dispatchTarget.type == SET_COLLECTED_READLISTS) {
     return {
