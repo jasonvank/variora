@@ -103,7 +103,7 @@ td:hover .editable-cell-icon {
 }
 
 .add-to-readlists-wrapper {
-  font-size: 14px!important;
+  font-size: 14px !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   display: -webkit-box !important;

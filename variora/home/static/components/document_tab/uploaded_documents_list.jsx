@@ -211,7 +211,8 @@ class AddToReadlists extends React.Component {
       defaultValues: [],
       visible: false,
       coteriePk: undefined,
-    };
+    }
+
     this.onChange = (checkedValues) => {
       this.setState({
         checkedValues: checkedValues,
@@ -291,7 +292,7 @@ class AddToReadlists extends React.Component {
           >
             {readlist.name.substring(0, 18)}
           </Checkbox>
-          <Icon type="global" style={{ width: 20 }}/>
+          <Icon type="folder-open" style={{ width: 20 }}/>
         </div>
       )
     })
@@ -308,7 +309,7 @@ class AddToReadlists extends React.Component {
         </CheckboxGroup>
         <Button type="primary" size="default" style={{ float: 'right', margin: 12 }} onClick={this.handleSubmit}>Submit</Button>
       </div>
-    );
+    )
 
     return (
       <Popover
@@ -318,7 +319,7 @@ class AddToReadlists extends React.Component {
         onVisibleChange={this.handleVisibleChange}
       >
         <a className="ant-dropdown-link" href="#">
-          Add <Icon type="down" />
+          Add to <Icon type="down" />
         </a>
       </Popover>
     )
