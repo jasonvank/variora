@@ -287,12 +287,11 @@ class AddToReadlists extends React.Component {
       return (
         <div className="add-to-readlists-wrapper" key={readlist.slug} title={readlist.name}>
           <Checkbox
-            style={{ width: 150 }}
             value={readlist.uuid}
           >
             {readlist.name.substring(0, 18)}
           </Checkbox>
-          <Icon type="folder-open" style={{ width: 20 }}/>
+          <Icon type="folder-open" style={{ float: 'right', padding: 5 }}/>
         </div>
       )
     })

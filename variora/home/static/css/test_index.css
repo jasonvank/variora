@@ -123,7 +123,7 @@ td:hover .editable-cell-icon {
 }
 
 .add-to-readlists-popover {
-  max-width: 240px !important;
+  max-width: 250px !important;
   max-height: 350px !important;
   overflow-y: scroll !important;
   background-color: #FFFFFF !important;
