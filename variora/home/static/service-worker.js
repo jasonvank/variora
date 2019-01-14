@@ -1,5 +1,5 @@
 const PWAVersion = "0.0.3"
-const DesktopVersion = "0.0.11"
+const DesktopVersion = "0.0.12"
 const cacheName = `VA-${PWAVersion}-${DesktopVersion}`
 const cacheAssets = [
 ]
