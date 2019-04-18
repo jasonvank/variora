@@ -374,12 +374,12 @@ class AppBeforeConnect extends React.Component {
       return (
         <Router basename={GLOBAL_URL_BASE}>
           <Layout>
-            <Sider className='sider' width={200} style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }}>
+            <Sider className='sider' width={200} style={{ overflowX: 'hidden', overflowY: 'auto', height: 'calc(100% - 64px)', position: 'fixed', left: 0, top: 64, background: '#fff' }}>
               <Menu
                 mode="inline"
                 defaultOpenKeys={['created_readlists', 'collected_readlists']}
                 onClick={this.onClickCreateReadlistMenuItem}
-                style={{ height: '100%', borderRight: 0 }}
+                style={{ borderRight: 0 }}
                 defaultSelectedKeys={defaultSelectedKeys()}
               >
                 {/*<Menu.Item key="explore" >*/}
@@ -445,7 +445,7 @@ class AppBeforeConnect extends React.Component {
                 </Modal>
               </Menu>
             </Sider>
-            <Layout style={{ marginLeft: 200, padding: 0 }}>
+            <Layout style={{ marginLeft: 200, padding: 0, marginTop: 64 }}>
               <Content>
                 <Switch>
                   <Route path='/groups/:coterieUUID/readlists/:readlistSlug' render={ ({match, location}) => this.renderReadlistTab(match, location) } />
@@ -466,12 +466,12 @@ class AppBeforeConnect extends React.Component {
     const globalRouter = (
       <Router basename={GLOBAL_URL_BASE}>
         <Layout>
-          <Sider className='sider' width={200} style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }}>
+          <Sider className='sider' width={200} style={{ overflowX: 'hidden', overflowY: 'auto', height: 'calc(100% - 64px)', position: 'fixed', left: 0, top: 64, background: '#fff' }}>
             <Menu
               mode="inline"
               defaultOpenKeys={['created_readlists', 'collected_readlists']}
               onClick={this.onClickCreateReadlistMenuItem}
-              style={{ height: '100%', borderRight: 0 }}
+              style={{ borderRight: 0 }}
               defaultSelectedKeys={this.getHighlightedMenuItems()}
             >
               <Menu.Item key="explore" >
@@ -525,7 +525,7 @@ class AppBeforeConnect extends React.Component {
               </Modal>
             </Menu>
           </Sider>
-          <Layout style={{ marginLeft: 200, padding: 0 }}>
+          <Layout style={{ marginLeft: 200, padding: 0, marginTop: 64 }}>
             <Content>
               <Switch>
                 <Route path='/explore' component={ExploreTab} />
@@ -579,7 +579,7 @@ class AppBeforeConnect extends React.Component {
 
     return (
       <Layout style={{ height: '100%', width: '100%', position: 'absolute' }}>
-        <Header className="header" style={{ backgroundColor: '#fff', diplay: 'inline' }}>
+        <Header className="header" style={{ backgroundColor: '#fff', diplay: 'inline', position: 'fixed', zIndex: 1, width: '100%' }}>
           <Row>
             <Col span={6}>
               {/* <div className="logo" /> */}
