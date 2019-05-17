@@ -10,8 +10,8 @@ var devConfig = prodConfig
 /**************** modify the following settings: **************/
 
 // change the destination path of the bundled javascript files
-// from ./variora/bundled_static/prod/bundle
-// to   ./variora/bundled_static/dev/bundle
+// from   ./variora/bundled_static/prod/bundle
+// to     ./variora/bundled_static/dev/bundle
 devConfig.output.path = path.resolve('./variora/bundled_static/dev/bundle')
 
 // set the mode to watch

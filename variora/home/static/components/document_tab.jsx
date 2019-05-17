@@ -2,18 +2,18 @@ import 'regenerator-runtime/runtime'
 
 import { Button, Col, Icon, Input, Layout, Menu, Modal, Row, Upload, notification } from 'antd'
 import { Link, Route, BrowserRouter as Router, Switch } from 'react-router-dom'
-import { getCookie } from 'util.js'
+import { fetchCreatedReadlists, setCreatedReadlists } from '../redux/actions.js'
+import { validateDocumentSize, validateDocumentTitle } from 'home_util.js'
 
 import { CollectedDocumentsList } from './document_tab/collected_documents_list.jsx'
 import React from 'react'
 import { UploadedDocumentsList } from './document_tab/uploaded_documents_list.jsx'
 import axios from 'axios'
-import { validateDocumentTitle, validateDocumentSize } from 'home_util.js'
-import { setCreatedReadlists, fetchCreatedReadlists } from '../redux/actions.js'
+import { connect } from 'react-redux'
+import { getCookie } from 'util.js'
+import { initialStore } from '../redux/init_store.js'
 
 const { Content } = Layout
-import { connect } from 'react-redux'
-import { initialStore } from '../redux/init_store.js'
 
 class DocumentTab extends React.Component {
   constructor() {
