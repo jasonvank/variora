@@ -68,7 +68,7 @@ class ReceivedCoterieInvitationNotificationContent extends React.Component {
   }
 }
 
-class NotificationsToggleButton extends React.Component {
+class InvitationsToggleButton extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -142,7 +142,7 @@ class NotificationsToggleButton extends React.Component {
   }
 }
 
-export { NotificationsToggleButton }
+export { InvitationsToggleButton }
 
 
 
