@@ -54,5 +54,5 @@ def check_valid_document_title(title):
 
 # TODO yy: use this to notify user
 def web_push_notify_user(user, title, message):
-  devices = FCMDevice.objects.filter(user=user)
-  devices.send_message(title=title, body=message, icon="https://www.variora.io/media/logo.png")
+    devices = FCMDevice.objects.filter(user=user)
+    devices.send_message(title=title, body=message, icon="https://www.variora.io/media/logo.png")

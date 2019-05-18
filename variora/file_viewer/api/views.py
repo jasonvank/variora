@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.auth import get_user
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse, JsonResponse, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.utils.decorators import method_decorator
 from django.utils.timezone import now
 from django.views.generic import View

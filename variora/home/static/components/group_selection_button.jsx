@@ -206,6 +206,7 @@ class GroupSelectionButton extends React.Component {
         trigger='click'
         visible={this.state.visible}
         onVisibleChange={this.handleVisibleChange}
+        placement="bottom"
       >
         {/*{iconToShow}*/}
         <Tooltip title={'Documents and discussion inside a group is not visible to the world'} >

@@ -173,6 +173,7 @@ MAX_DOCUMENT_UPLOAD_SIZE = 5 * 1024 * 1024  # 5 MB
 ############ PWA ##########
 ENABLE_PWA = True
 
+
 ############ Django Debug Toolbar ##########
 # if DEBUG:
 #     INTERNAL_IPS = ('127.0.0.1', 'localhost',)
