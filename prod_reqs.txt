@@ -13,6 +13,7 @@ django-notifications-hq==1.4.0
 pdfrw
 Wand
 facebook-sdk
+psycopg2-binary
 html2text
 bleach
 pyyaml
