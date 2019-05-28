@@ -17,4 +17,4 @@ script:
     - if [[ $TRAVIS_COMMIT_MESSAGE != *"bundle for production"* ]]; then lint-diff $TRAVIS_COMMIT_RANGE ; fi ;
     - git reset --soft ${TRAVIS_COMMIT_RANGE%...*} && git lint
     - yarn test
-    - sudo env/bin/python variora/manage.py test variora/ --pattern="tests.py"
+    - python variora/manage.py test variora/ --pattern="tests.py"
