@@ -1,8 +1,8 @@
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.serializers.json import DjangoJSONEncoder
-from django.conf import settings
 from django.utils.decorators import method_decorator
 
 from home.api.encoders import UserEncoder
