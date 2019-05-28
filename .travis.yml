@@ -14,9 +14,6 @@ install:
     - sudo pip install -r dev_reqs.txt
     - yarn install
 script:
-    - touch ./variora/variora/private_settings.py
-    - echo "import os\nBASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))\nDEBUG = True\nSECRET_KEY = 'variora2018'\nDATABASES = { 'default': { 'ENGINE':  'django.db.backends.sqlite3', 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'), } }" >> ./variora/variora/private_settings.py
     - if [[ $TRAVIS_COMMIT_MESSAGE != *"bundle for production"* ]]; then lint-diff $TRAVIS_COMMIT_RANGE ; fi ;
     - git reset --soft ${TRAVIS_COMMIT_RANGE%...*} && git lint
     - yarn test
-    - python variora/manage.py test variora/ --pattern="tests.py"
