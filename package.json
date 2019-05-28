@@ -17,7 +17,7 @@
     "antd": "^2.13.13",
     "axios": "^0.18.0",
     "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.4",
+    "babel-loader": "7",
     "babel-plugin-import": "^1.7.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
@@ -30,8 +30,9 @@
     "eslint": "^4.19.1",
     "eslint-plugin-react": "^7.9.1",
     "file-loader": "^1.1.11",
+    "firebase": "^5.5.8",
     "glob": "^7.1.2",
-    "jest": "^24.8.0",
+    "jest": "23.1.0",
     "less": "^2.7.3",
     "less-loader": "^5.0.0",
     "less-vars-to-js": "^1.2.1",
@@ -53,8 +54,7 @@
     "regenerator-runtime": "^0.11.1",
     "style-loader": "^0.23.1",
     "webpack": "^4.16.1",
-    "webpack-bundle-analyzer": "^2.13.1",
-    "firebase": "^5.5.8"
+    "webpack-bundle-analyzer": "^2.13.1"
   },
   "jest": {
     "moduleDirectories": [
