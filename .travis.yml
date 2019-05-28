@@ -15,19 +15,17 @@ install:
     - yarn install
 script:
     - touch ./variora/variora/private_settings.py
-    - echo "
-import os
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-DEBUG = True
-SECRET_KEY = '123'
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+    - echo " \
+        import os \
+        BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) \
+        DEBUG = True \
+        SECRET_KEY = '123' \
+        DATABASES = { \
+            'default': { \
+                'ENGINE': 'django.db.backends.sqlite3', \
+                'NAME': os.path.join(BASE_DIR, 'db.sqlite3'), \
+            } \
+        } \
         " >> test.py
     - if [[ $TRAVIS_COMMIT_MESSAGE != *"bundle for production"* ]]; then lint-diff $TRAVIS_COMMIT_RANGE ; fi ;
     - git reset --soft ${TRAVIS_COMMIT_RANGE%...*} && git lint
