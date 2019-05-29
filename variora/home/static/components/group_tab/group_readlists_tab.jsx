@@ -1,6 +1,6 @@
 import 'regenerator-runtime/runtime'
 
-import {Avatar, Icon, Input, Layout, Menu, message, Table} from 'antd'
+import { Avatar, Icon, Input, Layout, Menu, message, Table } from 'antd'
 import { Link, Route, Switch, Redirect } from 'react-router-dom'
 import { getCookie, getUrlFormat } from 'util.js'
 
@@ -12,7 +12,6 @@ import TimeAgo from 'react-timeago'
 const { SubMenu } = Menu
 const { Header, Content, Sider } = Layout
 const MenuItemGroup = Menu.ItemGroup
-
 
 const SUB_URL_BASE = '/groups/'
 
@@ -37,32 +36,40 @@ class GroupReadlistsTab extends React.Component {
   render() {
     const path = this.props.location.pathname
     return (
-      <Content style={{ paddingLeft: 18, paddingRight: 18, paddingTop: 16, margin: 0, minHeight: 280 }}>
+      <Content
+        style={{ paddingLeft: 18, paddingRight: 18, paddingTop: 16, margin: 0, minHeight: 280 }}
+      >
         <Menu
           onClick={this.handleClick}
-          mode="horizontal"
+          mode='horizontal'
           style={{ padding: 0 }}
           defaultSelectedKeys={['group-readlists']}
         >
           <Menu.Item key='group-readlists'>
-            <Link to={SUB_URL_BASE + this.state.coterieUUI + '/readlists'}><Icon type="folder" />Group Readlists</Link>
+            <Link to={SUB_URL_BASE + this.state.coterieUUI + '/readlists'}>
+              <Icon type='folder' />
+              <FormattedMessage id='app.group.group_readlists' defaultMessage='Group Readlists' />
+            </Link>
           </Menu.Item>
         </Menu>
 
         <Switch>
-          <Route exact path={SUB_URL_BASE + this.state.coterieUUI + '/readlists'} render={() =>
-            <GroupReadlistsSubtab
-              isAdmin={this.state.isAdmin}
-              coterieUUID={this.state.coterieUUI}
-              coteriePk={this.state.coteriePk}
-            />}
+          <Route
+            exact
+            path={SUB_URL_BASE + this.state.coterieUUI + '/readlists'}
+            render={() => (
+              <GroupReadlistsSubtab
+                isAdmin={this.state.isAdmin}
+                coterieUUID={this.state.coterieUUI}
+                coteriePk={this.state.coteriePk}
+              />
+            )}
           />
         </Switch>
       </Content>
     )
   }
 }
-
 
 class GroupReadlistsSubtab extends React.Component {
   constructor(props) {
@@ -72,46 +79,69 @@ class GroupReadlistsSubtab extends React.Component {
       data: [],
     }
 
-    this.handleChange = (sorter) => {
+    this.handleChange = sorter => {
       this.setState({
         sortedInfo: sorter,
       })
     }
 
     this.updateData = () => {
-      axios.get(getUrlFormat('/coterie/api/coteries/' + this.props.coteriePk, {}))
+      axios
+        .get(getUrlFormat('/coterie/api/coteries/' + this.props.coteriePk, {}))
         .then(response => {
           this.setState({
-            data: response.data.coteriereadlist_set
+            data: response.data.coteriereadlist_set,
           })
         })
-        .catch(e => { message.warning(e.message) })
+        .catch(e => {
+          message.warning(e.message)
+        })
     }
   }
 
-  componentDidMount() { this.updateData() }
-  componentWillReceiveProps(nextProps) { this.updateData() }
+  componentDidMount() {
+    this.updateData()
+  }
+  componentWillReceiveProps(nextProps) {
+    this.updateData()
+  }
 
   render() {
     let sortedInfo = this.state.sortedInfo
     sortedInfo = sortedInfo || {}
 
-    const columns = [{
-      title: 'Readlist Name',
-      dataIndex: 'name',
-      width: '40%',
-      render: (text, record) => <Link className='document-link custom-card-text-wrapper' title={text} to={record.url}>{text}</Link>,
-      sorter: (a, b) => a.name.localeCompare(b.name),
-    }, {
-      title: 'Creator',
-      render: (text, record) => <span><Avatar src={record.owner.portrait_url} style={{ verticalAlign: 'middle', marginRight: 12}} />{record.owner.nickname}</span>,
-      width: '30%',
-    }, {
-      title: 'Create date',
-      width: '30%',
-      render: (text, record) => <TimeAgo date={record.create_time} />,
-      sorter: (a, b) => Date.parse(a.create_time) > Date.parse(b.create_time),
-    }]
+    const columns = [
+      {
+        title: <FormattedMessage id='app.table.readlist_name' defaultMessage='Readlist Name' />,
+        dataIndex: 'name',
+        width: '40%',
+        render: (text, record) => (
+          <Link className='document-link custom-card-text-wrapper' title={text} to={record.url}>
+            {text}
+          </Link>
+        ),
+        sorter: (a, b) => a.name.localeCompare(b.name),
+      },
+      {
+        title: <FormattedMessage id='app.table.creator' defaultMessage='Creator' />,
+        render: (text, record) => (
+          <span>
+            <Avatar
+              src={record.owner.portrait_url}
+              style={{ verticalAlign: 'middle', marginRight: 12 }}
+            />
+            {record.owner.nickname}
+          </span>
+        ),
+        width: '30%',
+      },
+      {
+        title: <FormattedMessage id='app.table.create_date' defaultMessage='Create Date' />,
+        width: '30%',
+        render: (text, record) => <TimeAgo date={record.create_time} />,
+        sorter: (a, b) => Date.parse(a.create_time) > Date.parse(b.create_time),
+      },
+    ]
 
     return (
       <Table
@@ -123,23 +153,16 @@ class GroupReadlistsSubtab extends React.Component {
         rowKey={record => record.uuid}
         onChange={this.handleChange}
         locale={{
-          emptyText: 'No readlist found'
+          emptyText: (
+            <FormattedMessage
+              id='app.group.message.no_readlists'
+              defaultMessage='No readlists found'
+            />
+          ),
         }}
       />
     )
   }
 }
 
-
 export { GroupReadlistsTab }
-
-
-
-
-
-
-
-
-
-
-

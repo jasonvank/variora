@@ -1,8 +1,9 @@
-import {Avatar, Table} from 'antd'
+import { Avatar, Table } from 'antd'
 
 import React from 'react'
 import { Link, Route, Switch, Redirect } from 'react-router-dom'
 import TimeAgo from 'react-timeago'
+import { FormattedMessage, FormattedHTMLMessage } from 'react-intl'
 
 class ReadlistResult extends React.Component {
   constructor(props) {
@@ -11,7 +12,7 @@ class ReadlistResult extends React.Component {
       sortedInfo: null,
       data: props.resultReadlists,
     }
-    this.handleChange = (sorter) => {
+    this.handleChange = sorter => {
       this.setState({
         sortedInfo: sorter,
       })
@@ -28,22 +29,38 @@ class ReadlistResult extends React.Component {
     let sortedInfo = this.state.sortedInfo
     sortedInfo = sortedInfo || {}
 
-    const columns = [{
-      title: 'Readlist Name',
-      dataIndex: 'name',
-      width: '40%',
-      render: (text, record) => <Link className='document-link custom-card-text-wrapper' title={text} to={record.url}>{text}</Link>,
-      sorter: (a, b) => a.name.localeCompare(b.name),
-    }, {
-      title: 'Creator',
-      render: (text, record) => <span><Avatar src={record.owner.portrait_url} style={{ verticalAlign: 'middle', marginRight: 12}} />{record.owner.nickname}</span>,
-      width: '30%',
-    }, {
-      title: 'Create date',
-      width: '30%',
-      render: (text, record) => <TimeAgo date={record.create_time} />,
-      sorter: (a, b) => Date.parse(a.create_time) > Date.parse(b.create_time),
-    }]
+    const columns = [
+      {
+        title: <FormattedMessage id='app.table.readlist_name' defaultMessage='Readlist Name' />,
+        dataIndex: 'name',
+        width: '40%',
+        render: (text, record) => (
+          <Link className='document-link custom-card-text-wrapper' title={text} to={record.url}>
+            {text}
+          </Link>
+        ),
+        sorter: (a, b) => a.name.localeCompare(b.name),
+      },
+      {
+        title: <FormattedMessage id='app.table.creator' defaultMessage='Creator' />,
+        render: (text, record) => (
+          <span>
+            <Avatar
+              src={record.owner.portrait_url}
+              style={{ verticalAlign: 'middle', marginRight: 12 }}
+            />
+            {record.owner.nickname}
+          </span>
+        ),
+        width: '30%',
+      },
+      {
+        title: <FormattedMessage id='app.table.create_date' defaultMessage='Create date' />,
+        width: '30%',
+        render: (text, record) => <TimeAgo date={record.create_time} />,
+        sorter: (a, b) => Date.parse(a.create_time) > Date.parse(b.create_time),
+      },
+    ]
 
     return (
       <Table
@@ -55,7 +72,7 @@ class ReadlistResult extends React.Component {
         rowKey={record => record.uuid}
         onChange={this.handleChange}
         locale={{
-          emptyText: 'No readlist found'
+          emptyText: 'No readlist found',
         }}
       />
     )

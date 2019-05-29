@@ -1,12 +1,12 @@
 import 'regenerator-runtime/runtime'
 
-import {Button, Col, Collapse, Icon, Input, Layout, Menu, message, Popconfirm, Row, notification, Card, Tooltip} from 'antd'
+import { Button, Col, Icon, Input, Row, notification, Card, Tooltip } from 'antd'
 
 import React from 'react'
 import axios from 'axios'
 import { getCookie, getUrlFormat } from 'util.js'
 import validator from 'email-validator'
-
+import { FormattedMessage } from 'react-intl'
 
 const { TextArea } = Input
 
@@ -14,49 +14,63 @@ class SuccessfulInvitationsNotificationWrapper extends React.Component {
   render() {
     var successful_applications = this.props.successful_applications
     var emailListItems = successful_applications.map(function(invitation) {
-      return <li key={invitation.pk} ><p>{invitation.invitee_nickname + '  '}<code>{'<' + invitation.invitee_email + '>'}</code></p></li>
+      return (
+        <li key={invitation.pk}>
+          <p>
+            {invitation.invitee_nickname + '  '}
+            <code>{'<' + invitation.invitee_email + '>'}</code>
+          </p>
+        </li>
+      )
     })
     return (
       <div>
-        to<br />
-        <ul>
-          { emailListItems }
-        </ul>
+        to
+        <br />
+        <ul>{emailListItems}</ul>
       </div>
     )
   }
 }
 
-
 class UnregisteredEmailsNotificationWrapper extends React.Component {
   render() {
     var unregistered_emails = this.props.unregistered_emails
     var listItems = unregistered_emails.map(function(email) {
-      return <li key={email} ><code>{'<' + email + '>'}</code></li>
+      return (
+        <li key={email}>
+          <code>{'<' + email + '>'}</code>
+        </li>
+      )
     })
-    return (
-      <ul>
-        { listItems }
-      </ul>
-    )
+    return <ul>{listItems}</ul>
   }
 }
-
 
 class GroupInvitationForm extends React.Component {
   constructor() {
     super()
     this.state = {
-      emailList : '',
-      invitationMessage : '',
+      emailList: '',
+      invitationMessage: '',
     }
 
     this.sendInvitation = () => {
       var [isValid, emailList] = this.preprocessEmailsString(this.state.emailList)
       if (!isValid) {
         notification['warning']({
-          message: 'Email list input is not valid',
-          description: 'Please check again!',
+          message: (
+            <FormattedMessage
+              id='app.group.message.email_list_invalid'
+              defaultMessage='Email list input is not valid'
+            />
+          ),
+          description: (
+            <FormattedMessage
+              id='app.group.message.check_again'
+              defaultMessage='Please check again'
+            />
+          ),
           duration: 2,
         })
         return
@@ -67,26 +81,41 @@ class GroupInvitationForm extends React.Component {
       data.append('invitee_emails', emailList)
       data.append('invitation_message', this.state.invitationMessage)
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-      axios.post('/coterie/api/invite', data).then((response) => {
+      axios.post('/coterie/api/invite', data).then(response => {
         var successful_applications = response.data['successful_invitations']
         var unregistered_emails = response.data['unregistered_emails']
         if (successful_applications.length > 0)
           notification['success']({
-            message: 'Invitations successfully sent',
-            description: <SuccessfulInvitationsNotificationWrapper successful_applications={successful_applications}/>,
-            duration: 0
+            message: (
+              <FormattedMessage
+                id='app.group.message.invitation_sent'
+                defaultMessage='Invitations successfully sent'
+              />
+            ),
+            description: (
+              <SuccessfulInvitationsNotificationWrapper
+                successful_applications={successful_applications}
+              />
+            ),
+            duration: 0,
           })
         if (unregistered_emails.length > 0)
           notification['warning']({
-            message: 'Following emails are not registered yet. We already send email to them about your invitation.',
-            description: <UnregisteredEmailsNotificationWrapper unregistered_emails={unregistered_emails}/>,
+            message: (
+              <FormattedMessage
+                id='app.group.message.email_not_registered'
+                defaultMessage='Following emails are not registered yet. We already send email to them about your invitation.'
+              />
+            ),
+            description: (
+              <UnregisteredEmailsNotificationWrapper unregistered_emails={unregistered_emails} />
+            ),
             duration: 0,
             style: {
               width: 380,
               marginLeft: 335 - 380,
             },
           })
-
       })
     }
 
@@ -105,8 +134,13 @@ class GroupInvitationForm extends React.Component {
   _emailsStringToArray(emailsString) {
     var rows = emailsString.trim().split(/\n| /)
     var emailsArray = []
-    for (var row of rows){
-      emailsArray = emailsArray.concat(row.trim().split(',').filter(element => element !== ''))
+    for (var row of rows) {
+      emailsArray = emailsArray.concat(
+        row
+          .trim()
+          .split(',')
+          .filter(element => element !== ''),
+      )
     }
     return emailsArray
   }
@@ -119,7 +153,7 @@ class GroupInvitationForm extends React.Component {
     for (let index in matchesArray) {
       let match = matchesArray[index]
       let potentialEmailString = match.replace('<', '').replace('>', '')
-      if (validator.validate(potentialEmailString) && !(resultArray.includes(potentialEmailString))) {
+      if (validator.validate(potentialEmailString) && !resultArray.includes(potentialEmailString)) {
         resultArray.push(potentialEmailString)
       }
     }
@@ -138,8 +172,7 @@ class GroupInvitationForm extends React.Component {
     var returnedEmailArray = []
     for (var email of emailArray) {
       email = email.trim()
-      if (!validator.validate(email))
-        return [false, [email]]
+      if (!validator.validate(email)) return [false, [email]]
       if (!returnedEmailArray.includes(email)) {
         returnedEmailArray.push(email)
       }
@@ -156,7 +189,12 @@ class GroupInvitationForm extends React.Component {
               rows={2}
               value={this.state.emailList}
               onChange={this.onEmailListInputChange}
-              placeholder={"Multiple emails can be seperated by comma"}
+              placeholder={
+                <FormattedMessage
+                  id='app.group.message.multiple_emails_sep_comma'
+                  defaultMessage='Multiple emails can be seperated by comma'
+                />
+              }
             />
           </div>
           <div style={{ backgroundColor: 'white', marginTop: 28 }}>
@@ -164,18 +202,29 @@ class GroupInvitationForm extends React.Component {
               rows={4}
               value={this.state.invitationMessage}
               onChange={this.onInvitationMessageInputChange}
-              placeholder={"Messages to invitees"}
+              placeholder={
+                <FormattedMessage
+                  id='app.group.message.messages_to_invitees'
+                  defaultMessage='Messages to invitees'
+                />
+              }
             />
           </div>
           <div>
-            <Button type="primary" icon="mail" style={{ marginTop: 28, marginBottom: 18, float: 'right' }} onClick={this.sendInvitation}>Send Invitation</Button>
+            <Button
+              type='primary'
+              icon='mail'
+              style={{ marginTop: 28, marginBottom: 18, float: 'right' }}
+              onClick={this.sendInvitation}
+            >
+              Send Invitation
+            </Button>
           </div>
         </Col>
       </Row>
     )
   }
 }
-
 
 class GroupMemberInvitationsSubtab extends React.Component {
   constructor(props) {
@@ -192,33 +241,40 @@ class GroupMemberInvitationsSubtab extends React.Component {
     })
   }
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   render() {
     const cardTitle = (
-      <span style={{fontSize: '12px'}}>
+      <span style={{ fontSize: '12px' }}>
         Invite new members
-        <Tooltip title={'Or they can apply to join your group. Simply search the group name and click the apply button'} >
-          <a href="#">
-            <Icon type="info-circle-o" style={{marginLeft: 6}} />
+        <Tooltip
+          title={
+            <FormattedMessage
+              id='app.group.message.user_join_code'
+              defaultMessage='Or they can apply to join your group. Simply search the group name and click the apply button'
+            />
+          }
+        >
+          <a href='#'>
+            <Icon type='info-circle-o' style={{ marginLeft: 6 }} />
           </a>
         </Tooltip>
       </span>
     )
 
     const invitationSection = (
-      <Card title={cardTitle} className={'card'} bordered={false} style={{ overflow: 'auto', backgroundColor: 'white', margin: '18px 0 28px 0' }} noHovering>
-        <GroupInvitationForm coteriePk={this.state.coteriePk}/>
+      <Card
+        title={cardTitle}
+        className={'card'}
+        bordered={false}
+        style={{ overflow: 'auto', backgroundColor: 'white', margin: '18px 0 28px 0' }}
+        noHovering
+      >
+        <GroupInvitationForm coteriePk={this.state.coteriePk} />
       </Card>
     )
-    return (
-      <div>
-         { this.props.isAdmin ? invitationSection : null }
-      </div>
-    )
+    return <div>{this.props.isAdmin ? invitationSection : null}</div>
   }
 }
-
 
 export { GroupMemberInvitationsSubtab }

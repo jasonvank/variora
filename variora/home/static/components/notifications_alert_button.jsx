@@ -1,42 +1,48 @@
 import 'regenerator-runtime/runtime'
 
-import {Avatar, Badge, Icon, Popover, Table} from 'antd'
-import {getCookie, getUrlFormat} from 'util.js'
+import { Avatar, Badge, Icon, Popover, Table } from 'antd'
+import { getCookie, getUrlFormat } from 'util.js'
+import { FormattedMessage } from 'react-intl'
 
 import React from 'react'
 import axios from 'axios'
 import TimeAgo from 'react-timeago'
 
-
 class NotificationsAvaratWrapper extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      newNotification: this.props.newNotification
+      newNotification: this.props.newNotification,
     }
   }
 
   render() {
     const defaultAvatarUrl = '/media/default_notification_img.png'
-    const defaultAvatar = <Avatar src={defaultAvatarUrl} style={{ verticalAlign: 'middle', background: 'white' }}></Avatar>
-    const userAvatar = <Avatar src={this.state.newNotification.data.image_url} style={{ verticalAlign: 'middle', background: 'white' }}></Avatar>
-    return (
-      this.state.newNotification.data.image_url ? userAvatar : defaultAvatar
+    const defaultAvatar = (
+      <Avatar src={defaultAvatarUrl} style={{ verticalAlign: 'middle', background: 'white' }} />
     )
+    const userAvatar = (
+      <Avatar
+        src={this.state.newNotification.data.image_url}
+        style={{ verticalAlign: 'middle', background: 'white' }}
+      />
+    )
+    return this.state.newNotification.data.image_url ? userAvatar : defaultAvatar
   }
 }
-
 
 class NotificationsDetailsWrapper extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      newNotification: this.props.newNotification
+      newNotification: this.props.newNotification,
     }
   }
 
   render() {
-    const description = this.state.newNotification.description ? this.state.newNotification.description.trim() : ''
+    const description = this.state.newNotification.description
+      ? this.state.newNotification.description.trim()
+      : ''
     var verb = ''
     const actionVerb = this.state.newNotification.verb
 
@@ -51,18 +57,23 @@ class NotificationsDetailsWrapper extends React.Component {
 
     return (
       <div>
-        <div style={{fontWeight: 'bold'}}>
-          <a target="_blank" href={this.state.newNotification.data.redirect_url} style={{ textDecoration: 'none', color: '#37b'}}>
+        <div style={{ fontWeight: 'bold' }}>
+          <a
+            target='_blank'
+            href={this.state.newNotification.data.redirect_url}
+            style={{ textDecoration: 'none', color: '#37b' }}
+          >
             {title}
           </a>
         </div>
-        <div className="notification-alert-list-wrapper" title={description}>{description}</div>
-        <TimeAgo style={{color: '#91959d'}} date={this.state.newNotification.timestamp} />
+        <div className='notification-alert-list-wrapper' title={description}>
+          {description}
+        </div>
+        <TimeAgo style={{ color: '#91959d' }} date={this.state.newNotification.timestamp} />
       </div>
     )
   }
 }
-
 
 class NotificationsList extends React.Component {
   constructor(props) {
@@ -97,41 +108,42 @@ class NotificationsList extends React.Component {
       var data = new FormData()
       data.append('notif_slugs_to_mark_as_read', unreadSlug)
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-      axios.post('/notifications/api/mark-all-as-read', data)
-        .then(response => {
-          var newData = this.state.data
-          for (var notification of newData)
-            notification.unread = false
-          this.setState({data: newData})
-          this.forceUpdate()  // TODO: should avoid using forceUpdate
-          this.checkLeftUnreadNotifications()
-        })
+      axios.post('/notifications/api/mark-all-as-read', data).then(response => {
+        var newData = this.state.data
+        for (var notification of newData) notification.unread = false
+        this.setState({ data: newData })
+        this.forceUpdate() // TODO: should avoid using forceUpdate
+        this.checkLeftUnreadNotifications()
+      })
     }
   }
 
   render() {
-    const columns = [{
-      title: 'Avatar',
-      key: 'avatar',
-      width: '20%',
-      render: (text, record, index) => (
-        <NotificationsAvaratWrapper newNotification={record}/>
-      )
-    }, {
-      title: 'title',
-      key: 'title',
-      width: '75%',
-      render: (text, record, index) => (
-        <NotificationsDetailsWrapper newNotification={record}/>
-      )
-    }, {
-      title: 'Read',
-      key: 'read',
-      width: '5%',
-      render: (text, record, index) => (
-        <Badge style={{verticalAlign: 'middle'}} status={record.unread ? 'processing' : 'default'}/>
-      )
-    }]
+    const columns = [
+      {
+        title: <FormattedMessage id='app.table.avatar' defaultMessage='Avatar' />,
+        key: 'avatar',
+        width: '20%',
+        render: (text, record, index) => <NotificationsAvaratWrapper newNotification={record} />,
+      },
+      {
+        title: <FormattedMessage id='app.table.title' defaultMessage='Title' />,
+        key: 'title',
+        width: '75%',
+        render: (text, record, index) => <NotificationsDetailsWrapper newNotification={record} />,
+      },
+      {
+        title: <FormattedMessage id='app.table.read' defaultMessage='Read' />,
+        key: 'read',
+        width: '5%',
+        render: (text, record, index) => (
+          <Badge
+            style={{ verticalAlign: 'middle' }}
+            status={record.unread ? 'processing' : 'default'}
+          />
+        ),
+      },
+    ]
 
     return (
       <div style={{ width: '300px' }}>
@@ -147,7 +159,7 @@ class NotificationsList extends React.Component {
           columns={columns}
           pagination={false}
           showHeader={false}
-          style={{width: '300px', maxHeight: '66vh', overflowY: 'auto'}}
+          style={{ width: '300px', maxHeight: '66vh', overflowY: 'auto' }}
           rowKey={record => record.slug}
           onRowClick={this.handleReadStatus}
           footer={() => null}
@@ -157,7 +169,6 @@ class NotificationsList extends React.Component {
   }
 }
 
-
 class NotificationsAlertButton extends React.Component {
   constructor(props) {
     super(props)
@@ -165,41 +176,55 @@ class NotificationsAlertButton extends React.Component {
       visible: false,
       length: undefined,
       show: false,
-      data: undefined
+      data: undefined,
     }
-    this.handleVisibleChange = (visible) => {
-      this.setState({visible})
+    this.handleVisibleChange = visible => {
+      this.setState({ visible })
     }
     this.removeBadgeCallback = () => {
-      this.setState({show: false})
+      this.setState({ show: false })
     }
-    this.unreadNotificationsLeftCallback = (unreadNotificationsLeft) => {
-      this.setState({length: unreadNotificationsLeft})
+    this.unreadNotificationsLeftCallback = unreadNotificationsLeft => {
+      this.setState({ length: unreadNotificationsLeft })
     }
   }
 
   componentDidMount() {
     const self = this
-    axios.get(getUrlFormat('/notifications/api/combined'))
-      .then(response => {
-        self.setState({
-          data: response.data,
-          show: response.data.length > 0 ? true : false,
-          length: response.data.filter(item => item.unread == true).length,
-        })
+    axios.get(getUrlFormat('/notifications/api/combined')).then(response => {
+      self.setState({
+        data: response.data,
+        show: response.data.length > 0 ? true : false,
+        length: response.data.filter(item => item.unread == true).length,
       })
+    })
   }
 
   render() {
     return (
       <Badge count={this.state.length} style={{ backgroundColor: '#52c41a', marginTop: -5 }}>
         <Popover
-          content={<NotificationsList data={this.state.data} removeBadgeCallback={this.removeBadgeCallback} unreadNotificationsLeftCallback={this.unreadNotificationsLeftCallback} />}
+          content={
+            <NotificationsList
+              data={this.state.data}
+              removeBadgeCallback={this.removeBadgeCallback}
+              unreadNotificationsLeftCallback={this.unreadNotificationsLeftCallback}
+            />
+          }
           trigger='click'
           visible={this.state.visible}
           onVisibleChange={this.handleVisibleChange}
         >
-          <Icon type="bell" style={{ cursor: 'pointer', fontSize: 18, marginLeft: 28, verticalAlign: 'middle', marginTop: -2 }}/>
+          <Icon
+            type='bell'
+            style={{
+              cursor: 'pointer',
+              fontSize: 18,
+              marginLeft: 28,
+              verticalAlign: 'middle',
+              marginTop: -2,
+            }}
+          />
         </Popover>
       </Badge>
     )

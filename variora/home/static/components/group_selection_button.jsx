@@ -1,29 +1,35 @@
 import 'regenerator-runtime/runtime'
 
-import {Avatar, Badge, Col, Icon, Popover, Table, notification, Tabs, Tooltip} from 'antd'
-import {getCookie, getUrlFormat, groupAvatarColors} from 'util.js'
+import { Avatar, Badge, Col, Icon, Popover, Table, notification, Tabs, Tooltip } from 'antd'
+import { getCookie, getUrlFormat, groupAvatarColors } from 'util.js'
 
 import React from 'react'
 import axios from 'axios'
-
+import { FormattedMessage } from 'react-intl'
 
 class GroupAvatarWrapper extends React.Component {
   render() {
     if (this.props.coterie.avatarUrl !== undefined) {
-      return <Avatar src={this.props.coterie.avatarUrl} style={{ verticalAlign: 'middle', background: 'white' }}></Avatar>
+      return (
+        <Avatar
+          src={this.props.coterie.avatarUrl}
+          style={{ verticalAlign: 'middle', background: 'white' }}
+        />
+      )
     } else if (this.props.coterie.icon !== undefined) {
-      return <Avatar icon={this.props.coterie.icon} style={{ verticalAlign: 'middle'}}></Avatar>
+      return <Avatar icon={this.props.coterie.icon} style={{ verticalAlign: 'middle' }} />
     } else {
       const color = groupAvatarColors[this.props.coterie.uuid.charCodeAt(0) % 8]
       return (
         <Avatar style={{ backgroundColor: color, verticalAlign: 'middle' }}>
-          <span style={{position: 'initial'}}>{this.props.coterie.name.slice(0, 2).toUpperCase()}</span>
+          <span style={{ position: 'initial' }}>
+            {this.props.coterie.name.slice(0, 2).toUpperCase()}
+          </span>
         </Avatar>
       )
     }
   }
 }
-
 
 class GroupDetailsWrapper extends React.Component {
   render() {
@@ -31,17 +37,18 @@ class GroupDetailsWrapper extends React.Component {
     const name = this.props.coterie.name
 
     return (
-      <div style={{cursor: 'pointer'}}>
+      <div style={{ cursor: 'pointer' }}>
         <div className={'group-name'}>{name}</div>
-        { description.length === 0 ? null :
-          <div className="notification-alert-list-wrapper" title={description}>{description}</div>
-        }
+        {description.length === 0 ? null : (
+          <div className='notification-alert-list-wrapper' title={description}>
+            {description}
+          </div>
+        )}
         {/*<TimeAgo style={{color: '#91959d'}} date={this.state.newNotification.timestamp} />*/}
       </div>
     )
   }
 }
-
 
 class GroupsList extends React.Component {
   constructor(props) {
@@ -57,56 +64,68 @@ class GroupsList extends React.Component {
   }
 
   render() {
-    const columns = [{
-      title: 'Avatar',
-      key: 'avatar',
-      width: '20%',
-      render: (text, record, index) => (
-        <GroupAvatarWrapper coterie={record} />
-      )
-    }, {
-      title: 'title',
-      key: 'title',
-      width: '75%',
-      render: (text, record, index) => (
-        <GroupDetailsWrapper coterie={record} />
-      )
-    }, {
-      title: 'in',
-      key: 'in',
-      width: '5%',
-      render: (text, record, index) => (
-        <Icon style={{verticalAlign: 'middle', display: record.uuid === this.props.currentCoterieUUID ? 'block' : 'none'}} type="check" />
-      )
-    }]
+    const columns = [
+      {
+        title: 'Avatar',
+        key: 'avatar',
+        width: '20%',
+        render: (text, record, index) => <GroupAvatarWrapper coterie={record} />,
+      },
+      {
+        title: 'title',
+        key: 'title',
+        width: '75%',
+        render: (text, record, index) => <GroupDetailsWrapper coterie={record} />,
+      },
+      {
+        title: 'in',
+        key: 'in',
+        width: '5%',
+        render: (text, record, index) => (
+          <Icon
+            style={{
+              verticalAlign: 'middle',
+              display: record.uuid === this.props.currentCoterieUUID ? 'block' : 'none',
+            }}
+            type='check'
+          />
+        ),
+      },
+    ]
 
-    const publicCoterie = [{
-      uuid: undefined,
-      name: 'Public',
-      description: 'Public content is visible by all users',
-      avatarUrl: '/media/logo.png'
-    }]
+    const publicCoterie = [
+      {
+        uuid: undefined,
+        name: 'Public',
+        description: 'Public content is visible by all users',
+        avatarUrl: '/media/logo.png',
+      },
+    ]
     const createNewGroupFakeItem = {
       uuid: 'fake',
       name: 'New Group',
       description: 'Click to create a new group',
       icon: 'plus-square-o',
-      callback: () => {this.props.setCreateCoterieModelVisible(true)}
+      callback: () => {
+        this.props.setCreateCoterieModelVisible(true)
+      },
     }
     return (
-      <div id={'group-selection-div'} style={{maxHeight: '66vh', overflowY: 'auto' }}>
+      <div id={'group-selection-div'} style={{ maxHeight: '66vh', overflowY: 'auto' }}>
         <Table
           className='notification-table'
           dataSource={publicCoterie}
           columns={columns}
           pagination={false}
           showHeader={false}
-          style={{width: '300px'}}
+          style={{ width: '300px' }}
           rowKey={record => record.slug}
-          onRowClick={() => {window.location.href = `/`}}
+          onRowClick={() => {
+            window.location.href = '/'
+          }}
           footer={() => null}
           title={() => null}
-          locale={{ emptyText: '', }}
+          locale={{ emptyText: '' }}
         />
         <Table
           className='notification-table'
@@ -114,12 +133,16 @@ class GroupsList extends React.Component {
           columns={columns}
           pagination={false}
           showHeader={false}
-          style={{width: '300px'}}
+          style={{ width: '300px' }}
           rowKey={record => record.slug}
           onRowClick={this.onClickRow}
           footer={() => null}
-          title={() => <span style={{height: 18, }}>As admin</span>}
-          locale={{ emptyText: '', }}
+          title={() => (
+            <span style={{ height: 18 }}>
+              <FormattedMessage id='app.group.as_admin' defaultMessage='As admin' />
+            </span>
+          )}
+          locale={{ emptyText: '' }}
         />
         <Table
           className='notification-table'
@@ -127,18 +150,21 @@ class GroupsList extends React.Component {
           columns={columns}
           pagination={false}
           showHeader={false}
-          style={{width: '300px'}}
+          style={{ width: '300px' }}
           rowKey={record => record.slug}
           onRowClick={this.onClickRow}
           footer={() => null}
-          title={() => <span style={{height: 18, }}>As member</span>}
-          locale={{ emptyText: '', }}
+          title={() => (
+            <span style={{ height: 18 }}>
+              <FormattedMessage id='app.group.as_member' defaultMessage='As member' />
+            </span>
+          )}
+          locale={{ emptyText: '' }}
         />
       </div>
     )
   }
 }
-
 
 class GroupSelectionButton extends React.Component {
   constructor(props) {
@@ -147,10 +173,10 @@ class GroupSelectionButton extends React.Component {
       visible: false,
       length: undefined,
       show: false,
-      data: undefined
+      data: undefined,
     }
-    this.handleVisibleChange = (visible) => {
-      this.setState({visible})
+    this.handleVisibleChange = visible => {
+      this.setState({ visible })
     }
   }
 
@@ -165,7 +191,8 @@ class GroupSelectionButton extends React.Component {
 
   render() {
     var iconToShow = (
-      <Icon type="team"
+      <Icon
+        type='team'
         // onClick={() => {
         //   notification['info']({message: 'We are rewriting the group function, it will come soon.'})
         // }}
@@ -198,7 +225,8 @@ class GroupSelectionButton extends React.Component {
       <Popover
         content={
           <GroupsList
-            administratedCoteries={this.props.administratedCoteries} joinedCoteries={this.props.joinedCoteries}
+            administratedCoteries={this.props.administratedCoteries}
+            joinedCoteries={this.props.joinedCoteries}
             setCreateCoterieModelVisible={this.props.setCreateCoterieModelVisible}
             currentCoterieUUID={this.props.currentCoterieUUID}
           />
@@ -206,17 +234,37 @@ class GroupSelectionButton extends React.Component {
         trigger='click'
         visible={this.state.visible}
         onVisibleChange={this.handleVisibleChange}
-        placement="bottom"
+        placement='bottom'
       >
         {/*{iconToShow}*/}
-        <Tooltip title={'Documents and discussion inside a group is not visible to the world'} >
-          <a href="#">
-            <Icon type="info-circle-o" style={{marginRight: 6, verticalAlign: 'middle'}} />
+        <Tooltip
+          title={
+            <FormattedMessage
+              id='app.group.message.visible_within_group'
+              defaultMessage='Documents and discussion inside a group is not visible to the world'
+            />
+          }
+        >
+          <a href='#'>
+            <Icon type='info-circle-o' style={{ marginRight: 6, verticalAlign: 'middle' }} />
           </a>
         </Tooltip>
 
-        <span style={{ fontWeight: 400, color: '#666', cursor: 'pointer', verticalAlign: 'middle', marginRight: 6 }}>Groups</span>
-        <Icon style={{ fontSize: 8, cursor: 'pointer', verticalAlign: 'middle' }} type="caret-down" />
+        <span
+          style={{
+            fontWeight: 400,
+            color: '#666',
+            cursor: 'pointer',
+            verticalAlign: 'middle',
+            marginRight: 6,
+          }}
+        >
+          Groups
+        </span>
+        <Icon
+          style={{ fontSize: 8, cursor: 'pointer', verticalAlign: 'middle' }}
+          type='caret-down'
+        />
       </Popover>
     )
   }

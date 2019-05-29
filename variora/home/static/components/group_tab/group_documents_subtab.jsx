@@ -1,12 +1,21 @@
 import 'regenerator-runtime/runtime'
 
-import { Button, Card, Col, Icon, Input, Layout, Menu, Row, Tooltip, Upload, notification } from 'antd'
 import {
-  Link,
-  Route,
-  BrowserRouter as Router
-} from 'react-router-dom'
+  Button,
+  Card,
+  Col,
+  Icon,
+  Input,
+  Layout,
+  Menu,
+  Row,
+  Tooltip,
+  Upload,
+  notification,
+} from 'antd'
+import { Link, Route, BrowserRouter as Router } from 'react-router-dom'
 import { getCookie, getUrlFormat } from 'util.js'
+import { FormattedMessage } from 'react-intl'
 
 import { GroupDocumentsList } from './group_documents_list.jsx'
 import React from 'react'
@@ -14,11 +23,6 @@ import ReactDOM from 'react-dom'
 import axios from 'axios'
 import enUS from 'antd/lib/locale-provider/en_US'
 import { validateDocumentTitle, validateDocumentSize } from 'home_util.js'
-
-const { SubMenu } = Menu
-const { Header, Content, Sider } = Layout
-const MenuItemGroup = Menu.ItemGroup
-
 
 class GroupDocumentsSubtab extends React.Component {
   constructor(props) {
@@ -36,10 +40,8 @@ class GroupDocumentsSubtab extends React.Component {
     this.uploadLocalDocument = () => {
       const title = this.state.uploadedDocumentName
 
-      if (!validateDocumentTitle(title))
-        return false
-      if (!validateDocumentSize(this.state.uploadedDocumentFileList[0]))
-        return false
+      if (!validateDocumentTitle(title)) return false
+      if (!validateDocumentSize(this.state.uploadedDocumentFileList[0])) return false
 
       const data = new FormData()
       data.append('title', title)
@@ -48,28 +50,35 @@ class GroupDocumentsSubtab extends React.Component {
       data.append('coterie_pk', this.props.coteriePk)
       data.append('current_url', window.location.href)
       this.setState({ uploadBtnLoading: true })
-      axios.post('/coterie/api/coteriedocuments/upload', data, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }).then(() => {
-        this.setState({ uploadedDocumentFileList: [] })
-        this.setState({ uploadedDocumentName: '' })
-        this.setState({ uploadBtnLoading: false })
-        this.uploadedDocumentTable.updateData()
-      }).catch(() => {
-        this.setState({ uploadBtnLoading: false })
-      })
+      axios
+        .post('/coterie/api/coteriedocuments/upload', data, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        .then(() => {
+          this.setState({ uploadedDocumentFileList: [] })
+          this.setState({ uploadedDocumentName: '' })
+          this.setState({ uploadBtnLoading: false })
+          this.uploadedDocumentTable.updateData()
+        })
+        .catch(() => {
+          this.setState({ uploadBtnLoading: false })
+        })
     }
 
     this.uploadOnlineDocument = () => {
       const title = this.state.onlineDocumentName
       const externalUrl = this.state.onlineDocumentUrl
-      if (!validateDocumentTitle(title))
-        return false
+      if (!validateDocumentTitle(title)) return false
       if (externalUrl == undefined || externalUrl == '') {
         notification['warning']({
-          message: 'URL cannot be empty',
+          message: (
+            <FormattedMessage
+              id='app.group.message.url.not_empty'
+              defaultMessage='URL cannot be empty'
+            />
+          ),
           duration: 1.8,
         })
         return false
@@ -81,10 +90,10 @@ class GroupDocumentsSubtab extends React.Component {
       data.append('coterie_id', this.props.coteriePk)
       data.append('current_url', window.location.href)
       axios.post('/coterie/api/coteriedocuments/upload', data).then(() => {
-          this.setState({ onlineDocumentName: '' })
-          this.setState({ onlineDocumentUrl: '' })
-          this.uploadedDocumentTable.updateData()
-        })
+        this.setState({ onlineDocumentName: '' })
+        this.setState({ onlineDocumentUrl: '' })
+        this.uploadedDocumentTable.updateData()
+      })
     }
 
     this.handleDefaultDocumentName = this.handleDefaultDocumentName.bind(this)
@@ -92,14 +101,15 @@ class GroupDocumentsSubtab extends React.Component {
   }
 
   handleDefaultDocumentName(event) {
-    const defaultDocumentName = this.state.uploadedDocumentFileList[0] ? this.state.uploadedDocumentFileList[0].name : 'undefined'
+    const defaultDocumentName = this.state.uploadedDocumentFileList[0]
+      ? this.state.uploadedDocumentFileList[0].name
+      : 'undefined'
     this.setState({ uploadedDocumentName: defaultDocumentName })
   }
 
   handleUserInputDocumentName(event) {
     this.setState({ uploadedDocumentName: event.target.value })
   }
-
 
   render() {
     self = this
@@ -109,7 +119,9 @@ class GroupDocumentsSubtab extends React.Component {
       beforeUpload(file, fileList) {
         self.setState({
           uploadedDocumentFileList: [file],
-          uploadedDocumentName: file.name.endsWith('.pdf') ? file.name.slice(0, file.name.length - 4) : file.name
+          uploadedDocumentName: file.name.endsWith('.pdf')
+            ? file.name.slice(0, file.name.length - 4)
+            : file.name,
         })
         return false
       },
@@ -117,23 +129,41 @@ class GroupDocumentsSubtab extends React.Component {
     }
 
     const cardTitle = (
-      <span style={{fontSize: '12px'}}>
-        Upload Document
-        <Tooltip title={'Documents only visible to admins and members in the group'} >
-          <a href="#">
-            <Icon type="info-circle-o" style={{marginLeft: 6}} />
+      <span style={{ fontSize: '12px' }}>
+        <FormattedMessage id='app.document.upload_document' defaultMessage='Upload Document' />
+
+        <Tooltip
+          title={
+            <FormattedMessage
+              id='app.document.visible_group'
+              defaultMessage='Documents only visible to admins and members in the group'
+            />
+          }
+        >
+          <a href='#'>
+            <Icon type='info-circle-o' style={{ marginLeft: 6 }} />
           </a>
         </Tooltip>
       </span>
     )
 
     const uploadDocumentSection = (
-      <Card title={cardTitle} className={'card'} bordered={false} style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }} noHovering>
+      <Card
+        title={cardTitle}
+        className={'card'}
+        bordered={false}
+        style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}
+        noHovering
+      >
         <Row>
           <Col span={12} style={{ textAlign: 'left' }}>
             <Upload {...uploadProps}>
               <Button style={{ margin: 8 }}>
-                <Icon type="file-add" /> Click to Choose File
+                <Icon type='file-add' />{' '}
+                <FormattedMessage
+                  id='app.document.choose_file'
+                  defaultMessage='Click to Choose File'
+                />
               </Button>
             </Upload>
             <Input
@@ -141,29 +171,52 @@ class GroupDocumentsSubtab extends React.Component {
               value={this.state.uploadedDocumentName}
               onChange={this.handleDefaultDocumentName}
               onChange={this.handleUserInputDocumentName}
-              placeholder={ 'name of the document' }
-            ></Input>
+              placeholder={'name of the document'}
+            />
             <div>
-              <Button type="primary" icon="upload" style={{ margin: 8 }} loading={this.state.uploadBtnLoading} onClick={this.uploadLocalDocument}>upload</Button>
+              <Button
+                type='primary'
+                icon='upload'
+                style={{ margin: 8 }}
+                loading={this.state.uploadBtnLoading}
+                onClick={this.uploadLocalDocument}
+              >
+                <FormattedMessage id='app.document.upload' defaultMessage='Upload' />
+              </Button>
             </div>
           </Col>
           <Col span={12} style={{ textAlign: 'left' }}>
             <Input
               style={{ width: '60%', margin: 8 }}
-              onChange={async (e) => this.setState({ onlineDocumentUrl: e.target.value })}
+              onChange={async e => this.setState({ onlineDocumentUrl: e.target.value })}
               value={this.state.onlineDocumentUrl}
-              placeholder={ 'URL to the online document' }
-            >
-            </Input>
+              placeholder={
+                <FormattedMessage
+                  id='app.document.url'
+                  defaultMessage='URL to the online document'
+                />
+              }
+            />
             <Input
               style={{ width: '60%', margin: 8 }}
-              onChange={async (e) => this.setState({ onlineDocumentName: e.target.value })}
+              onChange={async e => this.setState({ onlineDocumentName: e.target.value })}
               value={this.state.onlineDocumentName}
-              placeholder={ 'name of the document' }
-            >
-            </Input>
+              placeholder={
+                <FormattedMessage
+                  id='app.document.document_name'
+                  defaultMessage='name of the document'
+                />
+              }
+            />
             <div>
-              <Button type="primary" icon="upload" style={{ margin: 8 }} onClick={this.uploadOnlineDocument}>upload</Button>
+              <Button
+                type='primary'
+                icon='upload'
+                style={{ margin: 8 }}
+                onClick={this.uploadOnlineDocument}
+              >
+                <FormattedMessage id='app.document.upload' defaultMessage='Upload' />
+              </Button>
             </div>
           </Col>
         </Row>
@@ -172,24 +225,22 @@ class GroupDocumentsSubtab extends React.Component {
 
     return (
       <div>
-        <div className={'card'} style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}>
-          <GroupDocumentsList ref={(ele) => this.uploadedDocumentTable = ele} coterieUUID={this.props.coterieUUID} coteriePk={this.props.coteriePk} isAdmin={this.props.isAdmin}/>
+        <div
+          className={'card'}
+          style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}
+        >
+          <GroupDocumentsList
+            ref={ele => (this.uploadedDocumentTable = ele)}
+            coterieUUID={this.props.coterieUUID}
+            coteriePk={this.props.coteriePk}
+            isAdmin={this.props.isAdmin}
+          />
         </div>
         {/*{ this.props.isAdmin ? uploadDocumentSection : null }*/}
-        { uploadDocumentSection }
+        {uploadDocumentSection}
       </div>
     )
   }
 }
 
 export { GroupDocumentsSubtab }
-
-
-
-
-
-
-
-
-
-

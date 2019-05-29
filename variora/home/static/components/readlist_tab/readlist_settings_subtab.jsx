@@ -1,13 +1,13 @@
-import { Icon, Input, Button, Row, Form, Radio, Switch, Card, Col, Spin, Popconfirm, Table, Collapse, message, notification } from 'antd'
-import { formatOpenCoterieDocumentUrl, getCookie, getUrlFormat } from 'util.js'
+import { Input, Button, Row, Form, Col, Spin, Popconfirm, Collapse, notification } from 'antd'
+import { getCookie } from 'util.js'
 
 import React from 'react'
 import axios from 'axios'
+import { FormattedMessage, FormattedHTMLMessage } from 'react-intl'
 
-const { TextArea } = Input;
+const { TextArea } = Input
 const Panel = Collapse.Panel
-const FormItem = Form.Item;
-
+const FormItem = Form.Item
 
 class ReadlistSettingsSubtab extends React.Component {
   constructor(props) {
@@ -17,7 +17,7 @@ class ReadlistSettingsSubtab extends React.Component {
       readlistSlug: props.readlistSlug,
       readlistName: props.readlist.name,
       readlistDescription: props.readlist.description,
-      loading: false
+      loading: false,
     }
 
     this.deleteReadList = () => {
@@ -25,19 +25,28 @@ class ReadlistSettingsSubtab extends React.Component {
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
       axios.post(this.state.readlist.delete_url, data).then(() => {
         this.props.updateReadlistsCallback(this.state.readlistSlug)
-        window.location.href = this.props.coterieUUID === undefined ? '/' : `/groups/${this.props.coterieUUID}`
+        window.location.href =
+          this.props.coterieUUID === undefined ? '/' : `/groups/${this.props.coterieUUID}`
       })
     }
 
-    this.handleSubmit = (e) => {
+    this.handleSubmit = e => {
       e.preventDefault()
-      this.setState({loading: true})
+      this.setState({ loading: true })
       const newName = this.state.readlistName
       const newDesc = this.state.readlistDescription
 
       if (newName == '') {
-        this.setState({loading: false})
-        notification['warning']({ message: 'Readlist name cannot be empty', duration: 4, })
+        this.setState({ loading: false })
+        notification['warning']({
+          message: (
+            <FormattedMessage
+              id='app.readlists.message.empty'
+              defaultMessage='Readlist name cannot be empty'
+            />
+          ),
+          duration: 4,
+        })
         return
       }
 
@@ -54,15 +63,21 @@ class ReadlistSettingsSubtab extends React.Component {
         this.props.updateReadlistsNameCallback(this.state.readlistSlug, newName)
 
         const self = this
-        axios.post(this.state.readlist.change_desc_url, data2)
-          .then(() => {
-            self.setState({
-              loading: false,
-            })
-            notification['success']({ message: 'Readlist info updated', })
-            // TODO: refactor this
-            props.updateData()
+        axios.post(this.state.readlist.change_desc_url, data2).then(() => {
+          self.setState({
+            loading: false,
           })
+          notification['success']({
+            message: (
+              <FormattedMessage
+                id='app.readlists.message.update'
+                defaultMessage='Readlist info updated'
+              />
+            ),
+          })
+          // TODO: refactor this
+          props.updateData()
+        })
       })
     }
   }
@@ -88,9 +103,15 @@ class ReadlistSettingsSubtab extends React.Component {
 
     var deleteReadlistSection = (
       <Popconfirm
-        title="Are you sure to delete this readlist? This cannot be undone"
+        title={
+          <FormattedMessage
+            id='app.readlists.message.delete'
+            defaultMessage='Are you sure to delete this readlist? This cannot be undone'
+          />
+        }
         onConfirm={() => this.deleteReadList()}
-        okText="Yes" cancelText="No"
+        okText='Yes'
+        cancelText='No'
       >
         <a style={{ float: 'right', color: '#F2784B', marginRight: '6%' }}>Delete this readlist</a>
       </Popconfirm>
@@ -101,8 +122,13 @@ class ReadlistSettingsSubtab extends React.Component {
         <Col>
           <div style={{ marginTop: 18 }}>
             <Collapse accordion>
-              <Panel header="Danger Zone" key="1">
-                <span>{'Once you delete this list, all followers and you will no longer have access.'}</span>
+              <Panel header='Danger Zone' key='1'>
+                <span>
+                  <FormattedMessage
+                    id='app.readlists.message.delete_warning'
+                    defaultMessage='Once you delete this list, all followers and you will no longer have access.'
+                  />
+                </span>
                 {deleteReadlistSection}
               </Panel>
             </Collapse>
@@ -117,25 +143,25 @@ class ReadlistSettingsSubtab extends React.Component {
         <Spin spinning={this.state.loading}>
           <div className={'card'} style={{ overflow: 'auto', marginTop: 16, padding: 18 }}>
             <Form style={{ marginTop: 24 }} onSubmit={this.handleSubmit}>
-              <FormItem
-                label="Name"
-                {...formItemLayout}
-              >
-                <Input value={this.state.readlistName} onChange={async (e) => await this.setState({ readlistName: e.target.value })}/>
+              <FormItem label='Name' {...formItemLayout}>
+                <Input
+                  value={this.state.readlistName}
+                  onChange={async e => await this.setState({ readlistName: e.target.value })}
+                />
               </FormItem>
-              <FormItem
-                label="Description"
-                {...formItemLayout}
-              >
-                <TextArea rows={6}
+              <FormItem label='Description' {...formItemLayout}>
+                <TextArea
+                  rows={6}
                   value={this.state.readlistDescription}
-                  onChange={async (e) => {
+                  onChange={async e => {
                     await this.setState({ readlistDescription: e.target.value })
                   }}
                 />
               </FormItem>
               <FormItem {...buttonItemLayout}>
-                <Button type="primary" htmlType="submit">Submit</Button>
+                <Button type='primary' htmlType='submit'>
+                  Submit
+                </Button>
               </FormItem>
             </Form>
           </div>
@@ -144,6 +170,5 @@ class ReadlistSettingsSubtab extends React.Component {
     )
   }
 }
-
 
 export { ReadlistSettingsSubtab }
