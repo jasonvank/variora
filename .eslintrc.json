@@ -6,7 +6,7 @@
     "node": true,
     "jquery": true
   },
-  "extends": "eslint:recommended",
+  "extends": ["eslint:recommended", "airbnb", "prettier"],
   "parserOptions": {
     "ecmaFeatures": {
       "experimentalObjectRestSpread": true,
@@ -14,63 +14,41 @@
     },
     "sourceType": "module"
   },
-  "plugins": [
-    "react"
-  ],
+  "parser": "babel-eslint",
+  "plugins": ["react"],
   "rules": {
-    "no-unused-vars": [
-      "off"
-    ],
-    "brace-style": [
-      "error",
-      "1tbs",
-      {
-        "allowSingleLine": true
-      }
-    ],
+    "no-console": [0],
+    "no-duplicate-imports": [0],
+    "global-require": [0],
+    "semi": ["error", "never"],
+    "no-underscore-dangle": [0],
+    "compat/compat": "warn",
+    "react/jsx-filename-extension": [0],
+    "react/sort-comp": [1],
+    "react/prop-types": [1],
+    "react/forbid-prop-types": [0],
+    "react/require-default-props": [1],
+    "react/destructuring-assignment": [1],
+    "import/no-extraneous-dependencies": [0],
+    "import/imports-first": [1],
+    "import/prefer-default-export": [1],
+    "no-unused-vars": ["off"],
+    "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
     "indent": [
       "error",
-      2
-    ],
-    "linebreak-style": [
-      "error",
-      "unix"
-    ],
-    "quotes": [
-      "warn",
-      "single"
-    ],
-    "semi": [
-      "warn",
-      "never"
-    ],
-    "array-element-newline": [
-      "warn",
-      "never"
-    ],
-    "array-bracket-spacing": [
-      "error",
-      "never"
-    ],
-    "no-multi-spaces": [
-      "warn", {
-        "ignoreEOLComments": true
-      }
-    ],
-    "space-before-function-paren": [
-      "error", {
+      {
         "anonymous": "never",
         "named": "never"
       }
     ],
-    "keyword-spacing": [
-      "error", {
-        "before": true,
-        "after": true
-      }
-    ],
-    "space-infix-ops": [
-      "error"
-    ]
+    "prettier/prettier": ["error"],
+    "accessor-pairs": "error",
+    "arrow-spacing": ["error", { "before": true, "after": true }],
+    "block-spacing": ["error", "always"],
+    "camelcase": ["error", { "properties": "never" }],
+    "comma-dangle": ["error", "never"],
+
+    "array-element-newline": ["warn", "never"],
+    "object-curly-spacing": ["error", "never", { "objectsInObjects": true }, { "multiline": true }]
   }
 }

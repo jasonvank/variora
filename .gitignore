@@ -125,6 +125,10 @@ typings/
 # dotenv environment variables file
 .env
 
+# locale translation
+build/messages
+*.babel
+
 
 ################### custom ######################
 private_settings.py
