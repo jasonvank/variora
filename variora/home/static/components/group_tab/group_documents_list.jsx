@@ -11,13 +11,11 @@ import {
   Avatar,
 } from 'antd'
 import { formatOpenCoterieDocumentUrl, getCookie, getUrlFormat } from 'util.js'
-import { FormattedMessage } from 'react-intl'
-
+import { FormattedMessage, FormattedRelative } from 'react-intl'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import axios from 'axios'
 import { validateDocumentTitle } from 'home_util.js'
-import TimeAgo from 'react-timeago'
 import { AddToReadlists } from '../document_tab/uploaded_documents_list.jsx'
 
 class ChangeDocumentName extends React.Component {
@@ -174,7 +172,7 @@ class GroupDocumentsList extends React.Component {
     )
 
     const documentUploadDate = (text, coterieDocument) => (
-      <TimeAgo date={coterieDocument.upload_time} />
+      <FormattedRelative value={coterieDocument.upload_time} />
     )
 
     const checkIAmUploader = coterieDocument => {

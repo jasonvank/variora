@@ -58,7 +58,6 @@
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",
     "react-test-renderer": "^16.4.0",
-    "react-timeago": "^4.4.0",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
     "regenerator-runtime": "^0.11.1",

@@ -14,8 +14,7 @@ import { formatOpenDocumentUrl, getCookie, getUrlFormat, copyToClipboard } from 
 
 import React from 'react'
 import axios from 'axios'
-import TimeAgo from 'react-timeago'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, FormattedRelative } from 'react-intl'
 import { validateDocumentTitle } from 'home_util.js'
 
 const { Column } = Table
@@ -181,7 +180,7 @@ class UploadedDocumentsList extends React.Component {
       {
         title: <FormattedMessage id='app.table.uploaded_time' defaultMessage='Upload Time' />,
         width: '20%',
-        render: (text, record) => <TimeAgo date={record.upload_time} />,
+        render: (text, record) => <FormattedTime value={record.upload_time} />,
         // sorter: (a, b) => Date.parse(a.upload_time) > Date.parse(b.upload_time),
       },
       {

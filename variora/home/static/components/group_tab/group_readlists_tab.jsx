@@ -7,7 +7,7 @@ import { getCookie, getUrlFormat } from 'util.js'
 import { GroupDocumentsSubtab } from './group_documents_subtab.jsx'
 import React from 'react'
 import axios from 'axios'
-import TimeAgo from 'react-timeago'
+import { FormattedMessage, FormattedRelative } from 'react-intl'
 
 const { SubMenu } = Menu
 const { Header, Content, Sider } = Layout
@@ -138,7 +138,7 @@ class GroupReadlistsSubtab extends React.Component {
       {
         title: <FormattedMessage id='app.table.create_date' defaultMessage='Create Date' />,
         width: '30%',
-        render: (text, record) => <TimeAgo date={record.create_time} />,
+        render: (text, record) => <FormattedRelative value={record.create_time} />,
         sorter: (a, b) => Date.parse(a.create_time) > Date.parse(b.create_time),
       },
     ]

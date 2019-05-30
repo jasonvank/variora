@@ -2,9 +2,7 @@ import { Avatar, Table } from 'antd'
 
 import React from 'react'
 import { Link, Route, Switch, Redirect } from 'react-router-dom'
-import TimeAgo from 'react-timeago'
-import { FormattedMessage, FormattedHTMLMessage } from 'react-intl'
-
+import { FormattedMessage, FormattedRelative } from 'react-intl'
 class ReadlistResult extends React.Component {
   constructor(props) {
     super(props)
@@ -57,7 +55,7 @@ class ReadlistResult extends React.Component {
       {
         title: <FormattedMessage id='app.table.create_date' defaultMessage='Create date' />,
         width: '30%',
-        render: (text, record) => <TimeAgo date={record.create_time} />,
+        render: (text, record) => <FormattedRelative value={record.create_time} />,
         sorter: (a, b) => Date.parse(a.create_time) > Date.parse(b.create_time),
       },
     ]

@@ -16,9 +16,7 @@ import React from 'react'
 import axios from 'axios'
 import { connect } from 'react-redux'
 import { fetchExploreDocs } from '../../redux/actions.js'
-import TimeAgo from 'react-timeago'
-import { FormattedMessage } from 'react-intl'
-
+import { FormattedMessage, FormattedRelative } from 'react-intl'
 const { Column } = Table
 
 class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
@@ -127,7 +125,7 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
       </span>
     )
 
-    var documentUploadDate = (text, document) => <TimeAgo date={document.upload_time} />
+    var documentUploadDate = (text, document) => <FormattedRelative value={document.upload_time} />
 
     const columns = [
       {
@@ -192,8 +190,10 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
                 />
                 <span style={{ verticalAlign: 'middle' }}>
                   {readlist.owner.nickname}{' '}
-                  <FormattedMessage id='app.readlists.created_in' defaultMessage='created in' />{' '}
-                  <TimeAgo style={{ color: '#999' }} date={readlist.create_time} />
+                  {<FormattedMessage id='app.readlists.created_in' defaultMessage='created in ' />}{' '}
+                  <span style={{ color: '#999' }}>
+                    <FormattedRelative value={readlist.create_time} />
+                  </span>
                 </span>
               </div>
                

@@ -217,7 +217,10 @@ class GroupInvitationForm extends React.Component {
               style={{ marginTop: 28, marginBottom: 18, float: 'right' }}
               onClick={this.sendInvitation}
             >
-              Send Invitation
+              <FormattedMessage
+                id='app.group.message.send_invitation'
+                defaultMessage='Send Invitation'
+              />
             </Button>
           </div>
         </Col>
@@ -246,7 +249,10 @@ class GroupMemberInvitationsSubtab extends React.Component {
   render() {
     const cardTitle = (
       <span style={{ fontSize: '12px' }}>
-        Invite new members
+        <FormattedMessage
+          id='app.group.message.invite_members'
+          defaultMessage='Invite new members'
+        />
         <Tooltip
           title={
             <FormattedMessage

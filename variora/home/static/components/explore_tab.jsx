@@ -2,11 +2,9 @@ import { Avatar, Button, Card, Col, Icon, Layout, Menu, Row, Tabs, Table, notifi
 import { Link, Route, BrowserRouter as Router, Switch } from 'react-router-dom'
 
 import React from 'react'
-import TimeAgo from 'react-timeago'
 import { connect } from 'react-redux'
 import { fetchExploreDocs, fetchExploreReadlists } from '../redux/actions.js'
-import { FormattedMessage } from 'react-intl'
-
+import { FormattedMessage, FormattedRelative } from 'react-intl'
 const { Content } = Layout
 const TabPane = Tabs.TabPane
 
@@ -54,8 +52,8 @@ class DocumentListWrapper extends React.Component {
                   <h3 className='custom-card-text-wrapper' title={item.title}>
                     {item.title}
                   </h3>
-                  <p>
-                    <TimeAgo style={{ color: '#91959d' }} date={item.upload_time} />
+                  <p style={{ color: '#91959d' }}>
+                    <FormattedRelative value={item.upload_time} />
                   </p>
                 </div>
               </Card>
@@ -165,7 +163,7 @@ class ReadlistTab extends React.Component {
         title: <FormattedMessage id='app.table.uploaded_time' defaultMessage='Uploaded Time' />,
         key: 'uploaded_time',
         width: '15%',
-        render: (text, record, index) => <TimeAgo date={record.create_time} />,
+        render: (text, record, index) => <FormattedRelative value={record.create_time} />,
       },
     ]
 

@@ -9,8 +9,7 @@ import { ReadlistSettingsSubtab } from './readlist_settings_subtab.jsx'
 import React from 'react'
 import axios from 'axios'
 import { connect } from 'react-redux'
-import { FormattedMessage, FormattedHTMLMessage } from 'react-intl'
-
+import { FormattedMessage, FormattedRelative } from 'react-intl'
 const { SubMenu } = Menu
 const { Header, Content, Sider } = Layout
 const MenuItemGroup = Menu.ItemGroup

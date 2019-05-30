@@ -1,10 +1,8 @@
 import { Avatar, Table } from 'antd'
 
 import React from 'react'
-import TimeAgo from 'react-timeago'
 import { formatOpenDocumentUrl } from 'CommAssets/util'
-import { FormattedMessage, FormattedHTMLMessage } from 'react-intl'
-
+import { FormattedMessage, FormattedRelative } from 'react-intl'
 class DocumentResult extends React.Component {
   constructor(props) {
     super(props)
@@ -62,7 +60,7 @@ class DocumentResult extends React.Component {
       {
         title: <FormattedMessage id='app.table.uploaded_time' defaultMessage='Upload time' />,
         width: '20%',
-        render: (text, record) => <TimeAgo date={record.upload_time} />,
+        render: (text, record) => <FormattedRelative value={record.upload_time} />,
         sorter: (a, b) => Date.parse(a.upload_time) > Date.parse(b.upload_time),
       },
       {

@@ -2,11 +2,10 @@ import 'regenerator-runtime/runtime'
 
 import { Avatar, Badge, Icon, Popover, Table } from 'antd'
 import { getCookie, getUrlFormat } from 'util.js'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, FormattedRelative } from 'react-intl'
 
 import React from 'react'
 import axios from 'axios'
-import TimeAgo from 'react-timeago'
 
 class NotificationsAvaratWrapper extends React.Component {
   constructor(props) {
@@ -69,7 +68,9 @@ class NotificationsDetailsWrapper extends React.Component {
         <div className='notification-alert-list-wrapper' title={description}>
           {description}
         </div>
-        <TimeAgo style={{ color: '#91959d' }} date={this.state.newNotification.timestamp} />
+        <span style={{ color: '#91959d' }}>
+          <FormattedRelative value={this.state.newNotification.timestamp} />
+        </span>
       </div>
     )
   }
