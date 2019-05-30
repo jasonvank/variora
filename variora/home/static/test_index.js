@@ -9,7 +9,7 @@ import {
   Icon,
   Input,
   Layout,
-  LocaleProvider,
+  Dropdown,
   Menu,
   Modal,
   Radio,
@@ -18,7 +18,7 @@ import {
   notification,
 } from 'antd'
 import { Link, Route, BrowserRouter as Router, Switch } from 'react-router-dom'
-import { FormattedMessage, FormattedHTMLMessage, IntlProvider, addLocaleData } from 'react-intl'
+import { FormattedMessage, injectIntl, IntlProvider, addLocaleData } from 'react-intl'
 import { Provider, connect } from 'react-redux'
 import { getCookie, getValFromUrlParam, groupAvatarColors } from 'util.js'
 import React from 'react'
@@ -42,6 +42,7 @@ import { GroupSelectionButton } from './components/group_selection_button.jsx'
 import { GroupTab } from './components/group_tab/group_tab.jsx'
 import { InvitationsToggleButton } from './components/invitations_toggle_button.jsx'
 import { NotificationsAlertButton } from './components/notifications_alert_button.jsx'
+
 import { ReadlistTab } from './components/readlist_tab/readlist_tab.jsx'
 import { SearchResultTab } from './components/search_result_tab/search_result_tab.jsx'
 import TextArea from '../../../node_modules/antd/lib/input/TextArea'
@@ -53,7 +54,7 @@ import { store } from './redux/store.js'
 import messages_zh from './locales/zh.json'
 import messages_en from './locales/en.json'
 
-let locale = initialStore.locale
+// let locale = initialStore.locale
 
 addLocaleData([...locale_en, ...locale_zh])
 
@@ -71,13 +72,10 @@ firebase.initializeApp(config)
 
 const { SubMenu } = Menu
 const { Header, Content, Sider, Footer } = Layout
-const MenuItemGroup = Menu.ItemGroup
 const Search = Input.Search
 const CREATE_NEW_READLIST_MENU_ITEM_KEY = 'createReadlistButton'
 
 const GLOBAL_URL_BASE = ''
-console.log(JSON.stringify(store))
-// const { locale } = store.locale
 
 function getCoterieUUID() {
   if (window.location.pathname.includes('/groups/')) return window.location.pathname.split('/')[2]
@@ -88,7 +86,7 @@ class AppBeforeConnect extends React.Component {
   constructor() {
     super()
     this.state = {
-      locale: initialStore.locale,
+      locale: 'en',
       fields: {
         coterieName: {
           value: '',
@@ -374,6 +372,7 @@ class AppBeforeConnect extends React.Component {
 
   componentDidMount() {
     this.props.fetchUser()
+    this.props.fetchLocale()
     axios.get('/coterie/api/coteries').then(response => {
       this.setState(
         {
@@ -405,7 +404,6 @@ class AppBeforeConnect extends React.Component {
 
   componentWillReceiveProps(props) {
     this.setState({ user: props.user, locale: props.locale })
-    console.log(JSON.stringify(props))
   }
 
   render() {
@@ -599,7 +597,7 @@ class AppBeforeConnect extends React.Component {
                 </Switch>
               </Content>
               <Footer style={{ textAlign: 'center' }}>
-                © 2018 Variora. Reach us via{' '}
+                © 2019 Variora. Reach us via{' '}
                 <a style={{ color: '#37b' }} href='mailto:variora@outlook.com'>
                   variora@outlook.com
                 </a>
@@ -809,89 +807,120 @@ class AppBeforeConnect extends React.Component {
       if (filtered.length !== 0) searchPlaceholder = `Search in this Group: ${filtered[0].name}`
     }
 
+    let locales = ['zh-CN', 'en-US']
+    let languageLabels = {
+      'zh-CN': '简体中文',
+      'en-US': 'English',
+    }
+    const languageIcons = {
+      'zh-CN': '🇨🇳',
+      'en-US': '🇬🇧',
+    }
+    const menu = (
+      <Menu selectedKeys={[this.state.locale]} onClick={this.props.handleLanguageChangeCallback}>
+        {locales.map(locale => (
+          <Menu.Item key={locale}>
+            <span role='img'>{languageIcons[locale]}</span> {languageLabels[locale]}
+          </Menu.Item>
+        ))}
+      </Menu>
+    )
+
     return (
-      <Layout style={{ height: '100%', width: '100%', position: 'absolute' }}>
-        <Header
-          className='header'
-          style={{
-            backgroundColor: '#fff',
-            diplay: 'inline',
-            position: 'fixed',
-            zIndex: 1,
-            width: '100%',
-          }}
-        >
-          <Row>
-            <Col span={4}>
-              {/* <div className="logo" /> */}
-              <a href='/'>
-                <img
-                  src='/media/logo.png'
-                  height={48}
-                  style={{ verticalAlign: 'middle', marginLeft: 28 }}
+      <IntlProvider locale={this.state.locale} messages={messages[this.state.locale]}>
+        <Layout style={{ height: '100%', width: '100%', position: 'absolute' }}>
+          <Header
+            className='header'
+            style={{
+              backgroundColor: '#fff',
+              diplay: 'inline',
+              position: 'fixed',
+              zIndex: 1,
+              width: '100%',
+            }}
+          >
+            <Row>
+              <Col span={4}>
+                {/* <div className="logo" /> */}
+                <a href='/'>
+                  <img
+                    src='/media/logo.png'
+                    height={48}
+                    style={{ verticalAlign: 'middle', marginLeft: 28 }}
+                  />
+                </a>
+                {groupIcon}
+              </Col>
+              <Col span={8} style={{ textAlign: 'right' }}>
+                <Search
+                  placeholder={searchPlaceholder}
+                  style={{ width: '60%' }}
+                  onSearch={this.handleSearch}
+                  defaultValue={
+                    window.location.pathname.includes('/search') ? getValFromUrlParam('key') : ''
+                  }
                 />
-              </a>
-              {groupIcon}
-            </Col>
-            <Col span={8} style={{ textAlign: 'right' }}>
-              <Search
-                placeholder={searchPlaceholder}
-                style={{ width: '60%' }}
-                onSearch={this.handleSearch}
-                defaultValue={
-                  window.location.pathname.includes('/search') ? getValFromUrlParam('key') : ''
-                }
-              />
-            </Col>
-            <Col span={12} style={{ textAlign: 'right' }}>
-              <GroupSelectionButton
-                administratedCoteries={this.state.administratedCoteries}
-                joinedCoteries={this.state.joinedCoteries}
-                setCreateCoterieModelVisible={this.setCreateCoterieModelVisible}
-                currentCoterieUUID={getCoterieUUID()}
-              />
-              <NotificationsAlertButton />
-              <InvitationsToggleButton
-                user={this.state.user}
-                acceptInvitationCallback={this.acceptInvitationCallback}
-              />
+              </Col>
+              <Col span={12} style={{ textAlign: 'right' }}>
+                <GroupSelectionButton
+                  administratedCoteries={this.state.administratedCoteries}
+                  joinedCoteries={this.state.joinedCoteries}
+                  setCreateCoterieModelVisible={this.setCreateCoterieModelVisible}
+                  currentCoterieUUID={getCoterieUUID()}
+                />
+                <NotificationsAlertButton />
+                <InvitationsToggleButton
+                  user={this.state.user}
+                  acceptInvitationCallback={this.acceptInvitationCallback}
+                />
 
-              <span style={{ marginRight: 12, marginLeft: 28, color: '#666' }}>
-                {this.state.user.nickname}
-              </span>
-              {this.state.user.is_authenticated ? (
-                <a onClick={this.signOff}>
-                  <FormattedMessage id='app.sign_off' defaultMessage='Sign Off' />
-                </a>
-              ) : (
-                <a href='/sign-in'>
-                  <FormattedMessage id='app.sign_in' defaultMessage='Sign In' />
-                </a>
-              )}
-              <Avatar
-                style={{
-                  marginLeft: 28,
-                  marginRight: 18,
-                  marginTop: -2,
-                  verticalAlign: 'middle',
-                }}
-                size={'large'}
-                src={this.state.user.portrait_url}
-              />
-              <Radio.Group defaultValue={this.state.locale} onChange={this.handleLanguageChange}>
-                <Radio.Button key='en' value='en'>
-                  English
-                </Radio.Button>
-                <Radio.Button key='zh' value='zh'>
-                  中文
-                </Radio.Button>
-              </Radio.Group>
-            </Col>
-          </Row>
-        </Header>
+                <span style={{ marginRight: 12, marginLeft: 28, color: '#666' }}>
+                  {this.state.user.nickname}
+                </span>
+                {this.state.user.is_authenticated ? (
+                  <a onClick={this.signOff}>
+                    <FormattedMessage id='app.sign_off' defaultMessage='Sign Off' />
+                  </a>
+                ) : (
+                  <a href='/sign-in'>
+                    <FormattedMessage id='app.sign_in' defaultMessage='Sign In' />
+                  </a>
+                )}
+                <Avatar
+                  style={{
+                    marginLeft: 28,
+                    marginRight: 18,
+                    marginTop: -2,
+                    verticalAlign: 'middle',
+                  }}
+                  size={'large'}
+                  src={this.state.user.portrait_url}
+                />
 
-        {getCoterieUUID() !== undefined ? groupRouter(getCoterieUUID()) : globalRouter}
-      </Layout>
+                {/* <Dropdown
+                  overlay={menu}
+                  placement='bottomLeft'
+                  defaultValue={this.state.locale}
+                  onClick={this.handleLanguageChange}
+                >
+                  <Icon type='global' style={{ fontSize: 18 }} />
+                </Dropdown> */}
+
+                <Radio.Group defaultValue={this.state.locale} onChange={this.handleLanguageChange}>
+                  <Radio.Button key='en' value='en'>
+                    English
+                  </Radio.Button>
+                  <Radio.Button key='zh' value='zh'>
+                    中文
+                  </Radio.Button>
+                </Radio.Group>
+              </Col>
+            </Row>
+          </Header>
+
+          {getCoterieUUID() !== undefined ? groupRouter(getCoterieUUID()) : globalRouter}
+        </Layout>
+      </IntlProvider>
     )
   }
 }
@@ -984,11 +1013,7 @@ const App = connect(
 
 ReactDOM.render(
   <Provider store={store}>
-    <IntlProvider locale={store.locale} messages={messages[store.locale]}>
-      <LocaleProvider>
-        <App />
-      </LocaleProvider>
-    </IntlProvider>
+    <App />
   </Provider>,
   document.getElementById('main'),
 )

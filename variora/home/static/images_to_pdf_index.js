@@ -50,7 +50,6 @@ class Main extends React.Component {
     }
 
     this.handleBeforeUpload = (file, fileList) => {
-      // console.log(file)
       var newFileList = this.state.fileList
       newFileList.push({
         file: file,

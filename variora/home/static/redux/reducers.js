@@ -14,7 +14,6 @@ const rootReducer = (store = initialStore, dispatchTarget) => {
   if (dispatchTarget.type == FETCH_LOCALE) {
     return {
       ...store,
-      ...dispatchTarget.payload,
     }
   } else if (dispatchTarget.type == SET_LOCALE) {
     console.log(dispatchTarget.payload)

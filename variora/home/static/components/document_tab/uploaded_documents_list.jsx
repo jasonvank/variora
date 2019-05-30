@@ -180,7 +180,7 @@ class UploadedDocumentsList extends React.Component {
       {
         title: <FormattedMessage id='app.table.uploaded_time' defaultMessage='Upload Time' />,
         width: '20%',
-        render: (text, record) => <FormattedTime value={record.upload_time} />,
+        render: (text, record) => <FormattedRelative value={record.upload_time} />,
         // sorter: (a, b) => Date.parse(a.upload_time) > Date.parse(b.upload_time),
       },
       {

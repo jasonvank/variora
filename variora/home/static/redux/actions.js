@@ -84,7 +84,6 @@ const setCollectedReadlists = collected_readlists => dispatch => {
 const fetchLocale = () => dispatch => {
   dispatch({
     type: FETCH_LOCALE,
-    payload: locale,
   })
 }
 
