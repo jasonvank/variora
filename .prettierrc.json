@@ -1,6 +1,7 @@
 {
   "printWidth": 100,
   "bracketSpacing": true,
+  "singleQuote": true,
   "htmlWhitespaceSensitivity": "css",
   "insertPragma": false,
   "jsxBracketSameLine": false,
