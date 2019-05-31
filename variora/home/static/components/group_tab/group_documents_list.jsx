@@ -1,4 +1,4 @@
-import { Button, Checkbox, Icon, Input, Popover, Popconfirm, Table, message, notification, Avatar} from 'antd'
+import { Badge, Button, Checkbox, Icon, Input, Popover, Popconfirm, Table, Tag, message, notification, Avatar} from 'antd'
 import { formatOpenCoterieDocumentUrl, getCookie, getUrlFormat } from 'util.js'
 
 import React from 'react'
@@ -7,6 +7,7 @@ import axios from 'axios'
 import { validateDocumentTitle } from 'home_util.js'
 import TimeAgo from 'react-timeago'
 import { AddToReadlists } from '../document_tab/uploaded_documents_list.jsx'
+import { formatOpenDocumentUrl } from 'CommAssets/util'
 
 const { Column } = Table
 const CheckboxGroup = Checkbox.Group;
@@ -171,18 +172,16 @@ class GroupDocumentsList extends React.Component {
     const columns = [
       {
         dataIndex: 'space',
-        width: '3%',
-      },
-      {
+        width: '2%',
+      }, {
         title: '',
         dataIndex: 'icon',
         width: '5%',
         render: (text, record) => <img width={20} height={24} src="/media/pdf.png" alt="pdf-logo"/>
-      },
-      {
+      }, {
         title: 'Title',
         dataIndex: 'title',
-        width: '32%',
+        width: '38%',
         render: (text, coterieDocument) => (
           checkIAmUploader(coterieDocument) ? changeDocumentName(text, coterieDocument) : <a className='document-link' href={formatOpenCoterieDocumentUrl(coterieDocument, this.state.coteriePk)}>{text}</a>
         ),
@@ -191,17 +190,17 @@ class GroupDocumentsList extends React.Component {
         title: 'Uploader',
         dataIndex: 'uploader_name',
         render: (text, record) => <span><Avatar src={record.uploader_portrait_url} style={{ verticalAlign: 'middle', marginRight: 12}} />{text}</span>,
-        width: '20%',
+        width: '15%',
       }, {
         title: 'Upload Time',
         dataIndex: 'uploader_time',
         render: (text, coterieDocument) => documentUploadDate(text, coterieDocument),
-        width: '20%',
+        width: '15%',
         sorter: (a, b) => Date.parse(a.upload_time) > Date.parse(b.upload_time),
       }, {
         title: 'Action',
         key: 'action',
-        width: '20%',
+        width: '15%',
         render: (text, coterieDocument) => (
         <span>
           {checkIAmUploader(coterieDocument) ? documentDeleteAction(text, coterieDocument) : null}
@@ -209,7 +208,12 @@ class GroupDocumentsList extends React.Component {
           <AddToReadlists createdReadlists={this.state.createdReadlists} document={coterieDocument} coteriePk={this.state.coteriePk} coterieUUID={this.state.coterieUUID} />
         </span>
       ),
-    }]
+    }, {
+      title: 'Unread',
+      width: '10%',
+      render: (text, record) => ( record.unread > 0 ? <Tag color="blue"><a href={formatOpenDocumentUrl(record)}>{record.unread}</a></Tag> : null )
+    }
+  ]
 
     return (
       <Table
