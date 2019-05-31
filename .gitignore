@@ -122,6 +122,9 @@ typings/
 # Yarn Integrity file
 .yarn-integrity
 
+# Yarn registry
+.yarnrc
+
 # dotenv environment variables file
 .env
 
