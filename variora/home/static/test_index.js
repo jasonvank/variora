@@ -1,6 +1,6 @@
 /* eslint-disable comma-dangle */
-import './css/test_index.css'
-import 'regenerator-runtime/runtime'
+import "./css/test_index.css"
+import "regenerator-runtime/runtime"
 
 import {
   Avatar,
@@ -15,61 +15,62 @@ import {
   Row,
   message,
   notification,
-} from 'antd'
-import { Link, Route, BrowserRouter as Router, Switch } from 'react-router-dom'
-import { FormattedMessage, IntlProvider, addLocaleData } from 'react-intl'
-import { Provider, connect } from 'react-redux'
-import { getCookie, getValFromUrlParam, groupAvatarColors } from 'util.js'
-import React from 'react'
-import ReactDOM from 'react-dom'
-import axios from 'axios'
-import firebase from 'firebase'
-import locale_en from 'react-intl/locale-data/en'
-import locale_zh from 'react-intl/locale-data/zh'
+} from "antd"
+import { Link, Route, BrowserRouter as Router, Switch } from "react-router-dom"
+import { FormattedMessage, IntlProvider, addLocaleData } from "react-intl"
+import { Provider, connect } from "react-redux"
+import { getCookie, getValFromUrlParam, groupAvatarColors } from "util.js"
+import React from "react"
+import ReactDOM from "react-dom"
+import axios from "axios"
+import firebase from "firebase"
+import locale_en from "react-intl/locale-data/en"
+import locale_zh from "react-intl/locale-data/zh"
 import {
   fetchLocale,
   setLocale,
   fetchUser,
   setCollectedReadlists,
   setCreatedReadlists,
-} from './redux/actions.js'
-import { DocumentTab } from './components/document_tab.jsx'
-import { ExploreTab } from './components/explore_tab.jsx'
-import { GroupReadlistsTab } from './components/group_tab/group_readlists_tab.jsx'
-import { GroupSelectionButton } from './components/group_selection_button.jsx'
-import { GroupTab } from './components/group_tab/group_tab.jsx'
-import { InvitationsToggleButton } from './components/invitations_toggle_button.jsx'
-import { NotificationsAlertButton } from './components/notifications_alert_button.jsx'
+} from "./redux/actions.js"
+import { DocumentTab } from "./components/document_tab.jsx"
+import { ExploreTab } from "./components/explore_tab.jsx"
+import { GroupReadlistsTab } from "./components/group_tab/group_readlists_tab.jsx"
+import { GroupSelectionButton } from "./components/group_selection_button.jsx"
+import { GroupTab } from "./components/group_tab/group_tab.jsx"
+import { InvitationsToggleButton } from "./components/invitations_toggle_button.jsx"
+import { NotificationsAlertButton } from "./components/notifications_alert_button.jsx"
 
-import { ReadlistTab } from './components/readlist_tab/readlist_tab.jsx'
-import { SearchResultTab } from './components/search_result_tab/search_result_tab.jsx'
-import TextArea from '../../../node_modules/antd/lib/input/TextArea'
-import { initialStore } from './redux/init_store.js'
-import { store } from './redux/store.js'
-import messages_zh from './locales/zh.json'
-import messages_en from './locales/en.json'
-addLocaleData([...locale_en, ...locale_zh])
+import { ReadlistTab } from "./components/readlist_tab/readlist_tab.jsx"
+import { SearchResultTab } from "./components/search_result_tab/search_result_tab.jsx"
+import TextArea from "../../../node_modules/antd/lib/input/TextArea"
+import { initialStore } from "./redux/init_store.js"
+import { store } from "./redux/store.js"
+import messages_zh from "./locales/zh.json"
+import messages_en from "./locales/en.json"
 const messages = {
   en: messages_en,
   zh: messages_zh,
 }
 
+addLocaleData([...locale_en, ...locale_zh])
+
 const FormItem = Form.Item
 
 const config = {
-  messagingSenderId: '241959101179',
+  messagingSenderId: "241959101179",
 }
 firebase.initializeApp(config)
 
 const { SubMenu } = Menu
 const { Header, Content, Sider, Footer } = Layout
 const Search = Input.Search
-const CREATE_NEW_READLIST_MENU_ITEM_KEY = 'createReadlistButton'
+const CREATE_NEW_READLIST_MENU_ITEM_KEY = "createReadlistButton"
 
-const GLOBAL_URL_BASE = ''
+const GLOBAL_URL_BASE = ""
 
 function getCoterieUUID() {
-  if (window.location.pathname.includes('/groups/')) return window.location.pathname.split('/')[2]
+  if (window.location.pathname.includes("/groups/")) return window.location.pathname.split("/")[2]
   return undefined
 }
 
@@ -77,16 +78,16 @@ class AppBeforeConnect extends React.Component {
   constructor() {
     super()
     this.state = {
-      locale: 'en',
+      locale: "en",
       fields: {
         coterieName: {
-          value: '',
+          value: "",
         },
         readlistName: {
-          value: '',
+          value: "",
         },
         readlistDesc: {
-          value: '',
+          value: "",
         },
       },
       createGroupModelVisible: false,
@@ -135,8 +136,8 @@ class AppBeforeConnect extends React.Component {
       //   })
       // })
       const data = new FormData()
-      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-      axios.post('/api/signoff', data).then(() => {
+      data.append("csrfmiddlewaretoken", getCookie("csrftoken"))
+      axios.post("/api/signoff", data).then(() => {
         window.location.reload()
       })
     }
@@ -155,26 +156,26 @@ class AppBeforeConnect extends React.Component {
 
     this.getHighlightedMenuItems = () => {
       const pathname = window.location.pathname
-      if (pathname.endsWith('/search')) return []
-      if (pathname.includes('/groups/') || pathname.includes('/readlists/')) {
-        const pageElement = pathname.split('/')
+      if (pathname.endsWith("/search")) return []
+      if (pathname.includes("/groups/") || pathname.includes("/readlists/")) {
+        const pageElement = pathname.split("/")
         return [pageElement[1] + pageElement[2]]
       }
-      if (pathname.includes('/explore')) {
-        return ['explore']
+      if (pathname.includes("/explore")) {
+        return ["explore"]
       }
-      return ['documents']
+      return ["documents"]
     }
 
     this.submitCreateReadlistForm = () => {
-      let url = '/file_viewer/api/readlists/create'
+      let url = "/file_viewer/api/readlists/create"
       if (this.state.currentCoterie.pk !== undefined)
         url = `/coterie/api/${this.state.currentCoterie.pk}/coteriereadlists/create`
 
       // const aaa =  <span></span>
 
       const readlistName = this.state.fields.readlistName.value
-      if (readlistName == '') {
+      if (readlistName == "") {
         message.warning(
           <FormattedMessage
             id='app.readlists.message.empty_name'
@@ -184,15 +185,15 @@ class AppBeforeConnect extends React.Component {
         )
       } else {
         const data = new FormData()
-        data.append('readlist_name', readlistName)
-        data.append('description', this.state.fields.readlistDesc.value)
-        data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+        data.append("readlist_name", readlistName)
+        data.append("description", this.state.fields.readlistDesc.value)
+        data.append("csrfmiddlewaretoken", getCookie("csrftoken"))
         axios.post(url, data).then(response => {
           const newCreatedReadlists = this.state.createdReadlists.slice()
           newCreatedReadlists.push(response.data)
           this.setCreateReadlistModelVisible(false)
           this.setState({
-            fields: { ...this.state.fields, readlistName: { value: '' } },
+            fields: { ...this.state.fields, readlistName: { value: "" } },
             createdReadlists: newCreatedReadlists,
           })
           this.props.setCreatedReadlists(newCreatedReadlists)
@@ -202,7 +203,7 @@ class AppBeforeConnect extends React.Component {
 
     this.submitCreateCoterieForm = () => {
       const coterieName = this.state.fields.coterieName.value
-      if (coterieName == '') {
+      if (coterieName == "") {
         message.warning(
           <FormattedMessage
             id='app.group.message.empty_name'
@@ -212,14 +213,14 @@ class AppBeforeConnect extends React.Component {
         )
       } else {
         const data = new FormData()
-        data.append('coterie_name', coterieName)
-        data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-        axios.post('/coterie/api/coteries/create', data).then(response => {
+        data.append("coterie_name", coterieName)
+        data.append("csrfmiddlewaretoken", getCookie("csrftoken"))
+        axios.post("/coterie/api/coteries/create", data).then(response => {
           const newAdministratedCoteries = this.state.administratedCoteries.slice()
           newAdministratedCoteries.push(response.data)
           this.setCreateCoterieModelVisible(false)
           this.setState({
-            fields: { ...this.state.fields, coterieName: { value: '' } },
+            fields: { ...this.state.fields, coterieName: { value: "" } },
             administratedCoteries: newAdministratedCoteries,
           })
         })
@@ -250,7 +251,7 @@ class AppBeforeConnect extends React.Component {
         createdReadlists: newCreatedReadlists,
         collectedReadlists: newCollectedReadlists,
       })
-      let url = '/file_viewer/api/readlists'
+      let url = "/file_viewer/api/readlists"
       if (this.state.coterieUUID !== undefined)
         url = `/coterie/api/coteries/${this.state.coterieUUID}/members/me/coteriereadlists`
 
@@ -363,7 +364,7 @@ class AppBeforeConnect extends React.Component {
   componentDidMount() {
     this.props.fetchUser()
     this.props.fetchLocale()
-    axios.get('/coterie/api/coteries').then(response => {
+    axios.get("/coterie/api/coteries").then(response => {
       this.setState(
         {
           administratedCoteries: response.data.administratedCoteries,
@@ -384,7 +385,7 @@ class AppBeforeConnect extends React.Component {
               .then(response => this.updateReadlist(response.data))
           } else {
             axios
-              .get('/file_viewer/api/readlists')
+              .get("/file_viewer/api/readlists")
               .then(response => this.updateReadlist(response.data))
           }
         },
@@ -404,15 +405,15 @@ class AppBeforeConnect extends React.Component {
     const groupRouter = coterieUUID => {
       const pathname = window.location.pathname
       const defaultSelectedKeys = () => {
-        if (pathname.endsWith('/search')) return []
-        if (pathname.includes('members')) return ['group-members']
-        if (pathname.includes('settings') && !pathname.includes('readlists'))
-          return ['group-settings']
-        if (pathname.includes('readlists')) {
-          const pageElement = pathname.split('/')
+        if (pathname.endsWith("/search")) return []
+        if (pathname.includes("members")) return ["group-members"]
+        if (pathname.includes("settings") && !pathname.includes("readlists"))
+          return ["group-settings"]
+        if (pathname.includes("readlists")) {
+          const pageElement = pathname.split("/")
           return [pageElement[3] + pageElement[4]]
         }
-        return ['group-documents']
+        return ["group-documents"]
       }
 
       return (
@@ -422,18 +423,18 @@ class AppBeforeConnect extends React.Component {
               className='sider'
               width={200}
               style={{
-                overflowX: 'hidden',
-                overflowY: 'auto',
-                height: 'calc(100% - 64px)',
-                position: 'fixed',
+                overflowX: "hidden",
+                overflowY: "auto",
+                height: "calc(100% - 64px)",
+                position: "fixed",
                 left: 0,
                 top: 64,
-                background: '#fff',
+                background: "#fff",
               }}
             >
               <Menu
                 mode='inline'
-                defaultOpenKeys={['created_readlists', 'collected_readlists']}
+                defaultOpenKeys={["created_readlists", "collected_readlists"]}
                 onClick={this.onClickCreateReadlistMenuItem}
                 style={{ borderRight: 0 }}
                 defaultSelectedKeys={defaultSelectedKeys()}
@@ -477,7 +478,7 @@ class AppBeforeConnect extends React.Component {
                     .map(readlist => (
                       <Menu.Item key={`readlists${readlist.slug}`} title={readlist.name}>
                         <Link
-                          style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
+                          style={{ overflow: "hidden", textOverflow: "ellipsis" }}
                           to={`/groups/${coterieUUID}/readlists/${readlist.slug}`}
                         >
                           <Icon type='folder-open' />
@@ -510,7 +511,7 @@ class AppBeforeConnect extends React.Component {
                     .map(readlist => (
                       <Menu.Item key={`readlists${readlist.slug}`} title={readlist.name}>
                         <Link
-                          style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
+                          style={{ overflow: "hidden", textOverflow: "ellipsis" }}
                           to={`/groups/${coterieUUID}/readlists/${readlist.slug}`}
                         >
                           <Icon type='folder' />
@@ -586,9 +587,9 @@ class AppBeforeConnect extends React.Component {
                   />
                 </Switch>
               </Content>
-              <Footer style={{ textAlign: 'center' }}>
-                © 2019 Variora. Reach us via{' '}
-                <a style={{ color: '#37b' }} href='mailto:variora@outlook.com'>
+              <Footer style={{ textAlign: "center" }}>
+                © 2019 Variora. Reach us via{" "}
+                <a style={{ color: "#37b" }} href='mailto:variora@outlook.com'>
                   variora@outlook.com
                 </a>
               </Footer>
@@ -605,18 +606,18 @@ class AppBeforeConnect extends React.Component {
             className='sider'
             width={200}
             style={{
-              overflowX: 'hidden',
-              overflowY: 'auto',
-              height: 'calc(100% - 64px)',
-              position: 'fixed',
+              overflowX: "hidden",
+              overflowY: "auto",
+              height: "calc(100% - 64px)",
+              position: "fixed",
               left: 0,
               top: 64,
-              background: '#fff',
+              background: "#fff",
             }}
           >
             <Menu
               mode='inline'
-              defaultOpenKeys={['created_readlists', 'collected_readlists']}
+              defaultOpenKeys={["created_readlists", "collected_readlists"]}
               onClick={this.onClickCreateReadlistMenuItem}
               style={{ borderRight: 0 }}
               defaultSelectedKeys={this.getHighlightedMenuItems()}
@@ -656,7 +657,7 @@ class AppBeforeConnect extends React.Component {
                   .map(readlist => (
                     <Menu.Item key={`readlists${readlist.slug}`} title={readlist.name}>
                       <Link
-                        style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
+                        style={{ overflow: "hidden", textOverflow: "ellipsis" }}
                         to={`/readlists/${readlist.slug}`}
                       >
                         <Icon type='folder-open' />
@@ -689,7 +690,7 @@ class AppBeforeConnect extends React.Component {
                   .map(readlist => (
                     <Menu.Item key={`readlists${readlist.slug}`} title={readlist.name}>
                       <Link
-                        style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
+                        style={{ overflow: "hidden", textOverflow: "ellipsis" }}
                         to={`/readlists/${readlist.slug}`}
                       >
                         <Icon type='folder' />
@@ -742,9 +743,9 @@ class AppBeforeConnect extends React.Component {
                 <Route path='/' component={DocumentTab} />
               </Switch>
             </Content>
-            <Footer style={{ textAlign: 'center' }}>
-              © 2019 Variora. Reach us via{' '}
-              <a style={{ color: '#37b' }} href='mailto:variora@outlook.com'>
+            <Footer style={{ textAlign: "center" }}>
+              © 2019 Variora. Reach us via{" "}
+              <a style={{ color: "#37b" }} href='mailto:variora@outlook.com'>
                 variora@outlook.com
               </a>
             </Footer>
@@ -774,11 +775,11 @@ class AppBeforeConnect extends React.Component {
               backgroundColor: color,
               top: 16,
               left: -6,
-              verticalAlign: 'middle',
+              verticalAlign: "middle",
             }}
-            size={'small'}
+            size={"small"}
           >
-            <span style={{ position: 'relative', top: -3 }}>
+            <span style={{ position: "relative", top: -3 }}>
               {currentCoterie.name.slice(0, 2).toUpperCase()}
             </span>
           </Avatar>
@@ -789,8 +790,8 @@ class AppBeforeConnect extends React.Component {
     let searchPlaceholder = (
       <FormattedMessage id='app.search.global' defaultMessage='Search in Variora' />
     )
-    if (window.location.pathname.includes('/groups/')) {
-      const coterieUUID = window.location.pathname.split('/')[2]
+    if (window.location.pathname.includes("/groups/")) {
+      const coterieUUID = window.location.pathname.split("/")[2]
       const filtered = this.state.administratedCoteries
         .concat(this.state.joinedCoteries)
         .filter(c => c.uuid === coterieUUID)
@@ -798,14 +799,14 @@ class AppBeforeConnect extends React.Component {
     }
 
     // language menu
-    let locales = ['en', 'zh']
+    let locales = ["en", "zh"]
     let languageLabels = {
-      zh: '简体中文',
-      en: 'English',
+      zh: "简体中文",
+      en: "English",
     }
     const languageIcons = {
-      zh: '🇨🇳',
-      en: '🇬🇧',
+      zh: "🇨🇳",
+      en: "🇬🇧",
     }
     const menu = (
       <Menu selectedKeys={[this.state.locale]} onClick={this.handleLanguageChange}>
@@ -819,15 +820,15 @@ class AppBeforeConnect extends React.Component {
 
     return (
       <IntlProvider locale={this.state.locale} messages={messages[this.state.locale]}>
-        <Layout style={{ height: '100%', width: '100%', position: 'absolute' }}>
+        <Layout style={{ height: "100%", width: "100%", position: "absolute" }}>
           <Header
             className='header'
             style={{
-              backgroundColor: '#fff',
-              diplay: 'inline',
-              position: 'fixed',
+              backgroundColor: "#fff",
+              diplay: "inline",
+              position: "fixed",
               zIndex: 1,
-              width: '100%',
+              width: "100%",
             }}
           >
             <Row>
@@ -837,22 +838,22 @@ class AppBeforeConnect extends React.Component {
                   <img
                     src='/media/logo.png'
                     height={48}
-                    style={{ verticalAlign: 'middle', marginLeft: 28 }}
+                    style={{ verticalAlign: "middle", marginLeft: 28 }}
                   />
                 </a>
                 {groupIcon}
               </Col>
-              <Col span={8} style={{ textAlign: 'right' }}>
+              <Col span={8} style={{ textAlign: "right" }}>
                 <Search
                   placeholder={searchPlaceholder}
-                  style={{ width: '60%' }}
+                  style={{ width: "60%" }}
                   onSearch={this.handleSearch}
                   defaultValue={
-                    window.location.pathname.includes('/search') ? getValFromUrlParam('key') : ''
+                    window.location.pathname.includes("/search") ? getValFromUrlParam("key") : ""
                   }
                 />
               </Col>
-              <Col span={12} style={{ textAlign: 'right' }}>
+              <Col span={12} style={{ textAlign: "right" }}>
                 <GroupSelectionButton
                   administratedCoteries={this.state.administratedCoteries}
                   joinedCoteries={this.state.joinedCoteries}
@@ -865,7 +866,7 @@ class AppBeforeConnect extends React.Component {
                   acceptInvitationCallback={this.acceptInvitationCallback}
                 />
 
-                <span style={{ marginRight: 12, marginLeft: 28, color: '#666' }}>
+                <span style={{ marginRight: 12, marginLeft: 28, color: "#666" }}>
                   {this.state.user.nickname}
                 </span>
                 {this.state.user.is_authenticated ? (
@@ -882,9 +883,9 @@ class AppBeforeConnect extends React.Component {
                     marginLeft: 28,
                     marginRight: 18,
                     marginTop: -2,
-                    verticalAlign: 'middle',
+                    verticalAlign: "middle",
                   }}
-                  size={'large'}
+                  size={"large"}
                   src={this.state.user.portrait_url}
                 />
 
@@ -923,7 +924,7 @@ const CreateReadlistForm = Form.create({
   return (
     <Form>
       <FormItem label='Name of the readlist'>
-        {getFieldDecorator('readlistName', {
+        {getFieldDecorator("readlistName", {
           rules: [
             {
               required: true,
@@ -937,7 +938,7 @@ const CreateReadlistForm = Form.create({
           ],
         })(<Input />)}
       </FormItem>
-      <FormItem label='Description'>{getFieldDecorator('readlistDesc')(<TextArea />)}</FormItem>
+      <FormItem label='Description'>{getFieldDecorator("readlistDesc")(<TextArea />)}</FormItem>
     </Form>
   )
 })
@@ -959,7 +960,7 @@ const CreateCoterieForm = Form.create({
   return (
     <Form layout='inline'>
       <FormItem label={<FormattedMessage id='app.group.name' defaultMessage='group name' />}>
-        {getFieldDecorator('coterieName', {
+        {getFieldDecorator("coterieName", {
           rules: [
             {
               required: true,
@@ -991,5 +992,5 @@ ReactDOM.render(
   <Provider store={store}>
     <App />
   </Provider>,
-  document.getElementById('main'),
+  document.getElementById("main"),
 )
