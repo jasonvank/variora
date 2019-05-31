@@ -1,4 +1,4 @@
-import { Badge, Button, Checkbox, Popover, Icon, Input, Tag, Popconfirm, Table, message, Menu, notification } from 'antd'
+import { Button, Checkbox, Popover, Icon, Input, Popconfirm, Table, message, Menu, notification } from 'antd'
 import { formatOpenDocumentUrl, getCookie, getUrlFormat, copyToClipboard } from 'util.js'
 
 import React from 'react'
@@ -7,7 +7,7 @@ import TimeAgo from 'react-timeago'
 import { validateDocumentTitle } from 'home_util.js'
 
 const { Column } = Table
-const CheckboxGroup = Checkbox.Group
+const CheckboxGroup = Checkbox.Group;
 
 class ChangeOpenDocumentName extends React.Component {
   constructor(props){
@@ -130,16 +130,17 @@ class UploadedDocumentsList extends React.Component {
     })
   }
 
-  
-
   render() {
-    console.log(this.state.data)
-
     const columns = [{
       title: '',
       dataIndex: 'space',
-      width: '2%',
+      width: '4%',
       render: (text, record) => null
+    }, {
+      title: '#',
+      dataIndex: 'id',
+      width: '6%',
+      render: (text, record) => this.state.data.indexOf(record) + 1
     },
     // {
     //   title: '',
@@ -166,7 +167,7 @@ class UploadedDocumentsList extends React.Component {
     }, {
       title: 'Action',
       key: 'action',
-      width: '20%',
+      width: '30%',
       render: (text, record) => (
         <span>
           <Popconfirm
@@ -185,10 +186,6 @@ class UploadedDocumentsList extends React.Component {
           <AddToReadlists createdReadlists={this.state.createdReadlists} document={record} className="test" />
         </span>
       ),
-    }, {
-      title: 'Unread',
-      width: '18%',
-      render: (text, record) => ( record.unread > 0 ? <Tag color="blue"><a href={formatOpenDocumentUrl(record)}>{record.unread}</a></Tag> : null )
     }]
     return (
       <Table

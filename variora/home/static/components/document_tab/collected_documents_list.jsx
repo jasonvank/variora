@@ -1,6 +1,6 @@
-import { Icon, Popconfirm, Table, Tag, message } from 'antd'
+import { Icon, Popconfirm, Table, message } from 'antd'
 import { formatOpenDocumentUrl, getCookie, getUrlFormat } from 'util.js'
-import TimeAgo from 'react-timeago'
+
 import React from 'react'
 import ReactDOM from 'react-dom'
 import axios from 'axios'
@@ -44,22 +44,22 @@ class CollectedDocumentsList extends React.Component {
     const columns = [{
       title: '',
       dataIndex: 'space',
-      width: '2%',
+      width: '8%',
       render: (text, record) => null
+    }, {
+      title: '#',
+      dataIndex: 'id',
+      width: '12%',
+      render: (text, record) => this.state.data.indexOf(record) + 1
     }, {
       title: 'Title',
       dataIndex: 'title',
       width: '40%',
       render: (text, record) => <a className='document-link' href={formatOpenDocumentUrl(record)}>{text}</a>,
-    },  {
-      title: 'Upload time',
-      width: '20%',
-      render: (text, record) => <TimeAgo date={record.upload_time} />,
-      // sorter: (a, b) => Date.parse(a.upload_time) > Date.parse(b.upload_time),
     }, {
       title: 'Action',
       key: 'action',
-      width: '20%',
+      width: '40%',
       render: (text, collectedDocument) => (
         <span>
           <a onClick={() => this.onUncollectDocument(text, collectedDocument)}>Uncollect</a>
@@ -70,12 +70,7 @@ class CollectedDocumentsList extends React.Component {
           </a>
         </span>
       ),
-    }, {
-      title: 'Unread',
-      width: '18%',
-      render: (text, record) => ( record.unread > 0 ? <Tag color="blue"><a href={formatOpenDocumentUrl(record)}>{record.unread}</a></Tag> : null )
     }]
-    
     return (
       <Table
         dataSource={this.state.data}
