@@ -95,6 +95,13 @@ def _join_coterie_with_invitation_code(request, coterie, user):
     if 'invitation_code' not in POST or not user.is_authenticated:
         return HttpResponse(status=403)
     try:
+        # join with join code
+        if hasattr(coterie, 'join_code') and POST['invitation_code'] == coterie.join_code.code:
+            if user not in coterie.administrators.all():
+                coterie.members.add(user)
+            return JsonResponse(coterie, encoder=CoterieEncoder, safe=False)
+
+        # join with invitation code
         invitation_codes = InvitationCode.objects.filter(code=POST['invitation_code'], coterie=coterie)
         if not invitation_codes.exists():
             return HttpResponse(status=404)
@@ -245,7 +252,7 @@ def create_or_override_joincode(request, coterie_uuid):
         if hasattr(coterie, 'join_code'):
             coterie.join_code.delete()
 
-        random_code = generate_random_code(5)
+        random_code = generate_random_code(6)
         code = CoterieJoinCode(
             coterie=coterie,
             code=random_code,
