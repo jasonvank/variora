@@ -83,7 +83,7 @@ function Footer() {
         </Row>
       </div> */}
       <Row className='bottom-bar' style={{ textAlign: 'center' }}>
-          © 2018 Variora. Reach us via <a style={{ color: '#37b' }} href='mailto:variora@outlook.com'>variora@outlook.com</a>
+          © 2019 Variora. Reach us via <a style={{ color: '#37b' }} href='mailto:variora@outlook.com'>variora@outlook.com</a>
       </Row>
     </footer>
   )

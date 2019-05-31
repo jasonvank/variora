@@ -74,7 +74,7 @@ class GroupTab extends React.Component {
           />
 
           <Route exact path={SUB_URL_BASE + this.state.coterieUUI + '/members/invitations'} render={() =>
-            <GroupMemberInvitationsSubtab isAdmin={this.state.isAdmin} coteriePk={this.state.coteriePk}/>}
+            <GroupMemberInvitationsSubtab isAdmin={this.state.isAdmin} coterieUUID={this.state.coterieUUI} coteriePk={this.state.coteriePk} />}
           />
 
           <Route exact path={SUB_URL_BASE + this.state.coterieUUI + '/settings'} render={() =>

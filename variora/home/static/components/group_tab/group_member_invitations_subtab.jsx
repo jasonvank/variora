@@ -1,12 +1,11 @@
 import 'regenerator-runtime/runtime'
 
-import {Button, Col, Collapse, Icon, Input, Layout, Menu, message, Popconfirm, Row, notification, Card, Tooltip} from 'antd'
+import {Button, Card, Col, Collapse, Icon, Input, Layout, Menu, Popconfirm, Row, Tooltip, message, notification} from 'antd'
+import { getCookie, getUrlFormat } from 'util.js'
 
 import React from 'react'
 import axios from 'axios'
-import { getCookie, getUrlFormat } from 'util.js'
 import validator from 'email-validator'
-
 
 const { TextArea } = Input
 
@@ -86,7 +85,6 @@ class GroupInvitationForm extends React.Component {
               marginLeft: 335 - 380,
             },
           })
-
       })
     }
 
@@ -105,7 +103,7 @@ class GroupInvitationForm extends React.Component {
   _emailsStringToArray(emailsString) {
     var rows = emailsString.trim().split(/\n| /)
     var emailsArray = []
-    for (var row of rows){
+    for (var row of rows) {
       emailsArray = emailsArray.concat(row.trim().split(',').filter(element => element !== ''))
     }
     return emailsArray
@@ -182,21 +180,38 @@ class GroupMemberInvitationsSubtab extends React.Component {
     super(props)
     this.state = {
       coteriePk: this.props.coteriePk,
-      coterie: undefined,
+      coterieUUID: this.props.coterieUUID,
+      join_code: undefined,
+    }
+
+    this.onClickNewJoinCode = () => {
+      var data = new FormData()
+      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+      axios.post('/coteries/api/coteries/{0}/joincodes/new'.format(this.state.coterieUUID), data).then(
+        response => this.setState({join_code: response.data['new_code']})
+      )
+    }
+
+    this.onClickDeleteJoinCode = () => {
+      var data = new FormData()
+      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+      axios.post('/coteries/api/coteries/{0}/joincodes/delete'.format(this.state.coterieUUID), data).then(
+        response => this.setState({join_code: undefined})
+      )
     }
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
       coteriePk: nextProps.coteriePk,
+      coterieUUID: this.props.coterieUUID,
     })
   }
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   render() {
-    const cardTitle = (
+    const inviteCardTitle = (
       <span style={{fontSize: '12px'}}>
         Invite new members
         <Tooltip title={'Or they can apply to join your group. Simply search the group name and click the apply button'} >
@@ -207,14 +222,43 @@ class GroupMemberInvitationsSubtab extends React.Component {
       </span>
     )
 
+    const joinCodeCardTitle = (
+      <span style={{fontSize: '12px'}}> Manage group invitation code </span>
+    )
+
     const invitationSection = (
-      <Card title={cardTitle} className={'card'} bordered={false} style={{ overflow: 'auto', backgroundColor: 'white', margin: '18px 0 28px 0' }} noHovering>
-        <GroupInvitationForm coteriePk={this.state.coteriePk}/>
-      </Card>
+      <div>
+        <Card size="small" title={inviteCardTitle} className={'card'} bordered={false} style={{ overflow: 'auto', backgroundColor: 'white', margin: '18px 0 28px 0' }} noHovering>
+          <GroupInvitationForm coteriePk={this.state.coteriePk}/>
+        </Card>
+
+        <Card size="small" title={joinCodeCardTitle} className={'card'} bordered={false} style={{ overflow: 'auto', backgroundColor: 'white', margin: '18px 0 28px 0' }} noHovering>
+          <span style={{ marginLeft: 8, verticalAlign: 'middle' }}>
+            Users can search the group name and join the group using the following invitation code
+          </span>
+
+          {
+            this.state.join_code === undefined ?
+            <p style={{ fontSize: 16, marginTop: 28, marginBottom: 28, marginLeft: 8, wordBreak: 'break-all', hyphens: 'auto' }}>
+              No invitation code. Click 'New' button to generate one
+            </p>
+            :
+            <p style={{ fontSize: 28, marginTop: 18, marginBottom: 18, marginLeft: 8, wordBreak: 'break-all', hyphens: 'auto' }}>
+              {this.state.join_code}
+            </p>
+          }
+
+
+          <div style={{ marginBottom: 18 }}>
+            <Button type="primary" ghost icon="reload" onClick={this.onClickNewJoinCode} style={{ marginRight: 18 }}>New</Button>
+            <Button type="danger" ghost icon="close" onClick={this.onClickDeleteJoinCode} style={{ marginRight: 18 }}>Delete</Button>
+          </div>
+        </Card>
+      </div>
     )
     return (
       <div>
-         { this.props.isAdmin ? invitationSection : null }
+        { this.props.isAdmin ? invitationSection : null }
       </div>
     )
   }

@@ -258,7 +258,7 @@ def create_or_override_joincode(request, coterie_uuid):
             code=random_code,
         )
         code.save()
-        return HttpResponse(status=200)
+        return JsonResponse({'new_code': str(random_code)}, safe=False)
 
     except ObjectDoesNotExist:
         return HttpResponse(status=404)
