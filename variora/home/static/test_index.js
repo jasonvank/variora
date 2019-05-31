@@ -54,8 +54,6 @@ import { store } from './redux/store.js'
 import messages_zh from './locales/zh.json'
 import messages_en from './locales/en.json'
 
-// let locale = initialStore.locale
-
 addLocaleData([...locale_en, ...locale_zh])
 
 const messages = {
@@ -109,10 +107,9 @@ class AppBeforeConnect extends React.Component {
       currentCoterie: {},
     }
 
-    this.handleLanguageChange = e => {
-      let updateLocale = e.target.value
-      this.setState({ locale: updateLocale })
-      this.props.setLocale(updateLocale)
+    this.handleLanguageChange = menuItem => {
+      this.setState({ locale: menuItem.key })
+      this.props.setLocale(menuItem.key)
     }
 
     this.handleSearch = searchKey => {
@@ -807,17 +804,18 @@ class AppBeforeConnect extends React.Component {
       if (filtered.length !== 0) searchPlaceholder = `Search in this Group: ${filtered[0].name}`
     }
 
-    let locales = ['zh-CN', 'en-US']
+    // language menu
+    let locales = ['en', 'zh']
     let languageLabels = {
-      'zh-CN': '简体中文',
-      'en-US': 'English',
+      zh: '简体中文',
+      en: 'English',
     }
     const languageIcons = {
-      'zh-CN': '🇨🇳',
-      'en-US': '🇬🇧',
+      zh: '🇨🇳',
+      en: '🇬🇧',
     }
     const menu = (
-      <Menu selectedKeys={[this.state.locale]} onClick={this.props.handleLanguageChangeCallback}>
+      <Menu selectedKeys={[this.state.locale]} onClick={this.handleLanguageChange}>
         {locales.map(locale => (
           <Menu.Item key={locale}>
             <span role='img'>{languageIcons[locale]}</span> {languageLabels[locale]}
@@ -897,14 +895,9 @@ class AppBeforeConnect extends React.Component {
                   src={this.state.user.portrait_url}
                 />
 
-                {/* <Dropdown
-                  overlay={menu}
-                  placement='bottomLeft'
-                  defaultValue={this.state.locale}
-                  onClick={this.handleLanguageChange}
-                >
+                <Dropdown overlay={menu} placement='bottomLeft'>
                   <Icon type='global' style={{ fontSize: 18 }} />
-                </Dropdown> */}
+                </Dropdown>
 
                 <Radio.Group defaultValue={this.state.locale} onChange={this.handleLanguageChange}>
                   <Radio.Button key='en' value='en'>
@@ -1006,7 +999,6 @@ const mapStoreToProps = (store, ownProps) => ({
   locale: store.locale,
 })
 const App = connect(
-  // mapStateToProps,
   mapStoreToProps,
   { fetchLocale, setLocale, fetchUser, setCollectedReadlists, setCreatedReadlists },
 )(AppBeforeConnect)

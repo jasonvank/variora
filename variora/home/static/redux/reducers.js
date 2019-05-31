@@ -16,7 +16,6 @@ const rootReducer = (store = initialStore, dispatchTarget) => {
       ...store,
     }
   } else if (dispatchTarget.type == SET_LOCALE) {
-    console.log(dispatchTarget.payload)
     return {
       ...store,
       locale: dispatchTarget.payload,
