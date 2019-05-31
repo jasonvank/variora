@@ -12,19 +12,17 @@ import {
   Dropdown,
   Menu,
   Modal,
-  Radio,
   Row,
   message,
   notification,
 } from 'antd'
 import { Link, Route, BrowserRouter as Router, Switch } from 'react-router-dom'
-import { FormattedMessage, injectIntl, IntlProvider, addLocaleData } from 'react-intl'
+import { FormattedMessage, IntlProvider, addLocaleData } from 'react-intl'
 import { Provider, connect } from 'react-redux'
 import { getCookie, getValFromUrlParam, groupAvatarColors } from 'util.js'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import axios from 'axios'
-import enUS from 'antd/lib/locale-provider/en_US'
 import firebase from 'firebase'
 import locale_en from 'react-intl/locale-data/en'
 import locale_zh from 'react-intl/locale-data/zh'
@@ -47,15 +45,10 @@ import { ReadlistTab } from './components/readlist_tab/readlist_tab.jsx'
 import { SearchResultTab } from './components/search_result_tab/search_result_tab.jsx'
 import TextArea from '../../../node_modules/antd/lib/input/TextArea'
 import { initialStore } from './redux/init_store.js'
-// import { Home } from './components/landing_page/index.jsx'
-import { invalidateToken } from './initialize_push'
 import { store } from './redux/store.js'
-
 import messages_zh from './locales/zh.json'
 import messages_en from './locales/en.json'
-
 addLocaleData([...locale_en, ...locale_zh])
-
 const messages = {
   en: messages_en,
   zh: messages_zh,
@@ -143,7 +136,7 @@ class AppBeforeConnect extends React.Component {
       // })
       const data = new FormData()
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-      axios.post('/api/signoff', data).then(response => {
+      axios.post('/api/signoff', data).then(() => {
         window.location.reload()
       })
     }
@@ -898,15 +891,6 @@ class AppBeforeConnect extends React.Component {
                 <Dropdown overlay={menu} placement='bottomLeft'>
                   <Icon type='global' style={{ fontSize: 18 }} />
                 </Dropdown>
-
-                <Radio.Group defaultValue={this.state.locale} onChange={this.handleLanguageChange}>
-                  <Radio.Button key='en' value='en'>
-                    English
-                  </Radio.Button>
-                  <Radio.Button key='zh' value='zh'>
-                    中文
-                  </Radio.Button>
-                </Radio.Group>
               </Col>
             </Row>
           </Header>
