@@ -411,8 +411,8 @@ class AppBeforeConnect extends React.Component {
       zh: '🇨🇳',
       en: '🇬🇧',
     }
-    const menu = (
-      <Menu selectedKeys={[this.state.locale]} onClick={this.handleLanguageChange}>
+    const languageMenu = (
+      <Menu selectedKeys={[this.state.locale]} onClick={this.handleLanguageChange} style={{marginTop: 20}}>
         {locales.map(locale => (
           <Menu.Item key={locale}>
             <span role='img'>{languageIcons[locale]}</span> {languageLabels[locale]}
@@ -898,7 +898,7 @@ class AppBeforeConnect extends React.Component {
                   src={this.state.user.portrait_url}
                 />
 
-                <Dropdown overlay={menu} placement='bottomLeft'>
+                <Dropdown overlay={languageMenu} placement='bottomLeft'>
                   <Icon type='global' style={{ fontSize: 18, cursor: 'pointer', verticalAlign: 'middle'  }} />
                 </Dropdown>
               </Col>
