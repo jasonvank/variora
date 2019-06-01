@@ -198,14 +198,18 @@ class GroupMemberInvitationsSubtab extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      coteriePk: nextProps.coteriePk,
-      coterieUUID: this.props.coterieUUID,
-    })
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   this.setState({
+  //     coteriePk: nextProps.coteriePk,
+  //     coterieUUID: this.props.coterieUUID,
+  //   })
+  // }
 
-  componentDidMount() {}
+  componentDidMount() {
+    axios.get('/coteries/api/coteries/{0}/joincodes'.format(this.state.coterieUUID)).then(
+      response => this.setState({join_code: response.data['join_code']})
+    )
+  }
 
   render() {
     const inviteCardTitle = (
@@ -221,10 +225,6 @@ class GroupMemberInvitationsSubtab extends React.Component {
 
     const invitationSection = (
       <div>
-        <Card size="small" title={inviteCardTitle} className={'card'} bordered={false} style={{ overflow: 'auto', backgroundColor: 'white', margin: '18px 0 28px 0' }} noHovering>
-          <GroupInvitationForm coteriePk={this.state.coteriePk}/>
-        </Card>
-
         <div style={{ marginTop: 18 }}>
           <Collapse accordion>
             <Panel header="Manage group invitation code" key="1">
@@ -259,6 +259,10 @@ class GroupMemberInvitationsSubtab extends React.Component {
             </Panel>
           </Collapse>
         </div>
+
+        <Card size="small" title={inviteCardTitle} className={'card'} bordered={false} style={{ overflow: 'auto', backgroundColor: 'white', margin: '18px 0 28px 0' }} noHovering>
+          <GroupInvitationForm coteriePk={this.state.coteriePk}/>
+        </Card>
       </div>
     )
     return (

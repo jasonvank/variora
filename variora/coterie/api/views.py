@@ -241,6 +241,25 @@ def search_api_view(request, coterie_uuid):
 
 
 @login_required(login_url='/')
+def get_joincode(request, coterie_uuid):
+    try:
+        coterie = Coterie.objects.get(uuid=coterie_uuid)
+
+        user = request.user
+        if user not in coterie.administrators.all():
+            return HttpResponseForbidden()
+
+        if hasattr(coterie, 'join_code'):
+            code = coterie.join_code.code
+        else:
+            code = None
+        return JsonResponse({'join_code': str(code)}, safe=False)
+
+    except ObjectDoesNotExist:
+        return HttpResponse(status=404)
+
+
+@login_required(login_url='/')
 def create_or_override_joincode(request, coterie_uuid):
     try:
         coterie = Coterie.objects.get(uuid=coterie_uuid)
