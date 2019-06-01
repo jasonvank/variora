@@ -219,10 +219,6 @@ class GroupMemberInvitationsSubtab extends React.Component {
       </span>
     )
 
-    const joinCodeCardTitle = (
-      <span style={{fontSize: '12px'}}>Manage group invitation code</span>
-    )
-
     const invitationSection = (
       <div>
         <Card size="small" title={inviteCardTitle} className={'card'} bordered={false} style={{ overflow: 'auto', backgroundColor: 'white', margin: '18px 0 28px 0' }} noHovering>

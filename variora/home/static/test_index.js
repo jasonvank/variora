@@ -455,7 +455,7 @@ class AppBeforeConnect extends React.Component {
                 </Switch>
               </Content>
               <Footer style={{ textAlign: 'center' }}>
-                  © 2018 Variora. Reach us via <a style={{ color: '#37b' }} href='mailto:variora@outlook.com'>variora@outlook.com</a>
+                © {new Date().getFullYear()} Variora. Reach us via <a style={{ color: '#37b' }} href='mailto:variora@outlook.com'>variora@outlook.com</a>
               </Footer>
             </Layout>
           </Layout>
@@ -536,7 +536,7 @@ class AppBeforeConnect extends React.Component {
               </Switch>
             </Content>
             <Footer style={{ textAlign: 'center' }}>
-                © 2018 Variora. Reach us via <a style={{ color: '#37b' }} href='mailto:variora@outlook.com'>variora@outlook.com</a>
+                © {new Date().getFullYear()} Variora. Reach us via <a style={{ color: '#37b' }} href='mailto:variora@outlook.com'>variora@outlook.com</a>
             </Footer>
           </Layout>
         </Layout>
