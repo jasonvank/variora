@@ -188,17 +188,19 @@ class UploadedDocumentsBeforeConnect extends React.Component {
                   />
                 </Button>
               </Upload>
-              <Input
-                style={{ width: '60%', margin: 8 }}
-                value={this.state.uploadedDocumentName}
-                onChange={async e => this.setState({ uploadedDocumentName: e.target.value })}
-                placeholder={
-                  <FormattedMessage
-                    id='app.document.set_title'
-                    defaultMessage='Give a title to this document'
-                  />
-                }
-              />
+
+              <FormattedMessage id='app.document.set_title'>
+                {msg =>               <Input
+                  style={{ width: '60%', margin: 8 }}
+                  value={this.state.uploadedDocumentName}
+                  onChange={async e => this.setState({ uploadedDocumentName: e.target.value })}
+                  placeholder={msg
+                  }
+                />}
+              </FormattedMessage>
+
+
+
               <div>
                 <Button
                   type='primary'
@@ -220,28 +222,34 @@ class UploadedDocumentsBeforeConnect extends React.Component {
               </div>
             </Col>
             <Col span={12} style={{ textAlign: 'left' }}>
-              <Input
-                style={{ width: '60%', margin: 8 }}
-                onChange={async e => this.setState({ onlineDocumentUrl: e.target.value })}
-                value={this.state.onlineDocumentUrl}
-                placeholder={
-                  <FormattedMessage
-                    id='app.document.upload_url'
-                    defaultMessage='URL to an online document'
-                  />
-                }
-              />
-              <Input
-                style={{ width: '60%', margin: 8 }}
-                onChange={async e => this.setState({ onlineDocumentName: e.target.value })}
-                value={this.state.onlineDocumentName}
-                placeholder={
-                  <FormattedMessage
-                    id='app.document.set_title'
-                    defaultMessage='Give a title to this document'
-                  />
-                }
-              />
+
+
+              <FormattedMessage id='app.document.upload_url'>
+                {msg =>                              <Input
+                  style={{ width: '60%', margin: 8 }}
+                  onChange={async e => this.setState({ onlineDocumentUrl: e.target.value })}
+                  value={this.state.onlineDocumentUrl}
+                  placeholder={
+                    msg
+                  }
+                />}
+              </FormattedMessage>
+
+
+              <FormattedMessage id='app.document.set_title'>
+                {msg =>                             <Input
+                  style={{ width: '60%', margin: 8 }}
+                  onChange={async e => this.setState({ onlineDocumentName: e.target.value })}
+                  value={this.state.onlineDocumentName}
+                  placeholder={
+                    msg
+                  }
+                />}
+              </FormattedMessage>
+
+
+
+
               <div>
                 <Button
                   type='primary'

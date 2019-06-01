@@ -166,13 +166,20 @@ class GroupDocumentsSubtab extends React.Component {
                 />
               </Button>
             </Upload>
-            <Input
-              style={{ width: '60%', margin: 8 }}
-              value={this.state.uploadedDocumentName}
-              onChange={this.handleDefaultDocumentName}
-              onChange={this.handleUserInputDocumentName}
-              placeholder={'name of the document'}
-            />
+
+            <FormattedMessage id='app.document.document_name'>
+              {msg => <Input
+                style={{ width: '60%', margin: 8 }}
+                value={this.state.uploadedDocumentName}
+                onChange={this.handleDefaultDocumentName}
+                onChange={this.handleUserInputDocumentName}
+                placeholder={msg}
+              />}
+            </FormattedMessage>
+
+
+
+
             <div>
               <Button
                 type='primary'
@@ -186,28 +193,30 @@ class GroupDocumentsSubtab extends React.Component {
             </div>
           </Col>
           <Col span={12} style={{ textAlign: 'left' }}>
-            <Input
-              style={{ width: '60%', margin: 8 }}
-              onChange={async e => this.setState({ onlineDocumentUrl: e.target.value })}
-              value={this.state.onlineDocumentUrl}
-              placeholder={
-                <FormattedMessage
-                  id='app.document.url'
-                  defaultMessage='URL to the online document'
-                />
-              }
-            />
-            <Input
-              style={{ width: '60%', margin: 8 }}
-              onChange={async e => this.setState({ onlineDocumentName: e.target.value })}
-              value={this.state.onlineDocumentName}
-              placeholder={
-                <FormattedMessage
-                  id='app.document.document_name'
-                  defaultMessage='name of the document'
-                />
-              }
-            />
+
+            <FormattedMessage id='app.document.url'>
+              {msg => <Input
+                style={{ width: '60%', margin: 8 }}
+                onChange={async e => this.setState({ onlineDocumentUrl: e.target.value })}
+                value={this.state.onlineDocumentUrl}
+                placeholder={
+                  msg
+                }
+              />}
+            </FormattedMessage>
+
+            <FormattedMessage id='app.document.document_name'>
+              {msg => <Input
+                style={{ width: '60%', margin: 8 }}
+                onChange={async e => this.setState({ onlineDocumentName: e.target.value })}
+                value={this.state.onlineDocumentName}
+                placeholder={
+                  msg
+                }
+              />}
+            </FormattedMessage>
+
+
             <div>
               <Button
                 type='primary'

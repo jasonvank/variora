@@ -103,7 +103,7 @@
   "app.readlists.message.remove": "Are you sure to remove it from the readlist?",
   "app.readlists.message.update": "Readlist info updated",
   "app.search.documents": "Documents",
-  "app.search.global": "Search in Variora",
+  "app.search.global_group": "Search in {group}",
   "app.search.groups": "Groups",
   "app.search.message.no_user": "No user found",
   "app.search.readlists": "Readlists",

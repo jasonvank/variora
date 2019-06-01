@@ -15,6 +15,7 @@ import {
   Row,
   message,
   notification,
+  LocaleProvider,
 } from 'antd'
 import { Link, Route, BrowserRouter as Router, Switch } from 'react-router-dom'
 import { FormattedMessage, IntlProvider, addLocaleData, injectIntl } from 'react-intl'
@@ -48,6 +49,9 @@ import { initialStore } from './redux/init_store.js'
 import { store } from './redux/store.js'
 import messages_zh from './locales/zh.json'
 import messages_en from './locales/en.json'
+import enUS from 'antd/lib/locale-provider/en_US';
+
+
 const messages = {
   en: messages_en,
   zh: messages_zh,
@@ -396,6 +400,26 @@ class AppBeforeConnect extends React.Component {
 
   render() {
     notification.config({ top: 66 })
+
+    // language menu
+    let locales = ['en', 'zh']
+    let languageLabels = {
+      zh: '简体中文',
+      en: 'English',
+    }
+    const languageIcons = {
+      zh: '🇨🇳',
+      en: '🇬🇧',
+    }
+    const menu = (
+      <Menu selectedKeys={[this.state.locale]} onClick={this.handleLanguageChange}>
+        {locales.map(locale => (
+          <Menu.Item key={locale}>
+            <span role='img'>{languageIcons[locale]}</span> {languageLabels[locale]}
+          </Menu.Item>
+        ))}
+      </Menu>
+    )
 
     const fields = this.state.fields
 
@@ -784,36 +808,16 @@ class AppBeforeConnect extends React.Component {
       }
     }
 
-    let searchPlaceholder = (
-      <FormattedMessage id='app.search.global' defaultMessage='Search in Variora' />
-    )
+    let searchPlaceholder = 'Variora'
+
     if (window.location.pathname.includes('/groups/')) {
       const coterieUUID = window.location.pathname.split('/')[2]
       const filtered = this.state.administratedCoteries
         .concat(this.state.joinedCoteries)
         .filter(c => c.uuid === coterieUUID)
-      if (filtered.length !== 0) searchPlaceholder = `Search in this Group: ${filtered[0].name}`
+      if (filtered.length !== 0) searchPlaceholder = `${filtered[0].name}`
     }
 
-    // language menu
-    let locales = ['en', 'zh']
-    let languageLabels = {
-      zh: '简体中文',
-      en: 'English',
-    }
-    const languageIcons = {
-      zh: '🇨🇳',
-      en: '🇬🇧',
-    }
-    const menu = (
-      <Menu selectedKeys={[this.state.locale]} onClick={this.handleLanguageChange}>
-        {locales.map(locale => (
-          <Menu.Item key={locale}>
-            <span role='img'>{languageIcons[locale]}</span> {languageLabels[locale]}
-          </Menu.Item>
-        ))}
-      </Menu>
-    )
 
     return (
       <IntlProvider locale={this.state.locale} messages={messages[this.state.locale]}>
@@ -841,14 +845,22 @@ class AppBeforeConnect extends React.Component {
                 {groupIcon}
               </Col>
               <Col span={8} style={{ textAlign: 'right' }}>
-                <Search
-                  placeholder={searchPlaceholder}
-                  style={{ width: '60%' }}
-                  onSearch={this.handleSearch}
-                  defaultValue={
-                    window.location.pathname.includes('/search') ? getValFromUrlParam('key') : ''
-                  }
-                />
+
+
+                <FormattedMessage id='app.search.global_group' values={{group: searchPlaceholder }}>
+                  {msg => <Search
+                    placeholder={msg}
+                    style={{ width: '60%' }}
+                    onSearch={this.handleSearch}
+                    defaultValue={
+                      window.location.pathname.includes('/search') ? getValFromUrlParam('key') : ''
+                    }
+                  />}
+                </FormattedMessage>
+
+
+
+
               </Col>
               <Col span={12} style={{ textAlign: 'right' }}>
                 <GroupSelectionButton
@@ -887,7 +899,7 @@ class AppBeforeConnect extends React.Component {
                 />
 
                 <Dropdown overlay={menu} placement='bottomLeft'>
-                  <Icon type='global' style={{ fontSize: 18 }} />
+                  <Icon type='global' style={{ fontSize: 18, cursor: 'pointer', verticalAlign: 'middle'  }} />
                 </Dropdown>
               </Col>
             </Row>
@@ -994,7 +1006,9 @@ const App = connect(
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <LocaleProvider locale={enUS}>
+      <App />
+    </LocaleProvider>
   </Provider>,
   document.getElementById('main'),
 )

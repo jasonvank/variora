@@ -185,30 +185,39 @@ class GroupInvitationForm extends React.Component {
       <Row>
         <Col span={12} offset={6}>
           <div style={{ backgroundColor: 'white', marginTop: 28 }}>
-            <TextArea
-              rows={2}
-              value={this.state.emailList}
-              onChange={this.onEmailListInputChange}
-              placeholder={
-                <FormattedMessage
-                  id='app.group.message.multiple_emails_sep_comma'
-                  defaultMessage='Multiple emails can be seperated by comma'
-                />
+
+            <FormattedMessage id='app.group.message.multiple_emails_sep_comma'>
+              {msg =>                            <TextArea
+                rows={2}
+                value={this.state.emailList}
+                onChange={this.onEmailListInputChange}
+                placeholder={
+                  msg
+                }
+              />
               }
-            />
+            </FormattedMessage>
+
+
+
           </div>
           <div style={{ backgroundColor: 'white', marginTop: 28 }}>
-            <TextArea
-              rows={4}
-              value={this.state.invitationMessage}
-              onChange={this.onInvitationMessageInputChange}
-              placeholder={
-                <FormattedMessage
-                  id='app.group.message.messages_to_invitees'
-                  defaultMessage='Messages to invitees'
-                />
+
+            <FormattedMessage id='app.group.message.messages_to_invitees'>
+              {msg =>                            <TextArea
+                rows={4}
+                value={this.state.invitationMessage}
+                onChange={this.onInvitationMessageInputChange}
+                placeholder={
+                  msg
+                }
+              />
               }
-            />
+            </FormattedMessage>
+
+
+
+
           </div>
           <div>
             <Button

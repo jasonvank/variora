@@ -105,7 +105,7 @@
   "app.readlists.message.url_copy": "已复制",
   "app.readlists.submit": "提交",
   "app.search.documents": "文件",
-  "app.search.global": "搜索Variora",
+  "app.search.global_group": "在{group}中搜索",
   "app.search.groups": "小组",
   "app.search.message.no_user": "用户不存在",
   "app.search.readlists": "列表",
