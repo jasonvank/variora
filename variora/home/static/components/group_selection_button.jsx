@@ -96,7 +96,7 @@ class GroupsList extends React.Component {
     const publicCoterie = [
       {
         uuid: undefined,
-        name: 'Public',
+        name: <FormattedMessage id='app.group.public' defaultMessage='Public' />,
         description: 'Public content is visible by all users',
         avatarUrl: '/media/logo.png',
       },
@@ -259,7 +259,7 @@ class GroupSelectionButton extends React.Component {
             marginRight: 6,
           }}
         >
-          Groups
+          <FormattedMessage id='app.group.groups' defaultMessage='Groups' />
         </span>
         <Icon
           style={{ fontSize: 8, cursor: 'pointer', verticalAlign: 'middle' }}

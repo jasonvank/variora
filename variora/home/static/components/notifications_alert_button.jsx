@@ -152,7 +152,7 @@ class NotificationsList extends React.Component {
           style={{ float: 'right', color: '#37b', marginRight: 12 }}
           onClick={this.handleMarkAllRead}
         >
-          Mark All as Read
+          <FormattedMessage id='app.notification.all_read' defaultMessage='Mark All as Read' />
         </a>
         <Table
           className='notification-table'

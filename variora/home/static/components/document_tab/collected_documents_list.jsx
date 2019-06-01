@@ -81,7 +81,7 @@ class CollectedDocumentsList extends React.Component {
         width: '40%',
         render: (text, collectedDocument) => (
           <span>
-            <a onClick={() => this.onUncollectDocument(text, collectedDocument)}>Uncollect</a>
+            <a onClick={() => this.onUncollectDocument(text, collectedDocument)}><FormattedMessage id='app.document.uncollect' defaultMessage='Uncollect' /></a>
             <span className='ant-divider' />
             <a href='javascript:;' onClick={() => this.onClickShareDocument(collectedDocument)}>
               {/*<Icon type="share-alt" />*/}

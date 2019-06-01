@@ -6,20 +6,18 @@ import { getCookie, getUrlFormat } from 'util.js'
 import React from 'react'
 import axios from 'axios'
 
-class InvitationDetailsWrapper extends React.Component{
+class InvitationDetailsWrapper extends React.Component {
   render() {
     var message = this.props.invitation
-    var messageListItems =
+    var messageListItems = (
       <p>
-        Group name: <b>{message.coterie_name}</b><br />
-        Message: { message.invitation_message }
+        Group name: <b>{message.coterie_name}</b>
+        <br />
+        Message: {message.invitation_message}
       </p>
-
-    return (
-      <div>
-        {messageListItems}
-      </div>
     )
+
+    return <div>{messageListItems}</div>
   }
 }
 
@@ -34,7 +32,7 @@ class ReceivedCoterieInvitationNotificationContent extends React.Component {
     var self = this
     var data = new FormData()
     data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-    axios.post(this.props.invitation.accept_url, data).then((response) => {
+    axios.post(this.props.invitation.accept_url, data).then(response => {
       notification.close(self.props.invitation.pk)
       self.props.updateLeftInvitationsCallback(self.props.invitation.pk)
       self.props.acceptInvitationCallback(self.props.invitation.coterie_pk)
@@ -45,7 +43,7 @@ class ReceivedCoterieInvitationNotificationContent extends React.Component {
     var self = this
     var data = new FormData()
     data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-    axios.post(this.props.invitation.reject_url, data).then((response) => {
+    axios.post(this.props.invitation.reject_url, data).then(response => {
       notification.close(self.props.invitation.pk)
       self.props.updateLeftInvitationsCallback(self.props.invitation.pk)
     })
@@ -54,12 +52,22 @@ class ReceivedCoterieInvitationNotificationContent extends React.Component {
   render() {
     return (
       <div>
-        <InvitationDetailsWrapper invitation={this.props.invitation}/>
+        <InvitationDetailsWrapper invitation={this.props.invitation} />
         <div>
-          <Button style={{ margin: '12px 8px 6px 8px' }} type="primary" size="small" onClick={this.onAcceptClick}>
+          <Button
+            style={{ margin: '12px 8px 6px 8px' }}
+            type='primary'
+            size='small'
+            onClick={this.onAcceptClick}
+          >
             Accept
           </Button>
-          <Button style={{ margin: '12px 8px 6px 8px' }} type="primary" size="small" onClick={this.onRejectClick}>
+          <Button
+            style={{ margin: '12px 8px 6px 8px' }}
+            type='primary'
+            size='small'
+            onClick={this.onRejectClick}
+          >
             Reject
           </Button>
         </div>
@@ -74,22 +82,24 @@ class InvitationsToggleButton extends React.Component {
     this.state = {
       invitations: undefined,
       showNotifications: false,
-      user: props.user
+      user: props.user,
     }
 
     this.onClick = () => {
       if (this.state.invitations == undefined || this.state.invitations.length == 0) {
         notification['info']({
-          message: 'You do not have new group invitations.',
+          message: (
+            <FormattedMessage
+              id='app.group.message.no_invitation'
+              defaultMessage='You do not have new group invitations.'
+            />
+          ),
           duration: 3.8,
         })
       }
       const show = !this.state.showNotifications
-      if (show)
-        this.displayInvitations(this.state.invitations)
-      else
-        for (var invitation of this.state.invitations)
-          notification.close(invitation.pk)
+      if (show) this.displayInvitations(this.state.invitations)
+      else for (var invitation of this.state.invitations) notification.close(invitation.pk)
       this.setState({ showNotifications: show })
     }
 
@@ -100,11 +110,15 @@ class InvitationsToggleButton extends React.Component {
     this.setState({ ...nextProps })
     if (this.state.invitations == undefined && nextProps.user != undefined) {
       var self = this
-      axios.get(getUrlFormat('/coterie/api/invitations', {
-        'to': nextProps.user.email_address
-      })).then(function(response) {
-        self.setState({ invitations: response.data })
-      })
+      axios
+        .get(
+          getUrlFormat('/coterie/api/invitations', {
+            to: nextProps.user.email_address,
+          }),
+        )
+        .then(function(response) {
+          self.setState({ invitations: response.data })
+        })
     }
   }
 
@@ -113,7 +127,13 @@ class InvitationsToggleButton extends React.Component {
     for (var invitation of invitations) {
       notification.open({
         message: 'You have a new invitation!',
-        description: <ReceivedCoterieInvitationNotificationContent invitation={invitation} acceptInvitationCallback={this.props.acceptInvitationCallback} updateLeftInvitationsCallback={this.updateLeftInvitationsCallback} />,
+        description: (
+          <ReceivedCoterieInvitationNotificationContent
+            invitation={invitation}
+            acceptInvitationCallback={this.props.acceptInvitationCallback}
+            updateLeftInvitationsCallback={this.updateLeftInvitationsCallback}
+          />
+        ),
         duration: 0,
         key: invitation.pk,
       })
@@ -121,10 +141,10 @@ class InvitationsToggleButton extends React.Component {
   }
 
   updateLeftInvitationsCallback(invitationPkID) {
-    var updatedInvitations = this.state.invitations.filter(function(invitation) {return invitation.pk != invitationPkID} )
-    this.setState(
-      {invitations: updatedInvitations}
-    )
+    var updatedInvitations = this.state.invitations.filter(function(invitation) {
+      return invitation.pk != invitationPkID
+    })
+    this.setState({ invitations: updatedInvitations })
   }
 
   render() {
@@ -134,8 +154,15 @@ class InvitationsToggleButton extends React.Component {
         style={{ cursor: 'pointer', backgroundColor: '#FABE58', marginTop: -5 }}
         onClick={this.onClick}
       >
-        <Icon type="inbox"
-          style={{ cursor: 'pointer', fontSize: 18, marginLeft: 28, verticalAlign: 'middle', marginTop: -1 }}
+        <Icon
+          type='inbox'
+          style={{
+            cursor: 'pointer',
+            fontSize: 18,
+            marginLeft: 28,
+            verticalAlign: 'middle',
+            marginTop: -1,
+          }}
         />
       </Badge>
     )
@@ -143,6 +170,3 @@ class InvitationsToggleButton extends React.Component {
 }
 
 export { InvitationsToggleButton }
-
-
-

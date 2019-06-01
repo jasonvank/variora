@@ -17,7 +17,7 @@ import {
   notification,
 } from 'antd'
 import { Link, Route, BrowserRouter as Router, Switch } from 'react-router-dom'
-import { FormattedMessage, IntlProvider, addLocaleData } from 'react-intl'
+import { FormattedMessage, IntlProvider, addLocaleData, injectIntl } from 'react-intl'
 import { Provider, connect } from 'react-redux'
 import { getCookie, getValFromUrlParam, groupAvatarColors } from 'util.js'
 import React from 'react'

@@ -128,7 +128,7 @@ class GroupMembersList extends React.Component {
                 okText='Yes'
                 cancelText='No'
               >
-                Remove
+                <FormattedMessage id='app.group.remove' defaultMessage='Remove' />
               </Popconfirm>
             </Menu.Item>
           </Menu>
@@ -141,7 +141,9 @@ class GroupMembersList extends React.Component {
             visible={this.state.visible}
           >
             <a className='ant-dropdown-link' href='#'>
-              Actions <Icon type='down' />
+              <FormattedMessage id='app.group.actions' defaultMessage='Actions' />
+
+              <Icon type='down' />
             </a>
           </Dropdown>
         )

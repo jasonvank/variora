@@ -113,7 +113,13 @@ class ReadlistSettingsSubtab extends React.Component {
         okText='Yes'
         cancelText='No'
       >
-        <a style={{ float: 'right', color: '#F2784B', marginRight: '6%' }}>Delete this readlist</a>
+        <a style={{ float: 'right', color: '#F2784B', marginRight: '6%' }}>
+          {' '}
+          <FormattedMessage
+            id='app.readlists.message.delete_readlists'
+            defaultMessage='Delete this readlist'
+          />
+        </a>
       </Popconfirm>
     )
 
@@ -122,7 +128,12 @@ class ReadlistSettingsSubtab extends React.Component {
         <Col>
           <div style={{ marginTop: 18 }}>
             <Collapse accordion>
-              <Panel header='Danger Zone' key='1'>
+              <Panel
+                header={
+                  <FormattedMessage id='app.readlists.danger_zone' defaultMessage='Danger Zone' />
+                }
+                key='1'
+              >
                 <span>
                   <FormattedMessage
                     id='app.readlists.message.delete_warning'
@@ -143,13 +154,21 @@ class ReadlistSettingsSubtab extends React.Component {
         <Spin spinning={this.state.loading}>
           <div className={'card'} style={{ overflow: 'auto', marginTop: 16, padding: 18 }}>
             <Form style={{ marginTop: 24 }} onSubmit={this.handleSubmit}>
-              <FormItem label='Name' {...formItemLayout}>
+              <FormItem
+                label={<FormattedMessage id='app.readlists.name' defaultMessage='Name' />}
+                {...formItemLayout}
+              >
                 <Input
                   value={this.state.readlistName}
                   onChange={async e => await this.setState({ readlistName: e.target.value })}
                 />
               </FormItem>
-              <FormItem label='Description' {...formItemLayout}>
+              <FormItem
+                label={
+                  <FormattedMessage id='app.readlists.description' defaultMessage='Description' />
+                }
+                {...formItemLayout}
+              >
                 <TextArea
                   rows={6}
                   value={this.state.readlistDescription}
@@ -160,7 +179,7 @@ class ReadlistSettingsSubtab extends React.Component {
               </FormItem>
               <FormItem {...buttonItemLayout}>
                 <Button type='primary' htmlType='submit'>
-                  Submit
+                  <FormattedMessage id='app.readlists.submit' defaultMessage='Submit' />
                 </Button>
               </FormItem>
             </Form>

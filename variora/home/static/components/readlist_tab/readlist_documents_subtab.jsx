@@ -42,7 +42,9 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
     this.onShareClick = () => {
       const url = [location.protocol, '//', location.host, location.pathname].join('')
       copyToClipboard(url)
-      message.success('URL copied')
+      message.success(
+        <FormattedMessage id='app.readlists.message.url_copy' defaultMessage='URL copied' />,
+      )
     }
 
     this.onCollectList = () => {
@@ -66,7 +68,7 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
           message: (
             <FormattedMessage
               id='app.readlists.message.owner'
-              defaultMessage="You are the owner of the list!'"
+              defaultMessage='You are the owner of the list!'
             />
           ),
         })
@@ -120,7 +122,9 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
           okText='Yes'
           cancelText='No'
         >
-          <a>Remove</a>
+          <a>
+            <FormattedMessage id='app.readlists.remove' defaultMessage='Remove' />
+          </a>
         </Popconfirm>
       </span>
     )
@@ -216,7 +220,7 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
                   onClick={this.onShareClick}
                   style={{ marginRight: 18 }}
                 >
-                  Share link
+                  <FormattedMessage id='app.readlists.share_link' defaultMessage='Share link' />
                 </Button>
                 <Button
                   type='primary'
@@ -227,12 +231,12 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
                   {this.state.isCollector ? (
                     <span>
                       <Icon type='heart' style={{ marginRight: 8 }} />
-                      Uncollect
+                      <FormattedMessage id='app.readlists.uncollect' defaultMessage='Uncollect' />
                     </span>
                   ) : (
                     <span>
                       <Icon type='heart-o' style={{ marginRight: 8 }} />
-                      Collect
+                      <FormattedMessage id='app.readlists.collect' defaultMessage='Collect' />
                     </span>
                   )}
                   <span style={{ marginLeft: 8 }}>{readlist.num_collectors}</span>
@@ -256,7 +260,13 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
               />
             </Col>
             <Col style={{ padding: 18 }} span={8}>
-              <p style={{ fontSize: 16, marginBottom: 18, marginLeft: 8 }}>Description: </p>
+              <p style={{ fontSize: 16, marginBottom: 18, marginLeft: 8 }}>
+                {' '}
+                <FormattedMessage
+                  id='app.readlists.description'
+                  defaultMessage='Description'
+                />{' '}
+              </p>
               <p
                 style={{
                   whiteSpace: 'pre-wrap',
