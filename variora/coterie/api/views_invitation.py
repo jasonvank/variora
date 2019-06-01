@@ -66,9 +66,9 @@ class InvitationEmailThread(Thread):
         )
 
 
-def _generate_random_code():
-    code = random.randint(0, 999990)
-    code = str(code).zfill(5)
+def generate_random_code(length):
+    code = random.randint(0, 10 ** length - 1)
+    code = str(code).zfill(length)
     return code
 
 
@@ -97,7 +97,7 @@ def create_invitation(request):
                     successful_invitations.append(invitation)
 
                     # create invitation code
-                    random_code = _generate_random_code()
+                    random_code = generate_random_code(5)
                     code = InvitationCode(
                         code=random_code,
                         invitation=invitation,
@@ -122,7 +122,7 @@ def create_invitation(request):
             temp_invitation.save()
 
             # create invitation code
-            random_code = _generate_random_code()
+            random_code = generate_random_code(5)
             code = InvitationCode(
                 code=random_code,
                 invitation=None,

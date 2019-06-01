@@ -1,7 +1,7 @@
 import 'regenerator-runtime/runtime'
 
-import { Avatar, Icon, Input, Layout, Menu, message, Table } from 'antd'
-import { Link, Route, Switch, Redirect } from 'react-router-dom'
+import { Avatar, Icon, Input, Layout, Menu, Table, message } from 'antd'
+import { Link, Redirect, Route, Switch } from 'react-router-dom'
 import { getCookie, getUrlFormat } from 'util.js'
 
 import { GroupDocumentsSubtab } from './group_documents_subtab.jsx'

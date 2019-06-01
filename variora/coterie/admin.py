@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from models import (Coterie, CoterieAnnotation, CoterieAnnotationReply,
+from models import (Coterie, CoterieJoinCode, CoterieAnnotation, CoterieAnnotationReply,
                     CoterieApplication, CoterieComment, CoterieDocument,
                     CoterieInvitation, CoterieReadlist, InvitationCode,
                     NonRegisteredUserTempCoterieInvitation)
@@ -11,6 +11,12 @@ class CoterieModelAdmin(admin.ModelAdmin):
     list_filter = []
     search_fields = ["id", "uuid", "name", "administrators__pk", "members__pk"]
     filter_horizontal = ["administrators", "members"]
+
+
+class CoterieJoinCodeModelAdmin(admin.ModelAdmin):
+    list_display = ["id", "clean_uuid", "coterie", "code"]
+    list_filter = []
+    search_fields = ["id", "uuid", "coterie__pk", "code"]
 
 
 class CoterieInvitationAdmin(admin.ModelAdmin):
@@ -67,6 +73,7 @@ class CoterieCommentModelAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Coterie, CoterieModelAdmin)
+admin.site.register(CoterieJoinCode, CoterieJoinCodeModelAdmin)
 admin.site.register(CoterieDocument, CoterieDocumentModelAdmin)
 admin.site.register(CoterieReadlist, CoterieReadlistModelAdmin)
 admin.site.register(CoterieAnnotation, CoterieAnnotationModelAdmin)

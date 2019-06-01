@@ -136,6 +136,7 @@ class GroupTab extends React.Component {
             render={() => (
               <GroupMemberInvitationsSubtab
                 isAdmin={this.state.isAdmin}
+                coterieUUID={this.state.coterieUUI}
                 coteriePk={this.state.coteriePk}
               />
             )}

@@ -13,14 +13,14 @@ from django.views.generic import View
 from home.models import User
 
 from ..models import (Coterie, CoterieAnnotation, CoterieAnnotationReply,
-                      CoterieDocument, CoterieInvitation)
+                      CoterieDocument, CoterieInvitation, CoterieJoinCode)
 from .encoders import (CoterieDocumentEncoder, CoterieEncoder,
                        CoterieInvitationEncoder)
 from .views_application import (ApplicationsView, ApplicationView,
                                 create_application)
 from .views_documents import *
 from .views_invitation import (InvitationsView, InvitationView,
-                               create_invitation)
+                               create_invitation, generate_random_code)
 from .views_member import *
 from .views_readlist import *
 
@@ -95,6 +95,13 @@ def _join_coterie_with_invitation_code(request, coterie, user):
     if 'invitation_code' not in POST or not user.is_authenticated:
         return HttpResponse(status=403)
     try:
+        # join with join code
+        if hasattr(coterie, 'join_code') and POST['invitation_code'] == coterie.join_code.code:
+            if user not in coterie.administrators.all():
+                coterie.members.add(user)
+            return JsonResponse(coterie, encoder=CoterieEncoder, safe=False)
+
+        # join with invitation code
         invitation_codes = InvitationCode.objects.filter(code=POST['invitation_code'], coterie=coterie)
         if not invitation_codes.exists():
             return HttpResponse(status=404)
@@ -228,6 +235,66 @@ def search_api_view(request, coterie_uuid):
             encoder=CombinedEncoder,
             safe=False
         )
+
+    except ObjectDoesNotExist:
+        return HttpResponse(status=404)
+
+
+@login_required(login_url='/')
+def get_joincode(request, coterie_uuid):
+    try:
+        coterie = Coterie.objects.get(uuid=coterie_uuid)
+
+        user = request.user
+        if user not in coterie.administrators.all():
+            return HttpResponseForbidden()
+
+        if hasattr(coterie, 'join_code'):
+            code = coterie.join_code.code
+        else:
+            code = None
+        return JsonResponse({'join_code': str(code)}, safe=False)
+
+    except ObjectDoesNotExist:
+        return HttpResponse(status=404)
+
+
+@login_required(login_url='/')
+def create_or_override_joincode(request, coterie_uuid):
+    try:
+        coterie = Coterie.objects.get(uuid=coterie_uuid)
+
+        user = request.user
+        if user not in coterie.administrators.all():
+            return HttpResponseForbidden()
+
+        if hasattr(coterie, 'join_code'):
+            coterie.join_code.delete()
+
+        random_code = generate_random_code(6)
+        code = CoterieJoinCode(
+            coterie=coterie,
+            code=random_code,
+        )
+        code.save()
+        return JsonResponse({'new_code': str(random_code)}, safe=False)
+
+    except ObjectDoesNotExist:
+        return HttpResponse(status=404)
+
+
+@login_required(login_url='/')
+def delete_joincode(request, coterie_uuid):
+    try:
+        coterie = Coterie.objects.get(uuid=coterie_uuid)
+
+        user = request.user
+        if user not in coterie.administrators.all():
+            return HttpResponseForbidden()
+
+        if hasattr(coterie, 'join_code'):
+            coterie.join_code.delete()
+        return HttpResponse(status=200)
 
     except ObjectDoesNotExist:
         return HttpResponse(status=404)

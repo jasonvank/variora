@@ -25,6 +25,13 @@ class Coterie(ModelWithCleanUUID):
         return self.name
 
 
+class CoterieJoinCode(ModelWithCleanUUID):
+    uuid = models.UUIDField(unique=True, null=False, default=uuid.uuid4, editable=False)
+    coterie = models.OneToOneField(Coterie, related_name='join_code')
+    code = models.CharField(max_length=64, null=False, blank=False)
+    create_datetime = models.DateTimeField(auto_now=False, auto_now_add=True)
+
+
 class CoterieInvitation(ModelWithCleanUUID):
     """
     invitation sent from inviter to a registered user (invitee)

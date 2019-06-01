@@ -5,6 +5,7 @@ cache:
 install:
     - sudo apt-get update
     - sudo apt-get install nodejs npm python-pip
+    - node -v
 
     - sudo pip install --upgrade pip
     - npm i -g npm

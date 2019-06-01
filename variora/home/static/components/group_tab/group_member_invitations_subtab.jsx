@@ -1,50 +1,61 @@
 import 'regenerator-runtime/runtime'
 
-import { Button, Col, Icon, Input, Row, notification, Card, Tooltip } from 'antd'
+import {
+  Button,
+  Card,
+  Col,
+  Collapse,
+  Icon,
+  Input,
+  Popconfirm,
+  Row,
+  Tooltip,
+  message,
+  notification,
+} from 'antd'
+import { faEye, faEyeSlash } from '@fortawesome/fontawesome-free-regular'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
 import axios from 'axios'
-import { getCookie, getUrlFormat } from 'util.js'
+import { getCookie } from 'util.js'
 import validator from 'email-validator'
 import { FormattedMessage } from 'react-intl'
 
 const { TextArea } = Input
+const Panel = Collapse.Panel
 
-class SuccessfulInvitationsNotificationWrapper extends React.Component {
-  render() {
-    var successful_applications = this.props.successful_applications
-    var emailListItems = successful_applications.map(function(invitation) {
-      return (
-        <li key={invitation.pk}>
-          <p>
-            {invitation.invitee_nickname + '  '}
-            <code>{'<' + invitation.invitee_email + '>'}</code>
-          </p>
-        </li>
-      )
-    })
+function SuccessfulInvitationsNotificationWrapper(props) {
+  var successful_applications = props.successful_applications
+  var emailListItems = successful_applications.map(function(invitation) {
     return (
-      <div>
-        to
-        <br />
-        <ul>{emailListItems}</ul>
-      </div>
+      <li key={invitation.pk}>
+        <p>
+          {invitation.invitee_nickname + '  '}
+          <code>{'<' + invitation.invitee_email + '>'}</code>
+        </p>
+      </li>
     )
-  }
+  })
+  return (
+    <div>
+      to
+      <br />
+      <ul>{emailListItems}</ul>
+    </div>
+  )
 }
 
-class UnregisteredEmailsNotificationWrapper extends React.Component {
-  render() {
-    var unregistered_emails = this.props.unregistered_emails
-    var listItems = unregistered_emails.map(function(email) {
-      return (
-        <li key={email}>
-          <code>{'<' + email + '>'}</code>
-        </li>
-      )
-    })
-    return <ul>{listItems}</ul>
-  }
+function UnregisteredEmailsNotificationWrapper(props) {
+  var unregistered_emails = props.unregistered_emails
+  var listItems = unregistered_emails.map(function(email) {
+    return (
+      <li key={email}>
+        <code>{'<' + email + '>'}</code>
+      </li>
+    )
+  })
+  return <ul>{listItems}</ul>
 }
 
 class GroupInvitationForm extends React.Component {
@@ -232,25 +243,48 @@ class GroupMemberInvitationsSubtab extends React.Component {
     super(props)
     this.state = {
       coteriePk: this.props.coteriePk,
-      coterie: undefined,
+      coterieUUID: this.props.coterieUUID,
+      join_code: undefined,
+    }
+
+    this.onClickNewJoinCode = () => {
+      var data = new FormData()
+      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+      axios
+        .post('/coteries/api/coteries/{0}/joincodes/new'.format(this.state.coterieUUID), data)
+        .then(response => this.setState({ join_code: response.data['new_code'] }))
+    }
+
+    this.onClickDeleteJoinCode = () => {
+      var data = new FormData()
+      data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+      axios
+        .post('/coteries/api/coteries/{0}/joincodes/delete'.format(this.state.coterieUUID), data)
+        .then(response => this.setState({ join_code: undefined }))
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      coteriePk: nextProps.coteriePk,
-    })
+  // componentWillReceiveProps(nextProps) {
+  //   this.setState({
+  //     coteriePk: nextProps.coteriePk,
+  //     coterieUUID: this.props.coterieUUID,
+  //   })
+  // }
+
+  componentDidMount() {
+    axios
+      .get('/coteries/api/coteries/{0}/joincodes'.format(this.state.coterieUUID))
+      .then(response => this.setState({ join_code: response.data['join_code'] }))
   }
 
-  componentDidMount() {}
-
   render() {
-    const cardTitle = (
+    const inviteCardTitle = (
       <span style={{ fontSize: '12px' }}>
         <FormattedMessage
           id='app.group.message.invite_members'
           defaultMessage='Invite new members'
         />
+
         <Tooltip
           title={
             <FormattedMessage
@@ -267,15 +301,83 @@ class GroupMemberInvitationsSubtab extends React.Component {
     )
 
     const invitationSection = (
-      <Card
-        title={cardTitle}
-        className={'card'}
-        bordered={false}
-        style={{ overflow: 'auto', backgroundColor: 'white', margin: '18px 0 28px 0' }}
-        noHovering
-      >
-        <GroupInvitationForm coteriePk={this.state.coteriePk} />
-      </Card>
+      <div>
+        <div style={{ marginTop: 18 }}>
+          <Collapse accordion>
+            <Panel header='Manage group invitation code' key='1'>
+              <span style={{ marginLeft: 8, verticalAlign: 'middle' }}>
+                Users can search the group name and join the group using the following invitation
+                code
+              </span>
+
+              {this.state.join_code === undefined ? (
+                <p
+                  style={{
+                    fontSize: 16,
+                    marginTop: 28,
+                    marginBottom: 28,
+                    marginLeft: 8,
+                    wordBreak: 'break-all',
+                    hyphens: 'auto',
+                  }}
+                >
+                  No invitation code. Click 'New' button to generate one
+                </p>
+              ) : (
+                <p
+                  style={{
+                    fontSize: 28,
+                    marginTop: 18,
+                    marginBottom: 18,
+                    marginLeft: 8,
+                    wordBreak: 'break-all',
+                    hyphens: 'auto',
+                  }}
+                >
+                  {this.state.join_code}
+                  {/* <FontAwesomeIcon icon={faEye} style={{height: 18}} />
+                <FontAwesomeIcon icon={faEyeSlash} style={{height: 18}} /> */}
+                </p>
+              )}
+
+              <div style={{ marginBottom: 18 }}>
+                <Popconfirm
+                  title='A new invitation code will be generated and the previous one will NO longer work'
+                  onConfirm={this.onClickNewJoinCode}
+                  okText='Yes'
+                  cancelText='No'
+                  placement='bottomLeft'
+                >
+                  <Button type='primary' ghost icon='reload' style={{ marginRight: 18 }}>
+                    New
+                  </Button>
+                </Popconfirm>
+
+                <Button
+                  type='danger'
+                  ghost
+                  icon='close'
+                  onClick={this.onClickDeleteJoinCode}
+                  style={{ marginRight: 18 }}
+                >
+                  Delete
+                </Button>
+              </div>
+            </Panel>
+          </Collapse>
+        </div>
+
+        <Card
+          size='small'
+          title={inviteCardTitle}
+          className={'card'}
+          bordered={false}
+          style={{ overflow: 'auto', backgroundColor: 'white', margin: '18px 0 28px 0' }}
+          noHovering
+        >
+          <GroupInvitationForm coteriePk={this.state.coteriePk} />
+        </Card>
+      </div>
     )
     return <div>{this.props.isAdmin ? invitationSection : null}</div>
   }
