@@ -1,5 +1,5 @@
 const initialStore = {
-  locale: 'en' || navigator.language.split(/[-_]/)[0],
+  locale: navigator.language.split(/[-_]/)[0],
   mostViewsDocuments: undefined,
   mostStarsDocuments: undefined,
   mostAnnotationsDocuments: undefined,

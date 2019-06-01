@@ -9,7 +9,7 @@ function getUrlFormat(urlBase, paraDic) {
 // this is the helper function for getting csrf_token
 function getCookie(name) {
   var cookieValue = null
-  if (document.cookie && document.cookie != '') {
+  if (document.cookie && document.cookie != '' && document.cookie.includes(name)) {
     var cookies = document.cookie.split(';')
     for (var i = 0; i < cookies.length; i++) {
       var cookie = cookies[i].trim()

@@ -139,6 +139,7 @@ private_settings.py
 db.sqlite3
 **/temp_sessions/
 .vscode
+.history
 **/bundled_static/dev/*
 **/media/images/*
 **/media/pdf/*

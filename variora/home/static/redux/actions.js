@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { getUrlFormat } from 'util.js'
+import { getUrlFormat, getCookie } from 'util.js'
 import { initializeWebPush } from '../initialize_push'
 
 const FETCH_USEREXPLORE_DOCS = 'FETCH_USEREXPLORE_DOCS'
@@ -82,12 +82,15 @@ const setCollectedReadlists = collected_readlists => dispatch => {
 }
 
 const fetchLocale = () => dispatch => {
+  var language = getCookie('language')
   dispatch({
     type: FETCH_LOCALE,
+    payload: language
   })
 }
 
 const setLocale = locale => dispatch => {
+  document.cookie = "language=" + locale
   dispatch({
     type: SET_LOCALE,
     payload: locale,
