@@ -49,8 +49,7 @@ import { initialStore } from './redux/init_store.js'
 import { store } from './redux/store.js'
 import messages_zh from './locales/zh.json'
 import messages_en from './locales/en.json'
-import enUS from 'antd/lib/locale-provider/en_US';
-
+import enUS from 'antd/lib/locale-provider/en_US'
 
 const messages = {
   en: messages_en,
@@ -412,7 +411,11 @@ class AppBeforeConnect extends React.Component {
       en: '🇬🇧',
     }
     const languageMenu = (
-      <Menu selectedKeys={[this.state.locale]} onClick={this.handleLanguageChange} style={{marginTop: 20}}>
+      <Menu
+        selectedKeys={[this.state.locale]}
+        onClick={this.handleLanguageChange}
+        style={{ marginTop: 20 }}
+      >
         {locales.map(locale => (
           <Menu.Item key={locale}>
             <span role='img'>{languageIcons[locale]}</span> {languageLabels[locale]}
@@ -818,7 +821,6 @@ class AppBeforeConnect extends React.Component {
       if (filtered.length !== 0) searchPlaceholder = `${filtered[0].name}`
     }
 
-
     return (
       <IntlProvider locale={this.state.locale} messages={messages[this.state.locale]}>
         <Layout style={{ height: '100%', width: '100%', position: 'absolute' }}>
@@ -845,22 +847,23 @@ class AppBeforeConnect extends React.Component {
                 {groupIcon}
               </Col>
               <Col span={8} style={{ textAlign: 'right' }}>
-
-
-                <FormattedMessage id='app.search.global_group' values={{group: searchPlaceholder }}>
-                  {msg => <Search
-                    placeholder={msg}
-                    style={{ width: '60%' }}
-                    onSearch={this.handleSearch}
-                    defaultValue={
-                      window.location.pathname.includes('/search') ? getValFromUrlParam('key') : ''
-                    }
-                  />}
+                <FormattedMessage
+                  id='app.search.global_group'
+                  values={{ group: searchPlaceholder }}
+                >
+                  {msg => (
+                    <Search
+                      placeholder={msg}
+                      style={{ width: '60%' }}
+                      onSearch={this.handleSearch}
+                      defaultValue={
+                        window.location.pathname.includes('/search')
+                          ? getValFromUrlParam('key')
+                          : ''
+                      }
+                    />
+                  )}
                 </FormattedMessage>
-
-
-
-
               </Col>
               <Col span={12} style={{ textAlign: 'right' }}>
                 <GroupSelectionButton
@@ -899,7 +902,10 @@ class AppBeforeConnect extends React.Component {
                 />
 
                 <Dropdown overlay={languageMenu} placement='bottomLeft'>
-                  <Icon type='global' style={{ fontSize: 18, cursor: 'pointer', verticalAlign: 'middle'  }} />
+                  <Icon
+                    type='global'
+                    style={{ fontSize: 18, cursor: 'pointer', verticalAlign: 'middle' }}
+                  />
                 </Dropdown>
               </Col>
             </Row>

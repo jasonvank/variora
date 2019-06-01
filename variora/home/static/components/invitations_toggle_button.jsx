@@ -110,16 +110,16 @@ class InvitationsToggleButton extends React.Component {
     this.setState({ ...nextProps })
     if (this.state.invitations == undefined && nextProps.user != undefined) {
       var self = this
-      if(nextProps.user.email_address) {
+      if (nextProps.user.email_address) {
         axios
-        .get(
-          getUrlFormat('/coterie/api/invitations', {
-            to: nextProps.user.email_address,
-          }),
-        )
-        .then(function(response) {
-          self.setState({ invitations: response.data })
-        })
+          .get(
+            getUrlFormat('/coterie/api/invitations', {
+              to: nextProps.user.email_address,
+            }),
+          )
+          .then(function(response) {
+            self.setState({ invitations: response.data })
+          })
       }
     }
   }

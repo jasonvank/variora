@@ -85,12 +85,12 @@ const fetchLocale = () => dispatch => {
   var language = getCookie('language')
   dispatch({
     type: FETCH_LOCALE,
-    payload: language
+    payload: language,
   })
 }
 
 const setLocale = locale => dispatch => {
-  document.cookie = "language=" + locale
+  document.cookie = 'language=' + locale
   dispatch({
     type: SET_LOCALE,
     payload: locale,
