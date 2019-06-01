@@ -65,6 +65,7 @@
   "app.group.message.warning.join_group": "先申请加入小组",
   "app.group.message.warning.need_to": "您需要",
   "app.group.message.with_invitation_code": "（邀请码）",
+  "app.group.message.public_content_visible": "公开群组内容对所有人可见",
   "app.group.name": "组名",
   "app.group.readlists": "收藏列表",
   "app.group.reject": "拒绝",

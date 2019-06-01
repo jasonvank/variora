@@ -197,7 +197,7 @@ class GroupDocumentsList extends React.Component {
         ),
       },
       {
-        title: 'Title',
+        title: <FormattedMessage id='app.table.title' defaultMessage='Title' />,
         dataIndex: 'title',
         width: '32%',
         render: (text, coterieDocument) =>
@@ -214,7 +214,7 @@ class GroupDocumentsList extends React.Component {
         sorter: (a, b) => a.title.localeCompare(b.title),
       },
       {
-        title: 'Uploader',
+        title: <FormattedMessage id='app.table.uploader' defaultMessage='Upload Name' />,
         dataIndex: 'uploader_name',
         render: (text, record) => (
           <span>
@@ -228,14 +228,14 @@ class GroupDocumentsList extends React.Component {
         width: '20%',
       },
       {
-        title: 'Upload Time',
+        title: <FormattedMessage id='app.table.uploaded_time' defaultMessage='Uploaded Time' />,
         dataIndex: 'uploader_time',
         render: (text, coterieDocument) => documentUploadDate(text, coterieDocument),
         width: '20%',
         sorter: (a, b) => Date.parse(a.upload_time) > Date.parse(b.upload_time),
       },
       {
-        title: 'Action',
+        title: <FormattedMessage id='app.table.action' defaultMessage='Action' />,
         key: 'action',
         width: '20%',
         render: (text, coterieDocument) => (

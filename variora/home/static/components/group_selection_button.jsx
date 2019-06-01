@@ -97,7 +97,8 @@ class GroupsList extends React.Component {
       {
         uuid: undefined,
         name: <FormattedMessage id='app.group.public' defaultMessage='Public' />,
-        description: 'Public content is visible by all users',
+        description: <FormattedMessage id='app.group.message.public_content_visible' defaultMessage='Public content is visible by all users' />,
+        
         avatarUrl: '/media/logo.png',
       },
     ]

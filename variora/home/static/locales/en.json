@@ -68,6 +68,7 @@
   "app.group.message.warning.join_group": "first to join a group",
   "app.group.message.warning.need_to": "Your need to",
   "app.group.message.with_invitation_code": "with invitation code",
+  "app.group.message.public_content_visible": "Public content is visible by all users",
   "app.group.name": "group name",
   "app.group.readlists": "Group Readlists",
   "app.group.reject": "Reject",

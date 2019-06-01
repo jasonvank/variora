@@ -156,23 +156,20 @@ class AppBeforeConnect extends React.Component {
 
     this.getHighlightedMenuItems = () => {
       const pathname = window.location.pathname
-      if (pathname.endsWith('/search')) return []
-      if (pathname.includes('/groups/') || pathname.includes('/readlists/')) {
+      if (pathname.endsWith('/search')) {
+        return []
+      } else if (pathname.includes('/groups/') || pathname.includes('/readlists/')) {
         const pageElement = pathname.split('/')
         return [pageElement[1] + pageElement[2]]
-      }
-      if (pathname.includes('/explore')) {
+      } else if (pathname.includes('/explore')) {
         return ['explore']
-      }
-      return ['documents']
+      } else return ['documents']
     }
 
     this.submitCreateReadlistForm = () => {
       let url = '/file_viewer/api/readlists/create'
       if (this.state.currentCoterie.pk !== undefined)
         url = `/coterie/api/${this.state.currentCoterie.pk}/coteriereadlists/create`
-
-      // const aaa =  <span></span>
 
       const readlistName = this.state.fields.readlistName.value
       if (readlistName == '') {
@@ -923,7 +920,14 @@ const CreateReadlistForm = Form.create({
   const { getFieldDecorator } = props.form
   return (
     <Form>
-      <FormItem label='Name of the readlist'>
+      <FormItem
+        label={
+          <FormattedMessage
+            id='app.readlists.name_readlist'
+            defaultMessage='Name of the readlist'
+          />
+        }
+      >
         {getFieldDecorator('readlistName', {
           rules: [
             {
