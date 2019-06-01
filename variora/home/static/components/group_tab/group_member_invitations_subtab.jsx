@@ -1,7 +1,9 @@
 import 'regenerator-runtime/runtime'
 
 import {Button, Card, Col, Collapse, Icon, Input, Popconfirm, Row, Tooltip, message, notification} from 'antd'
+import { faEye, faEyeSlash } from '@fortawesome/fontawesome-free-regular'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
 import axios from 'axios'
 import { getCookie } from 'util.js'
@@ -240,6 +242,8 @@ class GroupMemberInvitationsSubtab extends React.Component {
               :
               <p style={{ fontSize: 28, marginTop: 18, marginBottom: 18, marginLeft: 8, wordBreak: 'break-all', hyphens: 'auto' }}>
                 {this.state.join_code}
+                {/* <FontAwesomeIcon icon={faEye} style={{height: 18}} />
+                <FontAwesomeIcon icon={faEyeSlash} style={{height: 18}} /> */}
               </p>
             }
 
