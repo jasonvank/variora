@@ -1,44 +1,41 @@
 import 'regenerator-runtime/runtime'
 
-import {Button, Card, Col, Collapse, Icon, Input, Layout, Menu, Popconfirm, Row, Tooltip, message, notification} from 'antd'
-import { getCookie, getUrlFormat } from 'util.js'
+import {Button, Card, Col, Collapse, Icon, Input, Popconfirm, Row, Tooltip, message, notification} from 'antd'
 
 import React from 'react'
 import axios from 'axios'
+import { getCookie } from 'util.js'
 import validator from 'email-validator'
 
 const { TextArea } = Input
+const Panel = Collapse.Panel
 
-class SuccessfulInvitationsNotificationWrapper extends React.Component {
-  render() {
-    var successful_applications = this.props.successful_applications
-    var emailListItems = successful_applications.map(function(invitation) {
-      return <li key={invitation.pk} ><p>{invitation.invitee_nickname + '  '}<code>{'<' + invitation.invitee_email + '>'}</code></p></li>
-    })
-    return (
-      <div>
-        to<br />
-        <ul>
-          { emailListItems }
-        </ul>
-      </div>
-    )
-  }
+function SuccessfulInvitationsNotificationWrapper(props) {
+  var successful_applications = props.successful_applications
+  var emailListItems = successful_applications.map(function(invitation) {
+    return <li key={invitation.pk} ><p>{invitation.invitee_nickname + '  '}<code>{'<' + invitation.invitee_email + '>'}</code></p></li>
+  })
+  return (
+    <div>
+      to<br />
+      <ul>
+        { emailListItems }
+      </ul>
+    </div>
+  )
 }
 
 
-class UnregisteredEmailsNotificationWrapper extends React.Component {
-  render() {
-    var unregistered_emails = this.props.unregistered_emails
-    var listItems = unregistered_emails.map(function(email) {
-      return <li key={email} ><code>{'<' + email + '>'}</code></li>
-    })
-    return (
-      <ul>
-        { listItems }
-      </ul>
-    )
-  }
+function UnregisteredEmailsNotificationWrapper(props) {
+  var unregistered_emails = props.unregistered_emails
+  var listItems = unregistered_emails.map(function(email) {
+    return <li key={email} ><code>{'<' + email + '>'}</code></li>
+  })
+  return (
+    <ul>
+      { listItems }
+    </ul>
+  )
 }
 
 
@@ -223,7 +220,7 @@ class GroupMemberInvitationsSubtab extends React.Component {
     )
 
     const joinCodeCardTitle = (
-      <span style={{fontSize: '12px'}}> Manage group invitation code </span>
+      <span style={{fontSize: '12px'}}>Manage group invitation code</span>
     )
 
     const invitationSection = (
@@ -232,28 +229,40 @@ class GroupMemberInvitationsSubtab extends React.Component {
           <GroupInvitationForm coteriePk={this.state.coteriePk}/>
         </Card>
 
-        <Card size="small" title={joinCodeCardTitle} className={'card'} bordered={false} style={{ overflow: 'auto', backgroundColor: 'white', margin: '18px 0 28px 0' }} noHovering>
-          <span style={{ marginLeft: 8, verticalAlign: 'middle' }}>
-            Users can search the group name and join the group using the following invitation code
-          </span>
+        <div style={{ marginTop: 18 }}>
+          <Collapse accordion>
+            <Panel header="Manage group invitation code" key="1">
+            <span style={{ marginLeft: 8, verticalAlign: 'middle' }}>
+              Users can search the group name and join the group using the following invitation code
+            </span>
 
-          {
-            this.state.join_code === undefined ?
-            <p style={{ fontSize: 16, marginTop: 28, marginBottom: 28, marginLeft: 8, wordBreak: 'break-all', hyphens: 'auto' }}>
-              No invitation code. Click 'New' button to generate one
-            </p>
-            :
-            <p style={{ fontSize: 28, marginTop: 18, marginBottom: 18, marginLeft: 8, wordBreak: 'break-all', hyphens: 'auto' }}>
-              {this.state.join_code}
-            </p>
-          }
+            {
+              this.state.join_code === undefined ?
+              <p style={{ fontSize: 16, marginTop: 28, marginBottom: 28, marginLeft: 8, wordBreak: 'break-all', hyphens: 'auto' }}>
+                No invitation code. Click 'New' button to generate one
+              </p>
+              :
+              <p style={{ fontSize: 28, marginTop: 18, marginBottom: 18, marginLeft: 8, wordBreak: 'break-all', hyphens: 'auto' }}>
+                {this.state.join_code}
+              </p>
+            }
 
 
-          <div style={{ marginBottom: 18 }}>
-            <Button type="primary" ghost icon="reload" onClick={this.onClickNewJoinCode} style={{ marginRight: 18 }}>New</Button>
-            <Button type="danger" ghost icon="close" onClick={this.onClickDeleteJoinCode} style={{ marginRight: 18 }}>Delete</Button>
-          </div>
-        </Card>
+            <div style={{ marginBottom: 18 }}>
+              <Popconfirm
+                title="A new invitation code will be generated and the previous one will NO longer work"
+                onConfirm={this.onClickNewJoinCode}
+                okText="Yes" cancelText="No"
+                placement="bottomLeft"
+              >
+                <Button type="primary" ghost icon="reload" style={{ marginRight: 18 }}>New</Button>
+              </Popconfirm>
+
+              <Button type="danger" ghost icon="close" onClick={this.onClickDeleteJoinCode} style={{ marginRight: 18 }}>Delete</Button>
+            </div>
+            </Panel>
+          </Collapse>
+        </div>
       </div>
     )
     return (
