@@ -351,7 +351,7 @@ class AddToReadlists extends React.Component {
           style={{ float: 'right', margin: 12 }}
           onClick={this.handleSubmit}
         >
-          <FormattedMessage id='app.document.share' defaultMessage='Share' />
+          <FormattedMessage id='app.document.confirm' defaultMessage='Submit' />
         </Button>
       </div>
     )

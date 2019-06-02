@@ -110,7 +110,12 @@ class GroupsList extends React.Component {
     const createNewGroupFakeItem = {
       uuid: 'fake',
       name: 'New Group',
-      description: 'Click to create a new group',
+      description: (
+        <FormattedMessage
+          id='app.group.message.create_new_group'
+          defaultMessage='Click to create a new group'
+        />
+      ),
       icon: 'plus-square-o',
       callback: () => {
         this.props.setCreateCoterieModelVisible(true)

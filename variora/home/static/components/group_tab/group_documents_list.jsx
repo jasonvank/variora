@@ -166,7 +166,7 @@ class GroupDocumentsList extends React.Component {
           okText='Yes'
           cancelText='No'
         >
-          <a>Delete</a>
+          <a><FormattedMessage id='app.document.delete' defaultMessage='Delete' /></a>
         </Popconfirm>
       </span>
     )
