@@ -1,4 +1,5 @@
 const initialStore = {
+  locale: navigator.language.split(/[-_]/)[0],
   mostViewsDocuments: undefined,
   mostStarsDocuments: undefined,
   mostAnnotationsDocuments: undefined,

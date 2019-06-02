@@ -1,12 +1,23 @@
 import 'regenerator-runtime/runtime'
 
-import {Button, Col, Collapse, Form, Icon, Input, notification, Popconfirm, Row, Spin, Tooltip} from 'antd'
-
+import {
+  Button,
+  Col,
+  Collapse,
+  Form,
+  Icon,
+  Input,
+  notification,
+  Popconfirm,
+  Row,
+  Spin,
+  Tooltip,
+} from 'antd'
 
 import React from 'react'
 import axios from 'axios'
 import { getCookie } from 'util.js'
-
+import { FormattedMessage, FormattedHTMLMessage } from 'react-intl'
 const { TextArea } = Input
 const FormItem = Form.Item
 
@@ -14,17 +25,19 @@ class GroupSettingsSubtab extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      'coteriePk': props.coteriePk,
-      'coterieName': props.coterieName,
+      coteriePk: props.coteriePk,
+      coterieName: props.coterieName,
     }
     this.deleteGroup = () => {
       var self = this
       var data = new FormData()
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-      axios.post('/coterie/api/coteries/' + this.state.coteriePk + '/delete', data).then(function() {
-        self.props.removeCoterieCallback(self.state.coteriePk)
-        window.location.href = '/'
-      })
+      axios
+        .post('/coterie/api/coteries/' + this.state.coteriePk + '/delete', data)
+        .then(function() {
+          self.props.removeCoterieCallback(self.state.coteriePk)
+          window.location.href = '/'
+        })
     }
     this.exitGroup = () => {
       var self = this
@@ -48,34 +61,57 @@ class GroupSettingsSubtab extends React.Component {
     const Panel = Collapse.Panel
 
     const cardTitle = (
-      <span style={{fontSize: '12px'}}>
-        Invite new members
-        <Tooltip title={'Or they can apply to join your group. Simply search the group name and click the apply button'} >
-          <a href="#">
-            <Icon type="info-circle-o" style={{marginLeft: 6}} />
+      <span style={{ fontSize: '12px' }}>
+        <FormattedMessage id='app.group.invite_members' defaultMessage='Invite new members' />
+
+        <Tooltip
+          title={
+            <FormattedMessage
+              id='app.group.message.join_instruction'
+              defaultMessage='Or they can apply to join your group. Simply search the group name and click the apply button'
+            />
+          }
+        >
+          <a href='#'>
+            <Icon type='info-circle-o' style={{ marginLeft: 6 }} />
           </a>
         </Tooltip>
       </span>
     )
 
-
     var deleteGroupSection = (
       <Popconfirm
-        title="Are you sure to delete this group? This cannot be undone"
+        title={
+          <FormattedMessage
+            id='app.group.message.delete_group'
+            defaultMessage='Are you sure to delete this group? This cannot be undone'
+          />
+        }
         onConfirm={() => this.deleteGroup()}
-        okText="Yes" cancelText="No"
+        okText='Yes'
+        cancelText='No'
       >
-        <a style={{ float: 'right', color: '#F2784B', marginRight: '6%' }}>Delete this group</a>
+        <a style={{ float: 'right', color: '#F2784B', marginRight: '6%' }}>
+          <FormattedMessage id='app.group.delete_group' defaultMessage='Delete this group' />
+        </a>
       </Popconfirm>
     )
 
     var exitGroupSection = (
       <Popconfirm
-        title="Are you sure to exit this group? This cannot be undone"
+        title={
+          <FormattedMessage
+            id='app.group.message.exit_group'
+            defaultMessage='Are you sure to exit this group? This cannot be undone'
+          />
+        }
         onConfirm={() => this.exitGroup()}
-        okText="Yes" cancelText="No"
+        okText='Yes'
+        cancelText='No'
       >
-        <a style={{ float: 'right', color: '#F2784B', marginRight: '6%' }}>Exit this group</a>
+        <a style={{ float: 'right', color: '#F2784B', marginRight: '6%' }}>
+          <FormattedMessage id='app.group.exit_group' defaultMessage='Exit this group' />
+        </a>
       </Popconfirm>
     )
 
@@ -84,8 +120,20 @@ class GroupSettingsSubtab extends React.Component {
         <Col>
           <div style={{ marginTop: 18 }}>
             <Collapse accordion>
-              <Panel header="Danger Zone" key="1">
-                <span>{"Once you delete the group, all admins and members will no longer have access."}</span>
+              <Panel
+                header={
+                  <FormattedMessage id='app.group.danger_zone' defaultMessage='Danger Zone' />
+                }
+                key='1'
+              >
+                <span>
+                  {
+                    <FormattedMessage
+                      id='app.group.message.delete_warning'
+                      defaultMessage='Once you delete the group, all admins and members will no longer have access.'
+                    />
+                  }
+                </span>
                 {deleteGroupSection}
               </Panel>
             </Collapse>
@@ -99,8 +147,18 @@ class GroupSettingsSubtab extends React.Component {
         <Col>
           <div style={{ marginTop: 18 }}>
             <Collapse accordion>
-              <Panel header="Danger Zone" key="1">
-                <span>{"Once you exit the group, you will no longer have access"}</span>
+              <Panel
+                header={
+                  <FormattedMessage id='app.group.danger_zone' defaultMessage='Danger Zone' />
+                }
+                key='1'
+              >
+                <span>
+                  <FormattedMessage
+                    id='app.group.message.exit_warning'
+                    defaultMessage='Once you exit the group, you will no longer have access'
+                  />
+                </span>
                 {exitGroupSection}
               </Panel>
             </Collapse>
@@ -111,35 +169,40 @@ class GroupSettingsSubtab extends React.Component {
 
     return (
       <div>
-        { this.props.isAdmin ? deleteDangerZone : exitDangerZone }
-        { this.props.isAdmin ? <GroupInformationChange coteriePk = {this.state.coteriePk} coterieName = {this.state.coterieName} updateCoterieCallback = {this.props.updateCoterieCallback} /> : null}
+        {this.props.isAdmin ? deleteDangerZone : exitDangerZone}
+        {this.props.isAdmin ? (
+          <GroupInformationChange
+            coteriePk={this.state.coteriePk}
+            coterieName={this.state.coterieName}
+            updateCoterieCallback={this.props.updateCoterieCallback}
+          />
+        ) : null}
       </div>
     )
   }
 }
 
-
 class GroupInformationChange extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      'loading': false,
-      'coteriePk': props.coteriePk,
-      'coterieName': props.coterieName,
+      loading: false,
+      coteriePk: props.coteriePk,
+      coterieName: props.coterieName,
       // 'coterieDesc': props.coterieDesc,
     }
 
-    this.handleSubmit = (e) => {
+    this.handleSubmit = e => {
       var self = this
 
       e.preventDefault()
-      this.setState({loading: true})
+      this.setState({ loading: true })
       const newName = this.state.coterieName
       // const newDesc = this.state.coterieDescription
 
       if (newName == '') {
-        self.setState({loading: false})
-        notification['warning']({ message: 'Group name cannot be empty', duration: 4, })
+        self.setState({ loading: false })
+        notification['warning']({ message: 'Group name cannot be empty', duration: 4 })
         return
       }
 
@@ -148,14 +211,15 @@ class GroupInformationChange extends React.Component {
       // data.append('new_desc', newDesc)
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
 
-      axios.post('/coterie/api/coteries/' + this.state.coteriePk + '/update', data).then(function() {
-        self.props.updateCoterieCallback(self.state.coteriePk, newName)
-        self.setState({loading: false})
-        notification['success']({ message: 'Group info updated', duration: 4, })
-      })
+      axios
+        .post('/coterie/api/coteries/' + this.state.coteriePk + '/update', data)
+        .then(function() {
+          self.props.updateCoterieCallback(self.state.coteriePk, newName)
+          self.setState({ loading: false })
+          notification['success']({ message: 'Group info updated', duration: 4 })
+        })
     }
   }
-
 
   componentWillReceiveProps(nextProps) {
     this.setState({
@@ -179,25 +243,29 @@ class GroupInformationChange extends React.Component {
         <div className={'card'} style={{ overflow: 'auto', marginTop: 16, padding: 18 }}>
           <Form style={{ marginTop: 24 }} onSubmit={this.handleSubmit}>
             <FormItem
-              label="Group Name"
+              label={<FormattedMessage id='app.group.name' defaultMessage='Group Name' />}
               {...formItemLayout}
             >
-              <Input value={this.state.coterieName} onChange={async (e) => await this.setState({ coterieName: e.target.value })}/>
-
+              <Input
+                value={this.state.coterieName}
+                onChange={async e => await this.setState({ coterieName: e.target.value })}
+              />
             </FormItem>
             {/*<FormItem*/}
-              {/*label="Description"*/}
-              {/*{...formItemLayout}*/}
+            {/*label="Description"*/}
+            {/*{...formItemLayout}*/}
             {/*>*/}
-              {/*<TextArea rows={6}*/}
-                {/*value={this.state.coterieDesc}*/}
-                {/*onChange={async (e) => {*/}
-                  {/*await this.setState({ coterieDescription: e.target.value })*/}
-                {/*}}*/}
-              {/*/>*/}
+            {/*<TextArea rows={6}*/}
+            {/*value={this.state.coterieDesc}*/}
+            {/*onChange={async (e) => {*/}
+            {/*await this.setState({ coterieDescription: e.target.value })*/}
+            {/*}}*/}
+            {/*/>*/}
             {/*</FormItem>*/}
             <FormItem {...buttonItemLayout}>
-              <Button type="primary" htmlType="submit">Update</Button>
+              <Button type='primary' htmlType='submit'>
+                <FormattedMessage id='app.group.update' defaultMessage='Update' />
+              </Button>
             </FormItem>
           </Form>
         </div>
@@ -207,4 +275,3 @@ class GroupInformationChange extends React.Component {
 }
 
 export { GroupSettingsSubtab }
-

@@ -122,8 +122,15 @@ typings/
 # Yarn Integrity file
 .yarn-integrity
 
+# Yarn registry
+.yarnrc
+
 # dotenv environment variables file
 .env
+
+# locale translation
+build/messages
+*.babel
 
 
 ################### custom ######################
@@ -132,6 +139,7 @@ private_settings.py
 db.sqlite3
 **/temp_sessions/
 .vscode
+.history
 **/bundled_static/dev/*
 **/media/images/*
 **/media/pdf/*

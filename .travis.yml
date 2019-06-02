@@ -10,6 +10,12 @@ install:
     - sudo pip install --upgrade pip
     - npm i -g npm
 
+    - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+    - command -v nvm
+    - nvm ls
+    - nvm install v8.16.0
+    - nvm use v8.16.0
+
     - sudo pip install git-lint
     - npm install -g yarn webpack webpack-cli eslint eslint-plugin-react lint-diff
     - sudo pip install -r dev_reqs.txt
