@@ -1,12 +1,14 @@
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.db import IntegrityError
 from django.test import TestCase
-from models import User
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+from webdriver_manager.chrome import ChromeDriverManager
 
+from models import User
 
 TEST_USER_NAME = "admin"
 TEST_USER_EMAIL = "admin@admin.admin"
@@ -58,67 +60,71 @@ class TestUser(TestCase):
             self.assertTrue(True)
 
 
-# class HomeUITest(StaticLiveServerTestCase):
-#     @classmethod
-#     def setUpClass(cls):
-#         cls.browser = webdriver.Chrome()
-#         super(HomeUITest, cls).setUpClass()
+class HomeUITest(StaticLiveServerTestCase):
+    @classmethod
+    def setUpClass(cls):
+        chrome_options = Options()
+        chrome_options.add_argument("--disable-extensions")
+        chrome_options.add_argument("--disable-gpu")
+        chrome_options.add_argument("--headless")
+        cls.browser = webdriver.Chrome(ChromeDriverManager().install(), chrome_options=chrome_options)
+        super(HomeUITest, cls).setUpClass()
 
-#     @classmethod
-#     def tearDownClass(cls):
-#         super(HomeUITest, cls).tearDownClass()
-#         cls.browser.quit()
+    @classmethod
+    def tearDownClass(cls):
+        super(HomeUITest, cls).tearDownClass()
+        cls.browser.quit()
 
-#     def setUp(self):
-#         User.objects.create_user(TEST_USER_NAME, TEST_USER_EMAIL, TEST_USER_PASS)
+    def setUp(self):
+        User.objects.create_user(TEST_USER_NAME, TEST_USER_EMAIL, TEST_USER_PASS)
 
-#     def test_login_logout(self):
-#         browser = self.browser
-#         browser.get(self.live_server_url)
+    def test_login_logout(self):
+        browser = self.browser
+        browser.get(self.live_server_url)
 
-#         # test log in
-#         login_btn = browser.find_element_by_link_text("Log In Now")
-#         login_btn.click()
-#         login_popup_window = browser.find_element_by_class_name("layui-layer")
-#         self.assertIsNotNone(login_popup_window)
-#         browser.find_element_by_name("email_address").send_keys(TEST_USER_EMAIL)
-#         browser.find_element_by_name("password").send_keys(TEST_USER_PASS)
-#         browser.find_element_by_id("submit_login_form_btn").click()
-#         self.assertIsNotNone(browser.find_element_by_id("logout_btn"))
+        # test log in
+        login_btn = browser.find_element_by_link_text("sign in")
+        self.assertIsNotNone(login_btn)
 
-#         # test log out
-#         browser.find_element_by_id("logout_btn").click()
-#         self.assertIsNotNone(browser.find_element_by_link_text("Log In Now"))
+        # login_btn.click()
+        # browser.find_element_by_name("email_address").send_keys(TEST_USER_EMAIL)
+        # browser.find_element_by_name("password").send_keys(TEST_USER_PASS)
+        # browser.find_element_by_id("submit_login_form_btn").click()
+        # self.assertIsNotNone(browser.find_element_by_id("logout_btn"))
 
-#     def test_login_with_incorrect_email(self):
-#         browser = self.browser
-#         browser.get(self.live_server_url)
+        # test log out
+        # browser.find_element_by_id("logout_btn").click()
+        # self.assertIsNotNone(browser.find_element_by_link_text("Log In Now"))
 
-#         # test input wrong log in email and password
-#         login_btn = browser.find_element_by_link_text("Log In Now")
-#         login_btn.click()
-#         browser.find_element_by_name("email_address").send_keys(TEST_USER_EMAIL)
-#         browser.find_element_by_name("password").send_keys("admi")
-#         browser.find_element_by_id("submit_login_form_btn").click()
-#         err_message = browser.find_element_by_tag_name("h1").text
-#         self.assertEqual(err_message, "email address or password is wrong")
+    # def test_login_with_incorrect_email(self):
+    #     browser = self.browser
+    #     browser.get(self.live_server_url)
 
-#     def test_sign_up_to_right_page(self):
-#         browser = self.browser
-#         browser.get(self.live_server_url)
+    #     # test input wrong log in email and password
+    #     login_btn = browser.find_element_by_link_text("Log In Now")
+    #     login_btn.click()
+    #     browser.find_element_by_name("email_address").send_keys(TEST_USER_EMAIL)
+    #     browser.find_element_by_name("password").send_keys("admi")
+    #     browser.find_element_by_id("submit_login_form_btn").click()
+    #     err_message = browser.find_element_by_tag_name("h1").text
+    #     self.assertEqual(err_message, "email address or password is wrong")
 
-#         #test if sign up button linked to right page
-#         signup_btn = browser.find_element_by_link_text("Sign Up Now")
-#         signup_btn.click()
-#         self.assertEqual(str(browser.current_url).split('/')[-1], "sign_up")
+    # def test_sign_up_to_right_page(self):
+    #     browser = self.browser
+    #     browser.get(self.live_server_url)
 
-#     def test_search_by_keyword(self):
-#         browser = self.browser
-#         browser.get(self.live_server_url)
+    #     #test if sign up button linked to right page
+    #     signup_btn = browser.find_element_by_link_text("Sign Up Now")
+    #     signup_btn.click()
+    #     self.assertEqual(str(browser.current_url).split('/')[-1], "sign_up")
 
-#         #test search by keyword
-#         search_field = browser.find_element_by_xpath("//input[@type='search']")
-#         WebDriverWait(browser, 10).until(EC.visibility_of(search_field))
-#         search_field.send_keys("algorithm")
-#         search_field.send_keys(Keys.ENTER)
-#         self.assertEqual(str(browser.current_url).split('/')[-1], "handle_search?search_key=algorithm")
+    # def test_search_by_keyword(self):
+    #     browser = self.browser
+    #     browser.get(self.live_server_url)
+
+    #     #test search by keyword
+    #     search_field = browser.find_element_by_xpath("//input[@type='search']")
+    #     WebDriverWait(browser, 10).until(EC.visibility_of(search_field))
+    #     search_field.send_keys("algorithm")
+    #     search_field.send_keys(Keys.ENTER)
+    #     self.assertEqual(str(browser.current_url).split('/')[-1], "handle_search?search_key=algorithm")

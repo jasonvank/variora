@@ -30,6 +30,7 @@ boto3
 
 ###### development ######
 selenium  # write browser-side tests
+webdriver-manager
 pylint  # coding style
 isort
 django-debug-toolbar
