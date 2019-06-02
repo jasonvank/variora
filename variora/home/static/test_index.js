@@ -523,7 +523,7 @@ class AppBeforeConnect extends React.Component {
                     <span>
                       <Icon type='folder' />
                       <FormattedMessage
-                        id='app.readlists.collecte'
+                        id='app.readlists.collect_readlist'
                         defaultMessage='Collected Readlists'
                       />
                     </span>
@@ -702,7 +702,7 @@ class AppBeforeConnect extends React.Component {
                   <span>
                     <Icon type='folder' />
                     <FormattedMessage
-                      id='app.readlists.collecte'
+                      id='app.readlists.collect_readlist'
                       defaultMessage='Collected Readlists'
                     />
                   </span>
@@ -960,7 +960,11 @@ const CreateReadlistForm = Form.create({
           ],
         })(<Input />)}
       </FormItem>
-      <FormItem label='Description'>{getFieldDecorator('readlistDesc')(<TextArea />)}</FormItem>
+      <FormItem
+        label={<FormattedMessage id='app.readlists.description' defaultMessage='Description' />}
+      >
+        {getFieldDecorator('readlistDesc')(<TextArea />)}
+      </FormItem>
     </Form>
   )
 })

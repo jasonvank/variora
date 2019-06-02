@@ -2,7 +2,7 @@ import 'regenerator-runtime/runtime'
 
 import { Badge, Button, Icon, notification } from 'antd'
 import { getCookie, getUrlFormat } from 'util.js'
-
+import { FormattedMessage } from 'react-intl'
 import React from 'react'
 import axios from 'axios'
 
@@ -11,9 +11,11 @@ class InvitationDetailsWrapper extends React.Component {
     var message = this.props.invitation
     var messageListItems = (
       <p>
-        Group name: <b>{message.coterie_name}</b>
+        <FormattedMessage id='app.group.message.title' defaultMessage='Group name: ' />
+        <b>{message.coterie_name}</b>
         <br />
-        Message: {message.invitation_message}
+        <FormattedMessage id='app.group.message.message_title' defaultMessage='Message: ' />
+        {message.invitation_message}
       </p>
     )
 
@@ -60,7 +62,7 @@ class ReceivedCoterieInvitationNotificationContent extends React.Component {
             size='small'
             onClick={this.onAcceptClick}
           >
-            Accept
+            <FormattedMessage id='app.group.accept' defaultMessage='Accept' />
           </Button>
           <Button
             style={{ margin: '12px 8px 6px 8px' }}
@@ -68,7 +70,7 @@ class ReceivedCoterieInvitationNotificationContent extends React.Component {
             size='small'
             onClick={this.onRejectClick}
           >
-            Reject
+            <FormattedMessage id='app.group.reject' defaultMessage='Reject' />
           </Button>
         </div>
       </div>
@@ -88,12 +90,7 @@ class InvitationsToggleButton extends React.Component {
     this.onClick = () => {
       if (this.state.invitations == undefined || this.state.invitations.length == 0) {
         notification['info']({
-          message: (
-            <FormattedMessage
-              id='app.group.message.no_invitation'
-              defaultMessage='You do not have new group invitations.'
-            />
-          ),
+          message: 'You do not have new group invitations.',
           duration: 3.8,
         })
       }

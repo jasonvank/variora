@@ -71,7 +71,8 @@ class GroupAdministratorsList extends React.Component {
         pagination={false}
         title={() => (
           <span>
-            <Icon type='solution' /> Group Admin
+            <Icon type='solution' />
+            <FormattedMessage id='app.group.admin' defaultMessage=' Group Admin' />
           </span>
         )}
         size='middle'
@@ -194,7 +195,8 @@ class GroupMembersList extends React.Component {
         pagination={false}
         title={() => (
           <span>
-            <Icon type='team' /> Group Members
+            <Icon type='team' />
+            <FormattedMessage id='app.group.members' defaultMessage='Group Members' />
           </span>
         )}
         size='middle'
@@ -308,7 +310,8 @@ class GroupApplicationList extends React.Component {
         )}
         title={() => (
           <span>
-            <Icon type='usergroup-add' /> Group Applications
+            <Icon type='usergroup-add' />
+            <FormattedMessage id='app.group.application' defaultMessage='Group Applications' />
           </span>
         )}
         size='middle'

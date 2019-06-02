@@ -304,13 +304,23 @@ class GroupMemberInvitationsSubtab extends React.Component {
       <div>
         <div style={{ marginTop: 18 }}>
           <Collapse accordion>
-            <Panel header='Manage group invitation code' key='1'>
+            <Panel
+              header={
+                <FormattedMessage
+                  id='app.group.messgae.manage_code'
+                  defaultMessage='Manage group invitation code'
+                />
+              }
+              key='1'
+            >
               <span style={{ marginLeft: 8, verticalAlign: 'middle' }}>
-                Users can search the group name and join the group using the following invitation
-                code
+                <FormattedMessage
+                  id='app.group.message.search_instruction'
+                  defaultMessage='Users can search the group name and join the group using the following invitation code'
+                />
               </span>
 
-              {this.state.join_code === undefined ? (
+              {this.state.join_code === undefined || this.state.join_code === 'None' ? (
                 <p
                   style={{
                     fontSize: 16,
@@ -321,7 +331,10 @@ class GroupMemberInvitationsSubtab extends React.Component {
                     hyphens: 'auto',
                   }}
                 >
-                  No invitation code. Click 'New' button to generate one
+                  <FormattedMessage
+                    id='app.group.message.create_new_code'
+                    defaultMessage="No invitation code. Click 'New' button to generate one"
+                  />
                 </p>
               ) : (
                 <p
@@ -342,14 +355,19 @@ class GroupMemberInvitationsSubtab extends React.Component {
 
               <div style={{ marginBottom: 18 }}>
                 <Popconfirm
-                  title='A new invitation code will be generated and the previous one will NO longer work'
+                  title={
+                    <FormattedMessage
+                      id='app.group.message.generate_code'
+                      defaultMessage='A new invitation code will be generated and the previous one will NO longer work'
+                    />
+                  }
                   onConfirm={this.onClickNewJoinCode}
                   okText='Yes'
                   cancelText='No'
                   placement='bottomLeft'
                 >
                   <Button type='primary' ghost icon='reload' style={{ marginRight: 18 }}>
-                    New
+                    <FormattedMessage id='app.group.new' defaultMessage='New' />
                   </Button>
                 </Popconfirm>
 
@@ -360,7 +378,7 @@ class GroupMemberInvitationsSubtab extends React.Component {
                   onClick={this.onClickDeleteJoinCode}
                   style={{ marginRight: 18 }}
                 >
-                  Delete
+                  <FormattedMessage id='app.group.delete' defaultMessage='Delete' />
                 </Button>
               </div>
             </Panel>

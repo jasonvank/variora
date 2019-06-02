@@ -97,7 +97,7 @@ class ReadlistTabBeforeConnect extends React.Component {
             <Link to={this.state.sub_url_base + this.state.readlistSlug + '/'}>
               <Icon type='book' />
               <FormattedMessage
-                id='app.readlist.readlist_Documents'
+                id='app.readlist.readlist_documents'
                 defaultMessage='Readlist Documents'
               />
             </Link>

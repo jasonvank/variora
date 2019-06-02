@@ -16,7 +16,7 @@
     "sourceType": "module"
   },
   "parser": "babel-eslint",
-  "plugins": ["react"],
+  "plugins": ["react", "prettier"],
   "rules": {
     "no-console": [0],
     "no-duplicate-imports": [0],
@@ -48,8 +48,8 @@
     "block-spacing": ["error", "always"],
     "camelcase": ["error", { "properties": "never" }],
     "comma-dangle": ["error", "never"],
-
+    "react/prefer-stateless-function": "off",
     "array-element-newline": ["warn", "never"],
-    "object-curly-spacing": ["error", "never", { "objectsInObjects": true }, { "multiline": true }]
+    "object-curly-spacing": ["error", "always", { "objectsInObjects": false }]
   }
 }
