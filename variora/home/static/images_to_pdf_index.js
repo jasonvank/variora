@@ -1,13 +1,24 @@
 import './css/sign_in_index.css'
 import 'regenerator-runtime/runtime'
 
-import { Button, Row, Col, Form, Icon, Input, LocaleProvider, Upload } from 'antd'
+import { Button, Row, Col, Form, Icon, Input, LocaleProvider, Modal, Upload } from 'antd'
 
 import React from 'react'
 import ReactDOM from 'react-dom'
 import enUS from 'antd/lib/locale-provider/en_US'
 
-import { FormattedMessage, FormattedHTMLMessage } from 'react-intl'
+import { FormattedMessage, FormattedHTMLMessage, addLocaleData, IntlProvider } from 'react-intl'
+import locale_en from 'react-intl/locale-data/en'
+import locale_zh from 'react-intl/locale-data/zh'
+import { getCookie} from 'util.js'
+import messages_zh from './locales/zh.json'
+import messages_en from './locales/en.json'
+const messages = {
+  en: messages_en,
+  zh: messages_zh,
+}
+
+addLocaleData([...locale_en, ...locale_zh])
 
 const FormItem = Form.Item
 const Dragger = Upload.Dragger
@@ -141,8 +152,13 @@ class Main extends React.Component {
       beforeUpload: this.handleBeforeUpload,
       onRemove: this.handleRemove,
     }
+
+    var language = getCookie('language') || 'en'
+    console.log(language)
+
     return (
-      <div className='clearfix'>
+      <IntlProvider locale={language} messages={messages[language]}>
+        <div className='clearfix'>
         {/* <Row style={{ textAlign: 'center', marginTop: 18 }}>
           <a href='/'><img src="/media/logo.png" height={66} /></a>
         </Row> */}
@@ -164,7 +180,10 @@ class Main extends React.Component {
           </Col>
 
           <Col span={8} style={{ paddingLeft: 28 }}>
-            <Form.Item label='Name of the document'>
+            <Form.Item label={<FormattedMessage
+            id='app.document.convert.document'
+            defaultMessage="Name of the document"
+          />}>
               <Input value={this.state.documentName} onChange={this.handleDocNameChange} />
             </Form.Item>
             <Button type='primary' className='login-form-button' onClick={this.makePdf}>
@@ -182,7 +201,6 @@ class Main extends React.Component {
             <a target='_blank' href='https://www.camscanner.com/user/download'>
               CamScanner
             </a>
-            " />
           </Col>
         </Row>
 
@@ -200,6 +218,8 @@ class Main extends React.Component {
           <img alt='example' style={{ width: '100%' }} src={previewImage} />
         </Modal>
       </div>
+
+      </IntlProvider>
     )
   }
 }

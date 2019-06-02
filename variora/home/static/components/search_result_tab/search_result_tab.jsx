@@ -138,7 +138,6 @@ class SearchResultTab extends React.Component {
               <Link to={urlBase + '/users?key=' + searchKey}>
                 <Icon type='user' />
                 <FormattedMessage id='app.search.users' defaultMessage='Users' />
-                Users
               </Link>
             </Menu.Item>
           ) : null}
@@ -268,20 +267,13 @@ class GroupResult extends React.Component {
                 defaultMessage='Unsuccessful application'
               />
             ),
-            description:
-              (
-                <FormattedMessage
-                  id='app.group.message.warning.need_to'
-                  defaultMessage='You need to '
-                />
-              ) +
-              <a href='/sign-in'>log in </a> +
-              (
-                <FormattedMessage
-                  id='app.group.message.warning.join_group'
-                  defaultMessage='  first to join a group'
-                />
-              ),
+            description: (
+              <FormattedMessage
+                id='app.group.message.warning.login_required'
+                defaultMessage='You need to {login} first to join a group'
+                values={{ login: <a href='/sign-in'>log in </a> }}
+              />
+            ),
             duration: 3.8,
           })
         })
@@ -344,7 +336,7 @@ class GroupResult extends React.Component {
         render: (text, record) => {
           var applyLink = (
             <a href='javascript:;' onClick={() => this.onApplyClick(record)}>
-              Apply
+              <FormattedMessage id='app.group.apply' defaultMessage='Apply' />
             </a>
           )
           var alreadyMemberLink = (
@@ -388,7 +380,10 @@ class GroupResult extends React.Component {
               {isAdmin ? alreadyAdminLink : isMember ? alreadyMemberLink : applyLink}
               <span className='ant-divider' />
               <a href='javascript:;' onClick={() => this.onJoinWithCodeClick(record)}>
-                Join with invitation code
+                <FormattedMessage
+                  id='app.group.message.join_code'
+                  defaultMessage='Join with invitation code'
+                />
               </a>
             </span>
           )
@@ -415,12 +410,11 @@ class GroupResult extends React.Component {
 
         <Modal
           title={
-            (
-              <FormattedMessage
-                id='app.group.message.apply_join'
-                defaultMessage='Apply to join: '
-              />
-            ) + this.state.targetedCoterie.name
+            <FormattedMessage
+              id='app.group.message.apply_join'
+              defaultMessage='Apply to join: {group}'
+              values={{ group: this.state.targetedCoterie.name }}
+            />
           }
           wrapClassName='vertical-center-modal'
           visible={this.state.createApplicationModelVisible}
@@ -429,28 +423,24 @@ class GroupResult extends React.Component {
             this.setState({ createApplicationModelVisible: false })
           }}
         >
-          <TextArea
-            onChange={async e => this.setState({ applicationMessage: e.target.value })}
-            placeholder={
-              <FormattedMessage
-                id='app.group.message.application'
-                defaultMessage='Application message'
+          <FormattedMessage id='app.group.message.application_message'>
+            {msg => (
+              <TextArea
+                onChange={async e => this.setState({ applicationMessage: e.target.value })}
+                placeholder={msg}
+                value={this.state.applicationMessage}
               />
-            }
-            value={this.state.applicationMessage}
-          />
+            )}
+          </FormattedMessage>
         </Modal>
 
         <Modal
           title={
-            <FormattedMessage id='app.group.message.join' defaultMessage='Join ' /> +
-            <span style={{ color: '#1BA39C' }}>{this.state.targetedCoterie.name}</span> +
-            (
-              <FormattedMessage
-                id='app.group.message.with_invitation_code'
-                defaultMessage=' with invitation code'
-              />
-            )
+            <FormattedMessage
+              id='app.group.message.join_with_code'
+              defaultMessage='Join {group} with invitation code'
+              values={{ group: this.state.targetedCoterie.name }}
+            />
           }
           wrapClassName='vertical-center-modal'
           visible={this.state.joinWithCodeModelVisible}
@@ -459,16 +449,15 @@ class GroupResult extends React.Component {
             this.setState({ joinWithCodeModelVisible: false })
           }}
         >
-          <Input
-            onChange={async e => this.setState({ invitationCode: e.target.value })}
-            placeholder={
-              <FormattedMessage
-                id='app.group.message.invitation'
-                defaultMessage='Invitation code you received'
+          <FormattedMessage id='app.group.message.invitaion'>
+            {msg => (
+              <Input
+                onChange={async e => this.setState({ invitationCode: e.target.value })}
+                placeholder={msg}
+                value={this.state.invitationCode}
               />
-            }
-            value={this.state.invitationCode}
-          />
+            )}
+          </FormattedMessage>
         </Modal>
       </div>
     )
