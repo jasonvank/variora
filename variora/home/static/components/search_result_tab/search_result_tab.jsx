@@ -236,26 +236,11 @@ class GroupResult extends React.Component {
               />
             ),
             description:
-              (
-                <FormattedMessage
+              (<FormattedMessage
                   id='app.group.message.success.send_group'
-                  defaultMessage='Your application has been sent to Group: '
-                />
-              ) +
-              this.state.targetedCoterie.name +
-              (
-                <FormattedMessage
-                  id='app.group.message.success.success'
-                  defaultMessage=' successfully!'
-                />
-              ) +
-              (
-                <FormattedMessage
-                  id='app.group.message.send.with_message'
-                  defaultMessage='  With message: '
-                />
-              ) +
-              this.state.applicationMessage,
+                  defaultMessage='Your application has been sent to Group: {group} successfully! With message: {message}'
+                  values = {{ group: this.state.targetedCoterie.name, message: this.state.applicationMessage}}
+              />) ,
             duration: 4,
           })
         })
@@ -449,7 +434,7 @@ class GroupResult extends React.Component {
             this.setState({ joinWithCodeModelVisible: false })
           }}
         >
-          <FormattedMessage id='app.group.message.invitaion'>
+          <FormattedMessage id='app.group.message.use_invitation'>
             {msg => (
               <Input
                 onChange={async e => this.setState({ invitationCode: e.target.value })}

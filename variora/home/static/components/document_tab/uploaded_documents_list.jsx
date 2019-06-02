@@ -289,7 +289,10 @@ class AddToReadlists extends React.Component {
 
       axios.post(url, data).then(response => {
         notification['success']({
-          message: 'Updated',
+          message: (<FormattedMessage
+          id='app.document.update'
+          defaultMessage='Updated'
+          />),
           duration: 2,
         })
       })
