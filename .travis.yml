@@ -10,7 +10,7 @@ install:
     - sudo pip install --upgrade pip
     - npm i -g npm
 
-    - npm install nvm
+    - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
     - command -v nvm
     - nvm ls
     - nvm install v8.16.0
