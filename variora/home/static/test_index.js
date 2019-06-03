@@ -878,6 +878,13 @@ class AppBeforeConnect extends React.Component {
                   acceptInvitationCallback={this.acceptInvitationCallback}
                 />
 
+                <Dropdown overlay={languageMenu} placement='bottomLeft'>
+                  <Icon
+                    type='global'
+                    style={{ fontSize: 16, marginLeft: 28, cursor: 'pointer', verticalAlign: 'middle' }}
+                  />
+                </Dropdown>
+
                 <span style={{ marginRight: 12, marginLeft: 28, color: '#666' }}>
                   {this.state.user.nickname}
                 </span>
@@ -900,13 +907,6 @@ class AppBeforeConnect extends React.Component {
                   size={'large'}
                   src={this.state.user.portrait_url}
                 />
-
-                <Dropdown overlay={languageMenu} placement='bottomLeft'>
-                  <Icon
-                    type='global'
-                    style={{ fontSize: 18, cursor: 'pointer', verticalAlign: 'middle' }}
-                  />
-                </Dropdown>
               </Col>
             </Row>
           </Header>
