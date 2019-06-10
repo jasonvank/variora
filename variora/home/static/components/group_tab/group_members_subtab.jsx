@@ -20,32 +20,29 @@ class GroupAdministratorsList extends React.Component {
           title: '#',
           dataIndex: 'id',
           width: '20%',
-          render: (text, record) => this.state.data.indexOf(record) + 1,
-        },
-        {
+          render: (text, record) => this.state.data.indexOf(record) + 1
+        }, {
           title: '',
           dataIndex: 'avatar',
           width: '20%',
-          render: (text, record) => <Avatar src={record.portrait_url} size='default' />,
-        },
-        {
+          render: (text, record) => <Avatar src={record.portrait_url} size='default' />
+        }, {
           title: <FormattedMessage id='app.table.title' defaultMessage='Title' />,
           dataIndex: 'nickname',
-          width: '20%',
-        },
-        {
+          width: '20%'
+        }, {
           title: <FormattedMessage id='app.table.email_address' defaultMessage='Email Address' />,
           dataIndex: 'email_address',
-          width: '40%',
-        },
-      ],
+          width: '40%'
+        }
+      ]
     }
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
       coteriePk: this.props.coteriePk,
-      data: nextProps.administrators,
+      data: nextProps.administrators
     })
     this.forceUpdate()
   }
@@ -69,7 +66,7 @@ class GroupAdministratorsList extends React.Component {
               id='app.group.message.no_admin'
               defaultMessage='No administrators found'
             />
-          ),
+          )
         }}
       />
     )
@@ -82,7 +79,7 @@ class GroupMembersList extends React.Component {
     this.state = {
       coteriePk: this.props.coteriePk,
       data: this.props.members,
-      isAdmin: this.props.isAdmin,
+      isAdmin: this.props.isAdmin
     }
   }
 
@@ -90,36 +87,32 @@ class GroupMembersList extends React.Component {
     this.setState({
       coteriePk: this.props.coteriePk,
       data: nextProps.members,
-      isAdmin: nextProps.isAdmin,
+      isAdmin: nextProps.isAdmin
     })
     this.forceUpdate()
   }
 
   render() {
-    var columns = [
+    const columns = [
       {
         title: '#',
         dataIndex: 'id',
         width: '20%',
-        render: (text, record) => this.state.data.indexOf(record) + 1,
-      },
-      {
+        render: (text, record) => this.state.data.indexOf(record) + 1
+      }, {
         title: '',
         dataIndex: 'avatar',
         width: '20%',
-        render: (text, record) => <Avatar src={record.portrait_url} size='default' />,
-      },
-      {
+        render: (text, record) => <Avatar src={record.portrait_url} size='default' />
+      }, {
         title: <FormattedMessage id='app.table.name' defaultMessage='Name' />,
         dataIndex: 'nickname',
-        width: '20%',
-      },
-      {
+        width: '20%'
+      }, {
         title: <FormattedMessage id='app.table.email_address' defaultMessage='Email Address' />,
         dataIndex: 'email_address',
-        width: this.state.isAdmin ? '20%' : '40%',
-      },
-      {
+        width: this.state.isAdmin ? '20%' : '40%'
+      }, {
         title: <FormattedMessage id='app.table.action' defaultMessage='Action' />,
         key: 'action',
         width: '20%',
@@ -141,8 +134,8 @@ class GroupMembersList extends React.Component {
               </a>
             </Popconfirm>
           </span>
-        ),
-      },
+        )
+      }
     ]
 
     return (
@@ -157,7 +150,7 @@ class GroupMembersList extends React.Component {
               id='app.group.message.no_members'
               defaultMessage='No group members found'
             />
-          ),
+          )
         }}
         title={() => (
           <span>
@@ -177,21 +170,21 @@ class GroupApplicationList extends React.Component {
     this.onRejectClick = this.onRejectClick.bind(this)
     this.state = {
       coteriePk: this.props.coteriePk,
-      data: this.props.applications,
+      data: this.props.applications
     }
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
       coteriePk: nextProps.coteriePk,
-      data: nextProps.applications,
+      data: nextProps.applications
     })
     this.forceUpdate()
   }
 
   onAcceptClick(application) {
-    var self = this
-    var data = new FormData()
+    const self = this
+    const data = new FormData()
     data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
     axios.post(application.accept_url, data).then(() => {
       self.props.removeApplicationCallback(application.pk)
@@ -200,8 +193,8 @@ class GroupApplicationList extends React.Component {
   }
 
   onRejectClick(application) {
-    var self = this
-    var data = new FormData()
+    const self = this
+    const data = new FormData()
     data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
     axios.post(application.reject_url, data).then(response => {
       self.props.removeApplicationCallback(application.pk)
@@ -214,25 +207,21 @@ class GroupApplicationList extends React.Component {
         title: '#',
         dataIndex: 'id',
         width: '15%',
-        render: (text, record) => this.state.data.indexOf(record) + 1,
-      },
-      {
+        render: (text, record) => this.state.data.indexOf(record) + 1
+      }, {
         title: '',
         dataIndex: 'avatar',
         width: '20%',
-        render: (text, record) => <Avatar src={record.applicant.portrait_url} size='default' />,
-      },
-      {
+        render: (text, record) => <Avatar src={record.applicant.portrait_url} size='default' />
+      }, {
         title: <FormattedMessage id='app.table.name' defaultMessage='Name' />,
         dataIndex: 'applicant_nickname',
-        width: '20%',
-      },
-      {
+        width: '20%'
+      }, {
         title: <FormattedMessage id='app.table.email_address' defaultMessage='Email Address' />,
         dataIndex: 'applicant_email',
-        width: '20%',
-      },
-      {
+        width: '20%'
+      }, {
         title: <FormattedMessage id='app.table.action' defaultMessage='Action' />,
         key: 'action',
         width: '20%',
@@ -257,8 +246,8 @@ class GroupApplicationList extends React.Component {
               <FormattedMessage id='app.group.reject' defaultMessage='Reject' />
             </a>
           </span>
-        ),
-      },
+        )
+      }
     ]
 
     return (
@@ -290,7 +279,7 @@ class GroupApplicationList extends React.Component {
               id='app.group.message.no_applications'
               defaultMessage='No applications found'
             />
-          ),
+          )
         }}
       />
     )
@@ -305,26 +294,26 @@ class GroupMembersSubtab extends React.Component {
       administrators: [],
       members: [],
       applications: [],
-      coterie: undefined,
+      coterie: undefined
     }
     this.addIndexForCount = records => {
-      var index = 1
-      for (var record of records) document.id = index++
+      let index = 1
+      for (const record of records) document.id = index++
       return records
     }
     this.updateData = response => {
       axios
-        .get(getUrlFormat('/coterie/api/coteries/' + this.state.coteriePk, {}))
+        .get(getUrlFormat(`/coterie/api/coteries/${this.state.coteriePk}`, {}))
         .then(response => {
           this.setState({
             coterie: response.data,
             administrators: this.addIndexForCount(response.data.administrators),
-            members: this.addIndexForCount(response.data.members),
+            members: this.addIndexForCount(response.data.members)
           })
           axios
             .get(
               getUrlFormat('/coterie/api/applications', {
-                for: response.data.pk,
+                for: response.data.pk
               }),
             )
             .then(response => {
@@ -336,31 +325,29 @@ class GroupMembersSubtab extends React.Component {
         })
     }
     this.removeMemberCallback = memberEmailAddress => {
-      var self = this
-      var data = new FormData()
+      const self = this
+      const data = new FormData()
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
       data.append('member_email_address', memberEmailAddress)
       axios.post(this.state.coterie.remove_member_url, data).then(function() {
-        var updatedMembers = self.state.members.filter(
+        const updatedMembers = self.state.members.filter(
           member => member.email_address != memberEmailAddress,
         )
         self.setState({ members: updatedMembers })
       })
     }
     this.removeApplicationCallback = applicationPk => {
-      var updatedApplications = this.state.applications.filter(function(application) {
+      const updatedApplications = this.state.applications.filter(function(application) {
         return application.pk != applicationPk
       })
       this.setState({ applications: updatedApplications })
     }
     this.addMemberCallback = applicant => {
-      var alreadyMember =
+      const alreadyMember =
         this.state.members.find(member => member.email_address == applicant.email_address) !=
         undefined
-          ? true
-          : false
       if (!alreadyMember) {
-        var updatedMembers = this.state.members.concat([applicant])
+        const updatedMembers = this.state.members.concat([applicant])
         this.setState({ members: updatedMembers })
       }
     }
@@ -368,7 +355,7 @@ class GroupMembersSubtab extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      coteriePk: nextProps.coteriePk,
+      coteriePk: nextProps.coteriePk
     })
     this.updateData()
   }
@@ -378,8 +365,8 @@ class GroupMembersSubtab extends React.Component {
   }
 
   render() {
-    var groupApplicationList = (
-      <div className={'card'} style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}>
+    const groupApplicationList = (
+      <div className='card' style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}>
         <GroupApplicationList
           coteriePk={this.state.coteriePk}
           applications={this.state.applications}
@@ -390,19 +377,13 @@ class GroupMembersSubtab extends React.Component {
     )
     return (
       <div>
-        <div
-          className={'card'}
-          style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}
-        >
+        <div className='card' style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}>
           <GroupAdministratorsList
             coteriePk={this.state.coteriePk}
             administrators={this.state.administrators}
           />
         </div>
-        <div
-          className={'card'}
-          style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}
-        >
+        <div className='card' style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}>
           <GroupMembersList
             coteriePk={this.state.coteriePk}
             members={this.state.members}
