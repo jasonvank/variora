@@ -162,7 +162,12 @@ class GroupDocumentsList extends React.Component {
     const documentDeleteAction = (text, coterieDocument) => (
       <span>
         <Popconfirm
-          title='Are you sure delete this document? It cannot be undone.'
+          title={
+            <FormattedMessage
+              id='app.document.message.delete'
+              defaultMessage='Are you sure delete this document? It cannot be undone.'
+            />
+          }
           onConfirm={() => this.deleteDocument(coterieDocument)}
           okText='Yes'
           cancelText='No'

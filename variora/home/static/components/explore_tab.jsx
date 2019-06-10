@@ -200,7 +200,11 @@ class ReadlistTab extends React.Component {
             style={{ overflowY: 'auto' }}
             rowKey={record => record.slug}
             footer={() => null}
-            locale={{ emptyText: '' }}
+            locale={{
+              emptyText: (
+                <FormattedMessage id='app.group.message.no_data' defaultMessage='No data found' />
+              ),
+            }}
           />
         </div>
 
@@ -219,7 +223,11 @@ class ReadlistTab extends React.Component {
             style={{ overflowY: 'auto' }}
             rowKey={record => record.slug}
             footer={() => null}
-            locale={{ emptyText: '' }}
+            locale={{
+              emptyText: (
+                <FormattedMessage id='app.group.message.no_data' defaultMessage='No data found' />
+              ),
+            }}
           />
         </div>
       </div>

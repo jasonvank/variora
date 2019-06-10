@@ -257,7 +257,11 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
                 columns={columns}
                 pagination={false}
                 rowKey={record => record.pk}
-                locale={{ emptyText: '' }}
+                locale={{
+                  emptyText: (
+                    <FormattedMessage id='app.group.message.no_data' defaultMessage='No data found' />
+                  ),
+                }}
               />
             </Col>
             <Col style={{ padding: 18 }} span={8}>

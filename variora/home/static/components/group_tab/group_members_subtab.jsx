@@ -1,19 +1,6 @@
 import 'regenerator-runtime/runtime'
 
-import {
-  Avatar,
-  Dropdown,
-  Icon,
-  Input,
-  Divider,
-  Layout,
-  Menu,
-  Modal,
-  message,
-  Popconfirm,
-  Row,
-  Table,
-} from 'antd'
+import { Avatar, Icon, Divider, Layout, message, Popconfirm, Table } from 'antd'
 import { getCookie, getUrlFormat } from 'util.js'
 import { FormattedMessage } from 'react-intl'
 
@@ -48,7 +35,7 @@ class GroupAdministratorsList extends React.Component {
         },
         {
           title: <FormattedMessage id='app.table.email_address' defaultMessage='Email Address' />,
-          dataIndex: '',
+          dataIndex: 'email_address',
           width: '40%',
         },
       ],
@@ -76,8 +63,14 @@ class GroupAdministratorsList extends React.Component {
             <FormattedMessage id='app.group.admin' defaultMessage=' Group Admin' />
           </span>
         )}
-        size='middle'
-        locale={{ emptyText: '' }}
+        locale={{
+          emptyText: (
+            <FormattedMessage
+              id='app.group.message.no_admin'
+              defaultMessage='No administrators found'
+            />
+          ),
+        }}
       />
     )
   }
@@ -103,56 +96,6 @@ class GroupMembersList extends React.Component {
   }
 
   render() {
-    class DropdownWrapper extends React.Component {
-      constructor(props) {
-        super(props)
-        this.state = {
-          visible: false,
-        }
-        this.handleVisibleChange = flag => {
-          this.setState({ visible: flag })
-        }
-      }
-      render() {
-        var menu = (
-          <Menu onClick={this.handleMenuClick}>
-            <Menu.Item>
-              <Popconfirm
-                title={
-                  <FormattedMessage
-                    id='app.group.message.remove_member'
-                    defaultMessage='Are you sure to remove this member from the group?'
-                  />
-                }
-                onConfirm={() => {
-                  this.props.removeMemberCallback(this.props.memberEmailAddress)
-                  this.setState({ visible: false })
-                }}
-                okText='Yes'
-                cancelText='No'
-              >
-                <FormattedMessage id='app.group.remove' defaultMessage='Remove' />
-              </Popconfirm>
-            </Menu.Item>
-          </Menu>
-        )
-        return (
-          <Dropdown
-            overlay={menu}
-            trigger={['click']}
-            onVisibleChange={this.handleVisibleChange}
-            visible={this.state.visible}
-          >
-            <a className='ant-dropdown-link' href='#'>
-              <FormattedMessage id='app.group.actions' defaultMessage='Actions' />
-
-              <Icon type='down' />
-            </a>
-          </Dropdown>
-        )
-      }
-    }
-
     var columns = [
       {
         title: '#',
@@ -181,10 +124,23 @@ class GroupMembersList extends React.Component {
         key: 'action',
         width: '20%',
         render: (text, record) => (
-          <DropdownWrapper
-            removeMemberCallback={this.props.removeMemberCallback}
-            memberEmailAddress={record.email_address}
-          />
+          <span>
+            <Popconfirm
+              title={
+                <FormattedMessage
+                  id='app.document.message.delete'
+                  defaultMessage='Are you sure delete this document? It cannot be undone.'
+                />
+              }
+              onConfirm={() => this.props.removeMemberCallback(record.email_address)}
+              okText='Yes'
+              cancelText='No'
+            >
+              <a>
+                <FormattedMessage id='app.document.delete' defaultMessage='Delete' />
+              </a>
+            </Popconfirm>
+          </span>
         ),
       },
     ]
@@ -195,14 +151,20 @@ class GroupMembersList extends React.Component {
         rowKey={record => record.email_address}
         columns={this.state.isAdmin ? columns : columns.pop() ? columns : []}
         pagination={false}
+        locale={{
+          emptyText: (
+            <FormattedMessage
+              id='app.group.message.no_members'
+              defaultMessage='No group members found'
+            />
+          ),
+        }}
         title={() => (
           <span>
             <Icon type='team' />
             <FormattedMessage id='app.group.members' defaultMessage='Group Members' />
           </span>
         )}
-        size='middle'
-        locale={{ emptyText: '' }}
       />
     )
   }
@@ -301,13 +263,18 @@ class GroupApplicationList extends React.Component {
 
     return (
       <Table
-        rowKey={record => record.pk}
+        rowKey={record => record.applicant_email}
         dataSource={this.state.data}
         columns={columns}
         pagination={false}
         expandedRowRender={record => (
           <p>
-            <b>{'Message from this applicant: '}</b>
+            <b>
+              <FormattedMessage
+                id='app.group.message.from_applicant'
+                defaultMessage='Message from this applicant: '
+              />
+            </b>
             <span style={{ margin: 0 }}>{record.application_message}</span>
           </p>
         )}
@@ -317,8 +284,14 @@ class GroupApplicationList extends React.Component {
             <FormattedMessage id='app.group.application' defaultMessage='Group Applications' />
           </span>
         )}
-        size='middle'
-        locale={{ emptyText: '' }}
+        locale={{
+          emptyText: (
+            <FormattedMessage
+              id='app.group.message.no_applications'
+              defaultMessage='No applications found'
+            />
+          ),
+        }}
       />
     )
   }
