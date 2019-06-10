@@ -82,7 +82,7 @@ const setCollectedReadlists = collected_readlists => dispatch => {
 }
 
 const fetchLocale = () => dispatch => {
-  var language = getCookie('language')
+  var language = getCookie('language') || 'en'
   dispatch({
     type: FETCH_LOCALE,
     payload: language,
