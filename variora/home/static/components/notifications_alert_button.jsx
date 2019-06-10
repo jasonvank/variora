@@ -164,7 +164,8 @@ class NotificationsList extends React.Component {
           rowKey={record => record.slug}
           onRowClick={this.handleReadStatus}
           footer={() => null}
-        />
+          locale={{ emptyText: '' }}
+          />
       </div>
     )
   }

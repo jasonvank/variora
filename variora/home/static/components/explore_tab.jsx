@@ -200,6 +200,7 @@ class ReadlistTab extends React.Component {
             style={{ overflowY: 'auto' }}
             rowKey={record => record.slug}
             footer={() => null}
+            locale={{ emptyText: '' }}
           />
         </div>
 
@@ -218,6 +219,7 @@ class ReadlistTab extends React.Component {
             style={{ overflowY: 'auto' }}
             rowKey={record => record.slug}
             footer={() => null}
+            locale={{ emptyText: '' }}
           />
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { Icon, Popconfirm, Table, message } from 'antd'
+import { Icon, Popconfirm, Table, message, Divider } from 'antd'
 import { formatOpenDocumentUrl, getCookie, getUrlFormat } from 'util.js'
 
 import React from 'react'
@@ -84,7 +84,7 @@ class CollectedDocumentsList extends React.Component {
             <a onClick={() => this.onUncollectDocument(text, collectedDocument)}>
               <FormattedMessage id='app.document.uncollect' defaultMessage='Uncollect' />
             </a>
-            <span className='ant-divider' />
+            <Divider type='vertical' />
             <a href='javascript:;' onClick={() => this.onClickShareDocument(collectedDocument)}>
               {/*<Icon type="share-alt" />*/}
               <FormattedMessage id='app.document.share' defaultMessage='Share' />

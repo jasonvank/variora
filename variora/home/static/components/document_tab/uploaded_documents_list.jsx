@@ -1,6 +1,7 @@
 import {
   Button,
   Checkbox,
+  Divider,
   Popover,
   Icon,
   Input,
@@ -204,12 +205,12 @@ class UploadedDocumentsList extends React.Component {
                 <FormattedMessage id='app.document.delete' defaultMessage='Delete' />
               </a>
             </Popconfirm>
-            <span className='ant-divider' />
+            <Divider type='vertical' />
             <a href='javascript:;' onClick={() => this.onClickShareDocument(record)}>
               {/*<Icon type="share-alt" />*/}
               <FormattedMessage id='app.document.share' defaultMessage='Share' />
             </a>
-            <span className='ant-divider' />
+            <Divider type='vertical' />
             <AddToReadlists
               createdReadlists={this.state.createdReadlists}
               document={record}

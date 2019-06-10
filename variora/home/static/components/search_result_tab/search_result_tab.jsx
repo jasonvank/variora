@@ -4,6 +4,7 @@ import {
   Avatar,
   Icon,
   Layout,
+  Divider,
   Menu,
   message,
   Table,
@@ -235,12 +236,16 @@ class GroupResult extends React.Component {
                 defaultMessage='Application successfully sent'
               />
             ),
-            description:
-              (<FormattedMessage
-                  id='app.group.message.success.send_group'
-                  defaultMessage='Your application has been sent to Group: {group} successfully! With message: {message}'
-                  values = {{ group: this.state.targetedCoterie.name, message: this.state.applicationMessage}}
-              />) ,
+            description: (
+              <FormattedMessage
+                id='app.group.message.success.send_group'
+                defaultMessage='Your application has been sent to Group: {group} successfully! With message: {message}'
+                values={{
+                  group: this.state.targetedCoterie.name,
+                  message: this.state.applicationMessage,
+                }}
+              />
+            ),
             duration: 4,
           })
         })
@@ -363,7 +368,7 @@ class GroupResult extends React.Component {
           return (
             <span>
               {isAdmin ? alreadyAdminLink : isMember ? alreadyMemberLink : applyLink}
-              <span className='ant-divider' />
+              <Divider type='vertical' />
               <a href='javascript:;' onClick={() => this.onJoinWithCodeClick(record)}>
                 <FormattedMessage
                   id='app.group.message.join_code'

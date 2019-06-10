@@ -257,6 +257,7 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
                 columns={columns}
                 pagination={false}
                 rowKey={record => record.pk}
+                locale={{ emptyText: '' }}
               />
             </Col>
             <Col style={{ padding: 18 }} span={8}>

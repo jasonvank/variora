@@ -18,7 +18,6 @@
     "@fortawesome/fontawesome-free-regular": "^5.0.13",
     "@fortawesome/fontawesome-svg-core": "^1.2.4",
     "@fortawesome/react-fontawesome": "^0.1.3",
-    "antd": "^2.13.13",
     "axios": "^0.18.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
@@ -80,5 +79,8 @@
       "\\.(css|less)$": "<rootDir>/jest_tests/__mocks__/style_mock.js"
     },
     "testURL": "http://localhost:8000/test"
+  },
+  "dependencies": {
+    "antd": "^3.19.3"
   }
 }

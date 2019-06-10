@@ -881,7 +881,12 @@ class AppBeforeConnect extends React.Component {
                 <Dropdown overlay={languageMenu} placement='bottomLeft'>
                   <Icon
                     type='global'
-                    style={{ fontSize: 16, marginLeft: 28, cursor: 'pointer', verticalAlign: 'middle' }}
+                    style={{
+                      fontSize: 16,
+                      marginLeft: 28,
+                      cursor: 'pointer',
+                      verticalAlign: 'middle',
+                    }}
                   />
                 </Dropdown>
 
@@ -924,14 +929,14 @@ const CreateReadlistForm = Form.create({
   },
   mapPropsToFields(props) {
     return {
-      readlistName: {
+      readlistName: Form.createFormField({
         ...props.readlistName,
         value: props.readlistName.value,
-      },
-      readlistDesc: {
+      }),
+      readlistDesc: Form.createFormField({
         ...props.readlistDesc,
         value: props.readlistDesc.value,
-      },
+      }),
     }
   },
 })(props => {
@@ -975,10 +980,10 @@ const CreateCoterieForm = Form.create({
   },
   mapPropsToFields(props) {
     return {
-      coterieName: {
+      coterieName: Form.createFormField({
         ...props.coterieName,
         value: props.coterieName.value,
-      },
+      }),
     }
   },
 })(props => {

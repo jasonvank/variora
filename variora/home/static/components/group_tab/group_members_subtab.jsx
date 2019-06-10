@@ -2,11 +2,10 @@ import 'regenerator-runtime/runtime'
 
 import {
   Avatar,
-  Button,
-  Col,
   Dropdown,
   Icon,
   Input,
+  Divider,
   Layout,
   Menu,
   Modal,
@@ -20,6 +19,8 @@ import { FormattedMessage } from 'react-intl'
 
 import React from 'react'
 import axios from 'axios'
+
+const { Header, Content, Sider } = Layout
 
 class GroupAdministratorsList extends React.Component {
   constructor(props) {
@@ -76,6 +77,7 @@ class GroupAdministratorsList extends React.Component {
           </span>
         )}
         size='middle'
+        locale={{ emptyText: '' }}
       />
     )
   }
@@ -200,6 +202,7 @@ class GroupMembersList extends React.Component {
           </span>
         )}
         size='middle'
+        locale={{ emptyText: '' }}
       />
     )
   }
@@ -281,7 +284,7 @@ class GroupApplicationList extends React.Component {
             >
               <FormattedMessage id='app.group.accept' defaultMessage='Accept' />
             </a>
-            <span className='ant-divider' />
+            <Divider type='vertical' />
             <a
               onClick={e => {
                 e.preventDefault()
@@ -315,6 +318,7 @@ class GroupApplicationList extends React.Component {
           </span>
         )}
         size='middle'
+        locale={{ emptyText: '' }}
       />
     )
   }
