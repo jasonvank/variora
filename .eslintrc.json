@@ -7,7 +7,7 @@
     "jquery": true,
     "jest": true
   },
-  "extends": ["eslint:recommended", "airbnb"],
+  "extends": ["eslint:recommended"],
   "parserOptions": {
     "ecmaFeatures": {
       "experimentalObjectRestSpread": true,
