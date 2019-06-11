@@ -37,16 +37,13 @@ import {
 import { DocumentTab } from './components/document_tab.jsx'
 import { ExploreTab } from './components/explore_tab.jsx'
 import { GroupReadlistsTab } from './components/group_tab/group_readlists_tab.jsx'
-import { GroupSelectionButton } from './components/group_selection_button.jsx'
 import { GroupTab } from './components/group_tab/group_tab.jsx'
-import { InvitationsToggleButton } from './components/invitations_toggle_button.jsx'
-import { NotificationsAlertButton } from './components/notifications_alert_button.jsx'
-
 import { ReadlistTab } from './components/readlist_tab/readlist_tab.jsx'
 import { SearchResultTab } from './components/search_result_tab/search_result_tab.jsx'
 import TextArea from '../../../node_modules/antd/lib/input/TextArea'
 import { initialStore } from './redux/init_store.js'
 import { store } from './redux/store.js'
+import { Navbar } from './components/home_page/navbar.jsx'
 import messages_zh from './locales/zh.json'
 import messages_en from './locales/en.json'
 import enUS from 'antd/lib/locale-provider/en_US'
@@ -76,6 +73,8 @@ function getCoterieUUID() {
   if (window.location.pathname.includes('/groups/')) return window.location.pathname.split('/')[2]
   return undefined
 }
+
+let groupIcon = null
 
 class AppBeforeConnect extends React.Component {
   constructor() {
@@ -399,30 +398,6 @@ class AppBeforeConnect extends React.Component {
 
   render() {
     notification.config({ top: 66 })
-
-    // language menu
-    let locales = ['en', 'zh']
-    let languageLabels = {
-      zh: '简体中文',
-      en: 'English',
-    }
-    const languageIcons = {
-      zh: '🇨🇳',
-      en: '🇬🇧',
-    }
-    const languageMenu = (
-      <Menu
-        selectedKeys={[this.state.locale]}
-        onClick={this.handleLanguageChange}
-        style={{ marginTop: 20 }}
-      >
-        {locales.map(locale => (
-          <Menu.Item key={locale}>
-            <span role='img'>{languageIcons[locale]}</span> {languageLabels[locale]}
-          </Menu.Item>
-        ))}
-      </Menu>
-    )
 
     const fields = this.state.fields
 
@@ -778,144 +753,22 @@ class AppBeforeConnect extends React.Component {
       </Router>
     )
 
-    let groupIcon = null
-    const currentCoterieUUID = getCoterieUUID()
-    if (currentCoterieUUID !== undefined) {
-      let currentCoterie
-
-      let filtered = this.state.administratedCoteries.filter(c => c.uuid === currentCoterieUUID)
-      if (filtered.length > 0) currentCoterie = filtered[0]
-
-      filtered = this.state.joinedCoteries.filter(c => c.uuid === currentCoterieUUID)
-      if (filtered.length > 0) currentCoterie = filtered[0]
-
-      if (currentCoterie !== undefined) {
-        const color = groupAvatarColors[currentCoterieUUID.charCodeAt(0) % 8]
-        groupIcon = (
-          <Avatar
-            style={{
-              width: 18,
-              height: 18,
-              backgroundColor: color,
-              top: 16,
-              left: -6,
-              verticalAlign: 'middle',
-            }}
-            size={'small'}
-          >
-            <span style={{ position: 'relative', top: -3 }}>
-              {currentCoterie.name.slice(0, 2).toUpperCase()}
-            </span>
-          </Avatar>
-        )
-      }
-    }
-
-    let searchPlaceholder = 'Variora'
-
-    if (window.location.pathname.includes('/groups/')) {
-      const coterieUUID = window.location.pathname.split('/')[2]
-      const filtered = this.state.administratedCoteries
-        .concat(this.state.joinedCoteries)
-        .filter(c => c.uuid === coterieUUID)
-      if (filtered.length !== 0) searchPlaceholder = `${filtered[0].name}`
-    }
+  
 
     return (
       <IntlProvider locale={this.state.locale} messages={messages[this.state.locale]}>
-        <Layout style={{ height: '100%', width: '100%', position: 'absolute' }}>
-          <Header
-            className='header'
-            style={{
-              backgroundColor: '#fff',
-              diplay: 'inline',
-              position: 'fixed',
-              zIndex: 1,
-              width: '100%',
-            }}
-          >
-            <Row>
-              <Col span={4}>
-                {/* <div className="logo" /> */}
-                <a href='/'>
-                  <img
-                    src='/media/logo.png'
-                    height={48}
-                    style={{ verticalAlign: 'middle', marginLeft: 28 }}
-                  />
-                </a>
-                {groupIcon}
-              </Col>
-              <Col span={8} style={{ textAlign: 'right' }}>
-                <FormattedMessage
-                  id='app.search.global_group'
-                  values={{ group: searchPlaceholder }}
-                >
-                  {msg => (
-                    <Search
-                      placeholder={msg}
-                      style={{ width: '60%' }}
-                      onSearch={this.handleSearch}
-                      defaultValue={
-                        window.location.pathname.includes('/search')
-                          ? getValFromUrlParam('key')
-                          : ''
-                      }
-                    />
-                  )}
-                </FormattedMessage>
-              </Col>
-              <Col span={12} style={{ textAlign: 'right' }}>
-                <GroupSelectionButton
-                  administratedCoteries={this.state.administratedCoteries}
-                  joinedCoteries={this.state.joinedCoteries}
-                  setCreateCoterieModelVisible={this.setCreateCoterieModelVisible}
-                  currentCoterieUUID={getCoterieUUID()}
-                />
-                <NotificationsAlertButton />
-                <InvitationsToggleButton
-                  user={this.state.user}
-                  acceptInvitationCallback={this.acceptInvitationCallback}
-                />
-
-                <Dropdown overlay={languageMenu} placement='bottomLeft'>
-                  <Icon
-                    type='global'
-                    style={{
-                      fontSize: 16,
-                      marginLeft: 28,
-                      cursor: 'pointer',
-                      verticalAlign: 'middle',
-                    }}
-                  />
-                </Dropdown>
-
-                <span style={{ marginRight: 12, marginLeft: 28, color: '#666' }}>
-                  {this.state.user.nickname}
-                </span>
-                {this.state.user.is_authenticated ? (
-                  <a onClick={this.signOff}>
-                    <FormattedMessage id='app.sign_off' defaultMessage='Sign Off' />
-                  </a>
-                ) : (
-                  <a href='/sign-in'>
-                    <FormattedMessage id='app.sign_in' defaultMessage='Sign In' />
-                  </a>
-                )}
-                <Avatar
-                  style={{
-                    marginLeft: 28,
-                    marginRight: 18,
-                    marginTop: -2,
-                    verticalAlign: 'middle',
-                  }}
-                  size={'large'}
-                  src={this.state.user.portrait_url}
-                />
-              </Col>
-            </Row>
-          </Header>
-
+        <Layout>
+          <Navbar
+            user={this.state.user}
+            administratedCoteries={this.state.administratedCoteries}
+            joinedCoteries={this.state.joinedCoteries}
+            locale={this.state.locale}
+            handleSearch={this.handleSearch}
+            handleLanguageChange={this.handleLanguageChange}
+            setCreateCoterieModelVisible={this.setCreateCoterieModelVisible}
+            acceptInvitationCallback={this.acceptInvitationCallback}
+            signOff={this.props.signOff}
+          />
           {getCoterieUUID() !== undefined ? groupRouter(getCoterieUUID()) : globalRouter}
         </Layout>
       </IntlProvider>
