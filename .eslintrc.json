@@ -7,7 +7,7 @@
     "jquery": true,
     "jest": true
   },
-  "extends": ["eslint:recommended", "airbnb", "prettier"],
+  "extends": ["eslint:recommended", "airbnb", "prettier", "prettier/react"],
   "parserOptions": {
     "ecmaFeatures": {
       "experimentalObjectRestSpread": true,
@@ -24,7 +24,6 @@
     "semi": ["error", "never"],
     "no-underscore-dangle": [0],
     "compat/compat": "warn",
-    "react/jsx-filename-extension": [0],
     "react/sort-comp": [1],
     "react/prop-types": [1],
     "react/forbid-prop-types": [0],
@@ -35,13 +34,15 @@
     "import/prefer-default-export": [1],
     "no-unused-vars": ["off"],
     "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
-    "indent": [
-      "error",
+    "react/jsx-filename-extension": [
+      1,
       {
-        "anonymous": "never",
-        "named": "never"
+        "extensions": [".js", "jsx"]
       }
     ],
+    "react/no-multi-comp": [0],
+    "react/no-unused-state": [0],
+    "max-len": ["error", 80],
     "prettier/prettier": ["error"],
     "accessor-pairs": "error",
     "arrow-spacing": ["error", { "before": true, "after": true }],
