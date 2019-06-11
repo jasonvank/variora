@@ -7,7 +7,7 @@
     "jquery": true,
     "jest": true
   },
-  "extends": ["eslint:recommended", "airbnb", "prettier", "prettier/react"],
+  "extends": ["eslint:recommended", "airbnb"],
   "parserOptions": {
     "ecmaFeatures": {
       "experimentalObjectRestSpread": true,
@@ -16,7 +16,7 @@
     "sourceType": "module"
   },
   "parser": "babel-eslint",
-  "plugins": ["react", "prettier"],
+  "plugins": ["react"],
   "rules": {
     "no-console": [0],
     "no-duplicate-imports": [0],
@@ -43,7 +43,6 @@
     "react/no-multi-comp": [0],
     "react/no-unused-state": [0],
     "max-len": ["error", 80],
-    "prettier/prettier": ["error"],
     "accessor-pairs": "error",
     "arrow-spacing": ["error", { "before": true, "after": true }],
     "block-spacing": ["error", "always"],
