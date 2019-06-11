@@ -4,8 +4,7 @@
   "description": "Variora ======== #### the idea of this project comes from [NotaBene](http://nb.mit.edu/) --------",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
-    "extract-messages": "NODE_dENV=production babel ./variora/home/static  --out-file /dev/null"
+    "test": "jest"
   },
   "repository": {
     "type": "git",

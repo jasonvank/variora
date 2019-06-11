@@ -4,10 +4,9 @@
     "commonjs": true,
     "es6": true,
     "node": true,
-    "jquery": true,
-    "jest": true
+    "jquery": true
   },
-  "extends": ["eslint:recommended"],
+  "extends": "eslint:recommended",
   "parserOptions": {
     "ecmaFeatures": {
       "experimentalObjectRestSpread": true,
@@ -15,41 +14,42 @@
     },
     "sourceType": "module"
   },
-  "parser": "babel-eslint",
   "plugins": ["react"],
   "rules": {
-    "no-console": [0],
-    "no-duplicate-imports": [0],
-    "global-require": [0],
-    "semi": ["error", "never"],
-    "no-underscore-dangle": [0],
-    "compat/compat": "warn",
-    "react/sort-comp": [1],
-    "react/prop-types": [1],
-    "react/forbid-prop-types": [0],
-    "react/require-default-props": [1],
-    "react/destructuring-assignment": [1],
-    "import/no-extraneous-dependencies": [0],
-    "import/imports-first": [1],
-    "import/prefer-default-export": [1],
     "no-unused-vars": ["off"],
-    "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
-    "react/jsx-filename-extension": [
-      1,
+    "brace-style": [
+      "error",
+      "1tbs",
       {
-        "extensions": [".js", "jsx"]
+        "allowSingleLine": true
       }
     ],
-    "react/no-multi-comp": [0],
-    "react/no-unused-state": [0],
-    "max-len": ["error", 80],
-    "accessor-pairs": "error",
-    "arrow-spacing": ["error", { "before": true, "after": true }],
-    "block-spacing": ["error", "always"],
-    "camelcase": ["error", { "properties": "never" }],
-    "comma-dangle": ["error", "never"],
-    "react/prefer-stateless-function": "off",
+    "indent": ["error", 2],
+    "linebreak-style": ["error", "unix"],
+    "quotes": ["warn", "single"],
+    "semi": ["warn", "never"],
     "array-element-newline": ["warn", "never"],
-    "object-curly-spacing": ["error", "always", { "objectsInObjects": false }]
+    "array-bracket-spacing": ["error", "never"],
+    "no-multi-spaces": [
+      "warn",
+      {
+        "ignoreEOLComments": true
+      }
+    ],
+    "space-before-function-paren": [
+      "error",
+      {
+        "anonymous": "never",
+        "named": "never"
+      }
+    ],
+    "keyword-spacing": [
+      "error",
+      {
+        "before": true,
+        "after": true
+      }
+    ],
+    "space-infix-ops": ["error"]
   }
 }
