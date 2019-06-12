@@ -4,7 +4,10 @@
   "description": "Variora ======== #### the idea of this project comes from [NotaBene](http://nb.mit.edu/) --------",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "set-env": "source env/bin/activate && pip install -r dev_reqs.txt && npm install -g yarn webpack webpack-cli && yarn",
+    "start": "source env/bin/activate && source rundevserver.sh",
+    "test": "jest && python variora/manage.py test variora",
+    "extract-messages": "NODE_dENV=production babel ./variora/home/static  --out-file /dev/null"
   },
   "repository": {
     "type": "git",
