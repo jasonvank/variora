@@ -83,7 +83,7 @@ class HomeUITest(StaticLiveServerTestCase):
         browser.get(self.live_server_url)
 
         # test log in
-        login_btn = browser.find_element_by_link_text("sign in")
+        login_btn = browser.find_element_by_link_text("Sign In")
         self.assertIsNotNone(login_btn)
 
         # login_btn.click()
