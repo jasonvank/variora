@@ -6,6 +6,7 @@ import { getCookie, getUrlFormat, groupAvatarColors } from 'util.js'
 import React from 'react'
 import axios from 'axios'
 import { FormattedMessage } from 'react-intl'
+import { Link } from 'react-router-dom'
 
 class GroupAvatarWrapper extends React.Component {
   render() {
@@ -35,9 +36,11 @@ class GroupDetailsWrapper extends React.Component {
   render() {
     const description = this.props.coterie.description
     const name = this.props.coterie.name
+    const group_uuid = '/groups/' + this.props.uuid + '/'
 
     return (
       <div style={{ cursor: 'pointer' }}>
+        <Link to={group_uuid}>
         <div className={'group-name'}>{name}</div>
         {description.length === 0 ? null : (
           <div className='notification-alert-list-wrapper' title={description}>
@@ -45,6 +48,7 @@ class GroupDetailsWrapper extends React.Component {
           </div>
         )}
         {/*<TimeAgo style={{color: '#91959d'}} date={this.state.newNotification.timestamp} />*/}
+        </Link>
       </div>
     )
   }
@@ -58,7 +62,7 @@ class GroupsList extends React.Component {
       if (record.callback !== undefined) {
         record.callback()
       } else {
-        window.location.href = `/groups/${record.uuid}/`
+        // window.location.href = `/groups/${record.uuid}/`
       }
     }
   }
@@ -75,7 +79,7 @@ class GroupsList extends React.Component {
         title: 'title',
         key: 'title',
         width: '75%',
-        render: (text, record, index) => <GroupDetailsWrapper coterie={record} />,
+        render: (text, record, index) => <GroupDetailsWrapper coterie={record} uuid={record.uuid}/>,
       },
       {
         title: 'in',
@@ -107,6 +111,7 @@ class GroupsList extends React.Component {
         avatarUrl: '/media/logo.png',
       },
     ]
+    
     const createNewGroupFakeItem = {
       uuid: 'fake',
       name: 'New Group',
@@ -121,6 +126,7 @@ class GroupsList extends React.Component {
         this.props.setCreateCoterieModelVisible(true)
       },
     }
+    
     return (
       <div id={'group-selection-div'} style={{ maxHeight: '66vh', overflowY: 'auto' }}>
         <Table

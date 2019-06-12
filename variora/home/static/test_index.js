@@ -32,6 +32,8 @@ import {
 } from './redux/actions.js'
 import { initialStore } from './redux/init_store.js'
 import { store } from './redux/store.js'
+import { GlobalSider } from './components/home_page/global_sider.jsx'
+import { GroupSider } from './components/home_page/group_sider.jsx'
 
 const messages = {
   en: messages_en,
@@ -384,288 +386,7 @@ class AppBeforeConnect extends React.Component {
 
     const fields = this.state.fields
 
-    const groupRouter = coterieUUID => {
-      const pathname = window.location.pathname
-      const defaultSelectedKeys = () => {
-        if (pathname.endsWith('/search')) return []
-        if (pathname.includes('members')) return ['group-members']
-        if (pathname.includes('settings') && !pathname.includes('readlists'))
-          return ['group-settings']
-        if (pathname.includes('readlists')) {
-          const pageElement = pathname.split('/')
-          return [pageElement[3] + pageElement[4]]
-        }
-        return ['group-documents']
-      }
 
-      return (
-        <Sider
-          className='sider'
-          width={200}
-          style={{
-            overflowX: 'hidden',
-            overflowY: 'auto',
-            height: 'calc(100% - 64px)',
-            position: 'fixed',
-            left: 0,
-            top: 64,
-            background: '#fff',
-          }}
-        >
-          <Menu
-            mode='inline'
-            defaultOpenKeys={['created_readlists', 'collected_readlists']}
-            onClick={this.onClickCreateReadlistMenuItem}
-            style={{ borderRight: 0 }}
-            defaultSelectedKeys={defaultSelectedKeys()}
-          >
-            {/* <Menu.Item key="explore" > */}
-            {/* <Link to="/explore"><span><Icon type="compass" />Explore</span></Link> */}
-            {/* </Menu.Item> */}
-            <Menu.Item key='group-documents' disabled={!this.state.user.is_authenticated}>
-              <Link to={`/groups/${coterieUUID}/`}>
-                <span>
-                  <Icon type='book' />
-                  <FormattedMessage id='app.group.documents' defaultMessage='Group Documents' />
-                </span>
-              </Link>
-            </Menu.Item>
-
-            <Menu.Item key='group-readlists' disabled={!this.state.user.is_authenticated}>
-              <Link to={`/groups/${coterieUUID}/readlists`}>
-                <span>
-                  <Icon type='folder' />
-                  <FormattedMessage id='app.group.readlists' defaultMessage='Group Readlists' />
-                </span>
-              </Link>
-            </Menu.Item>
-
-            <SubMenu
-              key='created_readlists'
-              title={
-                <span>
-                  <Icon type='folder' />
-                  <FormattedMessage id='app.readlists.create' defaultMessage='Created Readlists' />
-                </span>
-              }
-              disabled={!this.state.user.is_authenticated}
-            >
-              {this.state.createdReadlists
-                .sort((a, b) => a.name > b.name)
-                .map(readlist => (
-                  <Menu.Item key={`readlists${readlist.slug}`} title={readlist.name}>
-                    <Link
-                      style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
-                      to={`/groups/${coterieUUID}/readlists/${readlist.slug}`}
-                    >
-                      <Icon type='folder-open' />
-                      <span>{readlist.name}</span>
-                    </Link>
-                  </Menu.Item>
-                ))}
-              <Menu.Item
-                disabled={!this.state.user.is_authenticated}
-                key={CREATE_NEW_READLIST_MENU_ITEM_KEY}
-              >
-                <Icon type='plus' />
-              </Menu.Item>
-            </SubMenu>
-            <SubMenu
-              key='collected_readlists'
-              title={
-                <span>
-                  <Icon type='folder' />
-                  <FormattedMessage
-                    id='app.readlists.collect_readlist'
-                    defaultMessage='Collected Readlists'
-                  />
-                </span>
-              }
-              disabled={!this.state.user.is_authenticated}
-            >
-              {this.state.collectedReadlists
-                .sort((a, b) => a.name > b.name)
-                .map(readlist => (
-                  <Menu.Item key={`readlists${readlist.slug}`} title={readlist.name}>
-                    <Link
-                      style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
-                      to={`/groups/${coterieUUID}/readlists/${readlist.slug}`}
-                    >
-                      <Icon type='folder' />
-                      <span>{readlist.name}</span>
-                    </Link>
-                  </Menu.Item>
-                ))}
-            </SubMenu>
-
-            <Menu.Item key='group-members' disabled={!this.state.user.is_authenticated}>
-              <Link to={`/groups/${coterieUUID}/members`}>
-                <span>
-                  <Icon type='team' />
-                  <FormattedMessage id='app.group.members' defaultMessage='Group Members' />
-                </span>
-              </Link>
-            </Menu.Item>
-
-            <Menu.Item key='group-settings' disabled={!this.state.user.is_authenticated}>
-              <Link to={`/groups/${coterieUUID}/settings`}>
-                <span>
-                  <Icon type='setting' />
-                  <FormattedMessage id='app.group.settings' defaultMessage='Group Settings' />
-                </span>
-              </Link>
-            </Menu.Item>
-
-            <Modal
-              title={
-                <FormattedMessage
-                  id='app.readlists.message.create'
-                  defaultMessage='create a new readlist'
-                />
-              }
-              wrapClassName='vertical-center-modal'
-              visible={this.state.createReadlistModelVisible}
-              onOk={this.submitCreateReadlistForm}
-              onCancel={() => this.setCreateReadlistModelVisible(false)}
-            >
-              <CreateReadlistForm {...fields} onChange={this.handleCreateReadlistFromChange} />
-            </Modal>
-            <Modal
-              title={<FormattedMessage id='app.group.create' defaultMessage='create a new group' />}
-              wrapClassName='vertical-center-modal'
-              visible={this.state.createGroupModelVisible}
-              onOk={this.submitCreateCoterieForm}
-              onCancel={() => this.setCreateCoterieModelVisible(false)}
-            >
-              <CreateCoterieForm {...fields} onChange={this.handleCreateCoterieFromChange} />
-            </Modal>
-          </Menu>
-        </Sider>
-      )
-    }
-
-    const globalRouter = (
-      <Sider
-        className='sider'
-        width={200}
-        style={{
-          overflowX: 'hidden',
-          overflowY: 'auto',
-          height: 'calc(100% - 64px)',
-          position: 'fixed',
-          left: 0,
-          top: 64,
-          background: '#fff',
-        }}
-      >
-        <Menu
-          mode='inline'
-          defaultOpenKeys={['created_readlists', 'collected_readlists']}
-          onClick={this.onClickCreateReadlistMenuItem}
-          style={{ borderRight: 0 }}
-          defaultSelectedKeys={this.getHighlightedMenuItems()}
-        >
-          <Menu.Item key='explore'>
-            <Link to='/explore'>
-              <span>
-                <Icon type='compass' />
-                <FormattedMessage id='app.explore.explore' defaultMessage='Explore' />
-              </span>
-            </Link>
-          </Menu.Item>
-          <Menu.Item key='documents' disabled={!this.state.user.is_authenticated}>
-            <Link to='/'>
-              <span>
-                <Icon type='file' />
-                <FormattedMessage id='app.document.documents' defaultMessage='Documents' />
-              </span>
-            </Link>
-          </Menu.Item>
-
-          <SubMenu
-            key='created_readlists'
-            title={
-              <span>
-                <Icon type='folder' />
-                <FormattedMessage id='app.readlists.create' defaultMessage='Created Readlists' />
-              </span>
-            }
-            disabled={!this.state.user.is_authenticated}
-          >
-            {this.state.createdReadlists
-              .sort((a, b) => a.name > b.name)
-              .map(readlist => (
-                <Menu.Item key={`readlists${readlist.slug}`} title={readlist.name}>
-                  <Link
-                    style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
-                    to={`/readlists/${readlist.slug}`}
-                  >
-                    <Icon type='folder-open' />
-                    <span>{readlist.name}</span>
-                  </Link>
-                </Menu.Item>
-              ))}
-            <Menu.Item
-              disabled={!this.state.user.is_authenticated}
-              key={CREATE_NEW_READLIST_MENU_ITEM_KEY}
-            >
-              <Icon type='plus' />
-            </Menu.Item>
-          </SubMenu>
-          <SubMenu
-            key='collected_readlists'
-            title={
-              <span>
-                <Icon type='folder' />
-                <FormattedMessage
-                  id='app.readlists.collect_readlist'
-                  defaultMessage='Collected Readlists'
-                />
-              </span>
-            }
-            disabled={!this.state.user.is_authenticated}
-          >
-            {this.state.collectedReadlists
-              .sort((a, b) => a.name > b.name)
-              .map(readlist => (
-                <Menu.Item key={`readlists${readlist.slug}`} title={readlist.name}>
-                  <Link
-                    style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
-                    to={`/readlists/${readlist.slug}`}
-                  >
-                    <Icon type='folder' />
-                    <span>{readlist.name}</span>
-                  </Link>
-                </Menu.Item>
-              ))}
-          </SubMenu>
-          <Modal
-            title={
-              <FormattedMessage
-                id='app.readlists.message.create'
-                defaultMessage='create a new readlist'
-              />
-            }
-            wrapClassName='vertical-center-modal'
-            visible={this.state.createReadlistModelVisible}
-            onOk={this.submitCreateReadlistForm}
-            onCancel={() => this.setCreateReadlistModelVisible(false)}
-          >
-            <CreateReadlistForm {...fields} onChange={this.handleCreateReadlistFromChange} />
-          </Modal>
-
-          <Modal
-            title={<FormattedMessage id='app.group.create' defaultMessage='create a new group' />}
-            wrapClassName='vertical-center-modal'
-            visible={this.state.createGroupModelVisible}
-            onOk={this.submitCreateCoterieForm}
-            onCancel={() => this.setCreateCoterieModelVisible(false)}
-          >
-            <CreateCoterieForm {...fields} onChange={this.handleCreateCoterieFromChange} />
-          </Modal>
-        </Menu>
-      </Sider>
-    )
 
     return (
       <IntlProvider locale={this.state.locale} messages={messages[this.state.locale]}>
@@ -684,7 +405,38 @@ class AppBeforeConnect extends React.Component {
             />
 
             <Layout style={{ minHeight: '100vh' }}>
-              {getCoterieUUID() !== undefined ? groupRouter(getCoterieUUID()) : globalRouter}
+                {getCoterieUUID() !== undefined ?
+                  <GroupSider
+                    coterieUUID={getCoterieUUID()}
+                    fields = {this.state.fields}
+                    user={this.state.user}
+                    collectedReadlists={this.state.collectedReadlists}
+                    createReadlistModelVisible={this.state.createReadlistModelVisible}
+                    create_new_readlist_menu_item_key={CREATE_NEW_READLIST_MENU_ITEM_KEY}
+                    submitCreateCoterieForm={this.submitCreateCoterieForm}
+                    setCreateCoterieModelVisible={this.setCreateCoterieModelVisible}
+                    handleCreateCoterieFromChange={this.handleCreateCoterieFromChange}
+                    submitCreateReadlistForm={this.submitCreateReadlistForm}
+                    createdReadlists={this.state.createdReadlists}
+                    setCreateReadlistModelVisible={this.setCreateReadlistModelVisible}
+                    handleCreateReadlistFromChange={this.handleCreateReadlistFromChange}
+                  />
+                  : <GlobalSider
+                    fields = {this.state.fields}
+                    user={this.state.user}
+                    collectedReadlists={this.state.collectedReadlists}
+                    createReadlistModelVisible={this.state.createReadlistModelVisible}
+                    create_new_readlist_menu_item_key={CREATE_NEW_READLIST_MENU_ITEM_KEY}
+                    submitCreateCoterieForm={this.submitCreateCoterieForm}
+                    setCreateCoterieModelVisible={this.setCreateCoterieModelVisible}
+                    handleCreateCoterieFromChange={this.handleCreateCoterieFromChange}
+                    submitCreateReadlistForm={this.submitCreateReadlistForm}
+                    createdReadlists={this.state.createdReadlists}
+                    createGroupModelVisible={this.state.createGroupModelVisible}
+                    handleCreateReadlistFromChange={this.handleCreateReadlistFromChange}
+                    setCreateReadlistModelVisible={this.setCreateReadlistModelVisible}
+                    onClickCreateReadlistMenuItem={this.onClickCreateReadlistMenuItem}
+                  />}
               <Layout
                 style={{
                   marginLeft: '200px',
