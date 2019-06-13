@@ -20,7 +20,7 @@ class GroupReadlistsTab extends React.Component {
     super(props)
     this.state = {
       coteriePk: props.coteriePk,
-      coterieUUI: props.coterieUUI,
+      coterieUUID: props.coterieUUID,
       isAdmin: props.isAdmin,
     }
   }
@@ -28,7 +28,7 @@ class GroupReadlistsTab extends React.Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       coteriePk: nextProps.coteriePk,
-      coterieUUI: nextProps.coterieUUI,
+      coterieUUID: nextProps.coterieUUID,
       isAdmin: nextProps.isAdmin,
     })
   }
@@ -46,7 +46,7 @@ class GroupReadlistsTab extends React.Component {
           defaultSelectedKeys={['group-readlists']}
         >
           <Menu.Item key='group-readlists'>
-            <Link to={SUB_URL_BASE + this.state.coterieUUI + '/readlists'}>
+            <Link to={SUB_URL_BASE + this.state.coterieUUID + '/readlists'}>
               <Icon type='folder' />
               <FormattedMessage id='app.group.group_readlists' defaultMessage='Group Readlists' />
             </Link>
@@ -56,11 +56,11 @@ class GroupReadlistsTab extends React.Component {
         <Switch>
           <Route
             exact
-            path={SUB_URL_BASE + this.state.coterieUUI + '/readlists'}
+            path={SUB_URL_BASE + this.state.coterieUUID + '/readlists'}
             render={() => (
               <GroupReadlistsSubtab
                 isAdmin={this.state.isAdmin}
-                coterieUUID={this.state.coterieUUI}
+                coterieUUID={this.state.coterieUUID}
                 coteriePk={this.state.coteriePk}
               />
             )}
