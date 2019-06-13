@@ -1,12 +1,11 @@
-import 'regenerator-runtime/runtime'
-
-import { Avatar, Badge, Col, Icon, Popover, Table, notification, Tabs, Tooltip } from 'antd'
-import { getCookie, getUrlFormat, groupAvatarColors } from 'util.js'
-
+import { Avatar, Icon, List, Popover, Tooltip } from 'antd'
 import React from 'react'
-import axios from 'axios'
 import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
+import 'regenerator-runtime/runtime'
+import { groupAvatarColors } from 'util.js'
+
+import { getCoterieUUID } from './home_page/common.jsx'
 
 class GroupAvatarWrapper extends React.Component {
   render() {
@@ -14,15 +13,32 @@ class GroupAvatarWrapper extends React.Component {
       return (
         <Avatar
           src={this.props.coterie.avatarUrl}
-          style={{ verticalAlign: 'middle', background: 'white' }}
+          style={{
+            verticalAlign: 'middle',
+            background: 'white',
+            marginLeft: '10px',
+            marginRight: '5px',
+          }}
         />
       )
     } else if (this.props.coterie.icon !== undefined) {
-      return <Avatar icon={this.props.coterie.icon} style={{ verticalAlign: 'middle' }} />
+      return (
+        <Avatar
+          icon={this.props.coterie.icon}
+          style={{ verticalAlign: 'middle', marginLeft: '10px', marginRight: '5px' }}
+        />
+      )
     } else {
       const color = groupAvatarColors[this.props.coterie.uuid.charCodeAt(0) % 8]
       return (
-        <Avatar style={{ backgroundColor: color, verticalAlign: 'middle' }}>
+        <Avatar
+          style={{
+            backgroundColor: color,
+            verticalAlign: 'middle',
+            marginLeft: '10px',
+            marginRight: '5px',
+          }}
+        >
           <span style={{ position: 'initial' }}>
             {this.props.coterie.name.slice(0, 2).toUpperCase()}
           </span>
@@ -36,20 +52,20 @@ class GroupDetailsWrapper extends React.Component {
   render() {
     const description = this.props.coterie.description
     const name = this.props.coterie.name
-    const group_uuid = '/groups/' + this.props.uuid + '/'
+    const group_uuid = this.props.uuid ? '/groups/' + this.props.uuid + '/' : '/'
 
     return (
-      <div style={{ cursor: 'pointer' }}>
-        <Link to={group_uuid}>
-        <div className={'group-name'}>{name}</div>
-        {description.length === 0 ? null : (
-          <div className='notification-alert-list-wrapper' title={description}>
-            {description}
-          </div>
-        )}
-        {/*<TimeAgo style={{color: '#91959d'}} date={this.state.newNotification.timestamp} />*/}
-        </Link>
-      </div>
+      <Link to={group_uuid}>
+        <div style={{ cursor: 'pointer' }}>
+          <div className={'group-name'}>{name}</div>
+          {description.length === 0 ? null : (
+            <div className='notification-alert-list-wrapper' title={description}>
+              {description}
+            </div>
+          )}
+          {/*<TimeAgo style={{color: '#91959d'}} date={this.state.newNotification.timestamp} />*/}
+        </div>
+      </Link>
     )
   }
 }
@@ -58,6 +74,12 @@ class GroupsList extends React.Component {
   constructor(props) {
     super(props)
 
+    this.showModal = () => {
+      this.setState({
+        visible: true,
+      })
+    }
+
     this.onClickRow = (record, index, event) => {
       if (record.callback !== undefined) {
         record.callback()
@@ -65,38 +87,15 @@ class GroupsList extends React.Component {
         // window.location.href = `/groups/${record.uuid}/`
       }
     }
+    this.state = {
+      createGroupModelVisible: false,
+    }
+    this.setCreateCoterieModelVisible = visibility => {
+      this.setState({ createGroupModelVisible: visibility })
+    }
   }
 
   render() {
-    const columns = [
-      {
-        title: 'Avatar',
-        key: 'avatar',
-        width: '20%',
-        render: (text, record, index) => <GroupAvatarWrapper coterie={record} />,
-      },
-      {
-        title: 'title',
-        key: 'title',
-        width: '75%',
-        render: (text, record, index) => <GroupDetailsWrapper coterie={record} uuid={record.uuid}/>,
-      },
-      {
-        title: 'in',
-        key: 'in',
-        width: '5%',
-        render: (text, record, index) => (
-          <Icon
-            style={{
-              verticalAlign: 'middle',
-              display: record.uuid === this.props.currentCoterieUUID ? 'block' : 'none',
-            }}
-            type='check'
-          />
-        ),
-      },
-    ]
-
     const publicCoterie = [
       {
         uuid: undefined,
@@ -111,7 +110,7 @@ class GroupsList extends React.Component {
         avatarUrl: '/media/logo.png',
       },
     ]
-    
+
     const createNewGroupFakeItem = {
       uuid: 'fake',
       name: 'New Group',
@@ -123,72 +122,80 @@ class GroupsList extends React.Component {
       ),
       icon: 'plus-square-o',
       callback: () => {
-        this.props.setCreateCoterieModelVisible(true)
+        this.setCreateCoterieModelVisible(true)
       },
     }
-    
+
     return (
-      <div id={'group-selection-div'} style={{ maxHeight: '66vh', overflowY: 'auto' }}>
-        <Table
-          className='notification-table'
+      <div>
+        <List
+          itemLayout='horizontal'
           dataSource={publicCoterie}
-          columns={columns}
-          pagination={false}
-          showHeader={false}
-          style={{ width: '300px' }}
-          rowKey={record => record.slug}
-          onRowClick={() => {
-            window.location.href = '/'
-          }}
-          footer={() => null}
-          title={() => null}
-          locale={{
-            emptyText: (
-              <FormattedMessage id='app.group.message.no_data' defaultMessage='No data found' />
-            ),
-          }}
-        />
-        <Table
-          className='notification-table'
-          dataSource={this.props.administratedCoteries.concat([createNewGroupFakeItem])}
-          columns={columns}
-          pagination={false}
-          showHeader={false}
-          style={{ width: '300px' }}
-          rowKey={record => record.slug}
-          onRowClick={this.onClickRow}
-          footer={() => null}
-          title={() => (
-            <span style={{ height: 18 }}>
-              <FormattedMessage id='app.group.as_admin' defaultMessage='As admin' />
-            </span>
+          style={{ maxHeight: '66vh', overflowY: 'auto' }}
+          size='large'
+          renderItem={item => (
+            <List.Item key={item.slug}>
+              <List.Item.Meta
+                avatar={
+                  <Avatar src={item.avatarUrl} style={{ marginLeft: '10px', marginRight: '5px' }} />
+                }
+                title={item.name}
+                description={item.description}
+              />
+            </List.Item>
           )}
-          locale={{
-            emptyText: (
-              <FormattedMessage id='app.group.message.no_data' defaultMessage='No data found' />
-            ),
-          }}
         />
-        <Table
-          className='notification-table'
-          dataSource={this.props.joinedCoteries}
-          columns={columns}
-          pagination={false}
-          showHeader={false}
-          style={{ width: '300px' }}
-          rowKey={record => record.slug}
-          onRowClick={this.onClickRow}
-          footer={() => null}
-          title={() => (
+
+        <List
+          itemLayout='horizontal'
+          dataSource={this.props.administratedCoteries.concat([createNewGroupFakeItem])}
+          style={{ maxHeight: '66vh', overflowY: 'auto', width: '300px' }}
+          size='large'
+          header={
             <span style={{ height: 18 }}>
               <FormattedMessage id='app.group.as_member' defaultMessage='As member' />
             </span>
-          )}
+          }
           locale={{
             emptyText: (
               <FormattedMessage id='app.group.message.no_data' defaultMessage='No data found' />
             ),
           }}
+          renderItem={item => (
+            <List.Item key={item.slug}>
+              <List.Item.Meta
+                avatar={<GroupAvatarWrapper coterie={item} />}
+                title={item.name}
+                description={item.description}
+              />
+            </List.Item>
+          )}
+        />
+
+        <List
+          itemLayout='horizontal'
+          dataSource={this.props.joinedCoteries}
+          style={{ maxHeight: '66vh', overflowY: 'auto' }}
+          size='large'
+          header={
+            <span style={{ height: 18 }}>
+              <FormattedMessage id='app.group.as_member' defaultMessage='As member' />
+            </span>
+          }
+          locale={{
+            emptyText: (
+              <FormattedMessage id='app.group.message.no_data' defaultMessage='No data found' />
+            ),
+          }}
+          renderItem={item => (
+            <List.Item key={item.slug}>
+              <List.Item.Meta
+                avatar={<GroupAvatarWrapper coterie={item} />}
+                title={item.name}
+                description={item.description}
+              />
+            </List.Item>
+          )}
         />
       </div>
     )
@@ -203,6 +210,7 @@ class GroupSelectionButton extends React.Component {
       length: undefined,
       show: false,
       data: undefined,
+      createGroupModelVisible: false,
     }
     this.handleVisibleChange = visible => {
       this.setState({ visible })
@@ -256,8 +264,9 @@ class GroupSelectionButton extends React.Component {
           <GroupsList
             administratedCoteries={this.props.administratedCoteries}
             joinedCoteries={this.props.joinedCoteries}
-            setCreateCoterieModelVisible={this.props.setCreateCoterieModelVisible}
-            currentCoterieUUID={this.props.currentCoterieUUID}
+            currentCoterieUUID={getCoterieUUID()}
+            updateUUIDCallback={this.props.updateUUIDCallback}
+            fields={this.props.fields}
           />
         }
         trigger='click'
