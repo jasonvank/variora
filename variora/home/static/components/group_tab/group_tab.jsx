@@ -19,7 +19,7 @@ class GroupTab extends React.Component {
     super(props)
     this.state = {
       coteriePk: props.coteriePk,
-      coterieUUI: props.coterieUUI,
+      coterieUUID: props.coterieUUID,
       isAdmin: props.isAdmin,
       coterieName: props.coterieName,
     }
@@ -28,7 +28,7 @@ class GroupTab extends React.Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       coteriePk: nextProps.coteriePk,
-      coterieUUI: nextProps.coterieUUI,
+      coterieUUID: nextProps.coterieUUID,
       isAdmin: nextProps.isAdmin,
       coterieName: nextProps.coterieName,
     })
@@ -58,7 +58,7 @@ class GroupTab extends React.Component {
             key='group-documents'
             style={{ display: selectedKeys.includes('group-documents') ? 'inline-block' : 'none' }}
           >
-            <Link to={SUB_URL_BASE + this.state.coterieUUI + '/'}>
+            <Link to={SUB_URL_BASE + this.state.coterieUUID + '/'}>
               <Icon type='book' />
               <FormattedMessage id='app.group.documents' defaultMessage='Group Documents' />
             </Link>
@@ -73,7 +73,7 @@ class GroupTab extends React.Component {
                   : 'none',
             }}
           >
-            <Link to={SUB_URL_BASE + this.state.coterieUUI + '/members'}>
+            <Link to={SUB_URL_BASE + this.state.coterieUUID + '/members'}>
               <Icon type='team' />
               <FormattedMessage id='app.group.members' defaultMessage='Group Members' />
             </Link>
@@ -89,7 +89,7 @@ class GroupTab extends React.Component {
                     : 'none',
               }}
             >
-              <Link to={SUB_URL_BASE + this.state.coterieUUI + '/members/invitations'}>
+              <Link to={SUB_URL_BASE + this.state.coterieUUID + '/members/invitations'}>
                 <Icon type='user-add' />
                 <FormattedMessage
                   id='app.group.member_invitation'
@@ -102,7 +102,7 @@ class GroupTab extends React.Component {
             key='group-settings'
             style={{ display: selectedKeys.includes('group-settings') ? 'inline-block' : 'none' }}
           >
-            <Link to={SUB_URL_BASE + this.state.coterieUUI + '/settings'}>
+            <Link to={SUB_URL_BASE + this.state.coterieUUID + '/settings'}>
               <Icon type='setting' />
               <FormattedMessage id='app.group.settings' defaultMessage='Group Settings' />
             </Link>
@@ -112,11 +112,11 @@ class GroupTab extends React.Component {
         <Switch>
           <Route
             exact
-            path={SUB_URL_BASE + this.state.coterieUUI + '/'}
+            path={SUB_URL_BASE + this.state.coterieUUID + '/'}
             render={() => (
               <GroupDocumentsSubtab
                 isAdmin={this.state.isAdmin}
-                coterieUUID={this.state.coterieUUI}
+                coterieUUID={this.state.coterieUUID}
                 coteriePk={this.state.coteriePk}
               />
             )}
@@ -124,7 +124,7 @@ class GroupTab extends React.Component {
 
           <Route
             exact
-            path={SUB_URL_BASE + this.state.coterieUUI + '/members'}
+            path={SUB_URL_BASE + this.state.coterieUUID + '/members'}
             render={() => (
               <GroupMembersSubtab isAdmin={this.state.isAdmin} coteriePk={this.state.coteriePk} />
             )}
@@ -132,11 +132,11 @@ class GroupTab extends React.Component {
 
           <Route
             exact
-            path={SUB_URL_BASE + this.state.coterieUUI + '/members/invitations'}
+            path={SUB_URL_BASE + this.state.coterieUUID + '/members/invitations'}
             render={() => (
               <GroupMemberInvitationsSubtab
                 isAdmin={this.state.isAdmin}
-                coterieUUID={this.state.coterieUUI}
+                coterieUUID={this.state.coterieUUID}
                 coteriePk={this.state.coteriePk}
               />
             )}
@@ -144,7 +144,7 @@ class GroupTab extends React.Component {
 
           <Route
             exact
-            path={SUB_URL_BASE + this.state.coterieUUI + '/settings'}
+            path={SUB_URL_BASE + this.state.coterieUUID + '/settings'}
             render={() => (
               <GroupSettingsSubtab
                 isAdmin={this.state.isAdmin}
@@ -158,8 +158,8 @@ class GroupTab extends React.Component {
 
           <Route
             exact
-            path={SUB_URL_BASE + this.state.coterieUUI + '/uploads'}
-            render={() => <Redirect to={SUB_URL_BASE + this.state.coterieUUI + '/'} />}
+            path={SUB_URL_BASE + this.state.coterieUUID + '/uploads'}
+            render={() => <Redirect to={SUB_URL_BASE + this.state.coterieUUID + '/'} />}
           />
         </Switch>
       </Content>
