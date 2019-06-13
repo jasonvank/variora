@@ -1,4 +1,11 @@
+import { Input } from 'antd'
 import { Form } from 'antd/lib/index'
+import React from 'react'
+import { FormattedMessage } from 'react-intl'
+import 'regenerator-runtime/runtime'
+
+const FormItem = Form.Item
+const { TextArea } = Input
 
 const CreateReadlistForm = Form.create({
   onFieldsChange(props, changedFields) {
@@ -86,6 +93,9 @@ const CreateCoterieForm = Form.create({
   )
 })
 
+function getCoterieUUID() {
+  if (window.location.pathname.includes('/groups/')) return window.location.pathname.split('/')[2]
+  return undefined
+}
 
-
-export { CreateReadlistForm, CreateCoterieForm }
+export { CreateReadlistForm, CreateCoterieForm, getCoterieUUID }
