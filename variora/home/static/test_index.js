@@ -1,5 +1,5 @@
 /* eslint-disable comma-dangle */
-import { Form, Icon, Input, Layout, LocaleProvider, Menu, message, Modal, notification } from 'antd'
+import { Form, Input, Layout, LocaleProvider, Menu, message, notification } from 'antd'
 import enUS from 'antd/lib/locale-provider/en_US'
 import axios from 'axios'
 import firebase from 'firebase'
@@ -16,6 +16,13 @@ import { DocumentTab } from './components/document_tab.jsx'
 import { ExploreTab } from './components/explore_tab.jsx'
 import { GroupReadlistsTab } from './components/group_tab/group_readlists_tab.jsx'
 import { GroupTab } from './components/group_tab/group_tab.jsx'
+import {
+  CreateCoterieForm,
+  CreateReadlistForm,
+  getCoterieUUID,
+} from './components/home_page/common.jsx'
+import { GlobalSider } from './components/home_page/global_sider.jsx'
+import { GroupSider } from './components/home_page/group_sider.jsx'
 import { Navbar } from './components/home_page/navbar.jsx'
 import { ReadlistTab } from './components/readlist_tab/readlist_tab.jsx'
 import { SearchResultTab } from './components/search_result_tab/search_result_tab.jsx'
@@ -31,8 +38,6 @@ import {
 } from './redux/actions.js'
 import { initialStore } from './redux/init_store.js'
 import { store } from './redux/store.js'
-import { GlobalSider } from './components/home_page/global_sider.jsx'
-import { GroupSider } from './components/home_page/group_sider.jsx'
 
 const messages = {
   en: messages_en,
@@ -56,10 +61,7 @@ const { TextArea } = Input
 
 const GLOBAL_URL_BASE = ''
 
-function getCoterieUUID() {
-  if (window.location.pathname.includes('/groups/')) return window.location.pathname.split('/')[2]
-  return undefined
-}
+let groupIcon = null
 
 class AppBeforeConnect extends React.Component {
   constructor() {
@@ -391,41 +393,43 @@ class AppBeforeConnect extends React.Component {
               acceptInvitationCallback={this.acceptInvitationCallback}
               signOff={this.signOff}
               updateUUIDCallback={this.updateUUIDCallback}
+              currentCoterieUUID={this.state.coterieUUID}
             />
 
             <Layout style={{ minHeight: '100vh' }}>
-                {getCoterieUUID() !== undefined ?
+                {
+                  getCoterieUUID() !== undefined ?
                   <GroupSider
-                    coterieUUID={getCoterieUUID()}
-                    fields = {this.state.fields}
+                    coterieUUID={this.state.coterieUUID}
+                    fields={this.state.fields}
                     user={this.state.user}
                     collectedReadlists={this.state.collectedReadlists}
+                    createdReadlists={this.state.createdReadlists}
                     createReadlistModelVisible={this.state.createReadlistModelVisible}
                     create_new_readlist_menu_item_key={CREATE_NEW_READLIST_MENU_ITEM_KEY}
-                    submitCreateCoterieForm={this.submitCreateCoterieForm}
-                    setCreateCoterieModelVisible={this.setCreateCoterieModelVisible}
+                    // setCreateCoterieModelVisible={this.setCreateCoterieModelVisible}
                     handleCreateCoterieFromChange={this.handleCreateCoterieFromChange}
                     submitCreateReadlistForm={this.submitCreateReadlistForm}
-                    createdReadlists={this.state.createdReadlists}
                     setCreateReadlistModelVisible={this.setCreateReadlistModelVisible}
                     handleCreateReadlistFromChange={this.handleCreateReadlistFromChange}
                   />
-                  : <GlobalSider
-                    fields = {this.state.fields}
-                    user={this.state.user}
-                    collectedReadlists={this.state.collectedReadlists}
-                    createReadlistModelVisible={this.state.createReadlistModelVisible}
-                    create_new_readlist_menu_item_key={CREATE_NEW_READLIST_MENU_ITEM_KEY}
-                    submitCreateCoterieForm={this.submitCreateCoterieForm}
-                    setCreateCoterieModelVisible={this.setCreateCoterieModelVisible}
-                    handleCreateCoterieFromChange={this.handleCreateCoterieFromChange}
-                    submitCreateReadlistForm={this.submitCreateReadlistForm}
-                    createdReadlists={this.state.createdReadlists}
-                    createGroupModelVisible={this.state.createGroupModelVisible}
-                    handleCreateReadlistFromChange={this.handleCreateReadlistFromChange}
-                    setCreateReadlistModelVisible={this.setCreateReadlistModelVisible}
-                    onClickCreateReadlistMenuItem={this.onClickCreateReadlistMenuItem}
-                  />}
+                  ) : (
+                  <GlobalSider
+                  fields={this.state.fields}
+                  user={this.state.user}
+                  collectedReadlists={this.state.collectedReadlists}
+                  createReadlistModelVisible={this.state.createReadlistModelVisible}
+                  create_new_readlist_menu_item_key={CREATE_NEW_READLIST_MENU_ITEM_KEY}
+                  setCreateCoterieModelVisible={this.setCreateCoterieModelVisible}
+                  handleCreateCoterieFromChange={this.handleCreateCoterieFromChange}
+                  submitCreateReadlistForm={this.submitCreateReadlistForm}
+                  createdReadlists={this.state.createdReadlists}
+                  // createGroupModelVisible={this.state.createGroupModelVisible}
+                  handleCreateReadlistFromChange={this.handleCreateReadlistFromChange}
+                  setCreateReadlistModelVisible={this.setCreateReadlistModelVisible}
+                  onClickCreateReadlistMenuItem={this.onClickCreateReadlistMenuItem}
+                  />
+                }
               <Layout
                 style={{
                   marginLeft: '200px',
@@ -460,6 +464,39 @@ class AppBeforeConnect extends React.Component {
                       render={({ match, location }) => this.renderGroupTab(match, location)}
                     />
                   </Switch>
+
+                  <Modal
+                    title={
+                      <FormattedMessage
+                        id='app.readlists.message.create'
+                        defaultMessage='create a new readlist'
+                      />
+                    }
+                    wrapClassName='vertical-center-modal'
+                    visible={this.state.createReadlistModelVisible}
+                    onOk={this.submitCreateReadlistForm}
+                    onCancel={() => this.setCreateReadlistModelVisible(false)}
+                  >
+                    <CreateReadlistForm
+                      {...this.state.fields}
+                      onChange={this.handleCreateReadlistFromChange}
+                    />
+                  </Modal>
+
+                  <Modal
+                    title={
+                      <FormattedMessage id='app.group.create' defaultMessage='create a new group' />
+                    }
+                    wrapClassName='vertical-center-modal'
+                    visible={this.state.createGroupModelVisible}
+                    onOk={this.submitCreateCoterieForm}
+                    onCancel={() => this.setCreateCoterieModelVisible(false)}
+                  >
+                    <CreateCoterieForm
+                      {...this.state.fields}
+                      onChange={this.handleCreateCoterieFromChange}
+                    />
+                  </Modal>
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>
                   © {new Date().getFullYear()} Variora. Reach us via{' '}

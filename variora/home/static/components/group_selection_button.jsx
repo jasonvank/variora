@@ -48,37 +48,9 @@ class GroupAvatarWrapper extends React.Component {
   }
 }
 
-class GroupDetailsWrapper extends React.Component {
-  render() {
-    const description = this.props.coterie.description
-    const name = this.props.coterie.name
-    const group_uuid = this.props.uuid ? '/groups/' + this.props.uuid + '/' : '/'
-
-    return (
-      <Link to={group_uuid}>
-        <div style={{ cursor: 'pointer' }}>
-          <div className={'group-name'}>{name}</div>
-          {description.length === 0 ? null : (
-            <div className='notification-alert-list-wrapper' title={description}>
-              {description}
-            </div>
-          )}
-          {/*<TimeAgo style={{color: '#91959d'}} date={this.state.newNotification.timestamp} />*/}
-        </div>
-      </Link>
-    )
-  }
-}
-
 class GroupsList extends React.Component {
   constructor(props) {
     super(props)
-
-    this.showModal = () => {
-      this.setState({
-        visible: true,
-      })
-    }
 
     this.onClickRow = (record, index, event) => {
       if (record.callback !== undefined) {
@@ -126,6 +98,7 @@ class GroupsList extends React.Component {
       },
     }
 
+    console.log(this.props.administratedCoteries)
     return (
       <div>
         <List
@@ -134,15 +107,26 @@ class GroupsList extends React.Component {
           style={{ maxHeight: '66vh', overflowY: 'auto' }}
           size='large'
           renderItem={item => (
-            <List.Item key={item.slug}>
-              <List.Item.Meta
-                avatar={
-                  <Avatar src={item.avatarUrl} style={{ marginLeft: '10px', marginRight: '5px' }} />
-                }
-                title={item.name}
-                description={item.description}
-              />
-            </List.Item>
+            <Link to='/'>
+              <List.Item
+                key={item.slug}
+                onClick={() => {
+                  this.props.updateUUIDCallback(item.uuid)
+                }}
+                style={{ cursor: 'pointer' }}
+              >
+                <List.Item.Meta
+                  avatar={
+                    <Avatar
+                      src={item.avatarUrl}
+                      style={{ marginLeft: '10px', marginRight: '5px' }}
+                    />
+                  }
+                  title={item.name}
+                  description={item.description}
+                />
+              </List.Item>
+            </Link>
           )}
         />
 
@@ -153,7 +137,7 @@ class GroupsList extends React.Component {
           size='large'
           header={
             <span style={{ height: 18 }}>
-              <FormattedMessage id='app.group.as_member' defaultMessage='As member' />
+              <FormattedMessage id='app.group.as_admin' defaultMessage='As admin' />
             </span>
           }
           locale={{
@@ -162,13 +146,29 @@ class GroupsList extends React.Component {
             ),
           }}
           renderItem={item => (
-            <List.Item key={item.slug}>
-              <List.Item.Meta
-                avatar={<GroupAvatarWrapper coterie={item} />}
-                title={item.name}
-                description={item.description}
-              />
-            </List.Item>
+            <Link
+              to={
+                item.uuid === (undefined || 'fake')
+                  ? window.location.pathname
+                  : '/groups/' + item.uuid + '/'
+              }
+            >
+              <List.Item
+                key={item.slug}
+                onClick={() => {
+                  item.uuid === 'fake'
+                    ? this.props.setCreateCoterieModelVisible(true)
+                    : this.props.updateUUIDCallback(item.uuid)
+                }}
+                style={{ cursor: 'pointer' }}
+              >
+                <List.Item.Meta
+                  avatar={<GroupAvatarWrapper coterie={item} />}
+                  title={item.name}
+                  description={item.description}
+                />
+              </List.Item>
+            </Link>
           )}
         />
 
@@ -188,13 +188,21 @@ class GroupsList extends React.Component {
             ),
           }}
           renderItem={item => (
-            <List.Item key={item.slug}>
-              <List.Item.Meta
-                avatar={<GroupAvatarWrapper coterie={item} />}
-                title={item.name}
-                description={item.description}
-              />
-            </List.Item>
+            <Link to={'/groups/' + item.uuid + '/'}>
+              <List.Item
+                key={item.slug}
+                onClick={() => {
+                  this.props.updateUUIDCallback(item.uuid)
+                }}
+                style={{ cursor: 'pointer' }}
+              >
+                <List.Item.Meta
+                  avatar={<GroupAvatarWrapper coterie={item} />}
+                  title={item.name}
+                  description={item.description}
+                />
+              </List.Item>
+            </Link>
           )}
         />
       </div>
@@ -264,9 +272,10 @@ class GroupSelectionButton extends React.Component {
           <GroupsList
             administratedCoteries={this.props.administratedCoteries}
             joinedCoteries={this.props.joinedCoteries}
-            currentCoterieUUID={getCoterieUUID()}
+            currentCoterieUUID={this.props.currentCoterieUUID}
             updateUUIDCallback={this.props.updateUUIDCallback}
             fields={this.props.fields}
+            setCreateCoterieModelVisible={this.props.setCreateCoterieModelVisible}
           />
         }
         trigger='click'

@@ -1,18 +1,15 @@
 /* eslint-disable comma-dangle */
-import '../../css/test_index.css'
-import 'regenerator-runtime/runtime'
-import { Avatar, Col, Icon, Input, Layout, Modal, Dropdown, Menu, Row } from 'antd'
-import { FormattedMessage, IntlProvider, addLocaleData, injectIntl } from 'react-intl'
-import { getCookie, getValFromUrlParam, groupAvatarColors } from 'util.js'
+import { Icon, Input, Layout, Menu } from 'antd'
 import React from 'react'
+import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
-import { CreateCoterieForm, CreateReadlistForm } from './common.jsx'
+import 'regenerator-runtime/runtime'
+import '../../css/test_index.css'
 
 const Search = Input.Search
 const { SubMenu } = Menu
 
 const { Header, Content, Sider, Footer } = Layout
-
 
 class GroupSider extends React.Component {
   constructor(props) {
@@ -74,9 +71,7 @@ class GroupSider extends React.Component {
       }
       return ['group-documents']
     }
-    
-    console.log("heheheheh!")
-  
+
     return (
       <Sider
         className='sider'
@@ -84,11 +79,11 @@ class GroupSider extends React.Component {
         style={{
           overflowX: 'hidden',
           overflowY: 'auto',
-          height: 'calc(100% - 64px)',
           position: 'fixed',
           left: 0,
           top: 64,
           background: '#fff',
+          height: '100%',
         }}
       >
         <Menu
@@ -194,30 +189,6 @@ class GroupSider extends React.Component {
               </span>
             </Link>
           </Menu.Item>
-
-          <Modal
-            title={
-              <FormattedMessage
-                id='app.readlists.message.create'
-                defaultMessage='create a new readlist'
-              />
-            }
-            wrapClassName='vertical-center-modal'
-            visible={this.props.createReadlistModelVisible}
-            onOk={this.props.submitCreateReadlistForm}
-            onCancel={() => this.props.setCreateReadlistModelVisible(false)}
-          >
-            <CreateReadlistForm {...this.props.fields} onChange={this.props.handleCreateReadlistFromChange} />
-          </Modal>
-          <Modal
-            title={<FormattedMessage id='app.group.create' defaultMessage='create a new group' />}
-            wrapClassName='vertical-center-modal'
-            visible={this.props.createGroupModelVisible}
-            onOk={this.props.submitCreateCoterieForm}
-            onCancel={() => this.props.setCreateCoterieModelVisible(false)}
-          >
-            <CreateCoterieForm {...this.props.fields} onChange={this.props.handleCreateCoterieFromChange} />
-          </Modal>
         </Menu>
       </Sider>
     )

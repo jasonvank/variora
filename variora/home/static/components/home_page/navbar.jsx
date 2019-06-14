@@ -1,15 +1,15 @@
 /* eslint-disable comma-dangle */
-import { Avatar, Col, Dropdown, Icon, Input, Layout, Menu, Row } from 'antd'
-import React from 'react'
-import { FormattedMessage } from 'react-intl'
-import { Link } from 'react-router-dom'
-import 'regenerator-runtime/runtime'
-import { getValFromUrlParam, groupAvatarColors } from 'util.js'
-import '../../css/test_index.css'
-import { GroupSelectionButton } from '../group_selection_button.jsx'
-import { InvitationsToggleButton } from '../invitations_toggle_button.jsx'
-import { NotificationsAlertButton } from '../notifications_alert_button.jsx'
-import { getCoterieUUID } from './common.jsx'
+import { Avatar, Col, Dropdown, Icon, Input, Layout, Menu, Row } from 'antd';
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
+import { Link } from 'react-router-dom';
+import 'regenerator-runtime/runtime';
+import { getValFromUrlParam, groupAvatarColors } from 'util.js';
+import '../../css/test_index.css';
+import { GroupSelectionButton } from '../group_selection_button.jsx';
+import { InvitationsToggleButton } from '../invitations_toggle_button.jsx';
+import { NotificationsAlertButton } from '../notifications_alert_button.jsx';
+import { getCoterieUUID } from './common.jsx';
 
 const { Header } = Layout
 const Search = Input.Search
@@ -157,7 +157,7 @@ class Navbar extends React.Component {
               administratedCoteries={this.props.administratedCoteries}
               joinedCoteries={this.props.joinedCoteries}
               setCreateCoterieModelVisible={this.props.setCreateCoterieModelVisible}
-              currentCoterieUUID={this.state.coterieUUID}
+              currentCoterieUUID={this.props.currentCoterieUUID}
               updateUUIDCallback={this.props.updateUUIDCallback}
             />
             <NotificationsAlertButton />
@@ -207,4 +207,4 @@ class Navbar extends React.Component {
   }
 }
 
-export { Navbar }
+export { Navbar };
