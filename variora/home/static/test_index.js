@@ -12,7 +12,6 @@ import { connect, Provider } from 'react-redux'
 import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom'
 import 'regenerator-runtime/runtime'
 import { getCookie } from 'util.js'
-import TextArea from '../../../node_modules/antd/lib/input/TextArea'
 import { DocumentTab } from './components/document_tab.jsx'
 import { ExploreTab } from './components/explore_tab.jsx'
 import { GroupReadlistsTab } from './components/group_tab/group_readlists_tab.jsx'
@@ -53,6 +52,7 @@ const { SubMenu } = Menu
 const { Header, Content, Sider, Footer } = Layout
 const Search = Input.Search
 const CREATE_NEW_READLIST_MENU_ITEM_KEY = 'createReadlistButton'
+const { TextArea } = Input
 
 const GLOBAL_URL_BASE = ''
 
@@ -84,7 +84,7 @@ class AppBeforeConnect extends React.Component {
       joinedCoteries: [],
       createdReadlists: [],
       collectedReadlists: [],
-      coterieUUID: undefined,
+      coterieUUID: getCoterieUUID(),
       currentCoterie: {},
     }
 
@@ -139,18 +139,6 @@ class AppBeforeConnect extends React.Component {
       this.setState({
         fields: { ...this.state.fields, ...changedFields },
       })
-    }
-
-    this.getHighlightedMenuItems = () => {
-      const pathname = window.location.pathname
-      if (pathname.endsWith('/search')) {
-        return []
-      } else if (pathname.includes('/groups/') || pathname.includes('/readlists/')) {
-        const pageElement = pathname.split('/')
-        return [pageElement[1] + pageElement[2]]
-      } else if (pathname.includes('/explore')) {
-        return ['explore']
-      } else return ['documents']
     }
 
     this.submitCreateReadlistForm = () => {
@@ -274,6 +262,10 @@ class AppBeforeConnect extends React.Component {
       })
     }
 
+    this.updateUUIDCallback = coterieUUID => {
+      this.setState({ coterieUUID: coterieUUID })
+    }
+
     this.renderGroupTab = (match, location) => {
       const coterieUUID = match.params.coterieUUID
       const isAdmin = this.state.administratedCoteries
@@ -292,7 +284,7 @@ class AppBeforeConnect extends React.Component {
           match={match}
           location={location}
           coteriePk={filtered[0].pk}
-          coterieUUI={coterieUUID}
+          coterieUUID={getCoterieUUID()}
           coterieName={filtered[0].name}
         />
       )
@@ -302,7 +294,7 @@ class AppBeforeConnect extends React.Component {
       <ReadlistTab
         user={this.state.user}
         match={match}
-        coterieUUID={match.params.coterieUUID}
+        coterieUUID={getCoterieUUID()}
         coterie={match.params.coterieUUID === undefined ? undefined : this.state.currentCoterie}
         location={location}
         updateReadlistsCallback={this.updateReadlistsCallback}
@@ -327,7 +319,7 @@ class AppBeforeConnect extends React.Component {
           match={match}
           location={location}
           coteriePk={filtered[0].pk}
-          coterieUUI={coterieUUID}
+          coterieUUID={this.state.coterieUUID}
         />
       )
     }
@@ -383,11 +375,7 @@ class AppBeforeConnect extends React.Component {
 
   render() {
     notification.config({ top: 66 })
-
-    const fields = this.state.fields
-
-
-
+    console.log('uuid: ', this.state.coterieUUID)
     return (
       <IntlProvider locale={this.state.locale} messages={messages[this.state.locale]}>
         <Router basename={GLOBAL_URL_BASE}>
@@ -402,6 +390,7 @@ class AppBeforeConnect extends React.Component {
               setCreateCoterieModelVisible={this.setCreateCoterieModelVisible}
               acceptInvitationCallback={this.acceptInvitationCallback}
               signOff={this.signOff}
+              updateUUIDCallback={this.updateUUIDCallback}
             />
 
             <Layout style={{ minHeight: '100vh' }}>
@@ -445,6 +434,13 @@ class AppBeforeConnect extends React.Component {
               >
                 <Content>
                   <Switch>
+                    <Route exact path='/' component={DocumentTab} />
+                    <Route path='/explore' component={ExploreTab} />
+                    <Route path='/search' component={SearchResultTab} />
+                    <Route
+                      path='/readlists/:readlistSlug'
+                      render={({ match, location }) => this.renderReadlistTab(match, location)}
+                    />
                     <Route
                       path='/groups/:coterieUUID/readlists/:readlistSlug'
                       render={({ match, location }) => this.renderReadlistTab(match, location)}
@@ -463,17 +459,6 @@ class AppBeforeConnect extends React.Component {
                       path='/groups/:coterieUUID'
                       render={({ match, location }) => this.renderGroupTab(match, location)}
                     />
-                    <Route path='/explore' component={ExploreTab} />
-                    <Route path='/search' component={SearchResultTab} />
-                    <Route
-                      path='/readlists/:readlistSlug'
-                      render={({ match, location }) => this.renderReadlistTab(match, location)}
-                    />
-                    <Route
-                      path='/groups/:coterieUUID'
-                      render={({ match, location }) => this.renderGroupTab(match, location)}
-                    />
-                    <Route path='/' component={DocumentTab} />
                   </Switch>
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>
@@ -490,92 +475,6 @@ class AppBeforeConnect extends React.Component {
     )
   }
 }
-
-const CreateReadlistForm = Form.create({
-  onFieldsChange(props, changedFields) {
-    props.onChange(changedFields)
-  },
-  mapPropsToFields(props) {
-    return {
-      readlistName: Form.createFormField({
-        ...props.readlistName,
-        value: props.readlistName.value,
-      }),
-      readlistDesc: Form.createFormField({
-        ...props.readlistDesc,
-        value: props.readlistDesc.value,
-      }),
-    }
-  },
-})(props => {
-  const { getFieldDecorator } = props.form
-  return (
-    <Form>
-      <FormItem
-        label={
-          <FormattedMessage
-            id='app.readlists.name_readlist'
-            defaultMessage='Name of the readlist'
-          />
-        }
-      >
-        {getFieldDecorator('readlistName', {
-          rules: [
-            {
-              required: true,
-              message: (
-                <FormattedMessage
-                  id='app.readlists.message.empty_name'
-                  defaultMessage='The name of the readlist cannot be empty!'
-                />
-              ),
-            },
-          ],
-        })(<Input />)}
-      </FormItem>
-      <FormItem
-        label={<FormattedMessage id='app.readlists.description' defaultMessage='Description' />}
-      >
-        {getFieldDecorator('readlistDesc')(<TextArea />)}
-      </FormItem>
-    </Form>
-  )
-})
-
-const CreateCoterieForm = Form.create({
-  onFieldsChange(props, changedFields) {
-    props.onChange(changedFields)
-  },
-  mapPropsToFields(props) {
-    return {
-      coterieName: Form.createFormField({
-        ...props.coterieName,
-        value: props.coterieName.value,
-      }),
-    }
-  },
-})(props => {
-  const { getFieldDecorator } = props.form
-  return (
-    <Form layout='inline'>
-      <FormItem label={<FormattedMessage id='app.group.name' defaultMessage='group name' />}>
-        {getFieldDecorator('coterieName', {
-          rules: [
-            {
-              required: true,
-              message: (
-                <FormattedMessage
-                  id='app.group.message.empty_name'
-                  defaultMessage='Group name cannot be empty!'
-                />
-              ),
-            },
-          ],
-        })(<Input />)}
-      </FormItem>
-    </Form>
-  )
-})
 
 const mapStoreToProps = (store, ownProps) => ({
   ...ownProps,

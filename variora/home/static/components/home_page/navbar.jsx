@@ -1,23 +1,18 @@
 /* eslint-disable comma-dangle */
-import '../../css/test_index.css'
-import 'regenerator-runtime/runtime'
-
-import { Avatar, Col, Icon, Input, Layout, Dropdown, Menu, Row } from 'antd'
-import { FormattedMessage, IntlProvider, addLocaleData, injectIntl } from 'react-intl'
-import { getCookie, getValFromUrlParam, groupAvatarColors } from 'util.js'
+import { Avatar, Col, Dropdown, Icon, Input, Layout, Menu, Row } from 'antd'
 import React from 'react'
-
+import { FormattedMessage } from 'react-intl'
+import { Link } from 'react-router-dom'
+import 'regenerator-runtime/runtime'
+import { getValFromUrlParam, groupAvatarColors } from 'util.js'
+import '../../css/test_index.css'
 import { GroupSelectionButton } from '../group_selection_button.jsx'
 import { InvitationsToggleButton } from '../invitations_toggle_button.jsx'
 import { NotificationsAlertButton } from '../notifications_alert_button.jsx'
+import { getCoterieUUID } from './common.jsx'
 
 const { Header } = Layout
 const Search = Input.Search
-
-function getCoterieUUID() {
-  if (window.location.pathname.includes('/groups/')) return window.location.pathname.split('/')[2]
-  return undefined
-}
 
 class Navbar extends React.Component {
   constructor(props) {
@@ -27,6 +22,7 @@ class Navbar extends React.Component {
       administratedCoteries: {},
       joinedCoteries: {},
       locale: 'en',
+      coterieUUID: getCoterieUUID(),
     }
   }
 
@@ -36,6 +32,7 @@ class Navbar extends React.Component {
       administratedCoteries: this.props.administratedCoteries,
       joinedCoteries: this.props.joinedCoteries,
       locale: this.props.locale,
+      coterieUUID: getCoterieUUID(),
     })
   }
 
@@ -53,6 +50,7 @@ class Navbar extends React.Component {
 
     let groupIcon = null
     const currentCoterieUUID = getCoterieUUID()
+    console.log('test: ', currentCoterieUUID)
     if (currentCoterieUUID !== undefined) {
       let currentCoterie
 
@@ -130,13 +128,14 @@ class Navbar extends React.Component {
         <Row>
           <Col span={4}>
             {/* <div className="logo" /> */}
-            <a href='/'>
+            <Link to='/'>
               <img
                 src='/media/logo.png'
                 height={48}
                 style={{ verticalAlign: 'middle', marginLeft: 28 }}
+                onClick={() => this.props.updateUUIDCallback(undefined)}
               />
-            </a>
+            </Link>
             {groupIcon}
           </Col>
           <Col span={8} style={{ textAlign: 'right' }}>
@@ -158,7 +157,8 @@ class Navbar extends React.Component {
               administratedCoteries={this.props.administratedCoteries}
               joinedCoteries={this.props.joinedCoteries}
               setCreateCoterieModelVisible={this.props.setCreateCoterieModelVisible}
-              currentCoterieUUID={getCoterieUUID()}
+              currentCoterieUUID={this.state.coterieUUID}
+              updateUUIDCallback={this.props.updateUUIDCallback}
             />
             <NotificationsAlertButton />
             <InvitationsToggleButton
