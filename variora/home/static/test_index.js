@@ -434,12 +434,6 @@ class AppBeforeConnect extends React.Component {
               >
                 <Content>
                   <Switch>
-                    <Route path='/explore' component={ExploreTab} />
-                    <Route path='/search' component={SearchResultTab} />
-                    <Route
-                      path='/readlists/:readlistSlug'
-                      render={({ match, location }) => this.renderReadlistTab(match, location)}
-                    />
                     <Route
                       path='/groups/:coterieUUID/readlists/:readlistSlug'
                       render={({ match, location }) => this.renderReadlistTab(match, location)}
@@ -453,6 +447,16 @@ class AppBeforeConnect extends React.Component {
                       render={({ match, location }) =>
                         this.renderGroupReadlistsTab(match, location)
                       }
+                    />
+                    <Route
+                      path='/groups/:coterieUUID'
+                      render={({ match, location }) => this.renderGroupTab(match, location)}
+                    />
+                    <Route path='/explore' component={ExploreTab} />
+                    <Route path='/search' component={SearchResultTab} />
+                    <Route
+                      path='/readlists/:readlistSlug'
+                      render={({ match, location }) => this.renderReadlistTab(match, location)}
                     />
                     <Route
                       path='/groups/:coterieUUID'
