@@ -128,6 +128,7 @@ class ReadlistTabBeforeConnect extends React.Component {
                 isCollector={this.state.isCollector}
                 updateData={this.updateData}
                 updateReadlistsCallback={this.props.updateReadlistsCallback}
+                updateCoterieReadlistsCallback={this.props.updateCoterieReadlistsCallback}
               />
             )}
           />
@@ -141,6 +142,7 @@ class ReadlistTabBeforeConnect extends React.Component {
                 readlist={this.state.readlist}
                 updateReadlistsCallback={this.props.updateReadlistsCallback}
                 updateReadlistsNameCallback={this.props.updateReadlistsNameCallback}
+                updateCoterieReadlistsCallback={this.props.updateCoterieReadlistsCallback}
                 updateData={this.updateData}
               />
             )}

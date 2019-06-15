@@ -18,11 +18,10 @@ class GroupSider extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      user: {},
       administratedCoteries: {},
       joinedCoteries: {},
       locale: 'en',
-      fields  : props.fields,
+      fields: props.fields,
       user: props.user,
       collectedReadlists: props.collectedReadlists,
       createReadlistModelVisible: props.createReadlistModelVisible,
@@ -52,16 +51,16 @@ class GroupSider extends React.Component {
       joinedCoteries: nextProps.joinedCoteries,
       locale: nextProps.locale,
       fields: nextProps.fields,
-      collectedReadlists: nextProps.collectedReadlists,
+      collectedCoterieReadlists: nextProps.collectedCoterieReadlists,
       createReadlistModelVisible: nextProps.createReadlistModelVisible,
-      createdReadlists: nextProps.createdReadlists,
-      createGroupModelVisible: nextProps.createGroupModelVisible
+      createdCoterieReadlists: nextProps.createdCoterieReadlists,
+      createGroupModelVisible: nextProps.createGroupModelVisible,
     })
   }
 
   render() {
     const fields = this.props.fields
-  
+
     const pathname = window.location.pathname
     const defaultSelectedKeys = () => {
       if (pathname.endsWith('/search')) return []
@@ -129,22 +128,25 @@ class GroupSider extends React.Component {
             }
             disabled={!this.props.user.is_authenticated}
           >
-            {this.props.createdReadlists
-              .sort((a, b) => a.name > b.name)
-              .map(readlist => (
-                <Menu.Item key={`readlists${readlist.slug}`} title={readlist.name}>
-                  <Link
-                    style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
-                    to={`/groups/${this.props.coterieUUID}/readlists/${readlist.slug}`}
-                  >
-                    <Icon type='folder-open' />
-                    <span>{readlist.name}</span>
-                  </Link>
-                </Menu.Item>
-              ))}
+            {this.props.createdCoterieReadlists
+              ? this.props.createdCoterieReadlists
+                  .sort((a, b) => a.name > b.name)
+                  .map(readlist => (
+                    <Menu.Item key={`readlists${readlist.slug}`} title={readlist.name}>
+                      <Link
+                        style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
+                        to={`/groups/${this.props.coterieUUID}/readlists/${readlist.slug}`}
+                      >
+                        <Icon type='folder-open' />
+                        <span>{readlist.name}</span>
+                      </Link>
+                    </Menu.Item>
+                  ))
+              : null}
             <Menu.Item
               disabled={!this.props.user.is_authenticated}
               key={this.props.create_new_readlist_menu_item_key}
+              onClick={() => this.props.setCreateReadlistModelVisible(true)}
             >
               <Icon type='plus' />
             </Menu.Item>
@@ -162,19 +164,21 @@ class GroupSider extends React.Component {
             }
             disabled={!this.props.user.is_authenticated}
           >
-            {this.props.collectedReadlists
-              .sort((a, b) => a.name > b.name)
-              .map(readlist => (
-                <Menu.Item key={`readlists${readlist.slug}`} title={readlist.name}>
-                  <Link
-                    style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
-                    to={`/groups/${this.props.coterieUUID}/readlists/${readlist.slug}`}
-                  >
-                    <Icon type='folder' />
-                    <span>{readlist.name}</span>
-                  </Link>
-                </Menu.Item>
-              ))}
+            {this.props.collectedCoterieReadlists
+              ? this.props.collectedCoterieReadlists
+                  .sort((a, b) => a.name > b.name)
+                  .map(readlist => (
+                    <Menu.Item key={`readlists${readlist.slug}`} title={readlist.name}>
+                      <Link
+                        style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
+                        to={`/groups/${this.props.coterieUUID}/readlists/${readlist.slug}`}
+                      >
+                        <Icon type='folder' />
+                        <span>{readlist.name}</span>
+                      </Link>
+                    </Menu.Item>
+                  ))
+              : null}
           </SubMenu>
 
           <Menu.Item key='group-members' disabled={!this.props.user.is_authenticated}>

@@ -5,6 +5,8 @@ const initialStore = {
   mostAnnotationsDocuments: undefined,
   createdReadlists: [],
   collectedReadlists: [],
+  coterieReadlists: {},
+  coterieReadlists: {},
   user: {
     nickname: '',
     email_address: '',

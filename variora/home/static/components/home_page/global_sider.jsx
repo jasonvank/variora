@@ -1,4 +1,5 @@
 /* eslint-disable comma-dangle */
+<<<<<<< HEAD
 import '../../css/test_index.css'
 import 'regenerator-runtime/runtime'
 
@@ -22,6 +23,14 @@ import { GroupSelectionButton } from '../group_selection_button.jsx'
 import { InvitationsToggleButton } from '../invitations_toggle_button.jsx'
 import { NotificationsAlertButton } from '../notifications_alert_button.jsx'
 import { CreateCoterieForm, CreateReadlistForm } from './common.jsx'
+=======
+import { Icon, Input, Layout, Menu } from 'antd'
+import React from 'react'
+import { FormattedMessage } from 'react-intl'
+import { Link } from 'react-router-dom'
+import 'regenerator-runtime/runtime'
+import '../../css/test_index.css'
+>>>>>>> 7f55513... WIP add coterie readlists in state
 
 const { Header, Content, Sider, Footer } = Layout
 const { SubMenu } = Menu
@@ -110,21 +119,24 @@ class GlobalSider extends React.Component {
             disabled={!this.props.user.is_authenticated}
           >
             {this.props.createdReadlists
-              .sort((a, b) => a.name > b.name)
-              .map(readlist => (
-                <Menu.Item key={`readlists${readlist.slug}`} title={readlist.name}>
-                  <Link
-                    style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
-                    to={`/readlists/${readlist.slug}`}
-                  >
-                    <Icon type='folder-open' />
-                    <span>{readlist.name}</span>
-                  </Link>
-                </Menu.Item>
-              ))}
+              ? this.props.createdReadlists
+                  .sort((a, b) => a.name > b.name)
+                  .map(readlist => (
+                    <Menu.Item key={`readlists${readlist.slug}`} title={readlist.name}>
+                      <Link
+                        style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
+                        to={`/readlists/${readlist.slug}`}
+                      >
+                        <Icon type='folder-open' />
+                        <span>{readlist.name}</span>
+                      </Link>
+                    </Menu.Item>
+                  ))
+              : null}
             <Menu.Item
               disabled={!this.props.user.is_authenticated}
               key={this.props.create_new_readlist_menu_item_key}
+              onClick={() => this.props.setCreateReadlistModelVisible(true)}
             >
               <Icon type='plus' />
             </Menu.Item>
