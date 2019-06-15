@@ -10,7 +10,7 @@ import enUS from 'antd/lib/locale-provider/en_US'
 import { FormattedMessage, FormattedHTMLMessage, addLocaleData, IntlProvider } from 'react-intl'
 import locale_en from 'react-intl/locale-data/en'
 import locale_zh from 'react-intl/locale-data/zh'
-import { getCookie} from 'util.js'
+import { getCookie } from 'util.js'
 import messages_zh from './locales/zh.json'
 import messages_en from './locales/en.json'
 const messages = {
@@ -159,52 +159,56 @@ class Main extends React.Component {
     return (
       <IntlProvider locale={language} messages={messages[language]}>
         <div className='clearfix'>
-        {/* <Row style={{ textAlign: 'center', marginTop: 18 }}>
+          {/* <Row style={{ textAlign: 'center', marginTop: 18 }}>
           <a href='/'><img src="/media/logo.png" height={66} /></a>
         </Row> */}
 
-        <Row style={{ marginTop: '8%', marginBottom: '6%' }}>
-          <Col span={8} offset={4}>
-            <Dragger {...props} style={{ padding: 18 }} accept='image/png, image/jpeg'>
-              <p className='ant-upload-drag-icon'>
-                <Icon type='inbox' />
-              </p>
-              <p className='ant-upload-hint'>
+          <Row style={{ marginTop: '8%', marginBottom: '6%' }}>
+            <Col span={8} offset={4}>
+              <Dragger {...props} style={{ padding: 18 }} accept='image/png, image/jpeg'>
+                <p className='ant-upload-drag-icon'>
+                  <Icon type='inbox' />
+                </p>
+                <p className='ant-upload-hint'>
+                  <FormattedMessage
+                    id='app.document.convert.instruction'
+                    defaultMessage='Click or drag image(s) to this area. They will be put into one PDF document.'
+                  />
+                </p>
+                {/* <p className="ant-upload-hint">Support for a single or bulk upload. Strictly prohibit from uploading company data or other band files</p> */}
+              </Dragger>
+            </Col>
+
+            <Col span={8} style={{ paddingLeft: 28 }}>
+              <Form.Item
+                label={
+                  <FormattedMessage
+                    id='app.document.convert.document'
+                    defaultMessage='Name of the document'
+                  />
+                }
+              >
+                <Input value={this.state.documentName} onChange={this.handleDocNameChange} />
+              </Form.Item>
+              <Button type='primary' className='login-form-button' onClick={this.makePdf}>
                 <FormattedMessage
-                  id='app.document.convert.instruction'
-                  defaultMessage='Click or drag image(s) to this area. They will be put into one PDF document.'
+                  id='app.document.convert.pdf'
+                  defaultMessage='Make a PDF document from the selected images'
                 />
-              </p>
-              {/* <p className="ant-upload-hint">Support for a single or bulk upload. Strictly prohibit from uploading company data or other band files</p> */}
-            </Dragger>
-          </Col>
-
-          <Col span={8} style={{ paddingLeft: 28 }}>
-            <Form.Item label={<FormattedMessage
-            id='app.document.convert.document'
-            defaultMessage="Name of the document"
-          />}>
-              <Input value={this.state.documentName} onChange={this.handleDocNameChange} />
-            </Form.Item>
-            <Button type='primary' className='login-form-button' onClick={this.makePdf}>
+              </Button>
+              <br />
+              <br />
               <FormattedMessage
-                id='app.document.convert.pdf'
-                defaultMessage='Make a PDF document from the selected images'
+                id='app.document.convert.info'
+                defaultMessage='For more features and customizability, we recommend '
               />
-            </Button>
-            <br />
-            <br />
-            <FormattedMessage
-              id='app.document.convert.info'
-              defaultMessage='For more features and customizability, we recommend '
-            />
-            <a target='_blank' href='https://www.camscanner.com/user/download'>
-              CamScanner
-            </a>
-          </Col>
-        </Row>
+              <a target='_blank' href='https://www.camscanner.com/user/download'>
+                CamScanner
+              </a>
+            </Col>
+          </Row>
 
-        {/* <Upload
+          {/* <Upload
           action=""
           listType="picture-card"
           fileList={fileList}
@@ -214,11 +218,10 @@ class Main extends React.Component {
           {uploadButton}
         </Upload> */}
 
-        <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-          <img alt='example' style={{ width: '100%' }} src={previewImage} />
-        </Modal>
-      </div>
-
+          <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+            <img alt='example' style={{ width: '100%' }} src={previewImage} />
+          </Modal>
+        </div>
       </IntlProvider>
     )
   }
