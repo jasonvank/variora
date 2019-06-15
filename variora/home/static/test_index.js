@@ -565,7 +565,7 @@ class AppBeforeConnect extends React.Component {
                 </Modal>
               </Menu>
             </Sider>
-            <Layout style={{ marginLeft: 200, padding: 0, marginTop: 64 }}>
+            <Layout style={{ marginLeft: '200px', minHeight: '100vh' }}>
               <Content>
                 <Switch>
                   <Route
@@ -726,7 +726,7 @@ class AppBeforeConnect extends React.Component {
               </Modal>
             </Menu>
           </Sider>
-          <Layout style={{ marginLeft: 200, padding: 0, marginTop: 64 }}>
+          <Layout style={{ marginLeft: '200px', minHeight: '100vh' }}>
             <Content>
               <Switch>
                 <Route path='/explore' component={ExploreTab} />
@@ -752,8 +752,6 @@ class AppBeforeConnect extends React.Component {
         </Layout>
       </Router>
     )
-
-  
 
     return (
       <IntlProvider locale={this.state.locale} messages={messages[this.state.locale]}>
