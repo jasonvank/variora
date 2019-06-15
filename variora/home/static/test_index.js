@@ -683,14 +683,12 @@ class AppBeforeConnect extends React.Component {
               signOff={this.signOff}
             />
 
-            <Layout>
+            <Layout style={{ minHeight: '100vh' }}>
               {getCoterieUUID() !== undefined ? groupRouter(getCoterieUUID()) : globalRouter}
               <Layout
                 style={{
                   marginLeft: '200px',
-                  minHeight: '89.9vh',
                   marginTop: '64px',
-                  paddingBottom: '3',
                 }}
               >
                 <Content>
