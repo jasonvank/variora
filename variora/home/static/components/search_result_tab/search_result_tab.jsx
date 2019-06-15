@@ -46,6 +46,7 @@ class SearchResultTab extends React.Component {
 
   componentDidMount() {
     // TODO: get user from redux
+
     axios.get('/api/user').then(response => {
       const user = response.data
       if (response.data.is_authenticated) this.setState({ user: user })
