@@ -1,6 +1,7 @@
 import {
   Button,
   Checkbox,
+  Divider,
   Popover,
   Icon,
   Input,
@@ -204,12 +205,12 @@ class UploadedDocumentsList extends React.Component {
                 <FormattedMessage id='app.document.delete' defaultMessage='Delete' />
               </a>
             </Popconfirm>
-            <span className='ant-divider' />
+            <Divider type='vertical' />
             <a href='javascript:;' onClick={() => this.onClickShareDocument(record)}>
               {/*<Icon type="share-alt" />*/}
               <FormattedMessage id='app.document.share' defaultMessage='Share' />
             </a>
-            <span className='ant-divider' />
+            <Divider type='vertical' />
             <AddToReadlists
               createdReadlists={this.state.createdReadlists}
               document={record}
@@ -289,10 +290,7 @@ class AddToReadlists extends React.Component {
 
       axios.post(url, data).then(response => {
         notification['success']({
-          message: (<FormattedMessage
-          id='app.document.update'
-          defaultMessage='Updated'
-          />),
+          message: <FormattedMessage id='app.document.update' defaultMessage='Updated' />,
           duration: 2,
         })
       })
@@ -345,17 +343,21 @@ class AddToReadlists extends React.Component {
         <div className='add-to-readlists-title-wrapper'>
           <FormattedMessage id='app.document.message.add_to' defaultMessage='Add to...' />
         </div>
-        <CheckboxGroup onChange={this.onChange} defaultValue={this.state.defaultValues}>
-          {readlists}
-        </CheckboxGroup>
-        <Button
-          type='primary'
-          size='default'
-          style={{ float: 'right', margin: 12 }}
-          onClick={this.handleSubmit}
-        >
-          <FormattedMessage id='app.document.confirm' defaultMessage='Submit' />
-        </Button>
+        <div>
+          <CheckboxGroup onChange={this.onChange} defaultValue={this.state.defaultValues}>
+            {readlists}
+          </CheckboxGroup>
+        </div>
+        <div>
+          <Button
+            type='primary'
+            size='default'
+            style={{ float: 'right', margin: 12 }}
+            onClick={this.handleSubmit}
+          >
+            <FormattedMessage id='app.document.confirm' defaultMessage='Submit' />
+          </Button>
+        </div>
       </div>
     )
 

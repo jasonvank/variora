@@ -70,7 +70,12 @@ class ReadlistResult extends React.Component {
         rowKey={record => record.uuid}
         onChange={this.handleChange}
         locale={{
-          emptyText: 'No readlist found',
+          emptyText: (
+            <FormattedMessage
+              id='app.group.message.no_readlists'
+              defaultMessage='No readlists found'
+            />
+          ),
         }}
       />
     )

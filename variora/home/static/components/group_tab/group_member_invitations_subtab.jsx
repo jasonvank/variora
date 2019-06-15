@@ -391,7 +391,6 @@ class GroupMemberInvitationsSubtab extends React.Component {
           className={'card'}
           bordered={false}
           style={{ overflow: 'auto', backgroundColor: 'white', margin: '18px 0 28px 0' }}
-          noHovering
         >
           <GroupInvitationForm coteriePk={this.state.coteriePk} />
         </Card>

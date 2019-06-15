@@ -153,7 +153,6 @@ class GroupDocumentsSubtab extends React.Component {
         className={'card'}
         bordered={false}
         style={{ overflow: 'auto', backgroundColor: 'white', marginTop: 18 }}
-        noHovering
       >
         <Row>
           <Col span={12} style={{ textAlign: 'left' }}>

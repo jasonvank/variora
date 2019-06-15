@@ -61,8 +61,8 @@ class DocumentTab extends React.Component {
           {/*</Menu.Item>*/}
         </Menu>
         <Switch>
-          <Route exact path='/' component={UploadedDocuments} />
-          <Route exact path='/collected' component={CollectedDocuments} />
+          <Route path='/collected' component={CollectedDocuments} />
+          <Route path='/' component={UploadedDocuments} />
           {/*<Route exact path="/subscribed" component={SubscribedDocuments}/>*/}
         </Switch>
       </Content>
