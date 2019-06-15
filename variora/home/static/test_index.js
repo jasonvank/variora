@@ -415,14 +415,6 @@ class AppBeforeConnect extends React.Component {
             if (filtered.length === 0) return null
             const coterie = filtered[0]
             this.setState({ coterieUUID, currentCoterie: coterie })
-
-            axios
-              .get(`/coterie/api/coteries/${coterieUUID}/members/me/coteriereadlists`)
-              .then(response => this.updateReadlist(response.data))
-          } else {
-            axios
-              .get('/file_viewer/api/readlists')
-              .then(response => this.updateReadlist(response.data))
           }
         },
       )
@@ -435,7 +427,6 @@ class AppBeforeConnect extends React.Component {
 
   render() {
     notification.config({ top: 66 })
-    console.log('uuid: ', this.state.coterieUUID)
     return (
       <IntlProvider locale={this.state.locale} messages={messages[this.state.locale]}>
         <Router basename={GLOBAL_URL_BASE}>
@@ -484,7 +475,6 @@ class AppBeforeConnect extends React.Component {
                   setCreateCoterieModelVisible={this.setCreateCoterieModelVisible}
                   handleCreateCoterieFromChange={this.handleCreateCoterieFromChange}
                   submitCreateReadlistForm={this.submitCreateReadlistForm}
-                  createdReadlists={this.state.createdReadlists}
                   createGroupModelVisible={this.state.createGroupModelVisible}
                   handleCreateReadlistFromChange={this.handleCreateReadlistFromChange}
                   setCreateReadlistModelVisible={this.setCreateReadlistModelVisible}
