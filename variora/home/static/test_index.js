@@ -434,7 +434,6 @@ class AppBeforeConnect extends React.Component {
               >
                 <Content>
                   <Switch>
-                    <Route exact path='/' component={DocumentTab} />
                     <Route path='/explore' component={ExploreTab} />
                     <Route path='/search' component={SearchResultTab} />
                     <Route
@@ -459,6 +458,7 @@ class AppBeforeConnect extends React.Component {
                       path='/groups/:coterieUUID'
                       render={({ match, location }) => this.renderGroupTab(match, location)}
                     />
+                    <Route path='/' component={DocumentTab} />
                   </Switch>
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>
