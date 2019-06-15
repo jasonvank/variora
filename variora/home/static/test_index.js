@@ -1,52 +1,37 @@
 /* eslint-disable comma-dangle */
-import './css/test_index.css'
-import 'regenerator-runtime/runtime'
-
-import {
-  Avatar,
-  Col,
-  Form,
-  Icon,
-  Input,
-  Layout,
-  Dropdown,
-  Menu,
-  Modal,
-  Row,
-  message,
-  notification,
-  LocaleProvider,
-} from 'antd'
-import { Link, Route, BrowserRouter as Router, Switch } from 'react-router-dom'
-import { FormattedMessage, IntlProvider, addLocaleData, injectIntl } from 'react-intl'
-import { Provider, connect } from 'react-redux'
-import { getCookie, getValFromUrlParam, groupAvatarColors } from 'util.js'
-import React from 'react'
-import ReactDOM from 'react-dom'
+import { Form, Icon, Input, Layout, LocaleProvider, Menu, message, Modal, notification } from 'antd'
+import enUS from 'antd/lib/locale-provider/en_US'
 import axios from 'axios'
 import firebase from 'firebase'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { addLocaleData, FormattedMessage, IntlProvider } from 'react-intl'
 import locale_en from 'react-intl/locale-data/en'
 import locale_zh from 'react-intl/locale-data/zh'
-import {
-  fetchLocale,
-  setLocale,
-  fetchUser,
-  setCollectedReadlists,
-  setCreatedReadlists,
-} from './redux/actions.js'
+import { connect, Provider } from 'react-redux'
+import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom'
+import 'regenerator-runtime/runtime'
+import { getCookie } from 'util.js'
+import TextArea from '../../../node_modules/antd/lib/input/TextArea'
 import { DocumentTab } from './components/document_tab.jsx'
 import { ExploreTab } from './components/explore_tab.jsx'
 import { GroupReadlistsTab } from './components/group_tab/group_readlists_tab.jsx'
 import { GroupTab } from './components/group_tab/group_tab.jsx'
+import { Navbar } from './components/home_page/navbar.jsx'
 import { ReadlistTab } from './components/readlist_tab/readlist_tab.jsx'
 import { SearchResultTab } from './components/search_result_tab/search_result_tab.jsx'
-import TextArea from '../../../node_modules/antd/lib/input/TextArea'
+import './css/test_index.css'
+import messages_en from './locales/en.json'
+import messages_zh from './locales/zh.json'
+import {
+  fetchLocale,
+  fetchUser,
+  setCollectedReadlists,
+  setCreatedReadlists,
+  setLocale,
+} from './redux/actions.js'
 import { initialStore } from './redux/init_store.js'
 import { store } from './redux/store.js'
-import { Navbar } from './components/home_page/navbar.jsx'
-import messages_zh from './locales/zh.json'
-import messages_en from './locales/en.json'
-import enUS from 'antd/lib/locale-provider/en_US'
 
 const messages = {
   en: messages_en,
@@ -700,7 +685,14 @@ class AppBeforeConnect extends React.Component {
 
             <Layout>
               {getCoterieUUID() !== undefined ? groupRouter(getCoterieUUID()) : globalRouter}
-              <Layout style={{ marginLeft: '200px', minHeight: '100vh', marginTop: '64px' }}>
+              <Layout
+                style={{
+                  marginLeft: '200px',
+                  minHeight: '89.9vh',
+                  marginTop: '64px',
+                  paddingBottom: '3',
+                }}
+              >
                 <Content>
                   <Switch>
                     <Route
