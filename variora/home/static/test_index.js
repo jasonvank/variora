@@ -29,7 +29,7 @@ import { SearchResultTab } from './components/search_result_tab/search_result_ta
 import './css/test_index.css'
 import messages_en from './locales/en.json'
 import messages_zh from './locales/zh.json'
-import {  
+import {
   fetchLocale,
   fetchUser,
   setCollectedReadlists,
@@ -438,7 +438,6 @@ class AppBeforeConnect extends React.Component {
               >
                 <Content>
                   <Switch>
-                    <Route exact path='/' component={DocumentTab} />
                     <Route path='/explore' component={ExploreTab} />
                     <Route path='/search' component={SearchResultTab} />
                     <Route
@@ -463,6 +462,7 @@ class AppBeforeConnect extends React.Component {
                       path='/groups/:coterieUUID'
                       render={({ match, location }) => this.renderGroupTab(match, location)}
                     />
+                    <Route path='/' component={DocumentTab} />
                   </Switch>
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>
