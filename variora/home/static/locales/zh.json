@@ -3,7 +3,7 @@
   "app.document.choose_file": "上传本地文件",
   "app.document.collected_documents": "收藏文件",
   "app.document.convert.document": "文件名",
-  "app.document.convert.info": "更多功能，我们推荐",
+  "app.document.convert.info": "更多功能，我们推荐 ",
   "app.document.convert.instruction": "点击或者拖拽图片至此。图片将会转成PDF文件",
   "app.document.convert.pdf": "将图片转换为PDF",
   "app.document.copy.success.message": "已复制到剪切板",

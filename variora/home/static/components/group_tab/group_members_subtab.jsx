@@ -56,7 +56,7 @@ class GroupAdministratorsList extends React.Component {
         pagination={false}
         title={() => (
           <span>
-            <Icon type='solution' />
+            <Icon type='solution' style={{ marginLeft: '15px', marginRight: '4px' }} />
             <FormattedMessage id='app.group.admin' defaultMessage=' Group Admin' />
           </span>
         )}
@@ -154,7 +154,7 @@ class GroupMembersList extends React.Component {
         }}
         title={() => (
           <span>
-            <Icon type='team' />
+            <Icon type='team' style={{ marginLeft: '15px', marginRight: '4px' }} />
             <FormattedMessage id='app.group.members' defaultMessage='Group Members' />
           </span>
         )}
@@ -269,7 +269,7 @@ class GroupApplicationList extends React.Component {
         )}
         title={() => (
           <span>
-            <Icon type='usergroup-add' />
+            <Icon type='usergroup-add' style={{ marginLeft: '15px', marginRight: '4px' }} />
             <FormattedMessage id='app.group.application' defaultMessage='Group Applications' />
           </span>
         )}
