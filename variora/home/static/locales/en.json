@@ -3,7 +3,7 @@
   "app.document.choose_file": "Click to Choose File",
   "app.document.collected_documents": "Collected Documents",
   "app.document.conver.document": "Name of the document",
-  "app.document.convert.info": "For more features and customizability, we recommend",
+  "app.document.convert.info": "For more features and customizability, we recommend ",
   "app.document.convert.instruction": "Click or drag image(s) to this area. They will be put into one PDF document.",
   "app.document.convert.pdf": "Make a PDF document from the selected images",
   "app.document.copy.success.message": "Copied to clipboard! Paste elsewhere to share this document",
