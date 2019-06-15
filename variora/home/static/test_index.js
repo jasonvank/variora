@@ -765,7 +765,7 @@ class AppBeforeConnect extends React.Component {
             handleLanguageChange={this.handleLanguageChange}
             setCreateCoterieModelVisible={this.setCreateCoterieModelVisible}
             acceptInvitationCallback={this.acceptInvitationCallback}
-            signOff={this.props.signOff}
+            signOff={this.signOff}
           />
           {getCoterieUUID() !== undefined ? groupRouter(getCoterieUUID()) : globalRouter}
         </Layout>

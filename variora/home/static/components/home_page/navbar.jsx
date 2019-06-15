@@ -18,7 +18,6 @@ function getCoterieUUID() {
   if (window.location.pathname.includes('/groups/')) return window.location.pathname.split('/')[2]
   return undefined
 }
-console.log('hhehe')
 
 class Navbar extends React.Component {
   constructor(props) {
