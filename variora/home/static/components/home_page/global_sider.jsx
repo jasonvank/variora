@@ -1,36 +1,22 @@
 /* eslint-disable comma-dangle */
-<<<<<<< HEAD
 import '../../css/test_index.css'
 import 'regenerator-runtime/runtime'
 
 import {
-  Avatar,
-  Col,
+
   Icon,
   Input,
   Layout,
-  Dropdown,
   Menu,
-  Row,
   Modal,
 } from 'antd'
 import { FormattedMessage, IntlProvider, addLocaleData, injectIntl } from 'react-intl'
 import { getCookie, getValFromUrlParam, groupAvatarColors } from 'util.js'
 import React from 'react'
 import { Link, Route, BrowserRouter as Router, Switch } from 'react-router-dom'
-
-import { GroupSelectionButton } from '../group_selection_button.jsx'
-import { InvitationsToggleButton } from '../invitations_toggle_button.jsx'
-import { NotificationsAlertButton } from '../notifications_alert_button.jsx'
 import { CreateCoterieForm, CreateReadlistForm } from './common.jsx'
-=======
-import { Icon, Input, Layout, Menu } from 'antd'
-import React from 'react'
-import { FormattedMessage } from 'react-intl'
-import { Link } from 'react-router-dom'
-import 'regenerator-runtime/runtime'
-import '../../css/test_index.css'
->>>>>>> 7f55513... WIP add coterie readlists in state
+
+
 
 const { Header, Content, Sider, Footer } = Layout
 const { SubMenu } = Menu
@@ -38,24 +24,6 @@ const { SubMenu } = Menu
 const Search = Input.Search
 
 class GlobalSider extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-
-    }
-  }
-
-  ComponentDidMount() {
-    this.setState({
-
-    })
-  }
-
-  ComponentWillReceiveProps(nextProps) {
-    this.setState({
-
-    })
-  }
 
   render() {
     const getHighlightedMenuItems = () => {

@@ -128,8 +128,8 @@ class GroupSider extends React.Component {
             }
             disabled={!this.props.user.is_authenticated}
           >
-            {this.props.createdCoterieReadlists
-              ? this.props.createdCoterieReadlists
+            {this.props.createdReadlists
+              ? this.props.createdReadlists
                   .sort((a, b) => a.name > b.name)
                   .map(readlist => (
                     <Menu.Item key={`readlists${readlist.slug}`} title={readlist.name}>
@@ -164,8 +164,8 @@ class GroupSider extends React.Component {
             }
             disabled={!this.props.user.is_authenticated}
           >
-            {this.props.collectedCoterieReadlists
-              ? this.props.collectedCoterieReadlists
+            {this.props.collectedReadlists
+              ? this.props.collectedReadlists
                   .sort((a, b) => a.name > b.name)
                   .map(readlist => (
                     <Menu.Item key={`readlists${readlist.slug}`} title={readlist.name}>

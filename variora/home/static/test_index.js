@@ -28,6 +28,7 @@ import {
   setCollectedReadlists,
   setCreatedReadlists,
   setLocale,
+  setCoterieReadlists,
   setCollectedCoterieReadlists,
   setCreatedCoterieReadlists,
 } from './redux/actions.js'
@@ -35,6 +36,7 @@ import { initialStore } from './redux/init_store.js'
 import { store } from './redux/store.js'
 import { GlobalSider } from './components/home_page/global_sider.jsx'
 import { GroupSider } from './components/home_page/group_sider.jsx'
+import { CreateCoterieForm, CreateReadlistForm, getCoterieUUID } from './components/home_page/common.jsx'
 
 const messages = {
   en: messages_en,
@@ -42,8 +44,6 @@ const messages = {
 }
 
 addLocaleData([...locale_en, ...locale_zh])
-
-const FormItem = Form.Item
 
 const config = {
   messagingSenderId: '241959101179',
@@ -57,11 +57,6 @@ const CREATE_NEW_READLIST_MENU_ITEM_KEY = 'createReadlistButton'
 const { TextArea } = Input
 
 const GLOBAL_URL_BASE = ''
-
-function getCoterieUUID() {
-  if (window.location.pathname.includes('/groups/')) return window.location.pathname.split('/')[2]
-  return undefined
-}
 
 class AppBeforeConnect extends React.Component {
   constructor() {
@@ -86,8 +81,16 @@ class AppBeforeConnect extends React.Component {
       joinedCoteries: [],
       createdReadlists: [],
       collectedReadlists: [],
-      createdCoterieReadlists: {},
-      collectedCoterieReadlists: {},
+      coterieReadlists: {
+        '1' : {
+          createdReadlists: {
+          
+          },
+          collectedReadlists: {
+          
+          }
+        }
+      },
       coterieUUID: getCoterieUUID(),
       currentCoterie: {},
     }
@@ -145,6 +148,7 @@ class AppBeforeConnect extends React.Component {
       })
     }
 
+    // TODO
     this.submitCreateReadlistForm = () => {
       let url = '/file_viewer/api/readlists/create'
       let coteriePk = this.state.currentCoterie.pk
@@ -176,15 +180,13 @@ class AppBeforeConnect extends React.Component {
             })
             this.props.setCreatedReadlists(newCreatedReadlists)
           } else {
-            const newCoterieReadlists = { ...coterieReadlists, currentCoterieUUID: response.data }
-            newCoterieReadlists[this.state.coterieUUID].createdReadlists.push(response.data)
-            console.log('+++')
-            console.log(newCoterieReadlists)
+            const newCoterieReadlists = { ...coterieReadlists }
+            newCoterieReadlists[this.state.coterieUUID] = response.data
             this.setState({
               fields: { ...this.state.fields, readlistName: { value: '' } },
               coterieReadlists: newCoterieReadlists,
             })
-            this.props.setCreatedCoterieReadlists(newCreatedCoterieReadlists)
+            this.props.setCoterieReadlists(newCoterieReadlists)
           }
         })
       }
@@ -251,30 +253,26 @@ class AppBeforeConnect extends React.Component {
       })
     }
 
+    // TODO
     this.updateCoterieReadlistsCallback = readlistSlug => {
-      const newCreatedReadlists = this.state.coterieReadlists[
-        this.state.coterieUUID
-      ].createdReadlists.filter(readlist => readlist.slug !== readlistSlug)
-      const newCollectedReadlists = this.state.coterieReadlists[this.state.coterieUUID].filter(
-        readlist => readlist.slug !== readlistSlug,
-      )
-
-      const newCoterieReadlists = { ...coterieReadlists }
-      newCoterieReadlists[this.state.coterieUUID].createdReadlists = newCreatedReadlists
-      newCoterieReadlists[this.state.coterieUUID].collectedReadlists = newCollectedReadlists
-
+      const newCoterieReadlists = this.state.coterieReadlists[getCoterieUUID()].forEach(allReadlists => {
+        allReadlists.filter(readlist => readlist.slug !== readlistSlug)
+      })
+      
       this.setState({
         coterieReadlists: newCoterieReadlists,
       })
-      let url = '/file_viewer/api/readlists'
-      if (this.state.coterieUUID !== undefined)
-        url = `/coterie/api/coteries/${this.state.coterieUUID}/members/me/coteriereadlists`
-
-      axios.get(url).then(response => {
-        this.setState({ collectedReadlists: response.data.collected_readlists })
-        this.props.setCollectedReadlists(response.data.collected_readlists)
-        this.props.setCreatedReadlists(newCreatedReadlists)
-      })
+      
+      // TODO
+      // let url = '/file_viewer/api/readlists'
+      // if (this.state.coterieUUID !== undefined)
+      //   url = `/coterie/api/coteries/${this.state.coterieUUID}/members/me/coteriereadlists`
+      //
+      // axios.get(url).then(response => {
+      //   this.setState({ collectedReadlists: response.data.collected_readlists })
+      //   this.props.setCreatedCoterieReadlists(response.data.created_readlists)
+      //   this.props.setCollectedCoterieReadlists(response.data.collected_readlists)
+      // })
     }
 
     this.updateCoterieCallback = (coteriePk, new_name) => {
@@ -292,6 +290,18 @@ class AppBeforeConnect extends React.Component {
       })
       this.setState({ createdReadlists: updatedCreatedReadlist })
     }
+  
+    //TODO
+    this.updateReadlistsNameCoterieCallback = (readlistSlug, new_name) => {
+      const updatedCoterieReadlists = this.state.coterieReadlists[getCoterieUUID()].forEach(allReadlists => {
+        allReadlists.map(readlist => {
+          if (readlist.slug !== readlistSlug) return readlist
+          return Object.assign({}, readlist, { name: new_name })
+        })
+      })
+  
+      this.setState({ createdReadlists: updatedCoterieReadlists })
+    }
 
     this.acceptInvitationCallback = coteriePk => {
       axios.get(`/coterie/api/coteries/${coteriePk}`).then(response => {
@@ -305,8 +315,34 @@ class AppBeforeConnect extends React.Component {
       })
     }
 
+    // TODO
     this.updateUUIDCallback = coterieUUID => {
       this.setState({ coterieUUID: coterieUUID })
+  
+      if (!this.state.coterieReadlists[this.state.coterieUUID]) {
+        // alert("heheh1")
+  
+        axios
+        .get(`/coterie/api/coteries/${coterieUUID}/members/me/coteriereadlists`)
+        .then(response => {
+
+          console.log(response)
+          // alert("heheh2")
+  
+          console.log("+++")
+  
+          let newCoterieReadlists = {...this.state.coterieReadlists}
+          newCoterieReadlists[this.state.coterieUUID] = response.data
+          
+          console.log(newCoterieReadlists)
+          
+          this.setState({
+            fields: { ...this.state.fields, readlistName: { value: '' } },
+            coterieReadlists : newCoterieReadlists
+          })
+          // this.props.setCoterieReadlists(newCoterieReadlists)
+        })
+      }
     }
 
     this.renderGroupTab = (match, location) => {
@@ -372,6 +408,7 @@ class AppBeforeConnect extends React.Component {
       <SearchResultTab user={this.state.user} match={match} location={location} />
     )
 
+    // todo
     this.updateReadlist = data => {
       this.setState({
         createdReadlists: data.created_readlists,
@@ -380,18 +417,22 @@ class AppBeforeConnect extends React.Component {
       this.props.setCollectedReadlists(data.collected_readlists)
     }
 
+    //todo
     this.updateCoterieReadlist = data => {
-      const newCoterieReadlists = { ...coterieReadlists, currentCoterieUUID: response.data }
-
+      const newCreatedCoterieReadlists = { ...createdCoterieReadlists, currentCoterieUUID: response.data.collected_readlists}
+      const newCollectedCoterieReadlists = { ...collectedCoterieReadlists, currentCoterieUUID: response.data.collected_readlists}
+      
       this.setState({
-        createdCoterieReadlists: data.created_readlists,
-        coterieReadlists: newCoterieReadlists,
+        createdCoterieReadlists: newCreatedCoterieReadlists,
+        coterieReadlists: newCollectedCoterieReadlists,
       })
-      this.props.setCollectedCoterieReadlists(data.collected_readlists)
+      this.props.setCoterieReadlists(data.collected_readlists)
     }
   }
 
+  // todo
   componentDidMount() {
+    console.log("mount")
     this.props.fetchUser()
     this.props.fetchLocale()
     axios.get('/coterie/api/coteries').then(response => {
@@ -404,10 +445,8 @@ class AppBeforeConnect extends React.Component {
           axios
             .get('/file_viewer/api/readlists')
             .then(response => this.updateReadlist(response.data))
-          axios
-            .get(`/coterie/api/coteries/${getCoterieUUID()}/members/me/coteriereadlists`)
-            .then(response => this.updateCoterieReadlist(response.data))
           if (getCoterieUUID() !== undefined) {
+            alert("going to get")
             const coterieUUID = getCoterieUUID()
             const filtered = this.state.administratedCoteries
               .concat(this.state.joinedCoteries)
@@ -415,6 +454,9 @@ class AppBeforeConnect extends React.Component {
             if (filtered.length === 0) return null
             const coterie = filtered[0]
             this.setState({ coterieUUID, currentCoterie: coterie })
+            axios
+            .get(`/coterie/api/coteries/${this.state.coterieUUID}/members/me/coteriereadlists`)
+            .then(response => this.updateCoterieReadlist(response.data))
           }
         },
       )
@@ -422,6 +464,8 @@ class AppBeforeConnect extends React.Component {
   }
 
   componentWillReceiveProps(props) {
+    console.log("receive")
+  
     this.setState({ user: props.user, locale: props.locale })
   }
 
@@ -450,12 +494,8 @@ class AppBeforeConnect extends React.Component {
                   coterieUUID={this.state.coterieUUID}
                   fields={this.state.fields}
                   user={this.state.user}
-                  collectedCoterieReadlists={
-                    this.state.coterieReadlists[this.state.coterieUUID].collectedCoterieReadlists
-                  }
-                  createdCoterieReadlists={
-                    this.state.coterieReadlists[this.state.coterieUUID].createdCoterieReadlists
-                  }
+                  createdReadlists={ this.state.coterieReadlists[getCoterieUUID()] ? this.state.coterieReadlists[getCoterieUUID()].createdReadlists : []}
+                  collectedReadlists={ this.state.coterieReadlists[getCoterieUUID()] ? this.state.coterieReadlists[getCoterieUUID()].collectedReadlists: []}
                   updateUUIDCallback={this.updateUUIDCallback}
                   createReadlistModelVisible={this.state.createReadlistModelVisible}
                   create_new_readlist_menu_item_key={CREATE_NEW_READLIST_MENU_ITEM_KEY}
@@ -489,7 +529,6 @@ class AppBeforeConnect extends React.Component {
               >
                 <Content>
                   <Switch>
-                    <Route exact path='/' component={DocumentTab} />
                     <Route path='/explore' component={ExploreTab} />
                     <Route path='/search' component={SearchResultTab} />
                     <Route
@@ -514,6 +553,7 @@ class AppBeforeConnect extends React.Component {
                       path='/groups/:coterieUUID'
                       render={({ match, location }) => this.renderGroupTab(match, location)}
                     />
+                    <Route path='/' component={DocumentTab} />
                   </Switch>
 
                   <Modal
@@ -577,6 +617,7 @@ const App = connect(
     fetchUser,
     setCollectedReadlists,
     setCreatedReadlists,
+    setCoterieReadlists,
     setCreatedCoterieReadlists,
     setCollectedCoterieReadlists,
   },
