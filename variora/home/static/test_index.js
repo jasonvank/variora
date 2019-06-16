@@ -34,7 +34,7 @@ import { initialStore } from './redux/init_store.js'
 import { store } from './redux/store.js'
 import { GlobalSider } from './components/home_page/global_sider.jsx'
 import { GroupSider } from './components/home_page/group_sider.jsx'
-import { CreateCoterieForm, CreateReadlistForm, getCoterieUUID } from './components/home_page/common.jsx'
+import { CreateCoterieForm, CreateReadlistForm, CreateFormModal, getCoterieUUID } from './components/home_page/common.jsx'
 
 const messages = {
   en: messages_en,
@@ -555,39 +555,17 @@ class AppBeforeConnect extends React.Component {
                     />
                     <Route path='/' component={DocumentTab} />
                   </Switch>
-                  
-                  <Modal
-                    title={
-                      <FormattedMessage
-                        id='app.readlists.message.create'
-                        defaultMessage='create a new readlist'
-                      />
-                    }
-                    wrapClassName='vertical-center-modal'
-                    visible={this.state.createReadlistModelVisible}
-                    onOk={this.submitCreateReadlistForm}
-                    onCancel={() => this.setCreateReadlistModelVisible(false)}
-                  >
-                    <CreateReadlistForm
-                      {...this.state.fields}
-                      onChange={this.handleCreateReadlistFromChange}
-                    />
-                  </Modal>
-                  
-                  <Modal
-                    title={
-                      <FormattedMessage id='app.group.create' defaultMessage='create a new group' />
-                    }
-                    wrapClassName='vertical-center-modal'
-                    visible={this.state.createGroupModelVisible}
-                    onOk={this.submitCreateCoterieForm}
-                    onCancel={() => this.setCreateCoterieModelVisible(false)}
-                  >
-                    <CreateCoterieForm
-                      {...this.state.fields}
-                      onChange={this.handleCreateCoterieFromChange}
-                    />
-                  </Modal>
+                  <CreateFormModal
+                    createReadlistsModelVisible={this.state.createGroupModelVisible}
+                    fields={this.state.fields}
+                    createGroupModelVisible={this.state.createGroupModelVisible}
+                    submitCreateReadlistForm = {this.submitCreateReadlistForm}
+                    setCreateReadlistModelVisible={this.setCreateReadlistModelVisible}
+                    handleCreateReadlistFromChange={this.handleCreateReadlistFromChange}
+                    submitCreateCoterieForm={this.submitCreateCoterieForm}
+                    setCreateCoterieModelVisible={this.setCreateCoterieModelVisible}
+                    handleCreateCoterieFromChange={this.handleCreateCoterieFromChange}
+                  />
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>
                   © {new Date().getFullYear()} Variora. Reach us via{' '}

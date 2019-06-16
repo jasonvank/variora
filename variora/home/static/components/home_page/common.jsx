@@ -1,5 +1,4 @@
-import { Input } from 'antd'
-import { Form } from 'antd/lib/index'
+import { Form, Modal, Input } from 'antd'
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
 import 'regenerator-runtime/runtime'
@@ -93,9 +92,56 @@ const CreateCoterieForm = Form.create({
   )
 })
 
+class CreateFormModal extends React.Component {
+  render() {
+    return (
+      <div>
+        <Modal
+          title={
+            <FormattedMessage
+              id='app.readlists.message.create'
+              defaultMessage='create a new readlist'
+            />
+          }
+          wrapClassName='vertical-center-modal'
+          visible={ this.props.createReadlistModelVisible }
+          onOk={ this.props.submitCreateReadlistForm }
+          onCancel={ () => this.props.setCreateReadlistModelVisible(false) }
+        >
+          <CreateReadlistForm
+            { ...this.props.fields }
+            onChange={ this.props.handleCreateReadlistFromChange }
+          />
+        </Modal>
+      
+        <Modal
+          title={
+            <FormattedMessage id='app.group.create'
+                              defaultMessage='create a new group'/>
+          }
+          wrapClassName='vertical-center-modal'
+          visible={ this.props.createGroupModelVisible }
+          onOk={ this.props.submitCreateCoterieForm }
+          onCancel={ () => this.props.setCreateCoterieModelVisible(false) }
+        >
+          <CreateCoterieForm
+            { ...this.props.fields }
+            onChange={ this.props.handleCreateCoterieFromChange }
+          />
+        </Modal>
+      </div>
+  
+    )
+  }
+}
+
 function getCoterieUUID() {
   if (window.location.pathname.includes('/groups/')) return window.location.pathname.split('/')[2]
   return undefined
 }
 
-export { CreateReadlistForm, CreateCoterieForm, getCoterieUUID }
+
+
+
+
+export { CreateReadlistForm, CreateCoterieForm, CreateFormModal, getCoterieUUID }
