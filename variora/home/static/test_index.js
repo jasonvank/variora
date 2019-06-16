@@ -299,26 +299,30 @@ class AppBeforeConnect extends React.Component {
     }
 
     this.updateReadlistsNameCallback = (readlistSlug, new_name) => {
-      const updatedCreatedReadlist = this.state.createdReadlists.map(readlist => {
-        if (readlist.slug !== readlistSlug) return readlist
-        return Object.assign({}, readlist, { name: new_name })
-      })
-      this.setState({ createdReadlists: updatedCreatedReadlist })
-    }
+      if (this.state.coterieUUID) {
+        let updatedCoterieReadlists = this.state.coterieReadlists[this.state.coterieUUID]
 
-    //TODO
-    this.updateReadlistsNameCoterieCallback = (readlistSlug, new_name) => {
-      alert('hjeheheheh')
-      console.log(this.state.coterieReadlists[this.state.coterieUUID])
-      const updatedCoterieReadlists = this.state.coterieReadlists[
-        this.state.coterieUUID
-      ].created_readlists.map(readlist => {
-        if (readlist.slug !== readlistSlug) return readlist
-        return Object.assign({}, readlist, { name: new_name })
-      })
-      getHighlightedMenuItems()
+        updatedCoterieReadlists = {
+          created_readlists: updatedCoterieReadlists.created_readlists.map(readlist => {
+            if (readlist.slug !== readlistSlug) return readlist
+            return Object.assign({}, readlist, { name: new_name })
+          }),
+          collected_readlists: updatedCoterieReadlists.collected_readlists,
+        }
 
-      this.setState({ createdReadlists: updatedCoterieReadlists })
+        const newCoterieReadlists = { ...this.state.coterieReadlists }
+        newCoterieReadlists[this.state.coterieUUID] = updatedCoterieReadlists
+        defaultSelectedKeys()
+
+        this.setState({ coterieReadlists: newCoterieReadlists })
+        this.props.setCoterieReadlists(newCoterieReadlists)
+      } else {
+        const newCoterieReadlists = this.state.createdReadlists.map(readlist => {
+          if (readlist.slug !== readlistSlug) return readlist
+          return Object.assign({}, readlist, { name: new_name })
+        })
+        this.setState({ createdReadlists: newCoterieReadlists })
+      }
     }
 
     this.acceptInvitationCallback = coteriePk => {
