@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import 'regenerator-runtime/runtime'
 import { groupAvatarColors } from 'util.js'
 
-import { getCoterieUUID } from './home_page/common.jsx'
+import { getCoterieUUID } from './home_page/utils.jsx'
 
 class GroupAvatarWrapper extends React.Component {
   render() {
@@ -47,7 +47,6 @@ class GroupAvatarWrapper extends React.Component {
     }
   }
 }
-
 
 class GroupsList extends React.Component {
   constructor(props) {
@@ -133,7 +132,6 @@ class GroupsList extends React.Component {
                 />
               </List.Item>
             </Link>
-
           )}
         />
 
@@ -210,7 +208,6 @@ class GroupsList extends React.Component {
                 />
               </List.Item>
             </Link>
-
           )}
         />
       </div>

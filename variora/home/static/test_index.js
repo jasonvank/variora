@@ -35,11 +35,11 @@ import { store } from './redux/store.js'
 import { GlobalSider } from './components/home_page/global_sider.jsx'
 import { GroupSider } from './components/home_page/group_sider.jsx'
 import {
-  CreateCoterieForm,
-  CreateReadlistForm,
   CreateFormModal,
   getCoterieUUID,
-} from './components/home_page/common.jsx'
+  getHighlightedMenuItems,
+  defaultSelectedKeys,
+} from './components/home_page/utils.jsx'
 
 const messages = {
   en: messages_en,
@@ -232,25 +232,38 @@ class AppBeforeConnect extends React.Component {
     }
 
     this.updateReadlistsCallback = readlistSlug => {
-      const newCreatedReadlists = this.state.createdReadlists.filter(
-        readlist => readlist.slug !== readlistSlug,
-      )
-      const newCollectedReadlists = this.state.collectedReadlists.filter(
-        readlist => readlist.slug !== readlistSlug,
-      )
-      this.setState({
-        createdReadlists: newCreatedReadlists,
-        collectedReadlists: newCollectedReadlists,
-      })
-      let url = '/file_viewer/api/readlists'
-      if (this.state.coterieUUID !== undefined)
-        url = `/coterie/api/coteries/${this.state.coterieUUID}/members/me/coteriereadlists`
+      if (getCoterieUUID()) {
+        let updatedCoterieReadlists = this.state.coterieReadlists[this.state.coterieUUID]
 
-      axios.get(url).then(response => {
-        this.setState({ collectedReadlists: response.data.collected_readlists })
-        this.props.setCollectedReadlists(response.data.collected_readlists)
+        updatedCoterieReadlists = {
+          created_readlists: updatedCoterieReadlists.created_readlists.filter(
+            readlist => readlist.slug !== readlistSlug,
+          ),
+          collected_readlists: updatedCoterieReadlists.collected_readlists.filter(
+            readlist => readlist.slug !== readlistSlug,
+          ),
+        }
+        defaultSelectedKeys()
+        const newCoterieReadlists = { ...this.state.coterieReadlists }
+        newCoterieReadlists[this.state.coterieUUID] = updatedCoterieReadlists
+        console.log(newCoterieReadlists)
+        this.setState({ coterieReadlists: newCoterieReadlists })
+        this.props.setCoterieReadlists(newCoterieReadlists)
+      } else {
+        const newCreatedReadlists = this.state.createdReadlists.filter(
+          readlist => readlist.slug !== readlistSlug,
+        )
+        const newCollectedReadlists = this.state.collectedReadlists.filter(
+          readlist => readlist.slug !== readlistSlug,
+        )
+        getHighlightedMenuItems()
+        this.setState({
+          createdReadlists: newCreatedReadlists,
+          collectedReadlists: newCollectedReadlists,
+        })
+        this.props.setCollectedReadlists(newCollectedReadlists)
         this.props.setCreatedReadlists(newCreatedReadlists)
-      })
+      }
     }
 
     // TODO
@@ -295,14 +308,15 @@ class AppBeforeConnect extends React.Component {
 
     //TODO
     this.updateReadlistsNameCoterieCallback = (readlistSlug, new_name) => {
-      const updatedCoterieReadlists = this.state.coterieReadlists[getCoterieUUID()].forEach(
-        allReadlists => {
-          allReadlists.map(readlist => {
-            if (readlist.slug !== readlistSlug) return readlist
-            return Object.assign({}, readlist, { name: new_name })
-          })
-        },
-      )
+      alert('hjeheheheh')
+      console.log(this.state.coterieReadlists[this.state.coterieUUID])
+      const updatedCoterieReadlists = this.state.coterieReadlists[
+        this.state.coterieUUID
+      ].created_readlists.map(readlist => {
+        if (readlist.slug !== readlistSlug) return readlist
+        return Object.assign({}, readlist, { name: new_name })
+      })
+      getHighlightedMenuItems()
 
       this.setState({ createdReadlists: updatedCoterieReadlists })
     }
@@ -511,7 +525,7 @@ class AppBeforeConnect extends React.Component {
                   setCreateReadlistModelVisible={this.setCreateReadlistModelVisible}
                   handleCreateReadlistFromChange={this.handleCreateReadlistFromChange}
                   updateCoterieReadlistsCallback={this.updateCoterieReadlistsCallback}
-                  updateReadlistsNameCoterieCallback={this.updateReadlistsNameCoterieCallback}
+                  updateReadlistsNameCallback={this.updateReadlistsNameCallback}
                   updateCoterieReadlist={this.updateCoterieReadlist}
                 />
               ) : (

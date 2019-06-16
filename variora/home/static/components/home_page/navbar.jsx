@@ -9,7 +9,7 @@ import '../../css/test_index.css'
 import { GroupSelectionButton } from '../group_selection_button.jsx'
 import { InvitationsToggleButton } from '../invitations_toggle_button.jsx'
 import { NotificationsAlertButton } from '../notifications_alert_button.jsx'
-import { getCoterieUUID } from './common.jsx'
+import { getCoterieUUID } from './utils.jsx'
 
 const { Header } = Layout
 const Search = Input.Search

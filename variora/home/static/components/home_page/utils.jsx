@@ -136,4 +136,35 @@ function getCoterieUUID() {
   return undefined
 }
 
-export { CreateReadlistForm, CreateCoterieForm, CreateFormModal, getCoterieUUID }
+const getHighlightedMenuItems = () => {
+  const pathname = window.location.pathname
+  if (pathname.endsWith('/search')) {
+    return []
+  } else if (pathname.includes('/groups/') || pathname.includes('/readlists/')) {
+    const pageElement = pathname.split('/')
+    return [pageElement[1] + pageElement[2]]
+  } else if (pathname.includes('/explore')) {
+    return ['explore']
+  } else return ['documents']
+}
+
+const defaultSelectedKeys = () => {
+  const pathname = window.location.pathname
+  if (pathname.endsWith('/search')) return []
+  if (pathname.includes('members')) return ['group-members']
+  if (pathname.includes('settings') && !pathname.includes('readlists')) return ['group-settings']
+  if (pathname.includes('readlists')) {
+    const pageElement = pathname.split('/')
+    return [pageElement[3] + pageElement[4]]
+  }
+  return ['group-documents']
+}
+
+export {
+  CreateReadlistForm,
+  CreateCoterieForm,
+  CreateFormModal,
+  getCoterieUUID,
+  getHighlightedMenuItems,
+  defaultSelectedKeys,
+}

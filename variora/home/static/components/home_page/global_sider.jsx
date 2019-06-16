@@ -2,21 +2,13 @@
 import '../../css/test_index.css'
 import 'regenerator-runtime/runtime'
 
-import {
-
-  Icon,
-  Input,
-  Layout,
-  Menu,
-  Modal,
-} from 'antd'
+import { Icon, Input, Layout, Menu, Modal } from 'antd'
 import { FormattedMessage, IntlProvider, addLocaleData, injectIntl } from 'react-intl'
 import { getCookie, getValFromUrlParam, groupAvatarColors } from 'util.js'
 import React from 'react'
 import { Link, Route, BrowserRouter as Router, Switch } from 'react-router-dom'
-import { CreateCoterieForm, CreateReadlistForm } from './common.jsx'
-
-
+import { CreateCoterieForm, CreateReadlistForm } from './utils.jsx'
+import { getHighlightedMenuItems } from './utils.jsx'
 
 const { Header, Content, Sider, Footer } = Layout
 const { SubMenu } = Menu
@@ -24,20 +16,7 @@ const { SubMenu } = Menu
 const Search = Input.Search
 
 class GlobalSider extends React.Component {
-
   render() {
-    const getHighlightedMenuItems = () => {
-      const pathname = window.location.pathname
-      if (pathname.endsWith('/search')) {
-        return []
-      } else if (pathname.includes('/groups/') || pathname.includes('/readlists/')) {
-        const pageElement = pathname.split('/')
-        return [pageElement[1] + pageElement[2]]
-      } else if (pathname.includes('/explore')) {
-        return ['explore']
-      } else return ['documents']
-    }
-    
     return (
       <Sider
         className='sider'
@@ -148,7 +127,10 @@ class GlobalSider extends React.Component {
             onOk={this.props.submitCreateReadlistForm}
             onCancel={() => this.props.setCreateReadlistModelVisible(false)}
           >
-            <CreateReadlistForm {...this.props.fields} onChange={this.props.handleCreateReadlistFromChange} />
+            <CreateReadlistForm
+              {...this.props.fields}
+              onChange={this.props.handleCreateReadlistFromChange}
+            />
           </Modal>
 
           <Modal
@@ -158,7 +140,10 @@ class GlobalSider extends React.Component {
             onOk={this.submitCreateCoterieForm}
             onCancel={() => this.setCreateCoterieModelVisible(false)}
           >
-            <CreateCoterieForm {...this.props.fields} onChange={this.props.handleCreateCoterieFromChange} />
+            <CreateCoterieForm
+              {...this.props.fields}
+              onChange={this.props.handleCreateCoterieFromChange}
+            />
           </Modal>
         </Menu>
       </Sider>

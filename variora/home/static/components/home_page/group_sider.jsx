@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
 import 'regenerator-runtime/runtime'
 import { getCookie, getValFromUrlParam, groupAvatarColors } from 'util.js'
 
-import { CreateCoterieForm, CreateReadlistForm } from './common.jsx'
+import { CreateCoterieForm, CreateReadlistForm, defaultSelectedKeys } from './utils.jsx'
 
 const Search = Input.Search
 const { SubMenu } = Menu
@@ -60,19 +60,6 @@ class GroupSider extends React.Component {
 
   render() {
     const fields = this.props.fields
-
-    const pathname = window.location.pathname
-    const defaultSelectedKeys = () => {
-      if (pathname.endsWith('/search')) return []
-      if (pathname.includes('members')) return ['group-members']
-      if (pathname.includes('settings') && !pathname.includes('readlists'))
-        return ['group-settings']
-      if (pathname.includes('readlists')) {
-        const pageElement = pathname.split('/')
-        return [pageElement[3] + pageElement[4]]
-      }
-      return ['group-documents']
-    }
 
     return (
       <Sider

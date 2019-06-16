@@ -4,6 +4,7 @@ import { getCookie } from 'util.js'
 import React from 'react'
 import axios from 'axios'
 import { FormattedMessage, FormattedHTMLMessage } from 'react-intl'
+import { Link, Route, Switch } from 'react-router-dom'
 
 const { TextArea } = Input
 const Panel = Collapse.Panel
@@ -25,8 +26,6 @@ class ReadlistSettingsSubtab extends React.Component {
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
       axios.post(this.state.readlist.delete_url, data).then(() => {
         this.props.updateReadlistsCallback(this.state.readlistSlug)
-        window.location.href =
-          this.props.coterieUUID === undefined ? '/' : `/groups/${this.props.coterieUUID}`
       })
     }
 
@@ -110,11 +109,16 @@ class ReadlistSettingsSubtab extends React.Component {
           />
         }
         onConfirm={() => this.deleteReadList()}
-        okText='Yes'
+        okText={
+          <Link
+            to={this.props.coterieUUID === undefined ? '/' : `/groups/${this.props.coterieUUID}`}
+          >
+            Yes
+          </Link>
+        }
         cancelText='No'
       >
         <a style={{ float: 'right', color: '#F2784B', marginRight: '6%' }}>
-          {' '}
           <FormattedMessage
             id='app.readlists.message.delete_readlists'
             defaultMessage='Delete this readlist'
