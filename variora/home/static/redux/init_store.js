@@ -6,7 +6,6 @@ const initialStore = {
   createdReadlists: [],
   collectedReadlists: [],
   coterieReadlists: {},
-  coterieReadlists: {},
   user: {
     nickname: '',
     email_address: '',

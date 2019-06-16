@@ -37,9 +37,9 @@ class GroupSider extends React.Component {
       joinedCoteries: this.props.joinedCoteries,
       locale: this.props.locale,
       fields: this.props.fields,
-      collectedReadlists: this.props.collectedReadlists,
-      createReadlistModelVisible: this.props.createReadlistModelVisible,
       createdReadlists: this.props.createdReadlists,
+      createReadlistModelVisible: this.props.createReadlistModelVisible,
+      collectedReadlists: this.props.collectedReadlists,
       createGroupModelVisible: this.props.createGroupModelVisible
     })
   }
@@ -51,9 +51,9 @@ class GroupSider extends React.Component {
       joinedCoteries: nextProps.joinedCoteries,
       locale: nextProps.locale,
       fields: nextProps.fields,
-      collectedCoterieReadlists: nextProps.collectedCoterieReadlists,
+      createdReadlists: nextProps.createdReadlists,
       createReadlistModelVisible: nextProps.createReadlistModelVisible,
-      createdCoterieReadlists: nextProps.createdCoterieReadlists,
+      collectedReadlists: nextProps.collectedReadlists,
       createGroupModelVisible: nextProps.createGroupModelVisible,
     })
   }

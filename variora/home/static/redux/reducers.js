@@ -7,8 +7,7 @@ import {
   FETCH_CREATED_READLISTS,
   SET_CREATED_READLISTS,
   SET_COLLECTED_READLISTS,
-  SET_CREATED_COTERIE_READLISTS,
-  SET_COLLECTED_COTERIE_READLISTS,
+  SET_COTERIE_READLISTS,
 } from './actions.js'
 import { initialStore } from './init_store.js'
 
@@ -53,15 +52,10 @@ const rootReducer = (store = initialStore, dispatchTarget) => {
       ...store,
       collectedReadlists: dispatchTarget.collectedReadlists,
     }
-  } else if (dispatchTarget.type == SET_CREATED_COTERIE_READLISTS) {
+  } else if (dispatchTarget.type == SET_COTERIE_READLISTS) {
     return {
       ...store,
-      coterieReadlists: dispatchTarget.createdCoterieReadlists,
-    }
-  } else if (dispatchTarget.type == SET_COLLECTED_COTERIE_READLISTS) {
-    return {
-      ...store,
-      coterieReadlists: dispatchTarget.collectedCoterieReadlists,
+      coterieReadlists: dispatchTarget.coterieReadlists,
     }
   } else {
     return store

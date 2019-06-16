@@ -8,8 +8,7 @@ const FETCH_USER = 'FETCH_USER'
 const FETCH_CREATED_READLISTS = 'FETCH_CREATED_READLISTS'
 const SET_COLLECTED_READLISTS = 'SET_COLLECTED_READLISTS'
 const SET_CREATED_READLISTS = 'SET_CREATED_READLISTS'
-const SET_COLLECTED_COTERIE_READLISTS = 'SET_COLLECTED_COTERIRE_READLISTS'
-const SET_CREATED_COTERIE_READLISTS = 'SET_CREATED_COTERIRE_READLISTS'
+const SET_COTERIE_READLISTS = 'SET_COTERIE_READLISTS'
 const FETCH_LOCALE = 'FETCH_LOCALE'
 const SET_LOCALE = 'SET_LOCALE'
 
@@ -76,13 +75,6 @@ const setCreatedReadlists = created_readlists => dispatch => {
   })
 }
 
-const setCreatedCoterieReadlists = coterieReadlists => dispatch => {
-  dispatch({
-    type: SET_CREATED_COTERIE_READLISTS,
-    coterieReadlists: created_readlists,
-  })
-}
-
 const setCollectedReadlists = collected_readlists => dispatch => {
   dispatch({
     type: SET_COLLECTED_READLISTS,
@@ -90,9 +82,9 @@ const setCollectedReadlists = collected_readlists => dispatch => {
   })
 }
 
-const setCollectedCoterieReadlists = coterieReadlists => dispatch => {
+const setCoterieReadlists = coterieReadlists => dispatch => {
   dispatch({
-    type: SET_COLLECTED_COTERIE_READLISTS,
+    type: SET_COTERIE_READLISTS,
     coterieReadlists: coterieReadlists,
   })
 }
@@ -120,8 +112,7 @@ export {
   fetchCreatedReadlists,
   setCreatedReadlists,
   setCollectedReadlists,
-  setCreatedCoterieReadlists,
-  setCollectedCoterieReadlists,
+  setCoterieReadlists,
   fetchLocale,
   setLocale,
   FETCH_USEREXPLORE_DOCS,
@@ -130,8 +121,7 @@ export {
   FETCH_CREATED_READLISTS,
   SET_CREATED_READLISTS,
   SET_COLLECTED_READLISTS,
-  SET_CREATED_COTERIE_READLISTS,
-  SET_COLLECTED_COTERIE_READLISTS,
+  SET_COTERIE_READLISTS,
   FETCH_LOCALE,
   SET_LOCALE,
 }
