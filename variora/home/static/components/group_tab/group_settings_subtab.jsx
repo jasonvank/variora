@@ -18,6 +18,7 @@ import React from 'react'
 import axios from 'axios'
 import { getCookie } from 'util.js'
 import { FormattedMessage, FormattedHTMLMessage } from 'react-intl'
+import { Link } from 'react-router-dom'
 const { TextArea } = Input
 const FormItem = Form.Item
 
@@ -36,7 +37,6 @@ class GroupSettingsSubtab extends React.Component {
         .post('/coterie/api/coteries/' + this.state.coteriePk + '/delete', data)
         .then(function() {
           self.props.removeCoterieCallback(self.state.coteriePk)
-          window.location.href = '/'
         })
     }
     this.exitGroup = () => {
@@ -45,7 +45,6 @@ class GroupSettingsSubtab extends React.Component {
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
       axios.post('/coterie/api/coteries/' + this.state.coteriePk + '/exit', data).then(function() {
         self.props.removeCoterieCallback(self.state.coteriePk)
-        window.location.href = '/'
       })
     }
   }
@@ -88,7 +87,7 @@ class GroupSettingsSubtab extends React.Component {
           />
         }
         onConfirm={() => this.deleteGroup()}
-        okText='Yes'
+        okText={<Link to='/' >Yes</Link>}
         cancelText='No'
       >
         <a style={{ float: 'right', color: '#F2784B', marginRight: '6%' }}>
@@ -106,7 +105,7 @@ class GroupSettingsSubtab extends React.Component {
           />
         }
         onConfirm={() => this.exitGroup()}
-        okText='Yes'
+        okText={<Link to='/' >Yes</Link>}
         cancelText='No'
       >
         <a style={{ float: 'right', color: '#F2784B', marginRight: '6%' }}>
