@@ -1,18 +1,18 @@
 /* eslint-disable comma-dangle */
 import '../../css/test_index.css'
-import 'regenerator-runtime/runtime'
 import { Avatar, Col, Icon, Input, Layout, Modal, Dropdown, Menu, Row } from 'antd'
-import { FormattedMessage, IntlProvider, addLocaleData, injectIntl } from 'react-intl'
-import { getCookie, getValFromUrlParam, groupAvatarColors } from 'util.js'
 import React from 'react'
+import { FormattedMessage, IntlProvider, addLocaleData, injectIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
+import 'regenerator-runtime/runtime'
+import { getCookie, getValFromUrlParam, groupAvatarColors } from 'util.js'
+
 import { CreateCoterieForm, CreateReadlistForm } from './common.jsx'
 
 const Search = Input.Search
 const { SubMenu } = Menu
 
 const { Header, Content, Sider, Footer } = Layout
-
 
 class GroupSider extends React.Component {
   constructor(props) {
@@ -26,7 +26,7 @@ class GroupSider extends React.Component {
       collectedReadlists: props.collectedReadlists,
       createReadlistModelVisible: props.createReadlistModelVisible,
       createdReadlists: props.createdReadlists,
-      createGroupModelVisible: props.createGroupModelVisible
+      createGroupModelVisible: props.createGroupModelVisible,
     }
   }
 
@@ -40,7 +40,7 @@ class GroupSider extends React.Component {
       createdReadlists: this.props.createdReadlists,
       createReadlistModelVisible: this.props.createReadlistModelVisible,
       collectedReadlists: this.props.collectedReadlists,
-      createGroupModelVisible: this.props.createGroupModelVisible
+      createGroupModelVisible: this.props.createGroupModelVisible,
     })
   }
 
@@ -73,9 +73,7 @@ class GroupSider extends React.Component {
       }
       return ['group-documents']
     }
-    
-    console.log("heheheheh!")
-  
+
     return (
       <Sider
         className='sider'
@@ -211,7 +209,10 @@ class GroupSider extends React.Component {
             onOk={this.props.submitCreateReadlistForm}
             onCancel={() => this.props.setCreateReadlistModelVisible(false)}
           >
-            <CreateReadlistForm {...this.props.fields} onChange={this.props.handleCreateReadlistFromChange} />
+            <CreateReadlistForm
+              {...this.props.fields}
+              onChange={this.props.handleCreateReadlistFromChange}
+            />
           </Modal>
           <Modal
             title={<FormattedMessage id='app.group.create' defaultMessage='create a new group' />}
@@ -220,7 +221,10 @@ class GroupSider extends React.Component {
             onOk={this.props.submitCreateCoterieForm}
             onCancel={() => this.props.setCreateCoterieModelVisible(false)}
           >
-            <CreateCoterieForm {...this.props.fields} onChange={this.props.handleCreateCoterieFromChange} />
+            <CreateCoterieForm
+              {...this.props.fields}
+              onChange={this.props.handleCreateCoterieFromChange}
+            />
           </Modal>
         </Menu>
       </Sider>

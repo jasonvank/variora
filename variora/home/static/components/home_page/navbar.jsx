@@ -50,7 +50,6 @@ class Navbar extends React.Component {
 
     let groupIcon = null
     const currentCoterieUUID = getCoterieUUID()
-    console.log('test: ', currentCoterieUUID)
     if (currentCoterieUUID !== undefined) {
       let currentCoterie
 

@@ -104,33 +104,29 @@ class CreateFormModal extends React.Component {
             />
           }
           wrapClassName='vertical-center-modal'
-          visible={ this.props.createReadlistModelVisible }
-          onOk={ this.props.submitCreateReadlistForm }
-          onCancel={ () => this.props.setCreateReadlistModelVisible(false) }
+          visible={this.props.createReadlistModelVisible}
+          onOk={this.props.submitCreateReadlistForm}
+          onCancel={() => this.props.setCreateReadlistModelVisible(false)}
         >
           <CreateReadlistForm
-            { ...this.props.fields }
-            onChange={ this.props.handleCreateReadlistFromChange }
+            {...this.props.fields}
+            onChange={this.props.handleCreateReadlistFromChange}
           />
         </Modal>
-      
+
         <Modal
-          title={
-            <FormattedMessage id='app.group.create'
-                              defaultMessage='create a new group'/>
-          }
+          title={<FormattedMessage id='app.group.create' defaultMessage='create a new group' />}
           wrapClassName='vertical-center-modal'
-          visible={ this.props.createGroupModelVisible }
-          onOk={ this.props.submitCreateCoterieForm }
-          onCancel={ () => this.props.setCreateCoterieModelVisible(false) }
+          visible={this.props.createGroupModelVisible}
+          onOk={this.props.submitCreateCoterieForm}
+          onCancel={() => this.props.setCreateCoterieModelVisible(false)}
         >
           <CreateCoterieForm
-            { ...this.props.fields }
-            onChange={ this.props.handleCreateCoterieFromChange }
+            {...this.props.fields}
+            onChange={this.props.handleCreateCoterieFromChange}
           />
         </Modal>
       </div>
-  
     )
   }
 }
@@ -139,9 +135,5 @@ function getCoterieUUID() {
   if (window.location.pathname.includes('/groups/')) return window.location.pathname.split('/')[2]
   return undefined
 }
-
-
-
-
 
 export { CreateReadlistForm, CreateCoterieForm, CreateFormModal, getCoterieUUID }
