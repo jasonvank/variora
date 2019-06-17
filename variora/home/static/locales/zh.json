@@ -44,7 +44,7 @@
   "app.group.admin": "群组管理员",
   "app.group.application": "群组申请",
   "app.group.application.success": "申请发送成功",
-  "app.group.apply": "申请",
+  "app.group.apply": "申请加入",
   "app.group.as_admin": "我管理的群组",
   "app.group.as_member": "我加入的群组",
   "app.group.create": "新建群组",
