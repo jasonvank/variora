@@ -89,13 +89,13 @@ function findTargetAnnotation(e, allAnnotationsInThisPage, pageJQ) {
   const coverAnnotations = allAnnotationsInThisPage.filter(annotation => _checkCoverage(annotation, e, pageJQ))
 
   const THREDSHOLD = 9
-  var sortedCloseness = coverAnnotations.sort((a, b) => _getRight(a) > _getRight(b))
-  if (_getRight(sortedCloseness[1]) - _getRight(sortedCloseness[0]) < THREDSHOLD) {  // right side too close
-    sortedCloseness = coverAnnotations.sort((a, b) => _getLeft(a) < _getLeft(b))
+  var sortedCloseness = coverAnnotations.sort((a, b) => _getRight(a) - _getRight(b))  // sorted by right border increasingly
+  if (_getRight(sortedCloseness[1]) - _getRight(sortedCloseness[0]) < THREDSHOLD) {  // if right side too close
+    sortedCloseness = coverAnnotations.sort((a, b) => -_getLeft(a) + _getLeft(b))  // sorted by left border decreasingly
     if (_getLeft(sortedCloseness[0]) - _getLeft(sortedCloseness[1]) < THREDSHOLD) {
-      sortedCloseness = coverAnnotations.sort((a, b) => _getBottom(a) > _getBottom(b))
+      sortedCloseness = coverAnnotations.sort((a, b) => _getBottom(a) - _getBottom(b))  // sorted by bottom border increasingly
       if (_getBottom(sortedCloseness[1]) - _getBottom(sortedCloseness[0]) < THREDSHOLD)
-        sortedCloseness = coverAnnotations.sort((a, b) => _getTop(a) < _getTop(b))
+        sortedCloseness = coverAnnotations.sort((a, b) => -_getTop(a) + _getTop(b))  // sorted by top border decreasingly
     }
   }
   const newTarget = $(sortedCloseness[0])
