@@ -129,7 +129,9 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
       </span>
     )
 
-    var documentUploadDate = (text, document) => <FormattedRelative value={document.upload_time} />
+    var documentUploadDate = (text, document) => (
+      <FormattedRelative value={document.upload_time || new Date()} />
+    )
 
     const columns = [
       {
@@ -196,7 +198,7 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
                   {readlist.owner.nickname}{' '}
                   {<FormattedMessage id='app.readlists.created_in' defaultMessage='created in ' />}{' '}
                   <span style={{ color: '#999' }}>
-                    <FormattedRelative value={readlist.create_time} />
+                    <FormattedRelative value={readlist.create_time || new Date()} />
                   </span>
                 </span>
               </div>
@@ -257,6 +259,14 @@ class ReadlistDocumentsSubtabBeforeConnect extends React.Component {
                 columns={columns}
                 pagination={false}
                 rowKey={record => record.pk}
+                locale={{
+                  emptyText: (
+                    <FormattedMessage
+                      id='app.group.message.no_data'
+                      defaultMessage='No data found'
+                    />
+                  ),
+                }}
               />
             </Col>
             <Col style={{ padding: 18 }} span={8}>

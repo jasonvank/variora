@@ -95,7 +95,7 @@ class GroupInvitationForm extends React.Component {
       axios.post('/coterie/api/invite', data).then(response => {
         var successful_applications = response.data['successful_invitations']
         var unregistered_emails = response.data['unregistered_emails']
-        if (successful_applications.length > 0)
+        if (successful_applications.length > 0) {
           notification['success']({
             message: (
               <FormattedMessage
@@ -110,7 +110,8 @@ class GroupInvitationForm extends React.Component {
             ),
             duration: 0,
           })
-        if (unregistered_emails.length > 0)
+        }
+        if (unregistered_emails.length > 0) {
           notification['warning']({
             message: (
               <FormattedMessage
@@ -122,11 +123,8 @@ class GroupInvitationForm extends React.Component {
               <UnregisteredEmailsNotificationWrapper unregistered_emails={unregistered_emails} />
             ),
             duration: 0,
-            style: {
-              width: 380,
-              marginLeft: 335 - 380,
-            },
           })
+        }
       })
     }
 
@@ -391,7 +389,6 @@ class GroupMemberInvitationsSubtab extends React.Component {
           className={'card'}
           bordered={false}
           style={{ overflow: 'auto', backgroundColor: 'white', margin: '18px 0 28px 0' }}
-          noHovering
         >
           <GroupInvitationForm coteriePk={this.state.coteriePk} />
         </Card>

@@ -56,7 +56,7 @@ class GroupTab extends React.Component {
         >
           <Menu.Item
             key='group-documents'
-            style={{ display: selectedKeys.includes('group-documents') ? 'block' : 'none' }}
+            style={{ display: selectedKeys.includes('group-documents') ? 'inline-block' : 'none' }}
           >
             <Link to={SUB_URL_BASE + this.state.coterieUUI + '/'}>
               <Icon type='book' />
@@ -69,7 +69,7 @@ class GroupTab extends React.Component {
               display:
                 selectedKeys.includes('group-members') ||
                 selectedKeys.includes('group-member-invitations')
-                  ? 'block'
+                  ? 'inline-block'
                   : 'none',
             }}
           >
@@ -85,7 +85,7 @@ class GroupTab extends React.Component {
                 display:
                   selectedKeys.includes('group-members') ||
                   selectedKeys.includes('group-member-invitations')
-                    ? 'block'
+                    ? 'inline-block'
                     : 'none',
               }}
             >
@@ -100,7 +100,7 @@ class GroupTab extends React.Component {
           ) : null}
           <Menu.Item
             key='group-settings'
-            style={{ display: selectedKeys.includes('group-settings') ? 'block' : 'none' }}
+            style={{ display: selectedKeys.includes('group-settings') ? 'inline-block' : 'none' }}
           >
             <Link to={SUB_URL_BASE + this.state.coterieUUI + '/settings'}>
               <Icon type='setting' />

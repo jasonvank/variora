@@ -1,6 +1,7 @@
 import {
   Button,
   Checkbox,
+  Divider,
   Icon,
   Input,
   Popover,
@@ -161,12 +162,19 @@ class GroupDocumentsList extends React.Component {
     const documentDeleteAction = (text, coterieDocument) => (
       <span>
         <Popconfirm
-          title='Are you sure delete this document? It cannot be undone.'
+          title={
+            <FormattedMessage
+              id='app.document.message.delete'
+              defaultMessage='Are you sure delete this document? It cannot be undone.'
+            />
+          }
           onConfirm={() => this.deleteDocument(coterieDocument)}
           okText='Yes'
           cancelText='No'
         >
-          <a><FormattedMessage id='app.document.delete' defaultMessage='Delete' /></a>
+          <a>
+            <FormattedMessage id='app.document.delete' defaultMessage='Delete' />
+          </a>
         </Popconfirm>
       </span>
     )
@@ -241,7 +249,7 @@ class GroupDocumentsList extends React.Component {
         render: (text, coterieDocument) => (
           <span>
             {checkIAmUploader(coterieDocument) ? documentDeleteAction(text, coterieDocument) : null}
-            <span className='ant-divider' />
+            <Divider type='vertical' />
             <AddToReadlists
               createdReadlists={this.state.createdReadlists}
               document={coterieDocument}
@@ -259,6 +267,14 @@ class GroupDocumentsList extends React.Component {
         columns={columns}
         pagination={{ pageSize: 10 }}
         rowKey={record => record.pk}
+        locale={{
+          emptyText: (
+            <FormattedMessage
+              id='app.document.message.not_found'
+              defaultMessage='No documents found'
+            />
+          ),
+        }}
         // size={'medium'}
       />
     )

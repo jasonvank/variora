@@ -136,7 +136,11 @@ class GroupsList extends React.Component {
           }}
           footer={() => null}
           title={() => null}
-          locale={{ emptyText: '' }}
+          locale={{
+            emptyText: (
+              <FormattedMessage id='app.group.message.no_data' defaultMessage='No data found' />
+            ),
+          }}
         />
         <Table
           className='notification-table'
@@ -153,7 +157,11 @@ class GroupsList extends React.Component {
               <FormattedMessage id='app.group.as_admin' defaultMessage='As admin' />
             </span>
           )}
-          locale={{ emptyText: '' }}
+          locale={{
+            emptyText: (
+              <FormattedMessage id='app.group.message.no_data' defaultMessage='No data found' />
+            ),
+          }}
         />
         <Table
           className='notification-table'
@@ -170,7 +178,11 @@ class GroupsList extends React.Component {
               <FormattedMessage id='app.group.as_member' defaultMessage='As member' />
             </span>
           )}
-          locale={{ emptyText: '' }}
+          locale={{
+            emptyText: (
+              <FormattedMessage id='app.group.message.no_data' defaultMessage='No data found' />
+            ),
+          }}
         />
       </div>
     )

@@ -164,6 +164,11 @@ class NotificationsList extends React.Component {
           rowKey={record => record.slug}
           onRowClick={this.handleReadStatus}
           footer={() => null}
+          locale={{
+            emptyText: (
+              <FormattedMessage id='app.group.message.no_data' defaultMessage='No data found' />
+            ),
+          }}
         />
       </div>
     )
