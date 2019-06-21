@@ -95,6 +95,8 @@ td:hover .editable-cell-icon {
 .notification-alert-list-wrapper {
   overflow: hidden !important;
   text-overflow: ellipsis !important;
+  word-break: break-all !important;
+  /* hyphens: auto !important; */
   display: -webkit-box !important;
   margin-top: 4px !important;
   margin-bottom: 6px !important;
