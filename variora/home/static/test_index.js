@@ -228,6 +228,7 @@ class AppBeforeConnect extends React.Component {
       this.setState({
         administratedCoteries: updatedAdministratedCoteries,
         joinedCoteries: updatedJoinedCoteries,
+        currentCoterie: {},
       })
     }
 
@@ -506,9 +507,9 @@ class AppBeforeConnect extends React.Component {
             />
 
             <Layout style={{ minHeight: '100vh' }}>
-              {this.state.coterieUUID !== undefined ? (
+              {this.state.currentCoterie.uuid !== undefined ? (
                 <GroupSider
-                  coterieUUID={this.state.coterieUUID}
+                  coterieUUID={this.state.currentCoterie.uuid || this.state.coterieUUID}
                   fields={this.state.fields}
                   user={this.state.user}
                   createdReadlists={
