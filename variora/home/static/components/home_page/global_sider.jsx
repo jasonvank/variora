@@ -36,7 +36,7 @@ class GlobalSider extends React.Component {
           defaultOpenKeys={['created_readlists', 'collected_readlists']}
           onClick={this.props.onClickCreateReadlistMenuItem}
           style={{ borderRight: 0 }}
-          defaultSelectedKeys={getHighlightedMenuItems()}
+          selectedKeys={getHighlightedMenuItems()}
         >
           <Menu.Item key='explore'>
             <Link to='/explore'>

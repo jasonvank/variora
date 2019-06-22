@@ -80,7 +80,7 @@ class GroupSider extends React.Component {
           defaultOpenKeys={['created_readlists', 'collected_readlists']}
           onClick={this.onClickCreateReadlistMenuItem}
           style={{ borderRight: 0 }}
-          defaultSelectedKeys={defaultSelectedKeys()}
+          selectedKeys={defaultSelectedKeys()}
         >
           {/* <Menu.Item key="explore" > */}
           {/* <Link to="/explore"><span><Icon type="compass" />Explore</span></Link> */}
