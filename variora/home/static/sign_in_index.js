@@ -198,8 +198,8 @@ class NormalLoginForm extends React.Component {
                     htmlType='button'
                     id='google-login'
                   >
-                    <i className='fa fa-google' aria-hidden='true'></i>
-                    {'  '}Log in with Google
+                    <i className='fa fa-google' aria-hidden='true' style={{marginRight: 8}}></i>
+                    Log in with Google
                   </Button>
                   <Button
                     style={{ backgroundColor:'#3b5998', borderColor:'#3b5998', marginTop: 16, color: 'white' }}
@@ -209,8 +209,8 @@ class NormalLoginForm extends React.Component {
                     onClick={this.facebookLogin}
                     loading={this.state.fbLoginButtonLoading}
                   >
-                    <i className='fa fa-facebook-official' aria-hidden='true'></i>
-                    {'  '}Log in with Facebook
+                    <i className='fa fa-facebook-official' aria-hidden='true' style={{marginRight: 8}}></i>
+                    Log in with Facebook
                   </Button>
                   <Button
                     style={{ backgroundColor:'#0078D7', borderColor:'#0078D7', marginTop: 16, color: 'white' }}
@@ -219,8 +219,8 @@ class NormalLoginForm extends React.Component {
                     id='microsoft-login'
                     onClick={this.displayMicrosoftLogin}
                   >
-                    <i className='fa fa-windows' aria-hidden='true'></i>
-                    {'  '}Log in with Office365
+                    <i className='fa fa-windows' aria-hidden='true' style={{marginRight: 8}}></i>
+                    Log in with Office365
                   </Button>
                   <Button
                     style={{backgroundColor: 'orange', borderColor: 'orange', marginTop: 16, color: 'white'}}
