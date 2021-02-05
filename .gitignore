@@ -147,4 +147,4 @@ db.sqlite3
 **/media/document_thumbnails/*
 package-lock.json
 
-
+*.DS_Store
