@@ -15,6 +15,11 @@ class DocumentEncoder(DjangoJSONEncoder):
         else:
             thumbnail_url = '/media/pdf.png',
         if isinstance(obj, Document):
+            print("see obj")
+            print(obj)
+            print(obj.tags)
+            print(obj.owner)
+            print("done obj")
             return {
                 'pk': obj.pk,
                 'uuid': obj.uuid,
@@ -36,6 +41,7 @@ class DocumentEncoder(DjangoJSONEncoder):
                 'uploader_name': obj.owner.nickname,
                 'uploader_portrait_url': obj.owner.portrait_url,
                 'thumbnail_url': thumbnail_url,
+                'tags': 'abc',
             }
         return super(DocumentEncoder, self).default(obj)
 

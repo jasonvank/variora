@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'django_user_agents',
     'anymail',
     'fcm_django',
+    'taggit',
 
     # django apps
     'django.contrib.admin',

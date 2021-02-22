@@ -8,6 +8,7 @@ from django.dispatch import receiver
 from home.models import User
 from variora import utils
 from variora.utils import ModelWithCleanUUID
+from taggit.managers import TaggableManager
 
 from .managers import DocumentManager, DocumentThumbnailManager
 
@@ -57,6 +58,7 @@ class Document(ModelWithCleanUUID):
     num_visit = models.IntegerField(default=0, db_index=True)
     external_url = models.CharField(max_length=2083, blank=True, db_index=True)
     upload_time = models.DateTimeField(auto_now=False, auto_now_add=True)
+    tags = TaggableManager()
 
     objects = DocumentManager()
 
@@ -83,7 +85,6 @@ class Document(ModelWithCleanUUID):
 
     def __unicode__(self):
         return self.title
-
 
 @receiver(models.signals.post_delete, sender=Document)
 def may_delete_unique_file(sender, instance, **kwargs):

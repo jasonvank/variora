@@ -28,6 +28,7 @@ def _handle_dropbox_link(link):
 
 def handle_file_upload(request):
     user = get_user(request)
+    print("API called")
     if 'title' not in request.POST or request.POST['title'] == '':
         return HttpResponse(status=403)
     if not user.is_authenticated:
@@ -42,8 +43,8 @@ def handle_file_upload(request):
     else:
         file_upload = request.FILES["file_upload"]  # this is an UploadedFile object
 
-        if not user.is_superuser and file_upload.size > settings.MAX_DOCUMENT_UPLOAD_SIZE:
-            return HttpResponse(status=403)
+        # if not user.is_superuser and file_upload.size > settings.MAX_DOCUMENT_UPLOAD_SIZE:
+        #     return HttpResponse(status=403)
 
         this_file_md5 = md5(file_upload.read()).hexdigest()
         try:
@@ -54,6 +55,9 @@ def handle_file_upload(request):
 
         document = Document(owner=user, unique_file=unique_file, title=request.POST["title"])
         document.save()
+        document.tags.add(request.POST['tags'])
+        print(document.tags.all())
+        print("++++done+++")
     return HttpResponse(status=200)
 
 

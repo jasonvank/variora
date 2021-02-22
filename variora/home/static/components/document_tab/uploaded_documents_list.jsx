@@ -156,16 +156,10 @@ class UploadedDocumentsList extends React.Component {
         width: '6%',
         render: (text, record) => this.state.data.indexOf(record) + 1,
       },
-      // {
-      //   title: '',
-      //   dataIndex: 'thumbnail',
-      //   width: '10%',
-      //   render: (text, record) => <img height={28} width={24} src={record.thumbnail_url} alt=""/>
-      // },
       {
         title: <FormattedMessage id='app.table.title' defaultMessage='Title' />,
         dataIndex: 'title',
-        width: '40%',
+        width: '35%',
         render: (text, openDocument) => (
           <ChangeOpenDocumentName
             openDocument={openDocument}
@@ -179,6 +173,12 @@ class UploadedDocumentsList extends React.Component {
         ),
       },
       {
+        title: '',
+        dataIndex: 'Tags',
+        width: '10%',
+        render: (text, record) => <img height={28} width={24} src={record.thumbnail_url} alt=""/>
+      },
+      {
         title: <FormattedMessage id='app.table.uploaded_time' defaultMessage='Upload Time' />,
         width: '20%',
         render: (text, record) => <FormattedRelative value={record.upload_time} />,
@@ -187,7 +187,7 @@ class UploadedDocumentsList extends React.Component {
       {
         title: <FormattedMessage id='app.table.action' defaultMessage='Action' />,
         key: 'action',
-        width: '30%',
+        width: '25%',
         render: (text, record) => (
           <span>
             <Popconfirm

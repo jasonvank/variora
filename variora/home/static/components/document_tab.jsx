@@ -1,10 +1,11 @@
 import 'regenerator-runtime/runtime'
 
-import { Button, Col, Icon, Input, Layout, Menu, Modal, Row, Upload, notification } from 'antd'
+import { Button, Col, Icon, Input, Layout, Menu, Modal, Row, Tag, Upload, notification } from 'antd'
 import { Link, Route, BrowserRouter as Router, Switch } from 'react-router-dom'
 import { fetchCreatedReadlists, setCreatedReadlists } from '../redux/actions.js'
 import { validateDocumentSize, validateDocumentTitle } from 'home_util.js'
 import { FormattedMessage } from 'react-intl'
+import { TweenOneGroup } from 'rc-tween-one';
 
 import { CollectedDocumentsList } from './document_tab/collected_documents_list.jsx'
 import React from 'react'
@@ -78,6 +79,7 @@ class UploadedDocumentsBeforeConnect extends React.Component {
       uploadedDocumentName: '',
       onlineDocumentUrl: '',
       onlineDocumentName: '',
+      tags: [],
       uploadBtnLoading: false,
       createdReadlists: initialStore.createdReadlists,
     }
@@ -97,6 +99,10 @@ class UploadedDocumentsBeforeConnect extends React.Component {
       data.append('title', title)
       data.append('file_upload', this.state.uploadedDocumentFileList[0])
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+      data.append('tags', "apple pineapple")
+      for (var value of formData.values()) {
+        console.log(value);
+     }
       this.setState({ uploadBtnLoading: true })
       axios
         .post('/user_dashboard/handle_file_upload', data, {
@@ -133,9 +139,14 @@ class UploadedDocumentsBeforeConnect extends React.Component {
         return false
       }
       var data = new FormData()
+      console.log("BBBB")
       data.append('title', title)
       data.append('external_url', externalUrl)
+      data.append('tags', "apple pineapple")
       data.append('csrfmiddlewaretoken', getCookie('csrftoken'))
+      for (var value of formData.values()) {
+        console.log(value);
+     }
       axios.post('/user_dashboard/handle_file_upload', data).then(() => {
         this.setState({ onlineDocumentName: '' })
         this.setState({ onlineDocumentUrl: '' })
@@ -201,6 +212,7 @@ class UploadedDocumentsBeforeConnect extends React.Component {
               </FormattedMessage>
 
               <div>
+                <EditableTagGroup>12</EditableTagGroup>
                 <Button
                   type='primary'
                   icon='upload'
@@ -296,6 +308,109 @@ class SubscribedDocuments extends React.Component {
         </div>
       </div>
     )
+  }
+}
+
+class EditableTagGroup extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      tags: ["apple, banana"],
+      inputVisible: false,
+      inputValue: '',
+    }
+  }
+
+  handleClose = removedTag => {
+    const tags = this.state.tags.filter(tag => tag !== removedTag);
+    console.log(tags);
+    this.setState({ tags });
+  };
+
+  showInput = () => {
+    this.setState({ inputVisible: true }, () => this.input.focus());
+  };
+
+  handleInputChange = e => {
+    this.setState({ inputValue: e.target.value });
+  };
+
+  handleInputConfirm = () => {
+    const { inputValue } = this.state;
+    let { tags } = this.state;
+    if (inputValue && tags.indexOf(inputValue) === -1) {
+      tags = [...tags, inputValue];
+    }
+    console.log(tags);
+    this.setState({
+      tags,
+      inputVisible: false,
+      inputValue: '',
+    });
+  };
+
+  saveInputRef = input => (this.input = input);
+
+  forMap = tag => {
+    const tagElem = (
+      <Tag
+        closable
+        onClose={e => {
+          e.preventDefault();
+          this.handleClose(tag);
+        }}
+      >
+        {tag}
+      </Tag>
+    );
+    return (
+      <span key={tag} style={{ display: 'inline-block' }}>
+        {tagElem}
+      </span>
+    );
+  };
+
+  render() {
+    const { tags, inputVisible, inputValue } = this.state;
+    const tagChild = tags.map(this.forMap);
+    return (
+      <div>
+        <div style={{ marginBottom: 16 }}>
+          <TweenOneGroup
+            enter={{
+              scale: 0.8,
+              opacity: 0,
+              type: 'from',
+              duration: 100,
+              onComplete: e => {
+                e.target.style = '';
+              },
+            }}
+            leave={{ opacity: 0, width: 0, scale: 0, duration: 200 }}
+            appear={false}
+          >
+            {tagChild}
+          </TweenOneGroup>
+        </div>
+        {inputVisible && (
+          <Input
+            ref={this.saveInputRef}
+            type="text"
+            size="small"
+            style={{ width: 78 }}
+            value={inputValue}
+            onChange={this.handleInputChange}
+            onBlur={this.handleInputConfirm}
+            onPressEnter={this.handleInputConfirm}
+          />
+        )}
+        {!inputVisible && (
+          <Tag onClick={this.showInput} style={{ background: '#fff', borderStyle: 'dashed' }}>
+            <Icon type="plus" /> New Tag
+          </Tag>
+        )}
+      </div>
+    );
   }
 }
 

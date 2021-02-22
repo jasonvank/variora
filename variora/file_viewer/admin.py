@@ -3,8 +3,8 @@ import models
 
 
 class DocumentModelAdmin(admin.ModelAdmin):
-    list_display = ["id", 'clean_uuid', "title", "owner", "size", "num_visit", "unique_file", 'upload_time']
-    search_fields = ["id", 'uuid', "title", "unique_file__file_field", "owner__nickname"]
+    list_display = ["id", 'clean_uuid', "title", "owner", "tags", "size", "num_visit", "unique_file", 'upload_time']
+    search_fields = ["id", 'uuid', "title", "tags", "unique_file__file_field", "owner__nickname"]
     filter_horizontal = ['collectors']
 
 
